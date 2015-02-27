@@ -24,8 +24,15 @@
 #ifndef F4_CRITICAL_PAIR_H
 #define F4_CRITICAL_PAIR_H
 
+/** \namespace F4 
+ * Group all the required tools used by the F4 algorithm.
+ */
 namespace F4
 {
+    /**
+     * \class CriticalPair
+     * Represent a critical pair.
+     */
     template <typename Element>
     class CriticalPair
     {

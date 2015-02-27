@@ -24,8 +24,15 @@
 #ifndef F4_POLYNOMIAL_H
 #define F4_POLYNOMIAL_H
 
+/** \namespace F4 
+ * Group all the required tools used by the F4 algorithm.
+ */
 namespace F4
 {
+    /**
+     * \class Polynomial
+     * Represent a polynomial.
+     */
     template <typename Element>
     class Polynomial
     {

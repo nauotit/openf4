@@ -24,15 +24,25 @@
 #ifndef F4_IDEAL_H
 #define F4_IDEAL_H
 
+#include <iostream>
+#include <string.h>
+
+/** \namespace F4 
+ * Group all the required tools used by the F4 algorithm.
+ */
 namespace F4
 {
+    /**
+     * \class Ideal
+     * Represent an ideal.
+     */
     template <typename Element>
     class Ideal
     {
         public:
         
         private:
-        
+            std::string * vars;
     };
 }
 

@@ -24,8 +24,15 @@
 #ifndef F4_MATRIX_H
 #define F4_MATRIX_H
 
+/** \namespace F4 
+ * Group all the required tools used by the F4 algorithm.
+ */
 namespace F4
 {
+    /**
+     * \class Matrix
+     * Represent a matrix.
+     */
     template <typename Element>
     class Matrix
     {

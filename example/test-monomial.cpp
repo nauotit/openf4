@@ -24,6 +24,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include "../include/monomial.h"
 
 using namespace F4;
@@ -31,7 +32,44 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    string vars[8]={"s1","s2","s3","s4","s5","s6","s7","s8"};
+    int varlist1[8]={1,2,1,0,4,3,2,2};
+    Monomial mon1(8, varlist1);
+    
+    int varlist2[8]={5,5,0,0,4,7,2,2};
+    Monomial mon2(8, varlist2);
+    
+    cout << "Test operator <<" << endl;
 
+    cout << "mon1:" << mon1 << endl ;
+    cout << "mon2:" << mon2 << endl << endl ;
+    
+    cout << "Test comparison operators " << endl;
+    
+    cout << "mon1 == mon2: " << (mon1==mon2) << endl;
+    cout << "mon1 < mon2: " << (mon1<mon2) << endl;
+    cout << "mon1 > mon2: " << (mon1>mon2) << endl;
+    
+    cout << "mon1 == mon1: " << (mon1==mon1) << endl;
+    cout << "mon1 < mon1: " << (mon1<mon1) << endl;
+    cout << "mon1 > mon1: " << (mon1>mon1) << endl;
+    cout << "mon1 >= mon1: " << (mon1>=mon1) << endl;
+    cout << "mon1 <= mon1: " << (mon1<=mon1) << endl << endl;
+    
+    cout << "Test copy constructor" << endl;
+    Monomial mon3(mon2);
+    cout << "mon2:" << mon2 << endl ;
+    cout << "mon3:" << mon3 << endl << endl ;
+    
+    cout << "Test operator =" << endl;
+    
+    mon3=mon1;
+    cout << "mon1:" << mon1 << endl ;
+    cout << "mon3:" << mon3 << endl << endl ;
+    
+    mon1.~Monomial();
+    mon2.~Monomial();
+    mon3.~Monomial();
     return 0;
 }
 

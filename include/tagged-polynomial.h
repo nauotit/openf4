@@ -24,8 +24,15 @@
 #ifndef F4_TAGGED_POLYNOMIAL_H
 #define F4_TAGGED_POLYNOMIAL_H
 
+/** \namespace F4 
+ * Group all the required tools used by the F4 algorithm.
+ */
 namespace F4
 {
+    /**
+     * \class TaggedPolynomial
+     * Represent a tagged polynomial.
+     */
     template <typename Element>
     class TaggedPolynomial
     {

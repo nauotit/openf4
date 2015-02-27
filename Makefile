@@ -18,27 +18,19 @@ CXX=g++
 CFLAGS= -O3 -g -Wall 
 LDFLAGS=
 #LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
-OBJ = obj/monomial.o obj/polynomial.o obj/taggeg-polynomial.o obj/critical-pair.o obj/matrix.o obj/ideal.o
 EXEC = example
 
-# common files
-
-obj/%.o: src/%.inl include/%.h 
-	$(CXX) $(CFLAGS) -D -o $@ -c $<
-
-# Specific files:
-
 # Regression tests
-obj/test-monomial.o: example/test-monomial.cpp
+obj/test-monomial.o: example/test-monomial.cpp 
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-bin/test-monomial: obj/monomial.o obj/test-monomial.o 
+bin/test-monomial: obj/test-monomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 
 # Intermediate rules
 
-example: test-monomial
+example: bin/test-monomial
 
 all: $(EXEC)
 
