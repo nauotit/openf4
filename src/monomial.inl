@@ -28,18 +28,58 @@ using namespace std;
 
 namespace F4
 {
+    // static variables
+    
     int Monomial::NB_VARIABLE = 0;
     
-    Monomial::Monomial(int nbVariable): _deg(0)
+    string const  * Monomial::VARS=0;
+    
+    int * Monomial::WEIGHT=0;
+    
+    // static functions
+    
+    void Monomial::setNbVariable(int nbVariable)
     {
-        NB_VARIABLE=nbVariable;
+        Monomial::NB_VARIABLE = nbVariable;
+    }
+             
+    int Monomial::getNbVariable()
+    {
+        return Monomial::NB_VARIABLE;
+    }
+    
+    void Monomial::setVariable(string const  * vars)
+    {
+        Monomial::VARS=vars;
+    }
+    
+    string const  * Monomial::getVariable()
+    {
+        return Monomial::VARS;
+    }
+    
+    void Monomial::setWeight(int  * weight)
+    {
+        Monomial::WEIGHT=weight;
+    }
+    
+    int * Monomial::getWeight()
+    {
+        return Monomial::WEIGHT;
+    }
+    
+    // Constructor
+    
+    Monomial::Monomial(): _deg(0)
+    {
+        assert(NB_VARIABLE>0);
         _varlist=new int[NB_VARIABLE]();
         assert(_varlist != 0);
     }
     
-    Monomial::Monomial(int nbVariable, int const * varlist)
+    Monomial::Monomial(int const * varlist): _deg(0)
     {
-        NB_VARIABLE=nbVariable;
+        assert(NB_VARIABLE>0);
         _varlist=new int[NB_VARIABLE]();
         assert(_varlist != 0);
         for (int i=0; i<NB_VARIABLE; i++)
@@ -52,35 +92,40 @@ namespace F4
     Monomial::Monomial(Monomial const & toCopy): _deg(toCopy._deg)
     {
         _varlist=new int[NB_VARIABLE];
+        assert(_varlist != 0);
         for(int i=0; i<NB_VARIABLE; i++)
         {
             _varlist[i]=toCopy._varlist[i];
         }
     }
     
+    // Destructor
+    
     Monomial::~Monomial()
     {
-        delete _varlist;
+        delete[] _varlist;
         _varlist=0;
     }
     
+    // Miscellaneous
+    
     void
-    Monomial::printMonomial (ostream & stream, std::string const * vars) const
+    Monomial::printMonomial (ostream & stream) const
     {
         int i;
-        for (i = 0; (_varlist)[i] == 0 && i < NB_VARIABLE; i++);
+        for (i = 0; i < NB_VARIABLE && (_varlist)[i] == 0; i++);
         if (i < NB_VARIABLE)
         {
-            if (vars!=0 && vars[i]!= "")
-                stream << vars[i] << "^" << (_varlist)[i];
+            if (VARS!=0 && VARS[i]!= "")
+                stream << VARS[i] << "^" << (_varlist)[i];
             else
                 stream << "x" << i << "^" << (_varlist)[i];
             i++;
             for (; i < NB_VARIABLE; i++)
                 if ((_varlist)[i] > 0)
                 {
-                    if (vars != 0 && vars[i]!= "")
-                        stream <<"*" << vars[i] << "^" << (_varlist)[i];
+                    if (VARS != 0 && VARS[i]!= "")
+                        stream <<"*" << VARS[i] << "^" << (_varlist)[i];
                     else
                         stream << "*x" << i << "^" << (_varlist)[i];
                 }
@@ -106,19 +151,86 @@ namespace F4
         return (_deg > mon._deg ? 1 : -1);
     }
     
+    bool Monomial::isDivisible(Monomial const & mon) const
+    {
+        if (mon._deg > _deg)
+        {
+            return false;
+        }
+        bool test = true;
+        for (int i = 0; i < NB_VARIABLE && test; i++)
+        {
+            test = test && (mon._varlist[i]) <= (_varlist[i]);
+        }
+        return test;
+    }
+    
+    void Monomial::reset()
+    {
+        _deg=0;
+        for(int i=0; i< NB_VARIABLE; i++)
+        {
+            _varlist[i]=0;
+        }
+    }
+    
     // Operator overload
     
-    Monomial & Monomial::operator=(Monomial const & toCopy)
+    Monomial & Monomial::operator=(Monomial const & mon)
     {
-        if(this!=&toCopy)
+        if(this!=&mon)
         {
-            _deg=toCopy._deg;
+            _deg=mon._deg;
             for(int i=0; i<NB_VARIABLE; i++)
             {
-                _varlist[i]=toCopy._varlist[i];
+                _varlist[i]=mon._varlist[i];
             }
         }
         return *this;
+    }
+    
+    Monomial & Monomial::operator*=(Monomial const & mon)
+    {
+        _deg += mon._deg;
+        for (int k = 0; k < NB_VARIABLE; k++)
+        {
+            (_varlist)[k] += (mon._varlist)[k];
+        }
+        return * this;
+    }
+    
+    Monomial & Monomial::operator/=(Monomial const & mon)
+    {
+        if (mon._deg > _deg)
+        {
+            cout << "Monomial: not divisible" << endl;
+            return * this;               // not divisible
+        }
+        Monomial copy(*this);
+        for (int i = 0; i < NB_VARIABLE; i++)
+        {
+            if ((mon._varlist[i]) <= (_varlist[i]))
+            {
+                copy._varlist[i] -= mon._varlist[i];
+                if (WEIGHT!=0)
+                {
+                    // weighted monomial order
+                    copy._deg -= (mon._varlist)[i] * WEIGHT[i];
+                }
+                else
+                {
+                    copy._deg -= (mon._varlist)[i];
+                }
+            }
+            else
+            {
+                cout << "Monomial: not divisible" << endl;
+                return * this;           // not divisible
+            }
+        }
+        (* this)=copy;
+        copy.~Monomial();
+        return * this;
     }
     
     ostream & operator<<(ostream & stream, Monomial const & mon)
@@ -150,6 +262,18 @@ namespace F4
     bool operator<=(Monomial const & mon1, Monomial const & mon2)
     {
         return (mon1.compareMonomial(mon2)!=1);
+    }
+    
+    Monomial operator * (Monomial const & mon1, Monomial const & mon2)
+    {
+        Monomial copy(mon1);
+        return copy*=mon2;
+    }
+    
+    Monomial operator / (Monomial const & mon1, Monomial const & mon2)
+    {
+        Monomial copy(mon1);
+        return (copy/=mon2);
     }
 
 }

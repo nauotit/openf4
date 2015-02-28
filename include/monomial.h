@@ -40,36 +40,77 @@ namespace F4
     class Monomial
     {
         public:
+            
+            // static functions
             /**
-             * \brief Constructor.
+             * \brief Modify the static variable NB_VARIABLE.
              * \param nbVariable: Number of variables of the polynomial ring.
              */
-            Monomial(int nbVariable); 
+             static void setNbVariable(int nbVariable);
+             
+             /**
+             * \brief Get the static variable NB_VARIABLE.
+             * \return Value of NB_VARIABLE.
+             */
+             static int getNbVariable();
+             
+             /**
+             * \brief Modify the static variable VARS.
+             * \param vars: Array of variable names of the polynomial ring.
+             */
+             static void setVariable(std::string const  * vars);
+             
+             /**
+             * \brief Get the static variable VARS.
+             * \return Value of VARS.
+             */
+             static std::string const  * getVariable();
+             
+             /**
+             * \brief Modify the static variable WEIGHT.
+             * \param weight: Array of weights. [1,...,1] by default.
+             */
+             static void setWeight(int  * weight);
+             
+             /**
+             * \brief Get the static variable WEIGHT.
+             * \return Value of WEIGHT.
+             */
+             static int * getWeight();
+            
+            // Constructor
             
             /**
-             * \brief Constructor.
-             * \param nbVariable: Number of variables of the polynomial ring.
+             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
+             */
+            Monomial(); 
+            
+            /**
+             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
              * \param varlist: Array representing the degree of each variable of the monomial.
              */
-            Monomial(int nbVariable, int const * varlist); 
+            Monomial(int const * varlist); 
             
             /**
              * \brief Copy constructor.
              * \param Monomial.
              */
              Monomial(Monomial const & toCopy);
+             
+             // Destructor
             
             /**
              * \brief Destructor.
              */
             ~Monomial();
             
+            // Miscellaneous
+            
             /**
              * \brief Print the monomial.
-             * \param vars: Array of string representing the variable names.
              * \return void
              */
-            void printMonomial (std::ostream & stream = std::cout, std::string const  * vars=0) const;
+            void printMonomial (std::ostream & stream = std::cout) const;
             
             /**
              * \brief Compare monomials according to the grevlex order.
@@ -81,16 +122,48 @@ namespace F4
             int compareMonomial(Monomial const & mon) const;
             
             /**
+             * \brief Test if this is divisible by mon.
+             * \param mon: Divisor.
+             * \return true if mon divides this.
+             * \return false otherwise.
+             */
+            bool isDivisible(Monomial const & mon) const;
+            
+            /**
+             * \brief Reset this.
+             */
+            void reset();
+            
+            // Internal operators
+            
+            /**
              * \brief Overload the operator =.
              * \return Reference on this.
              */
-            Monomial & operator=(Monomial const & toCopy);
+            Monomial & operator=(Monomial const & mon);
+            
+            /**
+             * \brief Overload the operator *=.
+             * \return Reference on this.
+             */
+            Monomial & operator*=(Monomial const & mon); 
+            
+            /**
+             * \brief Overload the operator /=.
+             * \return Reference on this.
+             */
+            Monomial & operator/=(Monomial const & mon); 
         
         private:
             int _deg;                /*!< Degree of the monomial */
             int *_varlist;           /*!< Array representing the degree of each variable of the monomial */
+            
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
+            static std::string const * VARS; /*!< Array of NB_VARIABLE string representing the variable names. */
+            static int * WEIGHT; /*!< Array of NB_VARIABLE weights. [1,...,1] by default */
     };
+    
+    // External operators
     
     /**
      * \brief Overload the operator <<.
@@ -126,12 +199,24 @@ namespace F4
      */
     bool operator<(Monomial const & mon1, Monomial const & mon2);
     
-        /**
+    /**
      * \brief Overload the operator <=.
      * \return true if mon1<=mon2.
      * \return false otherwise.
      */
     bool operator<=(Monomial const & mon1, Monomial const & mon2);
+    
+    /**
+     * \brief Overload the operator *.
+     * \return mon1 * mon2.
+     */
+    Monomial operator * (Monomial const & mon1, Monomial const & mon2);
+    
+    /**
+     * \brief Overload the operator /.
+     * \return mon1 / mon2.
+     */
+    Monomial operator / (Monomial const & mon1, Monomial const & mon2);
 }
 
 
