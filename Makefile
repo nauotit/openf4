@@ -27,10 +27,16 @@ obj/test-monomial.o: example/test-monomial.cpp
 bin/test-monomial: obj/test-monomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-term.o: example/test-term.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-term: obj/test-term.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example: bin/test-monomial
+example: bin/test-monomial bin/test-term
 
 all: $(EXEC)
 

@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../include/monomial.h"
 
 using namespace F4;
@@ -32,7 +33,11 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    // Set verbose mode.
+    Monomial::setVerbose(2);
     string vars[8]={"s1","s2","s3","s4","s5","s6","s7","s8"};
+    
+    int weight[8]={1,1,1,1,1,1,1,1};
     
     // In a first time we need to set the number of variables of the polynomial ring.
     Monomial::setNbVariable(8);
@@ -47,6 +52,19 @@ int main (int argc, char **argv)
         for(int i=0; i< Monomial::getNbVariable(); i++)
         {
             cout << Monomial::getVariable()[i] << ", ";
+        }
+        cout << endl << endl;
+    }
+    
+    // And their weight (weighted monomial order:
+    Monomial::setWeight(weight);
+    
+    if (Monomial::getWeight()!=0)
+    {
+        cout << "weight: ";
+        for(int i=0; i< Monomial::getNbVariable(); i++)
+        {
+            cout << Monomial::getWeight()[i] << ", ";
         }
         cout << endl << endl;
     }
@@ -118,13 +136,78 @@ int main (int argc, char **argv)
     
     cout << "Test reset " << endl;
     mon1.reset();
-    cout << "mon1.reset(): " << mon1 << endl ;
+    cout << "mon1.reset(): " << mon1 << endl << endl ;
+    
+    cout << "Test setMonomial() " << endl;
+    vector<Monomial> MonArray(4);
+    int varlist3[8]={1,1,1,1,1,1,1,1};
+    int varlist4[8]={1,1,1,1,1,1,1,2};
+    int varlist5[8]={1,1,1,1,1,1,1,3};
+    int varlist6[8]={1,1,1,1,1,1,1,4};
+    MonArray[0].setMonomial(varlist3);
+    MonArray[1].setMonomial(varlist4);
+    MonArray[2].setMonomial(varlist5);
+    MonArray[3].setMonomial(varlist6);
+    cout << "MonArray[0] :" << MonArray[0] << endl;
+    cout << "MonArray[1] :" << MonArray[1] << endl;
+    cout << "MonArray[2] :" << MonArray[2] << endl;
+    cout << "MonArray[3] :" << MonArray[3] << endl << endl;
+    
+    cout << "Test setNbMonomial() " << endl;
+    Monomial::setNbMonomial(25);
+    int ** nbMon=Monomial::getNbMonomial();
+    for (int i=0; i< 8+1; i++)
+    {
+        for (int j=0; j< 8+2; j++)
+        {
+            cout << nbMon[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+    
+    cout << "Test intToMonomial() " << endl;
+    vector<Monomial> MonArray2(25);
+    for (int i=0; i<20; i++)
+    {
+        MonArray2[i].intToMonomial(i);
+        cout << "MonArray2[" << i << "] :" << MonArray2[i] << endl;
+    }
+    cout << endl;
+    
+    cout << "Test monomialToInt() " << endl;
+    cout << "MonArray2[6].monomialToInt() " << MonArray2[6].monomialToInt() <<endl;
+    cout << "mon1.monomialToInt() " << mon1.monomialToInt() << endl;
+    cout << mon2 << endl;
+    cout << "mon2.monomialToInt() " << mon2.monomialToInt() << endl;
+    
+    cout << "Test setTabulatedProduct" << endl;
+    Monomial::setTabulatedProduct(2,10);
+    int ** tabProduct=Monomial::getTabulatedProduct();
+    cout << "tabProduct[3][9]: " << tabProduct[3][9] << endl;
+    cout << "MonArray2[3]*MonArray2[9]: " << MonArray2[3]*MonArray2[9] << endl;
+    mon1.intToMonomial(tabProduct[3][9]);
+    cout << "intToMonomial(tabProduct[3][9]): " << mon1 << endl << endl;
+    
+    // Free first TABULATED_PRODUCT, then NB_MONOMIAL.
+    Monomial::freeTabulatedProduct(2,10);
+    Monomial::freeNbMonomial(25);
     
     mon1.~Monomial();
     mon2.~Monomial();
     mon3.~Monomial();
     mon4.~Monomial();
     mon5.~Monomial();
+    
+    for (int i=0; i<4; i++)
+    {
+        MonArray[i].~Monomial();
+    }
+    
+    for (int i=0; i<20; i++)
+    {
+        MonArray2[i].~Monomial();
+    }
     return 0;
 }
 

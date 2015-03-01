@@ -42,6 +42,13 @@ namespace F4
         public:
             
             // static functions
+            
+            /**
+             * \brief Modify the static variable VERBOSE.
+             * \param verbose: Verbosity level.
+             */
+             static void setVerbose(int verbose);
+             
             /**
              * \brief Modify the static variable NB_VARIABLE.
              * \param nbVariable: Number of variables of the polynomial ring.
@@ -77,6 +84,43 @@ namespace F4
              * \return Value of WEIGHT.
              */
              static int * getWeight();
+             
+            /**
+             * \brief Modify the static array NB_MONOMIAL.
+             * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
+             */
+             static void setNbMonomial(int maxDegree);
+             
+             /**
+             * \brief Get the static variable NB_MONOMIAL.
+             * \return Value of NB_MONOMIAL.
+             */
+             static int ** getNbMonomial();
+             
+             /**
+             * \brief Free the static array NB_MONOMIAL.
+             * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
+             */
+             static void freeNbMonomial(int maxDegree);
+             
+             /**
+             * \brief Modify the static array TABULATED_PRODUCT.
+             * \param deg1: .
+             * \param deg2: .
+             */
+             static void setTabulatedProduct(int deg1, int deg2);
+             
+             /**
+             * \brief Get the static variable NB_MONOMIAL.
+             * \return Value of NB_MONOMIAL.
+             */
+             static int ** getTabulatedProduct();
+             
+             /**
+             * \brief Free the static array NB_MONOMIAL.
+             * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
+             */
+             static void freeTabulatedProduct(int deg1, int deg2);
             
             // Constructor
             
@@ -105,6 +149,24 @@ namespace F4
             ~Monomial();
             
             // Miscellaneous
+            
+            /**
+             * \brief Initialize this with varlist.
+             * \param varlist: Array representing the degree of each variable of the monomial.
+             */
+            void setMonomial(int const * varlist);
+            
+            /**
+             * \brief Initialize this with the num-th monomial of degree deg. The static array NB_MONOMIAL must be set beforehand.
+             * \param num: number of the constructed monomial, 0 is the smallest monomial of the given degree.
+             */
+            void intToMonomial(int numMon);
+            
+            /**
+             * \brief Compute the number of this. The static array NB_MONOMIAL must be set beforehand.
+             * \return Number of this.
+             */
+            int monomialToInt();
             
             /**
              * \brief Print the monomial.
@@ -158,9 +220,17 @@ namespace F4
             int _deg;                /*!< Degree of the monomial */
             int *_varlist;           /*!< Array representing the degree of each variable of the monomial */
             
+            static int VERBOSE; 
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
             static std::string const * VARS; /*!< Array of NB_VARIABLE string representing the variable names. */
             static int * WEIGHT; /*!< Array of NB_VARIABLE weights. [1,...,1] by default */
+            /**
+             * \brief NB_MONOMIAL[d][v] = Number of degree d monomials in the v first variables.
+             * NB_MONOMIAL[d][NB_VARIABLE+1] = Number of monomials of degree <= d.
+             */
+            static int **NB_MONOMIAL;
+            static int MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
+            static int ** TABULATED_PRODUCT; /*!< TABULATED_PRODUCT[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
     };
     
     // External operators
