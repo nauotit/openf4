@@ -24,9 +24,81 @@
 #ifndef F4_POLYNOMIAL_INL
 #define F4_POLYNOMIAL_INL
 
+using namespace std;
+
 namespace F4
 {
+    // Constructor 
+    
     template <typename Element>
+    Polynomial<Element>::Polynomial()
+    {
+    }
+    
+    template <typename Element>
+    Polynomial<Element>::Polynomial(string const s)
+    {
+        typename forward_list<Term<Element>>::const_iterator it=_polynomial.before_begin();
+        string tmp;
+        size_t pos1=0;
+        size_t pos2=0;
+        while(pos2 != string::npos)
+        {
+            Term<Element> term;
+            pos2= min(s.find('+', pos1), s.find('-', pos1));
+            tmp=s.substr(pos1, (pos2-pos1));
+            
+            if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
+            {
+                tmp=s[pos1-1]+tmp;
+            }
+            
+            pos1=pos2+1; // We skip +
+            cout << "Polynomial: " << tmp << endl;
+            term.setTerm(tmp);
+            
+            it=_polynomial.insert_after(it, term);
+        }
+    }
+    
+    // Destructor
+    
+    template <typename Element>
+    Polynomial<Element>::~Polynomial()
+    {
+        _polynomial.~forward_list();
+    }
+    
+    // Miscellaneous
+    
+    template <typename Element>
+    void
+    Polynomial<Element>::printPolynomial (ostream & stream) const
+    {
+        typename forward_list<Term<Element>>::const_iterator it, it_tmp;
+        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        {
+            it_tmp=it;
+            it_tmp++;
+            if(it_tmp !=_polynomial.end())
+            {
+                stream << "(" << *it << ") +";
+            }
+            else
+            {
+                stream << "(" << *it << ")";
+            }
+        }
+    }
+    
+    // Operator overload
+    
+    template <typename Element>
+    ostream & operator<<(ostream & stream, Polynomial<Element> const & polynomial)
+    {
+        polynomial.printPolynomial();
+        return stream;
+    }
 }
 
 #endif // F4_POLYNOMIAL_INL

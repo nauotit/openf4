@@ -136,6 +136,12 @@ namespace F4
             Monomial(int const * varlist); 
             
             /**
+             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
+             * \param s: String representing the monomial.
+             */
+            Monomial(std::string const s); 
+            
+            /**
              * \brief Copy constructor.
              * \param Monomial.
              */
@@ -155,6 +161,12 @@ namespace F4
              * \param varlist: Array representing the degree of each variable of the monomial.
              */
             void setMonomial(int const * varlist);
+            
+            /**
+             * \brief Initialize this with s.
+             * \param s: String representing the monomial.
+             */
+            void setMonomial(std::string const s);
             
             /**
              * \brief Initialize this with the num-th monomial of degree deg. The static array NB_MONOMIAL must be set beforehand.

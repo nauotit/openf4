@@ -31,7 +31,37 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
-
+    // First we set the number of variable of the polynomial ring.
+    Monomial::setNbVariable(4);
+    // Then their names:
+    string vars[4]={"s1","s2","s3","s4"};
+    Monomial::setVariable(vars);
+    // Then the weight
+    int weight[4]={1,1,1,1};
+    Monomial::setWeight(weight);
+    // Then the 2D array NB_MONOMIAL:
+    Monomial::setNbMonomial(30);
+    // Verbose mode
+    Monomial::setVerbose(2);
+    
+    // Test constructor from string
+    Polynomial<int> p1("2*s1+3*s2+5*s3+1*s4");
+    cout << "p1: " << p1 << endl;
+    
+    Polynomial<int> p2("-2*s1+s2+s3+s4");
+    cout << "p2: " << p2 << endl;
+    
+    Polynomial<int> p3("s1*s2*s3*s4 -1");
+    cout << "p3: " << p3 << endl;
+    
+    p1.~Polynomial();
+    p2.~Polynomial();
+    p3.~Polynomial();
+    
+    Monomial::freeNbMonomial(30);
+    
+    
+    
     return 0;
 }
 

@@ -229,13 +229,48 @@ namespace F4
     {
         // Preconditions
         assert(NB_VARIABLE > 0);
+        assert(WEIGHT!=0);
         
         _varlist=new int[NB_VARIABLE]();
         assert(_varlist != 0);
         for (int i=0; i<NB_VARIABLE; i++)
         {
             _varlist[i]=varlist[i];
-            _deg+=varlist[i];
+            _deg+=varlist[i]*WEIGHT[i];
+        }
+    }
+    
+    Monomial::Monomial(std::string const s)
+    {
+        // Preconditions
+        assert(NB_VARIABLE > 0);
+        assert(WEIGHT!=0);
+        assert(VARS!=0);
+        
+        _deg=0;
+        _varlist=new int[NB_VARIABLE]();
+        assert(_varlist != 0);
+        
+        size_t pos=0;
+        
+        for(int i=0; i<NB_VARIABLE; i++)
+        {
+            pos=s.find(VARS[i]);
+            if(pos != string::npos)
+            {
+                // VARS[i] is used in s
+                pos+=VARS[i].size();
+                if(s[pos]=='^')
+                {
+                    _varlist[i]=stoi(s.substr(pos+1));
+                    _deg+=_varlist[i]*WEIGHT[i];
+                }
+                else
+                {
+                    _varlist[i]=1;
+                    _deg+=_varlist[i]*WEIGHT[i];
+                }
+            }
         }
     }
     
@@ -269,11 +304,44 @@ namespace F4
     {
         // Preconditions
         assert(NB_VARIABLE > 0);
+        assert(WEIGHT!=0);
         
         for (int i=0; i<NB_VARIABLE; i++)
         {
             _varlist[i]=varlist[i];
-            _deg+=varlist[i];
+            _deg+=varlist[i]*WEIGHT[i];
+        }
+    }
+    
+    void 
+    Monomial::setMonomial(std::string const s)
+    {
+        // Preconditions
+        assert(NB_VARIABLE > 0);
+        assert(WEIGHT!=0);
+        assert(VARS!=0);
+        
+        _deg=0;
+        size_t pos=0;
+        
+        for(int i=0; i<NB_VARIABLE; i++)
+        {
+            pos=s.find(VARS[i]);
+            if(pos != string::npos)
+            {
+                // VARS[i] is used in s
+                pos+=VARS[i].size();
+                if(s[pos]=='^')
+                {
+                    _varlist[i]=stoi(s.substr(pos+1));
+                    _deg+=_varlist[i]*WEIGHT[i];
+                }
+                else
+                {
+                    _varlist[i]=1;
+                    _deg+=_varlist[i]*WEIGHT[i];
+                }
+            }
         }
     }
     

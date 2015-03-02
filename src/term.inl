@@ -26,15 +26,122 @@
 
 namespace F4
 {
+    // Constructor 
+    
     template <typename Element>
-    Term<Element>::Term(Element coeff, Monomial * mon): _coefficient(coeff), _monomial(mon)
+    Term<Element>::Term(): _coefficient(0), _numMonomial(-1)
     {
     }
     
     template <typename Element>
+    Term<Element>::Term(Element coeff, Monomial mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
+    {
+    }
+    
+    template <typename Element>
+    Term<Element>::Term(std::string const s)
+    {
+        // Be carefull, a specialised readCoefficient method must be defined.
+        _coefficient=readCoefficient(s);
+        Monomial mon(s);
+        _numMonomial=mon.monomialToInt();
+        mon.~Monomial();
+    }
+    
+    // Destructor
+    template <typename Element>
     Term<Element>::~Term()
     {
         _coefficient.~Element();
+    }
+    
+    
+    // Get / Set 
+    
+    template <typename Element>
+    Element 
+    Term<Element>::getCoefficient()
+    {
+        return _coefficient;
+    }
+    
+    template <typename Element>
+    void 
+    Term<Element>::setCoefficient(Element coeff)
+    {
+        _coefficient=coeff;
+    }
+    
+    // Miscellaneous
+    
+    template <typename Element>
+    void 
+    Term<Element>::setTerm(std::string const s)
+    {
+        // Be carefull, a specialised readCoefficient method must be defined.
+        _coefficient=readCoefficient(s);
+        Monomial mon(s);
+        _numMonomial=mon.monomialToInt();
+        mon.~Monomial();
+    }
+    
+    template <typename Element>
+    void
+    Term<Element>::printTerm (ostream & stream) const
+    {
+        Monomial mon;
+        mon.intToMonomial(_numMonomial);
+        stream << _coefficient << "*" << mon;
+        mon.~Monomial();
+    }
+    
+    template<typename Element>
+    Element
+    Term<Element>::readCoefficient(std::string const s)
+    {
+        cout << "Term: no defined readCoefficient method for this type" << endl;
+        return 0;
+    }
+    
+    template<>
+    int
+    Term<int>::readCoefficient(std::string const s)
+    {
+        int res;
+        try
+        { 
+            res=stoi(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        return res;
+    }
+    
+    template<>
+    double
+    Term<double>::readCoefficient(std::string const s)
+    {
+        double res;
+        try
+        { 
+            res=stod(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        return res;
+    }
+    
+    // Operator overload
+    
+    template <typename Element>
+    ostream & operator<<(ostream & stream, Term<Element> const & term)
+    {
+        term.printTerm();
+        return stream;
     }
 }
 

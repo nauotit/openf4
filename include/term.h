@@ -41,23 +41,80 @@ namespace F4
         public:
         
             // Constructor
+            
+            /**
+             * \brief Constructor.
+             */
+            Term();
+            
             /**
              * \brief Constructor.
              * \param coeff: Coefficient of the term.
              * \param mon: Pointer on the monomial of the term.
              */
-            Term(Element coeff, Monomial * mon);
+            Term(Element coeff, Monomial mon);
+            
+            /**
+             * \brief Constructor.
+             * \param s: String representing the term.
+             */
+            Term(std::string const s);
+            
             
             // Destructor
+            
             /**
              * \brief Destructor.
              */
             ~Term();
+            
+            
+            // Get / Set
+            
+            /**
+             * \brief Get the coefficient of this.
+             * \return Coefficient of this.
+             */
+            Element getCoefficient();
+            
+            /**
+             * \brief Set the coefficient of this.
+             * \param Coefficient.
+             */
+            void setCoefficient(Element coeff);
+            
+            // Miscellaneous
+            
+            /**
+             * \brief Initialize this with s.
+             * \param s: String representing the term.
+             */
+            void setTerm(std::string const s);
+            
+            /**
+             * \brief Print the term.
+             * \return void
+             */
+            void printTerm (std::ostream & stream = std::cout) const;
+            
+            /**
+             * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
+             * \param s: String representing the term.
+             * \return Coefficent the term.
+             */
+            Element readCoefficient(std::string const s);
         
         private:
             Element _coefficient;
-            Monomial * _monomial;
+            int _numMonomial;
     };
+    
+    /**
+     * \brief Overload the operator <<.
+     * \return ostream: Stream.
+     */
+    template <typename Element>
+    std::ostream & operator<<(std::ostream & stream, Term<Element> const & term);
 }
 
 #include "../src/term.inl"

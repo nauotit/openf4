@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
 CXX=g++
-CFLAGS= -O3 -g -Wall 
-LDFLAGS=
-#LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
+# std=c++11 required by forward_list
+CFLAGS= -O3 -g -Wall -std=c++11
+#LDFLAGS=
+LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
 EXEC = example
 
 # Regression tests
@@ -33,10 +34,16 @@ obj/test-term.o: example/test-term.cpp
 bin/test-term: obj/test-term.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-polynomial.o: example/test-polynomial.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-polynomial: obj/test-polynomial.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example: bin/test-monomial bin/test-term
+example: bin/test-monomial bin/test-polynomial bin/test-term 
 
 all: $(EXEC)
 

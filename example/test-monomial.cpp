@@ -189,6 +189,22 @@ int main (int argc, char **argv)
     mon1.intToMonomial(tabProduct[3][9]);
     cout << "intToMonomial(tabProduct[3][9]): " << mon1 << endl << endl;
     
+    cout << "Test setMonomial(string s)" << endl;
+    string s1="s1*s3^4*s7^2";
+    cout << "s1: " << s1 << endl;
+    mon1.reset();
+    mon1.setMonomial(s1);
+    cout << "mon1.setMonomial(s1): " << mon1 << endl;
+    string s2="s1^4*s2*s3^4*s7^2*s8^178*s5^2";
+    cout << "s2: " << s2 << endl;
+    mon2.reset();
+    mon2.setMonomial(s2);
+    cout << "mon2.setMonomial(s2): " << mon2 << endl;
+    string s3="s2*s3^12*s7*s8^178*s5^2";
+    cout << "s3: " << s3 << endl;
+    Monomial mon6(s3);
+    cout << "mon6(s3); " << mon6 << endl << endl;
+    
     // Free first TABULATED_PRODUCT, then NB_MONOMIAL.
     Monomial::freeTabulatedProduct(2,10);
     Monomial::freeNbMonomial(25);
@@ -198,6 +214,7 @@ int main (int argc, char **argv)
     mon3.~Monomial();
     mon4.~Monomial();
     mon5.~Monomial();
+    mon6.~Monomial();
     
     for (int i=0; i<4; i++)
     {
