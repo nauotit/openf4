@@ -55,6 +55,12 @@ namespace F4
              */
             Polynomial(std::string const s);
             
+            /**
+             * \brief Constructor.
+             * \param polynomial: Polynomial to copy.
+             */
+            Polynomial(Polynomial const & polynomial);
+            
             
             // Destructor
             
@@ -68,12 +74,27 @@ namespace F4
             
             /**
              * \brief Print the polynomial.
-             * \return void
              */
             void printPolynomial (std::ostream & stream = std::cout) const;
             
+            /**
+             * \brief Get the number of terms of this.
+             * \return Number of terms of this.
+             */
+             int getNbTerm();
+            
+            
+            // Internal operators
+            
+            /**
+             * \brief Overload the operator =.
+             * \param polynomial: Polynomial to copy.
+             * \return Reference on this.
+             */
+            Polynomial & operator=(Polynomial const & polynomial);
+            
         private:
-            std::forward_list<Term<Element>> _polynomial;
+            std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
     };
     
     /**

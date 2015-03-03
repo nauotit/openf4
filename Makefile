@@ -16,7 +16,8 @@
 
 CXX=g++
 # std=c++11 required by forward_list
-CFLAGS= -O3 -g -Wall -std=c++11
+#CFLAGS= -O3 -g -Wall -std=c++11
+CFLAGS= -g -Wall -std=c++11
 #LDFLAGS=
 LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
 EXEC = example

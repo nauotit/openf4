@@ -34,7 +34,12 @@ namespace F4
     }
     
     template <typename Element>
-    Term<Element>::Term(Element coeff, Monomial mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
+    Term<Element>::Term(Element coeff, Monomial & mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
+    {
+    }
+    
+    template <typename Element>
+    Term<Element>::Term(Element coeff, int numMon): _coefficient(coeff), _numMonomial(numMon)
     {
     }
     
@@ -48,6 +53,12 @@ namespace F4
         mon.~Monomial();
     }
     
+    template <typename Element>
+    Term<Element>::Term(Term const & toCopy): _coefficient(toCopy._coefficient), _numMonomial(toCopy._numMonomial)
+    {
+    }
+    
+    
     // Destructor
     template <typename Element>
     Term<Element>::~Term()
@@ -60,7 +71,7 @@ namespace F4
     
     template <typename Element>
     Element 
-    Term<Element>::getCoefficient()
+    Term<Element>::getCoefficient() const
     {
         return _coefficient;
     }
@@ -71,6 +82,21 @@ namespace F4
     {
         _coefficient=coeff;
     }
+    
+    template <typename Element>
+    int 
+    Term<Element>::getNumMonomial() const
+    {
+        return _numMonomial;
+    }
+
+    template <typename Element>
+    void 
+    Term<Element>::setNumMonomial(int numMon)
+    {
+        _numMonomial=numMon;
+    }
+    
     
     // Miscellaneous
     
@@ -135,7 +161,24 @@ namespace F4
         return res;
     }
     
+    
     // Operator overload
+    
+    template <typename Element>
+    Term<Element> & 
+    Term<Element>::operator=(Term const & term)
+    {
+        _coefficient=term._coefficient;
+        _numMonomial=term._numMonomial;
+        return * this;
+    }
+    
+    //template <typename Element>
+    //Term<Element> &
+    //Term<Element>::operator*=(Monomial const & monomial)
+    //{
+        ////_numMonomial
+    //}
     
     template <typename Element>
     ostream & operator<<(ostream & stream, Term<Element> const & term)

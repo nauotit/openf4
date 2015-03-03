@@ -154,8 +154,8 @@ int main (int argc, char **argv)
     cout << "MonArray[3] :" << MonArray[3] << endl << endl;
     
     cout << "Test setNbMonomial() " << endl;
-    Monomial::setNbMonomial(25);
-    int ** nbMon=Monomial::getNbMonomial();
+    Monomial::setNbMonomial(20);
+    vector<int *> nbMon=Monomial::getNbMonomial();
     for (int i=0; i< 8+1; i++)
     {
         for (int j=0; j< 8+2; j++)
@@ -179,15 +179,39 @@ int main (int argc, char **argv)
     cout << "MonArray2[6].monomialToInt() " << MonArray2[6].monomialToInt() <<endl;
     cout << "mon1.monomialToInt() " << mon1.monomialToInt() << endl;
     cout << mon2 << endl;
-    cout << "mon2.monomialToInt() " << mon2.monomialToInt() << endl;
+    cout << "mon2.monomialToInt() " << mon2.monomialToInt() << endl << endl;
     
-    cout << "Test setTabulatedProduct" << endl;
+    cout << "Test setMonomialArray: " << endl;
+    Monomial::setMonomialArray();
+    vector<Monomial> vec=Monomial::getMonomialArray();
+    for (int i=0; i<30; i++)
+    {
+        cout << " MONOMIAL_ARRAY["<<i<<"] :" << vec[i] << endl;
+    }
+    cout << endl;
+    
+    cout << "Test setTabulatedProduct: " << endl;
     Monomial::setTabulatedProduct(2,10);
     int ** tabProduct=Monomial::getTabulatedProduct();
+    for (int i=0; i< 10; i++)
+    {
+        for (int j=0; j< 10; j++)
+        {
+            cout << tabProduct[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
     cout << "tabProduct[3][9]: " << tabProduct[3][9] << endl;
     cout << "MonArray2[3]*MonArray2[9]: " << MonArray2[3]*MonArray2[9] << endl;
     mon1.intToMonomial(tabProduct[3][9]);
     cout << "intToMonomial(tabProduct[3][9]): " << mon1 << endl << endl;
+    
+    cout << "Test multNumMonomial: " << endl;
+    cout << "Monomial::multNumMonomial(10, 100) :" << Monomial::multNumMonomial(10, 100) << endl;
+    cout << "Monomial::multNumMonomial(100, 1000) :" << Monomial::multNumMonomial(100, 1000) << endl;
+    cout << "Monomial::multNumMonomial(1000, 10000) :" << Monomial::multNumMonomial(1000, 10000) << endl;
+    cout << "Monomial::multNumMonomial(10000, 100000) :" << Monomial::multNumMonomial(10000, 100000) << endl << endl;
     
     cout << "Test setMonomial(string s)" << endl;
     string s1="s1*s3^4*s7^2";
@@ -206,8 +230,9 @@ int main (int argc, char **argv)
     cout << "mon6(s3); " << mon6 << endl << endl;
     
     // Free first TABULATED_PRODUCT, then NB_MONOMIAL.
-    Monomial::freeTabulatedProduct(2,10);
-    Monomial::freeNbMonomial(25);
+    Monomial::freeTabulatedProduct();
+    Monomial::freeNbMonomial();
+    Monomial::freeMonomialArray();
     
     mon1.~Monomial();
     mon2.~Monomial();

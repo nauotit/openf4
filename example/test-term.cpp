@@ -60,16 +60,20 @@ int main (int argc, char **argv)
     cout << "Test Term<int>: " << endl;
     cout << "t1: " << t1 << endl;
     Term<int> t1bis("-7*s1^3*s4^12");
-    cout << "t1bis:" << t1bis << endl;
+    cout << "t1bis: " << t1bis << endl;
     Term<int> t1bisbis("-7");
-    cout << "t1bisbis:" << t1bisbis << endl << endl;
+    cout << "t1bisbis: " << t1bisbis << endl << endl;
     
     // Term with double coefficient
     Term<double> t2(85.32, monArray[14]);
     cout << "Test Term<double>: " << endl;
     cout << "t2: " << t2 << endl;
     Term<double> t2bis("95.365*s1^2*s3^11*s4^12");
-    cout << "t2bis:" << t2bis << endl << endl;
+    cout << "t2bis: " << t2bis << endl;
+    t2bis.setCoefficient(19.3);
+    cout << "t2bis after t2bis.setCoefficient(19.3): " << t2bis << endl;
+    t2bis.setNumMonomial(12557);
+    cout << "t2bis after t2bis.setNumMonomial(12557): " << t2bis << endl << endl;
     
     //// Term with modular coefficient (prime finite field)
     //typedef Modular < double >FieldModular;
@@ -91,12 +95,22 @@ int main (int argc, char **argv)
     //cout << "Test Term<GivaroGfq::Element>: " << endl;
     //cout << "t4: " << t4 << endl << endl;
     
+    // Test copy constructor
+    cout << "Test copy constructor: " << endl; 
+    Term<double> t5(t2bis);
+    cout << "t5: " << t5 << endl<< endl;
+    
+    // Test operator =
+    cout << "Test operator = " << endl; 
+    t5=t2;
+    cout << "t5: " << t5 << endl << endl;  
+    
     // Free
     for(int i=0; i<100; i++)
     {
         monArray[i].~Monomial();
     }
-    Monomial::freeNbMonomial(20);
+    Monomial::freeNbMonomial();
     
     t1.~Term();
     t2.~Term();

@@ -50,15 +50,28 @@ namespace F4
             /**
              * \brief Constructor.
              * \param coeff: Coefficient of the term.
-             * \param mon: Pointer on the monomial of the term.
+             * \param mon: Monomial of the term.
              */
-            Term(Element coeff, Monomial mon);
+            Term(Element coeff, Monomial & mon);
+            
+            /**
+             * \brief Constructor.
+             * \param coeff: Coefficient of the term.
+             * \param numMon: Number of the monomial of the term.
+             */
+            Term(Element coeff, int numMon);
             
             /**
              * \brief Constructor.
              * \param s: String representing the term.
              */
             Term(std::string const s);
+            
+            /**
+             * \brief Copy constructor.
+             * \param toCopy: Term.
+             */
+            Term(Term const & toCopy);
             
             
             // Destructor
@@ -75,13 +88,25 @@ namespace F4
              * \brief Get the coefficient of this.
              * \return Coefficient of this.
              */
-            Element getCoefficient();
+            Element getCoefficient() const;
             
             /**
              * \brief Set the coefficient of this.
              * \param Coefficient.
              */
             void setCoefficient(Element coeff);
+            
+            /**
+             * \brief Get the number of the monomial of this.
+             * \return numMonomial of this.
+             */
+            int getNumMonomial() const;
+            
+            /**
+             * \brief Set the number of the monomial of this.
+             * \param numMon: Number of the monomial of this.
+             */
+            void setNumMonomial(int numMon);
             
             // Miscellaneous
             
@@ -93,7 +118,6 @@ namespace F4
             
             /**
              * \brief Print the term.
-             * \return void
              */
             void printTerm (std::ostream & stream = std::cout) const;
             
@@ -103,10 +127,27 @@ namespace F4
              * \return Coefficent the term.
              */
             Element readCoefficient(std::string const s);
+            
+            
+            // Internal operators
+            
+            /**
+             * \brief Overload the operator =.
+             * \param term: Term to copy.
+             * \return Reference on this.
+             */
+            Term & operator=(Term const & term);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a monomial.
+             * \param mon: Monomial.
+             * \return Reference on this.
+             */
+            Term & operator*=(Monomial const & monomial);
         
         private:
-            Element _coefficient;
-            int _numMonomial;
+            Element _coefficient; /*!< Coefficient of the term. */
+            int _numMonomial; /*!< Number of the monomial of the term. */
     };
     
     /**

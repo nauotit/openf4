@@ -50,16 +50,24 @@ namespace F4
             
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
+                // add sign
                 tmp=s[pos1-1]+tmp;
             }
-            
             pos1=pos2+1; // We skip +
-            cout << "Polynomial: " << tmp << endl;
-            term.setTerm(tmp);
-            
-            it=_polynomial.insert_after(it, term);
+            if(tmp != "")
+            {
+                // In case the first character is a sign
+                term.setTerm(tmp);
+                it=_polynomial.insert_after(it, term);
+            }
         }
     }
+    
+    template <typename Element>
+    Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial)
+    {
+    }
+    
     
     // Destructor
     
@@ -82,7 +90,7 @@ namespace F4
             it_tmp++;
             if(it_tmp !=_polynomial.end())
             {
-                stream << "(" << *it << ") +";
+                stream << "(" << *it << ") + ";
             }
             else
             {
@@ -91,7 +99,24 @@ namespace F4
         }
     }
     
+    template <typename Element>
+    int 
+    Polynomial<Element>::getNbTerm()
+    {
+        return distance(_polynomial.begin(), _polynomial.end());
+    }
+    
+    
     // Operator overload
+    
+    template <typename Element>
+    Polynomial<Element> & 
+    Polynomial<Element>::operator=(Polynomial const & polynomial)
+    {
+        _polynomial=polynomial._polynomial;
+        return * this;
+    }
+    
     
     template <typename Element>
     ostream & operator<<(ostream & stream, Polynomial<Element> const & polynomial)

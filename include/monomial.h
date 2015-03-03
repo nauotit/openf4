@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <cassert>
 
 /** \namespace F4 
@@ -75,7 +76,7 @@ namespace F4
              
              /**
              * \brief Modify the static variable WEIGHT.
-             * \param weight: Array of weights. [1,...,1] by default.
+             * \param weight: Array of weights.
              */
              static void setWeight(int  * weight);
              
@@ -86,66 +87,120 @@ namespace F4
              static int * getWeight();
              
             /**
-             * \brief Modify the static array NB_MONOMIAL.
+             * \brief Modify the dynamic 2D array NB_MONOMIAL.
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
              */
              static void setNbMonomial(int maxDegree);
              
              /**
-             * \brief Get the static variable NB_MONOMIAL.
+             * \brief Get the dynamic 2D array NB_MONOMIAL.
              * \return Value of NB_MONOMIAL.
              */
-             static int ** getNbMonomial();
+             static std::vector<int *> & getNbMonomial();
              
              /**
-             * \brief Free the static array NB_MONOMIAL.
+             * \brief Free the dynamic 2D array NB_MONOMIAL.
              * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
              */
-             static void freeNbMonomial(int maxDegree);
+             static void freeNbMonomial();
              
              /**
-             * \brief Modify the static array TABULATED_PRODUCT.
-             * \param deg1: .
-             * \param deg2: .
+             * \brief Modify the dynamic array MONOMIAL_ARRAY.
+             * \pre Static variables NB_VARIABLE and NB_MONOMIAL must be set beforehand.
+             */
+             static void setMonomialArray();
+             
+             /**
+             * \brief Get the dynamic array MONOMIAL_ARRAY.
+             * \return Vector MONOMIAL_ARRAY.
+             */
+             static std::vector<Monomial> & getMonomialArray();
+             
+             /**
+             * \brief Free the dynamic array MONOMIAL_ARRAY.
+             */
+             static void freeMonomialArray();
+             
+             /**
+             * \brief Modify the static 2D array TABULATED_PRODUCT.
+             * \pre Static variables NB_VARIABLE, NB_MONOMIAL and MONOMIAL_ARRAY must be set beforehand.
+             * \param deg1: Maximum degree of line monomials.
+             * \param deg2: Maximum degree of column monomials.
              */
              static void setTabulatedProduct(int deg1, int deg2);
              
              /**
-             * \brief Get the static variable NB_MONOMIAL.
+             * \brief Get the static 2D array NB_MONOMIAL.
              * \return Value of NB_MONOMIAL.
              */
              static int ** getTabulatedProduct();
              
              /**
-             * \brief Free the static array NB_MONOMIAL.
-             * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
+             * \brief Free the static 2D array NB_MONOMIAL.
+             * \pre The static variables NB_VARIABLE must be set beforehand.
              */
-             static void freeTabulatedProduct(int deg1, int deg2);
+             static void freeTabulatedProduct();
+             
+             /**
+             * \brief Multiply two monomials, using TABULATED_PRODUCT if possible.
+             * \param numMon1: Number of the first monomial.
+             * \param numMon2: Number of the second monomial.
+             * \return Number of the product intToMonomial[numMon1] * intToMonomial[numMon2].
+             */
+             static int multNumMonomial(int numMon1, int numMon2);
+             
+             /**
+              * \brief Initialise the static parameters of Monomial.
+              * \param nbVariable: Number of variables of the polynomial ring.
+              * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.
+              * \param deg1: Maximum degree of line monomials in TABULATED_PRODUCT.
+              * \param deg2: Maximum degree of column monomials in TABULATED_PRODUCT.
+              * \param verbose: verbosity level.
+              */
+             static void initMonomial(int nbVariable, int maxDegree, int deg1, int deg2, int verbose);
+             
+             /**
+              * \brief Free the space allocated by initMonomial.
+              */
+             static void freeMonomial();
             
             // Constructor
             
             /**
-             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
+             * \brief Constructor.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
              */
             Monomial(); 
             
             /**
-             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
+             * \brief Constructor.
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param varlist: Array representing the degree of each variable of the monomial.
              */
             Monomial(int const * varlist); 
             
             /**
-             * \brief Constructor, the static variable NB_VARIABLE must be set beforehand.
+             * \brief Constructor.
+             * \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
              * \param s: String representing the monomial.
              */
             Monomial(std::string const s); 
             
             /**
-             * \brief Copy constructor.
-             * \param Monomial.
+             * \brief Constructor.
+             * \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
+             * \param numMon: number of the constructed monomial, 0 is the smallest monomial of the given degree.
              */
-             Monomial(Monomial const & toCopy);
+            Monomial(int numMon); 
+            
+            /**
+             * \brief Copy constructor.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
+             * \param toCopy: Monomial.
+             */
+            Monomial(Monomial const & toCopy);
+             
              
              // Destructor
             
@@ -154,40 +209,60 @@ namespace F4
              */
             ~Monomial();
             
+            
+            // Get / Set
+            
+            /**
+             * \brief Get the degree of this.
+             * \return Degree of this.
+             */
+            int getDegree() const;
+            
+            /**
+             * \brief Get the varlist of this.
+             * \return Varlist of this.
+             */
+            int * getVarlist() const;
+            
             // Miscellaneous
             
             /**
-             * \brief Initialize this with varlist.
+             * \brief Initialize this with varlist. 
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param varlist: Array representing the degree of each variable of the monomial.
              */
             void setMonomial(int const * varlist);
             
             /**
              * \brief Initialize this with s.
+             * \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
              * \param s: String representing the monomial.
              */
             void setMonomial(std::string const s);
             
             /**
-             * \brief Initialize this with the num-th monomial of degree deg. The static array NB_MONOMIAL must be set beforehand.
-             * \param num: number of the constructed monomial, 0 is the smallest monomial of the given degree.
+             * \brief Initialize this with the num-th monomial.
+             * \pre Static variables NB_VARIABLE, WEIGHT and NB_MONOMIAL must be set beforehand.
+             * \param numMon: number of the constructed monomial, 0 is the smallest monomial of the given degree.
              */
             void intToMonomial(int numMon);
             
             /**
-             * \brief Compute the number of this. The static array NB_MONOMIAL must be set beforehand.
+             * \brief Compute the number of this. 
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \return Number of this.
              */
-            int monomialToInt();
+            int monomialToInt() const;
             
             /**
-             * \brief Print the monomial.
-             * \return void
+             * \brief Print the monomial. 
+             * \pre The static variable NB_VARIABLE must be set beforehand.
              */
             void printMonomial (std::ostream & stream = std::cout) const;
             
             /**
              * \brief Compare monomials according to the grevlex order.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
              * \param mon: Monomial.
              * \return  0 if this==mon.
              * \return  1 if this>mon.
@@ -197,6 +272,7 @@ namespace F4
             
             /**
              * \brief Test if this is divisible by mon.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
              * \param mon: Divisor.
              * \return true if mon divides this.
              * \return false otherwise.
@@ -205,25 +281,33 @@ namespace F4
             
             /**
              * \brief Reset this.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
              */
             void reset();
+            
             
             // Internal operators
             
             /**
              * \brief Overload the operator =.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
+             * \param mon: Monomial to copy.
              * \return Reference on this.
              */
             Monomial & operator=(Monomial const & mon);
             
             /**
              * \brief Overload the operator *=.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
+             * \param mon: Monomial.
              * \return Reference on this.
              */
             Monomial & operator*=(Monomial const & mon); 
             
             /**
              * \brief Overload the operator /=.
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
+             * \param mon: Monomial (divisor).
              * \return Reference on this.
              */
             Monomial & operator/=(Monomial const & mon); 
@@ -235,13 +319,16 @@ namespace F4
             static int VERBOSE; 
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
             static std::string const * VARS; /*!< Array of NB_VARIABLE string representing the variable names. */
-            static int * WEIGHT; /*!< Array of NB_VARIABLE weights. [1,...,1] by default */
+            static int * WEIGHT; /*!< Array of NB_VARIABLE weights. */
             /**
              * \brief NB_MONOMIAL[d][v] = Number of degree d monomials in the v first variables.
              * NB_MONOMIAL[d][NB_VARIABLE+1] = Number of monomials of degree <= d.
              */
-            static int **NB_MONOMIAL;
+            static std::vector<Monomial> MONOMIAL_ARRAY;
+            static std::vector<int *> NB_MONOMIAL;
             static int MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
+            static int NUM_MAX_LINE; /*!< Number of line in TABULATED_PRODUCT. */
+            static int NUM_MAX_COLUMN; /*!< Number of column in TABULATED_PRODUCT. */
             static int ** TABULATED_PRODUCT; /*!< TABULATED_PRODUCT[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
     };
     
