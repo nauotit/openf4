@@ -232,24 +232,7 @@ int main (int argc, char **argv)
     // Free first TABULATED_PRODUCT, then NB_MONOMIAL.
     Monomial::freeTabulatedProduct();
     Monomial::freeNbMonomial();
-    Monomial::freeMonomialArray();
     
-    mon1.~Monomial();
-    mon2.~Monomial();
-    mon3.~Monomial();
-    mon4.~Monomial();
-    mon5.~Monomial();
-    mon6.~Monomial();
-    
-    for (int i=0; i<4; i++)
-    {
-        MonArray[i].~Monomial();
-    }
-    
-    for (int i=0; i<20; i++)
-    {
-        MonArray2[i].~Monomial();
-    }
     return 0;
 }
 

@@ -50,7 +50,6 @@ namespace F4
         _coefficient=readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
-        mon.~Monomial();
     }
     
     template <typename Element>
@@ -108,17 +107,14 @@ namespace F4
         _coefficient=readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
-        mon.~Monomial();
     }
     
     template <typename Element>
     void
     Term<Element>::printTerm (ostream & stream) const
     {
-        Monomial mon;
-        mon.intToMonomial(_numMonomial);
+        Monomial mon(_numMonomial);
         stream << _coefficient << "*" << mon;
-        mon.~Monomial();
     }
     
     template<typename Element>

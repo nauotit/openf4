@@ -106,19 +106,7 @@ int main (int argc, char **argv)
     cout << "t5: " << t5 << endl << endl;  
     
     // Free
-    for(int i=0; i<100; i++)
-    {
-        monArray[i].~Monomial();
-    }
     Monomial::freeNbMonomial();
-    
-    t1.~Term();
-    t2.~Term();
-    t1bis.~Term();
-    t1bisbis.~Term();
-    t2bis.~Term();
-    //t3.~Term();
-    //t4.~Term();
 
     return 0;
 }

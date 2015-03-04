@@ -87,7 +87,7 @@ namespace F4
              static int * getWeight();
              
             /**
-             * \brief Modify the dynamic 2D array NB_MONOMIAL.
+             * \brief Modify the dynamic 2D array NB_MONOMIAL, and call setMonomialArray().
              * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
              */
@@ -95,12 +95,12 @@ namespace F4
              
              /**
              * \brief Get the dynamic 2D array NB_MONOMIAL.
-             * \return Value of NB_MONOMIAL.
+             * \return Reference on NB_MONOMIAL.
              */
              static std::vector<int *> & getNbMonomial();
              
              /**
-             * \brief Free the dynamic 2D array NB_MONOMIAL.
+             * \brief Free the dynamic 2D array NB_MONOMIAL, and call freeMonomialArray().
              * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
              */
              static void freeNbMonomial();
@@ -113,7 +113,7 @@ namespace F4
              
              /**
              * \brief Get the dynamic array MONOMIAL_ARRAY.
-             * \return Vector MONOMIAL_ARRAY.
+             * \return Reference on MONOMIAL_ARRAY.
              */
              static std::vector<Monomial> & getMonomialArray();
              
@@ -200,6 +200,13 @@ namespace F4
              * \param toCopy: Monomial.
              */
             Monomial(Monomial const & toCopy);
+            
+            /**
+             * \brief Move constructor. Used when mon is unnamed.
+             * \pre The static variable NB_VARIABLE must be set beforehand.
+             * \param toCopy: Monomial.
+             */
+            Monomial(Monomial && toCopy);
              
              
              // Destructor
@@ -297,6 +304,14 @@ namespace F4
             Monomial & operator=(Monomial const & mon);
             
             /**
+             * \brief Overload the operator = (move assignment). Used when mon is unnamed (only copy the pointer).
+             * \pre The static variable NB_VARIABLE must be set beforehand.
+             * \param mon: Monomial to copy.
+             * \return Reference on this.
+             */
+            Monomial & operator=(Monomial && mon);
+            
+            /**
              * \brief Overload the operator *=.
              * \pre The static variable NB_VARIABLE must be set beforehand.
              * \param mon: Monomial.
@@ -324,8 +339,8 @@ namespace F4
              * \brief NB_MONOMIAL[d][v] = Number of degree d monomials in the v first variables.
              * NB_MONOMIAL[d][NB_VARIABLE+1] = Number of monomials of degree <= d.
              */
-            static std::vector<Monomial> MONOMIAL_ARRAY;
             static std::vector<int *> NB_MONOMIAL;
+            static std::vector<Monomial> MONOMIAL_ARRAY; /*!< Dynamic array of monomial */
             static int MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
             static int NUM_MAX_LINE; /*!< Number of line in TABULATED_PRODUCT. */
             static int NUM_MAX_COLUMN; /*!< Number of column in TABULATED_PRODUCT. */

@@ -29,6 +29,12 @@ obj/test-monomial.o: example/test-monomial.cpp
 bin/test-monomial: obj/test-monomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-memory-monomial.o: example/test-memory-monomial.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-memory-monomial: obj/test-memory-monomial.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 obj/test-term.o: example/test-term.cpp 
 	$(CC) $(CFLAGS) -o $@ -c $<
 
@@ -44,7 +50,7 @@ bin/test-polynomial: obj/test-polynomial.o
 
 # Intermediate rules
 
-example: bin/test-monomial bin/test-polynomial bin/test-term 
+example: bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term 
 
 all: $(EXEC)
 
