@@ -24,89 +24,146 @@
  */
 
 #include <iostream>
-//#include "linbox/field/modular.h"
+#include "linbox/field/modular.h"
 #include <vector>
-//#include "linbox/field/givaro.h"
+#include "linbox/field/givaro.h"
 #include "../include/term.h"
 
 using namespace F4;
 using namespace std;
-//using namespace LinBox;
+using namespace LinBox;
 
 int main (int argc, char **argv)
 {
-    // First we set the number of variable of the polynomial ring.
-    Monomial::setNbVariable(4);
-    // Then their names:
-    string vars[4]={"s1","s2","s3","s4"};
-    Monomial::setVariable(vars);
-    // Then the weight
-    int weight[4]={1,1,1,1};
-    Monomial::setWeight(weight);
-    // Then the 2D array NB_MONOMIAL:
-    Monomial::setNbMonomial(30);
-    // Verbose mode
-    Monomial::setVerbose(2);
+    //Init monomial tools: 6 variables.
+    Monomial::initMonomial(6,10,6,10,2);
+    cout << endl;
     
-    // Create an array of 100 monomials.
-    vector<Monomial> monArray(100);
-    for(int i=0; i<100; i++)
-    {
-        monArray[i].intToMonomial(i);
-    }
-    
-    // Term with integer coefficient
-    Term<int> t1(-3, monArray[8]);
-    cout << "Test Term<int>: " << endl;
+    // Test Term()
+    cout << "________Test Term()________" << endl;
+    Term<int> t1;
+    Term<double> t2;
     cout << "t1: " << t1 << endl;
-    Term<int> t1bis("-7*s1^3*s4^12");
-    cout << "t1bis: " << t1bis << endl;
-    Term<int> t1bisbis("-7");
-    cout << "t1bisbis: " << t1bisbis << endl << endl;
+    cout << "t2: " << t2 << endl << endl;
     
-    // Term with double coefficient
-    Term<double> t2(85.32, monArray[14]);
-    cout << "Test Term<double>: " << endl;
-    cout << "t2: " << t2 << endl;
-    Term<double> t2bis("95.365*s1^2*s3^11*s4^12");
-    cout << "t2bis: " << t2bis << endl;
-    t2bis.setCoefficient(19.3);
-    cout << "t2bis after t2bis.setCoefficient(19.3): " << t2bis << endl;
-    t2bis.setNumMonomial(12557);
-    cout << "t2bis after t2bis.setNumMonomial(12557): " << t2bis << endl << endl;
+    // Test Term(Element coeff, Monomial const & mon)
+    cout << "________Test Term(Element coeff, Monomial const & mon)________" << endl;
+    Term<int> t3(123, Monomial("x0^2*x1^3*x2^4"));
+    Term<double> t4(123.456, Monomial("x0^2*x1^3*x2^4*x5"));
+    cout << "t3: " << t3 << endl;
+    cout << "t4: " << t4 << endl << endl;
     
-    //// Term with modular coefficient (prime finite field)
-    //typedef Modular < double >FieldModular;
-    //FieldModular field1 (65537);
-    //typedef FieldModular::Element elt1;
-    //elt1 e1;
-    //field1.init(e1, 6);
-    //Term<elt1> t3(e1, monArray[16]);
-    //cout << "Test Term<Modular<double>::Element>: " << endl;
-    //cout << "t3: " << t3 << endl << endl;
+    // Test Term(Element coeff, int numMon);
+    cout << "________Test Term(Element coeff, int numMon)________" << endl;
+    Term<int> t5(123, Monomial("x0^2*x1^3*x2^4").monomialToInt());
+    Term<double> t6(123.456, Monomial("x0^2*x1^3*x2^4*x5").monomialToInt());
+    cout << "t5: " << t5 << endl;
+    cout << "t6: " << t6 << endl << endl;
+            
+    // Test Term(std::string const s);
+    cout << "________Test Term(std::string const s)________" << endl;
+    Term<int> t7("123*x0^2*x1^3*x2^4");
+    Term<double> t8("123.456*x0^2*x1^3*x2^4*x5");
+    cout << "t7: " << t7 << endl;
+    cout << "t8: " << t8 << endl << endl;
+            
+    // Test Term(Term const & toCopy);
+    cout << "________Test Term(Term const & toCopy)________" << endl;
+    Term<int> t9(t7);
+    Term<double> t10(t8);
+    cout << "t9: " << t9 << endl;
+    cout << "t10: " << t10 << endl << endl;
+            
+    // Test ~Term();
+    // Usefull only if Element use dynamic allocation. 
+            
+    // Test Element getCoefficient() const;
+    cout << "________Test getCoefficient()________" << endl;
+    cout << "Coefficient of t9: " << t9.getCoefficient() << endl;
+    cout << "Coefficient of t10: " << t10.getCoefficient() << endl << endl;
+            
+    // Test void setCoefficient(Element coeff);
+    cout << "________Test setCoefficient(Element coeff)________" << endl;
+    t9.setCoefficient(456);
+    t10.setCoefficient(456.789);
+    cout << "t9: " << t9 << endl;
+    cout << "t10: " << t10 << endl << endl;
+            
+    // Test int getNumMonomial() const;
+    cout << "________Test getNumMonomial()________" << endl;
+    cout << t9.getNumMonomial() << " which match monomial: " << Monomial(t9.getNumMonomial()) << endl;
+    cout << t10.getNumMonomial() << " which match monomial: " << Monomial(t10.getNumMonomial()) << endl << endl;
+            
+    // Test void setNumMonomial(int numMon);
+    cout << "________Test setNumMonomial(int numMon)________" << endl;
+    t9.setNumMonomial(10000);
+    t10.setNumMonomial(20000);
+    cout << "t9: " << t9 << endl;
+    cout << "t10: " << t10 << endl << endl;
+            
+    // Test void setTerm(std::string const s);
+    cout << "________Test setTerm(std::string const s)________" << endl;
+    t9.setTerm("-123*x1*x2^2*x3^3*x4^4*x5^5");
+    t10.setTerm("-123.456*x1*x2^2*x3^3*x4^4*x5^5");
+    cout << "t9: " << t9 << endl;
+    cout << "t10: " << t10 << endl << endl;
+            
+    // Test void printTerm (std::ostream & stream = std::cout) const;
+    cout << "________Test printTerm (std::ostream & stream = std::cout)________" << endl;
+    t9.printTerm();
+    cout << endl;
+    t10.printTerm();
+    cout << endl << endl;
+            
+    // Test Element readCoefficient(std::string const s);
+    cout << "________Test readCoefficient(std::string const s)________" << endl;
+    cout << Term<int>::readCoefficient("-123*x1*x2^2*x3^3*x4^4*x5^5") << endl;
+    cout << Term<double>::readCoefficient("-123.456*x1*x2^2*x3^3*x4^4*x5^5") << endl << endl;
+            
+    // Test Term & operator=(Term const & term);
+    cout << "________Test operator=(Term const & term)________" << endl;
+    t9=t3;
+    t10=t4;
+    cout << "t9: " << t9 << endl;
+    cout << "t10: " << t10 << endl << endl;
+            
+    // Test Term & operator*=(Monomial const & monomial);
+    cout << "________Test operator*=(Monomial const & monomial)________" << endl;
+    t9*=Monomial(10000);
+    t10*=Monomial(20000);
+    cout << "t9 multiply by "<< Monomial(10000) << ": " << t9 << endl;
+    cout << "t10 multiply by " << Monomial(20000) <<": " << t10 << endl << endl;
     
-    //// Term with givaro coefficient (non prime finite field)
-    //typedef GivaroGfq FieldGivaro;
-    //FieldGivaro field2( 17, 5);
-    //typedef FieldGivaro::Element elt2;
-    //elt2 e2;
-    //field2.init(e2, 545);
-    //Term<elt2> t4(e2, monArray[9]);
-    //cout << "Test Term<GivaroGfq::Element>: " << endl;
-    //cout << "t4: " << t4 << endl << endl;
+    // Test Term & operator*=(int numMon);
+    cout << "________Test operator*=(int numMon)________" << endl;
+    t9*=1000;
+    t10*=2000;
+    cout << "t9 multiply by "<< Monomial(1000) << ": " << t9 << endl;
+    cout << "t10 multiply by " << Monomial(2000) <<": " << t10 << endl << endl;
     
-    // Test copy constructor
-    cout << "Test copy constructor: " << endl; 
-    Term<double> t5(t2bis);
-    cout << "t5: " << t5 << endl<< endl;
+    // Test Linbox compatibility :
+    // Term with modular coefficient (prime finite field)
+    cout << "________Test Term(Element coeff, int numMon) with Modular________" << endl;
+    typedef Modular < double >FieldModular;
+    FieldModular field1 (65537);
+    typedef FieldModular::Element elt1;
+    elt1 e1;
+    field1.init(e1, 123456789);
+    Term<elt1> t11(e1, Monomial(123456));
+    cout << "t12: " << t11 << endl << endl;
     
-    // Test operator =
-    cout << "Test operator = " << endl; 
-    t5=t2;
-    cout << "t5: " << t5 << endl << endl;  
+    // Term with givaro coefficient (non prime finite field)
+    cout << "________Test Term(Element coeff, int numMon) with GivaroGfq________" << endl;
+    typedef GivaroGfq FieldGivaro;
+    FieldGivaro field2(17, 5);
+    typedef FieldGivaro::Element elt2;
+    elt2 e2;
+    field2.init(e2, 545);
+    Term<elt2> t12(e2, Monomial(123456));
+    cout << "t12: " << t12 << endl << endl;
     
-    // Free
-    Monomial::freeNbMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
 
     return 0;
 }

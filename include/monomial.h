@@ -143,7 +143,7 @@ namespace F4
              static void freeTabulatedProduct();
              
              /**
-             * \brief Multiply two monomials, using TABULATED_PRODUCT if possible.
+             * \brief Multiply two monomials, using TABULATED_PRODUCT if possible. Prefer numMon1<numMon2.
              * \param numMon1: Number of the first monomial.
              * \param numMon2: Number of the second monomial.
              * \return Number of the product intToMonomial[numMon1] * intToMonomial[numMon2].
@@ -190,7 +190,7 @@ namespace F4
             /**
              * \brief Constructor.
              * \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
-             * \param numMon: number of the constructed monomial, 0 is the smallest monomial of the given degree.
+             * \param numMon: number of the constructed monomial, 0 is the smallest monomial.
              */
             Monomial(int numMon); 
             
@@ -250,7 +250,7 @@ namespace F4
             /**
              * \brief Initialize this with the num-th monomial.
              * \pre Static variables NB_VARIABLE, WEIGHT and NB_MONOMIAL must be set beforehand.
-             * \param numMon: number of the constructed monomial, 0 is the smallest monomial of the given degree.
+             * \param numMon: number of the constructed monomial, 0 is the smallest monomial.
              */
             void intToMonomial(int numMon);
             

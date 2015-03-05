@@ -26,6 +26,49 @@
 
 namespace F4
 {
+    // Static methods
+    
+    template<typename Element>
+    Element
+    Term<Element>::readCoefficient(std::string const s)
+    {
+        cout << "Term: no defined readCoefficient method for this type" << endl;
+        return 0;
+    }
+    
+    template<>
+    int
+    Term<int>::readCoefficient(std::string const s)
+    {
+        int res;
+        try
+        { 
+            res=stoi(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        return res;
+    }
+    
+    template<>
+    double
+    Term<double>::readCoefficient(std::string const s)
+    {
+        double res;
+        try
+        { 
+            res=stod(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        return res;
+    }
+    
+    
     // Constructor 
     
     template <typename Element>
@@ -34,7 +77,7 @@ namespace F4
     }
     
     template <typename Element>
-    Term<Element>::Term(Element coeff, Monomial & mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
+    Term<Element>::Term(Element coeff, Monomial const & mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
     {
     }
     
@@ -117,46 +160,6 @@ namespace F4
         stream << _coefficient << "*" << mon;
     }
     
-    template<typename Element>
-    Element
-    Term<Element>::readCoefficient(std::string const s)
-    {
-        cout << "Term: no defined readCoefficient method for this type" << endl;
-        return 0;
-    }
-    
-    template<>
-    int
-    Term<int>::readCoefficient(std::string const s)
-    {
-        int res;
-        try
-        { 
-            res=stoi(s);
-        }
-        catch(exception const & e)
-        {
-            res=1;
-        }
-        return res;
-    }
-    
-    template<>
-    double
-    Term<double>::readCoefficient(std::string const s)
-    {
-        double res;
-        try
-        { 
-            res=stod(s);
-        }
-        catch(exception const & e)
-        {
-            res=1;
-        }
-        return res;
-    }
-    
     
     // Operator overload
     
@@ -169,12 +172,21 @@ namespace F4
         return * this;
     }
     
-    //template <typename Element>
-    //Term<Element> &
-    //Term<Element>::operator*=(Monomial const & monomial)
-    //{
-        ////_numMonomial
-    //}
+    template <typename Element>
+    Term<Element> &
+    Term<Element>::operator*=(Monomial const & monomial)
+    {
+        _numMonomial=Monomial::multNumMonomial(_numMonomial, monomial.monomialToInt());
+        return * this;
+    }
+    
+    template <typename Element>
+    Term<Element> &
+    Term<Element>::operator*=(int numMon)
+    {
+        _numMonomial=Monomial::multNumMonomial(_numMonomial, numMon);
+        return * this;
+    }
     
     template <typename Element>
     ostream & operator<<(ostream & stream, Term<Element> const & term)

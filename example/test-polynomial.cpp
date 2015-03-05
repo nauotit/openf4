@@ -33,53 +33,50 @@ int main (int argc, char **argv)
 {
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10,2);
-    
-    // Test constructor from string
-    cout << "Test constructor from string " << endl;
+            
+    // Test Polynomial();
+    cout << "________Test Polynomial()________" << endl;
+    Polynomial<double> p0;
+    cout << "p0: " << p0 << endl <<endl;
+            
+    // Test Polynomial(std::string const s);
+    cout << "________Test Polynomial(std::string const s)________" << endl;
     Polynomial<int> p1("x0+x1+x2+x3+x4+x5");
     Polynomial<int> p2("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
     Polynomial<int> p3("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
     Polynomial<int> p4("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
     Polynomial<int> p5("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
     Polynomial<int> p6("x0*x1*x2*x3*x4*x5-1");
-    
-    cout << "Polynomial<int> p1(\"x0+x1+x2+x3+x4+x5\"): " << endl; 
     cout << "p1: " << p1 << endl;
-    cout << "Polynomial<int> p2(\"x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5\"): " << endl;
     cout << "p2: " << p2 << endl;
-    cout << "Polynomial<int> p3(\"x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5\"): " << endl;
     cout << "p3: " << p3 << endl;
-    cout << "Polynomial<int> p4(\"x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5\"): " << endl;
     cout << "p4: " << p4 << endl;
-    cout << "Polynomial<int> p5(\"x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5\"): " << endl;
     cout << "p5: " << p5 << endl;
-    cout << "Polynomial<int> p6(\"x0*x1*x2*x3*x4*x5-1\"): " << endl;
     cout << "p6: " << p6 << endl <<endl;
     
-    // Test copy constructor 
-    cout << "Test copy constructor " << endl;
+    // Test Polynomial(Polynomial const & polynomial);
+    cout << "________Test Polynomial(Polynomial const & polynomial)________" << endl;
     Polynomial<int> p7(p3);
-    cout << "Polynomial<int> p7(p3) : " << p7 << endl << endl;
+    cout << "p7: " << p7 << endl << endl;
+            
+    // Test ~Polynomial();
+    // Automatically called at the end of the scope
     
-    // Test operator =
-    cout << "Test operator = " << endl;
+    // Test void printPolynomial (std::ostream & stream = std::cout) const;
+    cout << "________Test printPolynomial (std::ostream & stream = std::cout)________" << endl;
+    cout << "p7: ";
+    p7.printPolynomial();
+    cout << endl << endl;
+            
+    // Test int getNbTerm();
+    cout << "________Test getNbTerm()________" << endl;
+    cout << "Number of terms of p5 : " << p5.getNbTerm() << endl << endl;
+            
+    // Test Polynomial & operator=(Polynomial const & polynomial);
+    cout << "________Test operator=(Polynomial const & polynomial)________" << endl;
     Polynomial<int> p8;
     p8=p3;
-    cout << "p8 : " << p8 << endl << endl;
-    
-    // Test getNbTerm(): 
-    cout << "Test getNbTerm " << endl;
-    cout << "p5.getNbTerm() : " << p5.getNbTerm() << endl << endl;
-    
-    // Free 
-    p1.~Polynomial();
-    p2.~Polynomial();
-    p3.~Polynomial();
-    p4.~Polynomial();
-    p5.~Polynomial();
-    p6.~Polynomial();
-    p7.~Polynomial();
-    p8.~Polynomial();
+    cout << "p8: " << p8 << endl << endl;
     
     Monomial::freeMonomial();
     

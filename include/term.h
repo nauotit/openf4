@@ -39,6 +39,16 @@ namespace F4
     class Term
     {
         public:
+            
+            // Static methods
+            
+            /**
+             * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
+             * \param s: String representing the term.
+             * \return Coefficent the term.
+             */
+            static Element readCoefficient(std::string const s);
+            
         
             // Constructor
             
@@ -52,7 +62,7 @@ namespace F4
              * \param coeff: Coefficient of the term.
              * \param mon: Monomial of the term.
              */
-            Term(Element coeff, Monomial & mon);
+            Term(Element coeff, Monomial const & mon);
             
             /**
              * \brief Constructor.
@@ -121,13 +131,6 @@ namespace F4
              */
             void printTerm (std::ostream & stream = std::cout) const;
             
-            /**
-             * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
-             * \param s: String representing the term.
-             * \return Coefficent the term.
-             */
-            Element readCoefficient(std::string const s);
-            
             
             // Internal operators
             
@@ -144,6 +147,13 @@ namespace F4
              * \return Reference on this.
              */
             Term & operator*=(Monomial const & monomial);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a monomial.
+             * \param numMon: number of a monomial.
+             * \return Reference on this.
+             */
+            Term & operator*=(int numMon);
         
         private:
             Element _coefficient; /*!< Coefficient of the term. */

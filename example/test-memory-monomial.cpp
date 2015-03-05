@@ -31,9 +31,27 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
-    //Init monomial tools
+    // Init monomial tools
     Monomial::initMonomial(6,5,6,10,2);
     
+    vector<Monomial> MonArray;
+    cout << "size of MonArray: " << MonArray.size() << endl << endl;
+    
+    Monomial mon1(1234567);
+    cout << "mon1:" << mon1 << endl;
+    cout << "number of mon1: " << mon1.monomialToInt() << endl;
+    MonArray = Monomial::getMonomialArray();
+    cout << "size of MonArray: " << MonArray.size() << endl;
+    cout << "MonArray[1234567]: " << MonArray[1234567] << endl << endl;
+    
+    Monomial mon2(12345678);
+    cout << "mon2:" << mon2 << endl;
+    cout << "number of mon2: " << mon2.monomialToInt() << endl;
+    MonArray = Monomial::getMonomialArray();
+    cout << "size of MonArray: " << MonArray.size() << endl;
+    cout << "MonArray[12345678]: " << MonArray[12345678] << endl << endl;
+    
+    // Free monomial tools
     Monomial::freeMonomial();
     return 0;
 }

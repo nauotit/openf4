@@ -593,6 +593,10 @@ namespace F4
                     _deg+=_varlist[i]*WEIGHT[i];
                 }
             }
+            else
+            {
+                _varlist[i]=0;
+            }
         }
     }
     
@@ -611,46 +615,30 @@ namespace F4
         }
         
         int d;
-        //degre du monome numMon
+        // degree of monomial numMon
         for (d = 0; NB_MONOMIAL[d][NB_VARIABLE + 1] <= numMon; d++);
         _deg = d;
-        //on cherche le numero parmi les monomes de degre d
+        // look for its number among the degree d monomials.
         if (d != 0)
         {
             numMon -= NB_MONOMIAL[d - 1][NB_VARIABLE + 1];
         }
-        //pour chaque variable on cherche la puissance correspondante
+        // for each variable, look for the matching power. 
         int i, j;
-        if(WEIGHT!=0)
+
+        for (i = NB_VARIABLE - 1; i > 0; i--)
         {
-            for (i = NB_VARIABLE - 1; i > 0; i--)
+            // degree of the i-th variable
+            j = d / WEIGHT[i];
+            while (numMon >= NB_MONOMIAL[d - j * WEIGHT[i]][i])
             {
-                j = d / WEIGHT[i];      //deg de la variable num i
-                while (numMon >= NB_MONOMIAL[d - j * WEIGHT[i]][i])
-                {
-                    numMon -= NB_MONOMIAL[d - j * WEIGHT[i]][i];
-                    j--;
-                }
-                _varlist[i] = j;
-                d -= j * WEIGHT[i];
+                numMon -= NB_MONOMIAL[d - j * WEIGHT[i]][i];
+                j--;
             }
-            _varlist[0] = d / WEIGHT[0];
+            _varlist[i] = j;
+            d -= j * WEIGHT[i];
         }
-        else
-        {
-            for (i = NB_VARIABLE - 1; i > 0; i--)
-            {
-                j = d;      //deg de la variable num i
-                while (numMon >= NB_MONOMIAL[d - j][i])
-                {
-                    numMon -= NB_MONOMIAL[d - j][i];
-                    j--;
-                }
-                _varlist[i] = j;
-                d -= j;
-            }
-            _varlist[0] = d;
-        }
+        _varlist[0] = d / WEIGHT[0];
     }
     
     int Monomial::monomialToInt() const
@@ -672,14 +660,14 @@ namespace F4
             return 0;
         }
 
-        //on saute les monomes de deg total < deg
+        // skip monomials of degree < _deg 
         res = NB_MONOMIAL[_deg - 1][NB_VARIABLE + 1];
-        //on recherche la position du monome pour le degre deg
-        //tmp = degre restant apres avoir enleve le degre des dernieres variables
+        // on recherche la position du monome pour le degre deg
+        // tmp = degre restant apres avoir enleve le degre des dernieres variables
         int tmp = _deg - _varlist[NB_VARIABLE - 1] * WEIGHT[NB_VARIABLE - 1];
         for (i = NB_VARIABLE - 1; i > 0 && tmp > 0; i--)
         {
-            //les mon dont le deg en les i premieres variables est <
+            // les mon dont le deg en les i premieres variables est <
             if (tmp >= WEIGHT[i])
             {
                 res += NB_MONOMIAL[tmp - WEIGHT[i]][i + 1];
@@ -738,7 +726,7 @@ namespace F4
         if (_deg == mon._deg)
         {
             for (int k = NB_VARIABLE - 1; k > 0; k--)
-            {                       //deggrevlex
+            {   // deggrevlex monomial order
                 if ((_varlist)[k] > (mon._varlist)[k])
                 {
                     return -1;
@@ -838,8 +826,9 @@ namespace F4
         
         if (mon._deg > _deg)
         {
+            // not divisible
             cout << "Monomial: not divisible" << endl;
-            return * this;               // not divisible
+            return * this;               
         }
         Monomial copy(*this);
         for (int i = 0; i < NB_VARIABLE; i++)
@@ -847,20 +836,15 @@ namespace F4
             if ((mon._varlist[i]) <= (_varlist[i]))
             {
                 copy._varlist[i] -= mon._varlist[i];
-                if (WEIGHT!=0)
-                {
-                    // weighted monomial order
-                    copy._deg -= (mon._varlist)[i] * WEIGHT[i];
-                }
-                else
-                {
-                    copy._deg -= (mon._varlist)[i];
-                }
+                // weighted monomial order
+                copy._deg -= (mon._varlist)[i] * WEIGHT[i];
+                
             }
             else
             {
+                // not divisible
                 cout << "Monomial: not divisible" << endl;
-                return * this;           // not divisible
+                return * this;           
             }
         }
         (* this)=copy;
