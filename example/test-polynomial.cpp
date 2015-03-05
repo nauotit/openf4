@@ -71,6 +71,37 @@ int main (int argc, char **argv)
     // Test int getNbTerm();
     cout << "________Test getNbTerm()________" << endl;
     cout << "Number of terms of p5 : " << p5.getNbTerm() << endl << endl;
+    
+    // Test const Term<Element> & getLT(); 
+    cout << "________Test getLT()________" << endl;
+    cout << "Leading term of p1: " << p1.getLT() << endl;
+    cout << "Leading term of p5: " << p5.getLT() << endl << endl;
+    
+    // Test int getLM() const;
+    cout << "________Test getLM()________" << endl;
+    cout << "Number of the leading monomial of p1: " << p1.getLM() << endl;
+    cout << "Number of the leading term of p5: " << p5.getLM() << endl << endl;
+    
+    // Test Element & getCoefficient(int numMon);
+    cout << "________Test getCoefficient(int numMon)________" << endl;
+    cout << "coefficient of x1*x2*x3*x4 in p4: " << p4.getCoefficient(Monomial("x1*x2*x3*x4").monomialToInt()) << endl ;
+    cout << "coefficient of x1*x2 in p4: " << p4.getCoefficient(Monomial("x1*x2").monomialToInt()) << endl << endl ;
+    
+    // Test void deleteLT();
+    cout << "________Test deleteLT()________" << endl;
+    p1.deleteLT();
+    cout << "p1: " << p1 << endl;
+    p6.deleteLT();
+    cout << "p6: " << p6 << endl;
+    p6.deleteLT();
+    cout << "p6: " << p6 << endl;
+    p6.deleteLT();
+    cout << "p6: " << p6 << endl << endl;
+    
+    // Test void reset();
+    cout << "________Test reset()________" << endl;
+    p1.reset();
+    cout << "p1: " << p1 << endl << endl;
             
     // Test Polynomial & operator=(Polynomial const & polynomial);
     cout << "________Test operator=(Polynomial const & polynomial)________" << endl;
@@ -78,6 +109,23 @@ int main (int argc, char **argv)
     p8=p3;
     cout << "p8: " << p8 << endl << endl;
     
+    // Test Polynomial & operator*=(Monomial const & monomial);
+    cout << "________Test operator*=(Monomial const & monomial);________" << endl;
+    p8*=Monomial("x1*x3");
+    cout << "p8: " << p8 << endl << endl;
+            
+    // Test Polynomial & operator*=(int numMon);
+    cout << "________Test operator*=(int numMon)________" << endl;
+    p7*=(Monomial("x1*x3").monomialToInt());
+    cout << "p7: " << p7 << endl << endl;
+            
+    // Test Polynomial & operator*=(Term<Element> const & term);
+    cout << "________Test operator*=(Term<Element> const & term)________" << endl;
+    Polynomial<int> p9(p2);
+    p9*=Term<int>("4*x1*x3");
+    cout << "p9: " << p9 << endl << endl;
+    
+    // Free monomial tools
     Monomial::freeMonomial();
     
     

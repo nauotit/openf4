@@ -101,11 +101,58 @@ namespace F4
     
     template <typename Element>
     int 
-    Polynomial<Element>::getNbTerm()
+    Polynomial<Element>::getNbTerm() const
     {
         return distance(_polynomial.begin(), _polynomial.end());
     }
     
+    template <typename Element>
+    const Term<Element> & 
+    Polynomial<Element>::getLT() const
+    {
+        assert(!_polynomial.empty());
+        return _polynomial.front();
+    }
+    
+    template <typename Element>
+    int
+    Polynomial<Element>::getLM() const
+    {
+        assert(!_polynomial.empty());
+        return _polynomial.front().getNumMonomial();
+    }
+    
+    template <typename Element>
+    Element
+    Polynomial<Element>::getCoefficient(int numMon) const
+    {
+        typename forward_list<Term<Element>>::const_iterator it;
+        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        {
+            if((*it).getNumMonomial() == numMon)
+            {
+                return ((*it).getCoefficient());
+            }
+        }
+        return 0;
+    }
+    
+    template <typename Element>
+    void
+    Polynomial<Element>::deleteLT()
+    {
+        if(!_polynomial.empty())
+        {
+            _polynomial.pop_front();
+        }
+    }
+    
+    template <typename Element>
+    void
+    Polynomial<Element>::reset()
+    {
+        _polynomial.clear();
+    }
     
     // Operator overload
     
@@ -115,6 +162,42 @@ namespace F4
     {
         _polynomial=polynomial._polynomial;
         return * this;
+    }
+    
+    template <typename Element>
+    Polynomial<Element> & 
+    Polynomial<Element>::operator*=(Monomial const & monomial)
+    {
+        typename forward_list<Term<Element>>::iterator it;
+        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        {
+            (*it)*=monomial;
+        }
+        return *this;
+    }
+            
+    template <typename Element>
+    Polynomial<Element> & 
+    Polynomial<Element>::operator*=(int numMon)
+    {
+        typename forward_list<Term<Element>>::iterator it;
+        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        {
+            (*it)*=numMon;
+        }
+        return *this;
+    }
+            
+    template <typename Element>
+    Polynomial<Element> & 
+    Polynomial<Element>::operator*=(Term<Element> const & term)
+    {
+        typename forward_list<Term<Element>>::iterator it;
+        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        {
+            (*it)*=term;
+        }
+        return *this;
     }
     
     

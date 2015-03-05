@@ -243,15 +243,18 @@ namespace F4
         assert(NB_VARIABLE > 0);
         assert(!NB_MONOMIAL.empty());
         
-        if((int)NB_MONOMIAL.size() < max(deg1,deg2))
+        if((int)NB_MONOMIAL.size() < deg1+deg2)
         {
-            setNbMonomial(max(deg1,deg2));
+            setNbMonomial(deg1+deg2);
         }
         
         int nb;
         double size=0;
         NUM_MAX_LINE = NB_MONOMIAL[deg1][NB_VARIABLE + 1];
         NUM_MAX_COLUMN = NB_MONOMIAL[deg2][NB_VARIABLE + 1];
+        
+        cout << "Monomial: NUM_MAX_LINE: " << NUM_MAX_LINE << endl;
+        cout << "Monomial: NUM_MAX_COLUMN: " << NUM_MAX_COLUMN << endl;
         
         TABULATED_PRODUCT = new int*[NUM_MAX_LINE];
         size += NUM_MAX_LINE * sizeof (int *);
@@ -324,6 +327,23 @@ namespace F4
             }
             Monomial tmp=MONOMIAL_ARRAY[numMon1]*MONOMIAL_ARRAY[numMon2];
             return tmp.monomialToInt();
+        }
+    }
+    
+    int 
+    Monomial::compareNumMonomial(int numMon1, int numMon2)
+    {
+        if (numMon1 > numMon2)
+        {
+            return 1;
+        }
+        else if (numMon1 < numMon2)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
         }
     }
     

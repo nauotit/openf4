@@ -189,10 +189,79 @@ namespace F4
     }
     
     template <typename Element>
+    Term<Element> &
+    Term<Element>::operator*=(Term const & term)
+    {
+        _coefficient*=term._coefficient;
+        _numMonomial=Monomial::multNumMonomial(_numMonomial, term._numMonomial);
+        return *this;
+    }
+    
+    template <typename Element>
+    Term<Element> &
+    Term<Element>::operator/=(Monomial const & monomial)
+    {
+        _numMonomial=(Monomial(_numMonomial)/monomial).monomialToInt();
+        return * this;
+    }
+            
+    template <typename Element>
+    Term<Element> &
+    Term<Element>::operator/=(int numMon)
+    {
+        _numMonomial=(Monomial(_numMonomial)/Monomial(numMon)).monomialToInt();
+        return * this;
+    }
+            
+    template <typename Element>
+    Term<Element> &
+    Term<Element>::operator/=(Term const & term)
+    {
+        _coefficient/=term._coefficient;
+        _numMonomial=(Monomial(_numMonomial)/Monomial(term._numMonomial)).monomialToInt();
+        return * this;
+    }
+    
+    template <typename Element>
     ostream & operator<<(ostream & stream, Term<Element> const & term)
     {
         term.printTerm();
         return stream;
+    }
+    
+    template <typename Element>
+    Term<Element> operator * (Monomial const & mon, Term<Element> const & term)
+    {
+        Term<Element> copy(term);
+        return copy*=mon;
+    }
+    
+    template <typename Element>
+    Term<Element> operator * (Term<Element> const & term, Monomial const & mon)
+    {
+        Term<Element> copy(term);
+        return copy*=mon;
+    }
+    
+    template <typename Element>
+    Term<Element> operator * (Term<Element> const & term1, Term<Element> const & term2)
+    {
+        Term<Element> copy(term1);
+        return copy*=term2;
+    }
+    
+    template <typename Element>
+    Term<Element> operator / (Term<Element> const & term, Monomial const & mon)
+    {
+        Term<Element> copy(term);
+        return copy/=mon;
+    }
+   
+    template <typename Element>
+    Term<Element> operator / (Term<Element> const & term1, Term<Element> const & term2)
+    {
+        Term<Element> copy(term1);
+        return copy/=term2;
     }
 }
 

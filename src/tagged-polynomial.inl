@@ -26,7 +26,96 @@
 
 namespace F4
 {
+    // Static methods
+    
+    
+    // Constructor
+    
     template <typename Element>
+    TaggedPolynomial<Element>::TaggedPolynomial()
+    {
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element>::TaggedPolynomial(Polynomial<Element> const & polynomial)
+    {
+        _polynomial=polynomial;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial const & taggedPolynomial)
+    {
+        _polynomial=taggedPolynomial._polynomial;
+        _simplyrules=taggedPolynomial._simplyrules;
+    }
+    
+    // Destructor
+    
+    template <typename Element>
+    TaggedPolynomial<Element>::~TaggedPolynomial()
+    {
+        _polynomial.reset();
+        _simplyrules.clear();
+    }
+    
+    
+    // Miscellaneous
+    
+    template <typename Element>
+    void 
+    TaggedPolynomial<Element>::printTaggedPolynomial (std::ostream & stream) const
+    {
+        stream << "polynomial: ";
+        _polynomial.printPolynomial(stream);
+        stream << endl;
+        typename vector<int>::const_iterator it, it_tmp;
+        stream << "Simplyrules: [";
+        for (it = _simplyrules.begin(); it != _simplyrules.end(); ++it)
+        {
+            it_tmp=it;
+            it_tmp++;
+            if(it_tmp !=_simplyrules.end())
+            {
+                stream << *it << ", ";
+            }
+            else
+            {
+                stream << *it;
+            }
+        }
+        stream << "]";
+    }
+    
+    template <typename Element>
+    int 
+    TaggedPolynomial<Element>::compareTaggedPolynomial (TaggedPolynomial const & taggedPolynomial) const
+    {
+        int cmp=Monomial::compareNumMonomial(_polynomial.getLM(), taggedPolynomial._polynomial.getLM());
+        if (cmp == 0)
+        {
+            return (_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm());
+        }
+        return cmp;
+    }
+    
+    
+    // Operator overload
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator=(TaggedPolynomial const & taggedPolynomial)
+    {
+        _polynomial=taggedPolynomial._polynomial;
+        _simplyrules=taggedPolynomial._simplyrules;
+        return * this;
+    }
+    
+    template <typename Element>
+    ostream & operator<<(ostream & stream, TaggedPolynomial<Element> const & taggedPolynomial)
+    {
+        taggedPolynomial.printTaggedPolynomial();
+        return stream;
+    }
     
 }
 

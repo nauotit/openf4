@@ -34,6 +34,15 @@ int main (int argc, char **argv)
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10,2);
     
+    //Monomial m1(100);
+    //Monomial m2("x0^2*x1^3*x2^4");
+    //cout << "m1: " << m1 << endl;
+    //cout << "m2: " << m2 << endl;
+    //cout << "num of m2: " << m2.monomialToInt() << endl;
+    //cout << "Monmial(num of m2): " << Monomial(m2.monomialToInt()) << endl;
+    //cout << "m1 * m2: " << (m1*m2) << endl;
+    //cout << "m1 * m2 with tabulated product: " << Monomial(Monomial::multNumMonomial(100,4967)) << endl;
+    
     vector<Monomial> MonArray;
     cout << "size of MonArray: " << MonArray.size() << endl << endl;
     

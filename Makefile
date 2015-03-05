@@ -47,10 +47,16 @@ obj/test-polynomial.o: example/test-polynomial.cpp
 bin/test-polynomial: obj/test-polynomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-tagged-polynomial.o: example/test-tagged-polynomial.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-tagged-polynomial: obj/test-tagged-polynomial.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example: bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term 
+example: bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term bin/test-tagged-polynomial
 
 all: $(EXEC)
 

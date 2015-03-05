@@ -31,7 +31,46 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
-
+    // Init monomial tools
+    Monomial::initMonomial(6,5,6,10,2);
+    
+    // Test TaggedPolynomial();
+    cout << "________Test TaggedPolynomial()________" << endl;
+    TaggedPolynomial<int> tp1;
+    cout << "tp1: " << tp1 << endl << endl;
+    
+    // Test TaggedPolynomial(Polynomial<Element> const & polynomial);
+    cout << "________Test TaggedPolynomial(Polynomial<Element> & polynomial)________" << endl;
+    TaggedPolynomial<int> tp2(Polynomial<int>("x0+x1+x2+x3+x4+x5"));
+    TaggedPolynomial<int> tp3(Polynomial<int>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
+    cout << "tp2: " << tp2 << endl;
+    cout << "tp3: " << tp3 << endl << endl;
+    
+    // Test TaggedPolynomial(TaggedPolynomial const & taggedPolynomial);
+    cout << "________Test TaggedPolynomial(TaggedPolynomial const & taggedPolynomial)________" << endl;
+    TaggedPolynomial<int> tp4(tp3);
+    cout << "tp4: " << tp4 << endl << endl;
+    
+    // Test void printTaggedPolynomial(std::ostream & stream = std::cout) const;
+    cout << "________Test printTaggedPolynomial (std::ostream & stream = std::cout)________" << endl;
+    cout << "tp2 :";
+    tp2.printTaggedPolynomial();
+    cout << endl << endl;
+    
+    // Test int compareTaggedPolynomial(TaggedPolynomial const & taggedPolynomial) const;
+    cout << "________Test compareTaggedPolynomial(TaggedPolynomial const & taggedPolynomial)________" << endl;
+    cout << tp2.compareTaggedPolynomial(tp3) << endl;
+    cout << tp3.compareTaggedPolynomial(tp3) << endl;
+    cout << tp3.compareTaggedPolynomial(tp2) << endl << endl;
+    
+    // Test TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);
+    cout << "________Test operator=(TaggedPolynomial const & taggedPolynomial)________" << endl;
+    tp1=tp4;
+    cout << "tp1: " << tp1 << endl << endl;
+    
+    // Free monomial tools
+    Monomial::freeMonomial();
+    
     return 0;
 }
 

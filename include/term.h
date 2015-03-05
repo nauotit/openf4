@@ -154,6 +154,34 @@ namespace F4
              * \return Reference on this.
              */
             Term & operator*=(int numMon);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a term.
+             * \param term: Term.
+             * \return Reference on this.
+             */
+            Term & operator*=(Term const & term);
+            
+            /**
+             * \brief Overload the operator /= to divide this with a monomial.
+             * \param mon: Monomial.
+             * \return Reference on this.
+             */
+            Term & operator/=(Monomial const & monomial);
+            
+            /**
+             * \brief Overload the operator /= to divide this with a monomial.
+             * \param numMon: number of a monomial.
+             * \return Reference on this.
+             */
+            Term & operator/=(int numMon);
+            
+            /**
+             * \brief Overload the operator /= to divide this with a term (Beware of the coefficient division).
+             * \param term: Term.
+             * \return Reference on this.
+             */
+            Term & operator/=(Term const & term);
         
         private:
             Element _coefficient; /*!< Coefficient of the term. */
@@ -166,6 +194,41 @@ namespace F4
      */
     template <typename Element>
     std::ostream & operator<<(std::ostream & stream, Term<Element> const & term);
+    
+    /**
+     * \brief Overload the operator *.
+     * \return mon * term.
+     */
+    template <typename Element>
+    Term<Element> operator * (Monomial const & mon, Term<Element> const & term);
+    
+    /**
+     * \brief Overload the operator *.
+     * \return term * mon.
+     */
+    template <typename Element>
+    Term<Element> operator * (Term<Element> const & term, Monomial const & mon);
+    
+    /**
+     * \brief Overload the operator *.
+     * \return term1 * term2.
+     */
+    template <typename Element>
+    Term<Element> operator * (Term<Element> const & term1, Term<Element> const & term2);
+    
+    /**
+     * \brief Overload the operator /.
+     * \return term / mon.
+     */
+    template <typename Element>
+    Term<Element> operator / (Term<Element> const & term, Monomial const & mon);
+    
+    /**
+     * \brief Overload the operator /.
+     * \return term1 / term2.
+     */
+    template <typename Element>
+    Term<Element> operator / (Term<Element> const & term1, Term<Element> const & term2);
 }
 
 #include "../src/term.inl"

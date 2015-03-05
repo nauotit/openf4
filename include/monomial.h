@@ -151,6 +151,16 @@ namespace F4
              static int multNumMonomial(int numMon1, int numMon2);
              
              /**
+             * \brief Compare two monomials, using MONOMIAL_ARRAY if possible.
+             * \param numMon1: Number of the first monomial.
+             * \param numMon2: Number of the second monomial.
+             * \return  0 if numMon1==numMon2.
+             * \return  1 if numMon1>numMon2.
+             * \return -1 if numMon1<numMon2.
+             */
+             static int compareNumMonomial(int numMon1, int numMon2);
+             
+             /**
               * \brief Initialise the static parameters of Monomial.
               * \param nbVariable: Number of variables of the polynomial ring.
               * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.

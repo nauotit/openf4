@@ -114,6 +114,12 @@ int main (int argc, char **argv)
     cout << Monomial(10000).compareMonomial(Monomial(10001)) << endl;
     cout << Monomial(10000).compareMonomial(Monomial(10000)) << endl;
     cout << Monomial(10001).compareMonomial(Monomial(10000)) << endl << endl;
+    
+    // Test static int compareNumMonomial(int numMon1, int numMon2);
+    cout << "________Test compareNumMonomial(int numMon1, int numMon2)________" << endl;
+    cout << Monomial::compareNumMonomial(10000,10001) << endl;
+    cout << Monomial::compareNumMonomial(10000,10000) << endl;
+    cout << Monomial::compareNumMonomial(10001,10000) << endl << endl;
             
     // Test bool isDivisible(Monomial const & mon) const;
     cout << "________Test isDivisible(Monomial const & mon)________" << endl;

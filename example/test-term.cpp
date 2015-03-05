@@ -141,6 +141,59 @@ int main (int argc, char **argv)
     cout << "t9 multiply by "<< Monomial(1000) << ": " << t9 << endl;
     cout << "t10 multiply by " << Monomial(2000) <<": " << t10 << endl << endl;
     
+    // Test Term & operator*=(Term const & term);
+    cout << "________Test operator*=(Term const & term)________" << endl;
+    cout << "t9: " << t9 << endl;
+    cout << "t7: " << t7 << endl;
+    t9*=t7;
+    cout << "t9 multiplied by t7: "<< t9 << endl << endl;
+    
+    // Test Term & operator/=(Monomial const & monomial);
+    cout << "________Test operator/=(Monomial const & monomial)________" << endl;
+    t10/=Monomial(20000);
+    cout << "t10 divided by " << Monomial(20000) <<": " << t10 << endl;
+    t10/=Monomial(200000);
+    cout << "t10 divided by " << Monomial(200000) <<": " << t10 << endl << endl;
+            
+    // Test Term & operator/=(int numMon);
+    cout << "________Test operator/=(int numMon)________" << endl;
+    t10/=100;
+    cout << "t10 divided by " << Monomial(100) <<": " << t10 << endl << endl;
+            
+    // Test Term & operator/=(Term const & term);
+    cout << "________Test operator/=(Term const & term)________" << endl;
+    cout << "t9: " << t9 << endl;
+    cout << "t7: " << t7 << endl;
+    t9/=t7;
+    cout << "t9 divided by t7: "<< t9 << endl << endl;
+    
+    // Test Term<Element> operator * (Monomial const & mon, Term<Element> const & term);
+    cout << "________Test operator * (Monomial const & mon, Term<Element> const & term)________" << endl;
+    cout << Monomial(100) << " * " << t7 << ": " << (Monomial(100)*t7) << endl;
+    cout << t7 << " * " << Monomial(100) << ": " << (t7*Monomial(100)) << endl << endl;
+    
+    // Test Term operator * (Term const & term1, Term const & term2);
+    cout << "________Test operator * (Term const & term1, Term const & term2)________" << endl;
+    cout << "t9: " << t9 << endl;
+    cout << "t7: " << t7 << endl;
+    cout << "t9 * t7: "<< (t9 * t7) << endl << endl;
+    
+    // Test Term<Element> operator / (Term<Element> const & term, Monomial const & mon);
+    cout << "________operator / (Term<Element> const & term, Monomial const & mon)________" << endl;
+    cout << "t9: " << t9 << endl;
+    Monomial m1(1234);
+    cout << "m1: " << m1 << endl;
+    cout << "t9 / m1: "<< (t9 / m1) << endl;
+    m1=Monomial(100);
+    cout << "m1: " << m1 << endl;
+    cout << "t9 / m1: "<< (t9 / m1) << endl << endl;
+    
+    // Test Term operator / (Term const & term1, Term const & term2);
+    cout << "________Test operator / (Term const & term1, Term const & term2)________" << endl;
+    cout << "t9: " << t9 << endl;
+    cout << "t7: " << t7 << endl;
+    cout << "t9 / t7: "<< (t9 / t7) << endl << endl;
+    
     // Test Linbox compatibility :
     // Term with modular coefficient (prime finite field)
     cout << "________Test Term(Element coeff, int numMon) with Modular________" << endl;

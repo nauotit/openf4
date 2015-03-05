@@ -81,7 +81,37 @@ namespace F4
              * \brief Get the number of terms of this.
              * \return Number of terms of this.
              */
-             int getNbTerm();
+            int getNbTerm() const;
+             
+            /**
+            * \brief Get the leading term of this.
+            * \pre _polynomial is not empty.
+            * \return Leading term of this.
+            */
+            const Term<Element> & getLT() const; 
+            
+            /**
+            * \brief Get the number of the leading monomial of this.
+            * \pre _polynomial is not empty.
+            * \return Number of the leading monomial of this.
+            */
+            int getLM() const;
+            
+            /**
+            * \brief Get the coefficient of the term of monomial numMon.
+            * \return Coefficient of the term of monomial numMon.
+            */
+            Element getCoefficient(int numMon) const;
+            
+            /**
+            * \brief Delete the leading term of this.
+            */
+            void deleteLT(); 
+            
+            /**
+             * \brief Reset this.
+             */
+            void reset(); 
             
             
             // Internal operators
@@ -92,6 +122,27 @@ namespace F4
              * \return Reference on this.
              */
             Polynomial & operator=(Polynomial const & polynomial);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a monomial.
+             * \param mon: Monomial.
+             * \return Reference on this.
+             */
+            Polynomial & operator*=(Monomial const & monomial);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a monomial.
+             * \param numMon: number of a monomial.
+             * \return Reference on this.
+             */
+            Polynomial & operator*=(int numMon);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a term.
+             * \param term: Term.
+             * \return Reference on this.
+             */
+            Polynomial & operator*=(Term<Element> const & term);
             
         private:
             std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
