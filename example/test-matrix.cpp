@@ -31,6 +31,14 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    // Test Matrix();
+    cout << "________Test Matrix()________" << endl;
+    Matrix<int> mat1;
+    
+    // Test Matrix(int height, int width);
+    cout << "________Test Matrix(int height, int width);________" << endl;
+    Matrix<int> mat2(10000,10000);
+    
 
     return 0;
 }

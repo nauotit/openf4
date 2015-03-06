@@ -26,7 +26,46 @@
 
 namespace F4
 {
+    // Constructor 
+    
     template <typename Element>
+    Matrix<Element>::Matrix():_matrix(0), _height(0), _width(0), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+    }
+    
+    template <typename Element>
+    Matrix<Element>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+        _matrix=new Element[_height*_width];
+    }
+    
+    
+    // Destructor 
+    
+    template <typename Element>
+    Matrix<Element>::~Matrix()
+    {
+        delete[] _matrix;
+    }
+    
+    
+    // Get / Set
+    
+    template <typename Element>
+    inline Element & 
+    Matrix<Element>::operator() (unsigned row, unsigned col) 
+    { 
+        assert(row >= _height || col >= _width); 
+        return _matrix[_height*row + col]; 
+    } 
+    
+    template <typename Element>
+    inline Element 
+    Matrix<Element>::operator() (unsigned row, unsigned col) const 
+    { 
+        assert(row >= _height || col >= _width);
+        return _matrix[_height*row + col]; 
+    }
 
 }
 

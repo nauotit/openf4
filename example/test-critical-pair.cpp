@@ -99,6 +99,16 @@ int main (int argc, char **argv)
     cout << "cp3 <= cp4: " << (cp3<=cp4) << endl;
     cout << "cp3 <= cp3: " << (cp3<=cp3) << endl << endl;
     
+    // Test copy constructor
+    cout << "________Test generated copy constructor________" << endl;
+    CriticalPair<int> cp5(cp4);
+    cout << "cp5: " << cp5 << endl << endl;
+    
+    // Test operator =
+    cout << "________Test generated operator=________" << endl;
+    cp5=cp1;
+    cout << "cp5: " << cp5 << endl << endl;
+    
     
     // Free monomial tools
     Monomial::freeMonomial();

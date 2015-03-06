@@ -24,6 +24,9 @@
 #ifndef F4_MATRIX_H
 #define F4_MATRIX_H
 
+#include <iostream>
+#include <cassert>
+
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */
@@ -37,9 +40,47 @@ namespace F4
     class Matrix
     {
         public:
-        
+            
+            // Constructor
+            
+            /**
+             * \brief Constructor
+             */
+            Matrix();
+            
+            /**
+             * \brief Constructor
+             * \param height: Height of _matrix.
+             * \param width: Width of _matrix.
+             */
+            Matrix(int height, int width);
+            
+            
+            // Destructor
+            
+            /**
+             * \brief Destructor
+             */
+            ~Matrix();
+            
+            
+            // Get / Set
+            
+            Element & operator() (unsigned row, unsigned col);
+              
+            Element operator() (unsigned row, unsigned col) const;
+            
+            
+            
         private:
-        
+            Element * _matrix; /*!<  */
+            int _height; /*!< Height of _matrix. */
+            int _width; /*!< Width of _matrix. */
+            int _nbPiv; /*!< Number of pivots. */
+            int * _tau; /*!< Permutation, _sigma(_tau(i))=_tau(_sigma(i))=i. _tau[i]=column of the monomial tab_mon[i]. */
+            int * _sigma; /*!< _sigma[i]=index in tab_mon of the column i monomial. */
+            int * _startTail; /*!< startTail[i]=column of the first possibly non zero coefficient (in line i) after nb_piv if i < nb_piv. Otherwise startTail[i]=0. startTail[i] = min{j>=nb_piv : _igma[i]<_sigma[j]}. */
+            int * _endCol; /*!< endCol[i] = end of column i if i < nbPiv. Otherwise endCol[i]=end of column i without taking into account the lines under nbPiv. */
     };
 }
 

@@ -59,10 +59,16 @@ obj/test-critical-pair.o: example/test-critical-pair.cpp
 bin/test-critical-pair: obj/test-critical-pair.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-matrix.o: example/test-matrix.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-matrix: obj/test-matrix.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example:  bin/test-critical-pair bin/test-tagged-polynomial
+example:  bin/test-critical-pair bin/test-tagged-polynomial bin/test-matrix
 #bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term 
 
 all: $(EXEC)
