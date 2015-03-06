@@ -40,6 +40,15 @@ namespace F4
     {
         public:
             
+            // Static methods
+            
+            static void insertTaggedPolynomialArray(TaggedPolynomial<Element> const & taggedPolynomial);
+            
+            static TaggedPolynomial<Element> const & getTaggedPolynomialArray(int numTaggedPolynomial);
+            
+            static int getSizeTaggedPolynomialArray();
+            
+            
             // Constructor 
             
             /**
@@ -65,6 +74,14 @@ namespace F4
             ~TaggedPolynomial();
             
             
+            // Get / Set
+            
+            /**
+             * \brief Get the polynomial of this.
+             * \return Polynomial of this.
+             */
+            Polynomial<Element> const & getPolynomial() const;
+            
             // Miscellaneous
             
             /**
@@ -73,17 +90,16 @@ namespace F4
             void printTaggedPolynomial (std::ostream & stream = std::cout) const;
             
             /**
-             * \brief Compare the tagged polynomial p1 and p2. Be careful with the non intuitive return value.
-             * \param p1: Tagged polynomial.
-             * \param p2: Tagged polynomial.
-             * \return (Number of terms of p1) - (Number of terms of p2) if LM(p1)==LM(P2).
-             * \return 1 if LM(p1) > LM(p2).
-             * \return -1 if LM(p1) < LM(p2).
+             * \brief Compare this with taggedPolynomial.
+             * \param taggedPolynomial: TaggedPolynomial.
+             * \return (Number of terms of this) - (Number of terms of taggedPolynomial) if LM(this)==LM(taggedPolynomial).
+             * \return 1 if LM(this) > LM(taggedPolynomial).
+             * \return -1 if LM(this) < LM(taggedPolynomial).
              */
             int compareTaggedPolynomial (TaggedPolynomial const & taggedPolynomial) const;
             
             
-            // Operator overload
+            // Internal operators
             
             /**
              * \brief Overload the operator =.
@@ -96,7 +112,11 @@ namespace F4
         
             Polynomial<Element> _polynomial;           /*!< Polynomial . */
             std::vector<int> _simplyrules;       /*!< Array of integer, mainly used by the simplify algorithm. simplifyrules[i] is the index of a tagged polynomial of List. */
+            
+            static std::vector<TaggedPolynomial<Element>> TAGGEG_POLYNOMIAL_ARRAY; /*!< Dynamic array of TaggedPolynomial */
     };
+    
+    // External operators
     
     /**
      * \brief Overload the operator <<.
@@ -104,6 +124,46 @@ namespace F4
      */
     template <typename Element>
     std::ostream & operator<<(std::ostream & stream, TaggedPolynomial<Element> const & taggedPolynomial);
+    
+    /**
+     * \brief Overload the operator ==.
+     * \return true if taggedPolynomial1 == taggedPolynomial2.
+     * \return false otherwise.
+     */
+    template <typename Element>
+    bool operator==(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    
+    /**
+     * \brief Overload the operator >.
+     * \return true if taggedPolynomial1 > taggedPolynomial2.
+     * \return false otherwise.
+     */
+    template <typename Element>
+    bool operator>(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    
+    /**
+     * \brief Overload the operator >=.
+     * \return true if taggedPolynomial1 >= taggedPolynomial2.
+     * \return false otherwise.
+     */
+    template <typename Element>
+    bool operator>=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    
+    /**
+     * \brief Overload the operator <.
+     * \return true if taggedPolynomial1 < taggedPolynomial2.
+     * \return false otherwise.
+     */
+    template <typename Element>
+    bool operator<(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    
+    /**
+     * \brief Overload the operator <=.
+     * \return true if taggedPolynomial1 <= taggedPolynomial2.
+     * \return false otherwise.
+     */
+    template <typename Element>
+    bool operator<=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
 }
 
 #include "../src/tagged-polynomial.inl"

@@ -31,6 +31,77 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    // Init monomial tools
+    Monomial::initMonomial(6,5,6,10,2);
+    
+    // Init tagged polynomial array
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0+x1+x2+x3+x4+x5")));
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5")));
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5")));
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5")));
+    
+    // Test CriticalPair();
+    cout << "________Test CriticalPair()________" << endl;
+    CriticalPair<int> cp1;
+    cout << "cp1: " << cp1 << endl << endl;
+    
+    // Test CriticalPair(TaggedPolynomial<Element> const & p1, TaggedPolynomial<Element> const & p2);
+    cout << "________Test CriticalPair(TaggedPolynomial<Element> const & p1, TaggedPolynomial<Element> const & p2)________" << endl;
+    CriticalPair<int> cp2(0,1);
+    CriticalPair<int> cp3(1,3);
+    CriticalPair<int> cp4(2,3);
+    cout << "cp2: " << cp2 << endl;
+    cout << "cp3: " << cp3 << endl;
+    cout << "cp4: " << cp4 << endl << endl;
+    
+    // Test void printCriticalPair (std::ostream & stream = std::cout) const;
+    cout << "________Test printCriticalPair (std::ostream & stream = std::cout)________" << endl;
+    cout << "cp1 :";
+    cp1.printCriticalPair();
+    cout << endl;
+    cout << "cp2 :";
+    cp2.printCriticalPair();
+    cout << endl << endl;
+    
+    // Test int compareCriticalPair (CriticalPair const & criticalPair) const;
+    cout << "________Test compareCriticalPair (CriticalPair const & criticalPair)________" << endl;
+    cout << cp2.compareCriticalPair(cp3) << endl;
+    cout << cp3.compareCriticalPair(cp3) << endl;
+    cout << cp3.compareCriticalPair(cp2) << endl << endl;
+    
+    // Test bool operator==(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2);
+    cout << "________Test operator==(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2)________" << endl;
+    cout << "cp2 == cp3: " << (cp2==cp3) << endl;
+    cout << "cp3 == cp4: " << (cp3==cp4) << endl;
+    cout << "cp3 == cp3: " << (cp3==cp3) << endl << endl;
+    
+    // Test bool operator>(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2);
+    cout << "________Test operator>(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2)________" << endl;
+    cout << "cp2 > cp3: " << (cp2>cp3) << endl;
+    cout << "cp3 > cp4: " << (cp3>cp4) << endl;
+    cout << "cp3 > cp3: " << (cp3>cp3) << endl << endl;
+    
+    // Test bool operator>=(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2);
+    cout << "________Test operator>=(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2)________" << endl;
+    cout << "cp2 >= cp3: " << (cp2>=cp3) << endl;
+    cout << "cp3 >= cp4: " << (cp3>=cp4) << endl;
+    cout << "cp3 >= cp3: " << (cp3>=cp3) << endl << endl;
+    
+    // Test bool operator<(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2);
+    cout << "________Test operator<(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2)________" << endl;
+    cout << "cp2 < cp3: " << (cp2<cp3) << endl;
+    cout << "cp3 < cp4: " << (cp3<cp4) << endl;
+    cout << "cp3 < cp3: " << (cp3<cp3) << endl << endl;
+    
+    // Test bool operator<=(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2);
+    cout << "________Test operator<=(CriticalPair<Element> const & criticalPair1, CriticalPair<Element> const & criticalPair2)________" << endl;
+    cout << "cp2 <= cp3: " << (cp2<=cp3) << endl;
+    cout << "cp3 <= cp4: " << (cp3<=cp4) << endl;
+    cout << "cp3 <= cp3: " << (cp3<=cp3) << endl << endl;
+    
+    
+    // Free monomial tools
+    Monomial::freeMonomial();
 
     return 0;
 }

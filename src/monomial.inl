@@ -51,7 +51,7 @@ namespace F4
     int ** Monomial::TABULATED_PRODUCT = 0;
     
     
-    // static functions
+    // static methods
     
     void Monomial::setVerbose(int verbose)
     {
@@ -347,7 +347,23 @@ namespace F4
         }
     }
     
-    void Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2, int verbose)
+    Monomial const &
+    Monomial::getNumMonomial(int numMon)
+    {
+        // Preconditions
+        assert(! NB_MONOMIAL.empty());
+        assert(NB_VARIABLE > 0);
+        
+        while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
+        {
+            // We increase NB_MONOMIAL:
+            setNbMonomial(MAX_DEGREE+5);
+        }
+        return MONOMIAL_ARRAY[numMon];
+    }
+    
+    void 
+    Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2, int verbose)
     {
         // Set verbosity
         setVerbose(verbose);
@@ -380,7 +396,8 @@ namespace F4
         }
     }
     
-    void Monomial::freeMonomial()
+    void 
+    Monomial::freeMonomial()
     {
         freeTabulatedProduct();
         freeNbMonomial();

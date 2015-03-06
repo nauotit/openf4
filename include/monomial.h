@@ -161,6 +161,13 @@ namespace F4
              static int compareNumMonomial(int numMon1, int numMon2);
              
              /**
+             * \brief Get the numMon-th monomial, using MONOMIAL_ARRAY if possible.
+             * \param numMon: Number of the monomial.
+             * \return Monomial.
+             */
+             static Monomial const & getNumMonomial(int numMon);
+             
+             /**
               * \brief Initialise the static parameters of Monomial.
               * \param nbVariable: Number of variables of the polynomial ring.
               * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.

@@ -98,6 +98,11 @@ int main (int argc, char **argv)
     cout << "________Test intToMonomial(int numMon)________" << endl;
     m6.intToMonomial(20000);
     cout << "m6: "<< m6 << endl << endl;
+    
+    // static const & Monomial getNumMonomial(int numMon);
+    cout << "________Test getNumMonomial(int numMon)________" << endl;
+    m5=Monomial::getNumMonomial(200000);
+    cout << "m5: "<< m5 << endl << endl;
             
     // Test int monomialToInt() const;
     cout << "________Test monomialToInt()________" << endl;

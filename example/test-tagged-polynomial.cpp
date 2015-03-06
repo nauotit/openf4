@@ -68,6 +68,52 @@ int main (int argc, char **argv)
     tp1=tp4;
     cout << "tp1: " << tp1 << endl << endl;
     
+    // Test bool operator==(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    cout << "________Test operator==(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)________" << endl;
+    cout << "tp2==tp3 :" << (tp2==tp3) << endl;
+    cout << "tp3==tp3 :" << (tp3==tp3) << endl << endl;
+    
+    // Test bool operator>(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    cout << "________Test operator>(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)________" << endl;
+    cout << "tp2>tp3 :" << (tp2>tp3) << endl;
+    cout << "tp3>tp3 :" << (tp3>tp3) << endl;
+    cout << "tp3>tp2 :" << (tp3>tp2) << endl << endl;
+    
+    // Test bool operator>=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    cout << "________Test operator>=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)________" << endl;
+    cout << "tp2>=tp3 :" << (tp2>=tp3) << endl;
+    cout << "tp3>=tp3 :" << (tp3>=tp3) << endl;
+    cout << "tp3>=tp2 :" << (tp3>=tp2) << endl << endl;
+    
+    // Test bool operator<(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    cout << "________Test operator<(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)________" << endl;
+    cout << "tp2<tp3 :" << (tp2<tp3) << endl;
+    cout << "tp3<tp3 :" << (tp3<tp3) << endl;
+    cout << "tp3<tp2 :" << (tp3<tp2) << endl << endl;
+    
+    // Test bool operator<=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    cout << "________Test operator<=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)________" << endl;
+    cout << "tp2<=tp3 :" << (tp2<=tp3) << endl;
+    cout << "tp3<=tp3 :" << (tp3<=tp3) << endl;
+    cout << "tp3<=tp2 :" << (tp3<=tp2) << endl << endl;
+    
+    // Test static int getSizeTaggedPolynomialArray();
+    cout << "________Test getSizeTaggedPolynomialArray()________" << endl;
+    cout << "size of TAGGED_POLYNOMIAL_ARRAY: " << TaggedPolynomial<int>::getSizeTaggedPolynomialArray() << endl << endl;
+    
+    // Test static void insertTaggedPolynomialArray(TaggedPolynomial<Element> & taggedPolynomial);
+    cout << "________Test insertTaggedPolynomialArray(TaggedPolynomial<Element> & taggedPolynomial)________" << endl;
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(tp1);
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(tp2);
+    TaggedPolynomial<int>::insertTaggedPolynomialArray(tp3);
+    cout << "size of TAGGED_POLYNOMIAL_ARRAY: " << TaggedPolynomial<int>::getSizeTaggedPolynomialArray() << endl << endl;
+    
+    // Test static TaggedPolynomial<Element> const & getTaggedPolynomialArray(int numTaggedPolynomial);
+    cout << "________Test TaggedPolynomial<Element> const & getTaggedPolynomialArray(int numTaggedPolynomial)________" << endl;
+    cout << "TAGGED_POLYNOMIAL_ARRAY[0]: " << TaggedPolynomial<int>::getTaggedPolynomialArray(0) << endl;
+    cout << "TAGGED_POLYNOMIAL_ARRAY[1]: " << TaggedPolynomial<int>::getTaggedPolynomialArray(1) << endl;
+    cout << "TAGGED_POLYNOMIAL_ARRAY[2]: " << TaggedPolynomial<int>::getTaggedPolynomialArray(2) << endl << endl;
+    
     // Free monomial tools
     Monomial::freeMonomial();
     

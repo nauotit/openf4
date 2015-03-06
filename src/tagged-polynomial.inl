@@ -26,7 +26,34 @@
 
 namespace F4
 {
+    // Static variables
+    
+    template <typename Element>
+    vector<TaggedPolynomial<Element>> TaggedPolynomial<Element>::TAGGEG_POLYNOMIAL_ARRAY;
+    
+    
     // Static methods
+    
+    template <typename Element>
+    void 
+    TaggedPolynomial<Element>::insertTaggedPolynomialArray(TaggedPolynomial<Element> const & taggedPolynomial)
+    {
+        TAGGEG_POLYNOMIAL_ARRAY.push_back(taggedPolynomial);
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> const & 
+    TaggedPolynomial<Element>::getTaggedPolynomialArray(int numTaggedPolynomial)
+    {
+        return TAGGEG_POLYNOMIAL_ARRAY[numTaggedPolynomial];
+    }
+    
+    template <typename Element>
+    int
+    TaggedPolynomial<Element>::getSizeTaggedPolynomialArray()
+    {
+        return TAGGEG_POLYNOMIAL_ARRAY.size();
+    }
     
     
     // Constructor
@@ -58,6 +85,15 @@ namespace F4
         _simplyrules.clear();
     }
     
+    
+    // Get / Set
+    
+    template <typename Element>
+    Polynomial<Element> const & 
+    TaggedPolynomial<Element>::getPolynomial() const
+    {
+        return _polynomial;
+    }
     
     // Miscellaneous
     
@@ -115,6 +151,36 @@ namespace F4
     {
         taggedPolynomial.printTaggedPolynomial();
         return stream;
+    }
+    
+    template <typename Element>
+    bool operator==(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)
+    {
+        return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)==0);
+    }
+    
+    template <typename Element>
+    bool operator>(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)
+    {
+        return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)==1);
+    }
+    
+    template <typename Element>
+    bool operator>=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)
+    {
+        return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)!=-1);
+    }
+    
+    template <typename Element>
+    bool operator<(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)
+    {
+        return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)==-1);
+    }
+    
+    template <typename Element>
+    bool operator<=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2)
+    {
+        return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)!=1);
     }
     
 }
