@@ -29,10 +29,13 @@
 using namespace F4;
 using namespace std;
 
+// Global variable
+int F4::VERBOSE=2;
+
 int main (int argc, char **argv)
 {
     // Init monomial tools
-    Monomial::initMonomial(6,5,6,10,2);
+    Monomial::initMonomial(6,5,6,10);
     
     // Init tagged polynomial array
     TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0+x1+x2+x3+x4+x5")));

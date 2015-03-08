@@ -29,6 +29,7 @@
 #include <vector>
 #include <cassert>
 
+
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */
@@ -43,12 +44,6 @@ namespace F4
         public:
             
             // static functions
-            
-            /**
-             * \brief Modify the static variable VERBOSE.
-             * \param verbose: Verbosity level.
-             */
-             static void setVerbose(int verbose);
              
             /**
              * \brief Modify the static variable NB_VARIABLE.
@@ -173,9 +168,8 @@ namespace F4
               * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.
               * \param deg1: Maximum degree of line monomials in TABULATED_PRODUCT.
               * \param deg2: Maximum degree of column monomials in TABULATED_PRODUCT.
-              * \param verbose: verbosity level.
               */
-             static void initMonomial(int nbVariable, int maxDegree, int deg1, int deg2, int verbose);
+             static void initMonomial(int nbVariable, int maxDegree, int deg1, int deg2);
              
              /**
               * \brief Free the space allocated by initMonomial.
@@ -348,7 +342,6 @@ namespace F4
             int _deg;                /*!< Degree of the monomial */
             int *_varlist;           /*!< Array representing the degree of each variable of the monomial */
             
-            static int VERBOSE; 
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
             static std::string const * VARS; /*!< Array of NB_VARIABLE string representing the variable names. */
             static int * WEIGHT; /*!< Array of NB_VARIABLE weights. */
@@ -362,6 +355,7 @@ namespace F4
             static int NUM_MAX_LINE; /*!< Number of line in TABULATED_PRODUCT. */
             static int NUM_MAX_COLUMN; /*!< Number of column in TABULATED_PRODUCT. */
             static int ** TABULATED_PRODUCT; /*!< TABULATED_PRODUCT[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
+            
     };
     
     // External operators

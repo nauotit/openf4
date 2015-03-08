@@ -28,9 +28,12 @@ using namespace std;
 
 namespace F4
 {
-    // static variables
+    // Global variables
     
-    int Monomial::VERBOSE = 0;
+    extern int VERBOSE;
+    
+    
+    // static variables
     
     int Monomial::NB_VARIABLE = 0;
     
@@ -52,11 +55,6 @@ namespace F4
     
     
     // static methods
-    
-    void Monomial::setVerbose(int verbose)
-    {
-        VERBOSE=verbose;
-    }
     
     void Monomial::setNbVariable(int nbVariable)
     {
@@ -363,11 +361,8 @@ namespace F4
     }
     
     void 
-    Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2, int verbose)
+    Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2)
     {
-        // Set verbosity
-        setVerbose(verbose);
-        
         // Set the number of variable
         setNbVariable(nbVariable);
         string *vars =new string[NB_VARIABLE];

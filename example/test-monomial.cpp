@@ -31,10 +31,13 @@
 using namespace F4;
 using namespace std;
 
+// Global variable
+int F4::VERBOSE=2;
+
 int main (int argc, char **argv)
 {
     //Init monomial tools: 6 variables.
-    Monomial::initMonomial(6,10,6,10,2);
+    Monomial::initMonomial(6,10,6,10);
     
     // Test Monomial(); 
     cout << "________Test Monomial()________" << endl;

@@ -29,10 +29,14 @@
 using namespace F4;
 using namespace std;
 
+// Global variable
+int F4::VERBOSE=2;
+
 int main (int argc, char **argv)
 {
+    
     // Init monomial tools
-    Monomial::initMonomial(6,5,6,10,2);
+    Monomial::initMonomial(6,5,6,10);
     
     //Monomial m1(100);
     //Monomial m2("x0^2*x1^3*x2^4");

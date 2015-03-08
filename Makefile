@@ -16,8 +16,8 @@
 
 CXX=g++
 # std=c++11 required by forward_list
-#CFLAGS= -O3 -g -Wall -std=c++11
-CFLAGS= -g -Wall -std=c++11
+CFLAGS= -O3 -g -Wall -std=c++11
+#CFLAGS= -g -Wall -std=c++11 
 #LDFLAGS=
 LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
 EXEC = example
@@ -65,11 +65,17 @@ obj/test-matrix.o: example/test-matrix.cpp
 bin/test-matrix: obj/test-matrix.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-element-prime.o: example/test-element-prime.cpp 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+bin/test-element-prime: obj/test-element-prime.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example:  bin/test-critical-pair bin/test-tagged-polynomial bin/test-matrix
-#bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term 
+example: bin/test-element-prime bin/test-matrix
+#bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term bin/test-critical-pair bin/test-tagged-polynomial 
 
 all: $(EXEC)
 
