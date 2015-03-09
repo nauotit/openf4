@@ -147,11 +147,11 @@ namespace F4
             Term & operator*=(Monomial const & monomial);
             
             /**
-             * \brief Overload the operator *= to multiply this with a monomial.
-             * \param numMon: number of a monomial.
+             * \brief Overload the operator *= to multiply this with an Element.
+             * \param element: Element.
              * \return Reference on this.
              */
-            Term & operator*=(int numMon);
+            Term & operator*=(Element element);
             
             /**
              * \brief Overload the operator *= to multiply this with a term.
@@ -168,11 +168,11 @@ namespace F4
             Term & operator/=(Monomial const & monomial);
             
             /**
-             * \brief Overload the operator /= to divide this with a monomial.
-             * \param numMon: number of a monomial.
+             * \brief Overload the operator /= to divide this with an Element.
+             * \param element: Element.
              * \return Reference on this.
              */
-            Term & operator/=(int numMon);
+            Term & operator/=(Element element);
             
             /**
              * \brief Overload the operator /= to divide this with a term (Beware of the coefficient division).

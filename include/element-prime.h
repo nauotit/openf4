@@ -118,6 +118,16 @@ namespace F4
              */
             bool isOne() const;
             
+            /**
+             * \brief Set the element to zero.
+             */
+            void setZero();
+            
+             /**
+             * \brief Set the element to one.
+             */
+            void setOne();
+            
             
             // Internal operators
             

@@ -211,6 +211,20 @@ namespace F4
         }
     }
     
+    template <typename baseType>
+    void 
+    ElementPrime<baseType>::setZero()
+    {
+        _element=0;
+    }
+    
+    template <typename baseType>
+    void 
+    ElementPrime<baseType>::setOne()
+    {
+        _element=1;
+    }
+    
     
     // Operator overload
     

@@ -168,27 +168,33 @@ namespace F4
         _polynomial.clear();
     }
     
-    //template <typename Element>
-    //void
-    //Polynomial<Element>::normalize()
-    //{
-        //Element lc=getLC();
-        //if (lc.isZero())
-        //{
-            //cout << "Polynomial::Normalize: problem with Normalize : lc = 0 " << endl;
-        //}
-        //if (!lc.isOne())
-        //{
-            //Element invCoef;
-            //invCoef = lc.inverse();
-            //(p->data).coeff = CorpsOne ();
-            //while (p->next != NULL)
-            //{
-                //p = p->next;
-                //(p->data).coeff = MulMod ((p->data).coeff, inv_coef);
-            //}
-        //}
-    //}
+    template <typename Element>
+    void
+    Polynomial<Element>::normalize()
+    {
+        Element lc=getLC();
+        if (lc.isZero())
+        {
+            cout << "Polynomial::Normalize: problem with Normalize : lc = 0 " << endl;
+        }
+        if (!lc.isOne())
+        {
+            Element invCoef;
+            invCoef = lc.inverse();
+            
+            typename forward_list<Term<Element>>::iterator it;
+            it= _polynomial.begin();
+            
+            // Modify the leading coefficient
+            (*it).setCoefficient(1);
+            ++it;
+            for (; it != _polynomial.end(); ++it)
+            {
+                // Modify the other coefficients
+                (*it)*=invCoef;
+            }
+        }
+    }
     
     // Operator overload
     
@@ -219,15 +225,15 @@ namespace F4
         }
         return *this;
     }
-            
+    
     template <typename Element>
     Polynomial<Element> & 
-    Polynomial<Element>::operator*=(int numMon)
+    Polynomial<Element>::operator*=(Element element)
     {
         typename forward_list<Term<Element>>::iterator it;
         for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
         {
-            (*it)*=numMon;
+            (*it)*=element;
         }
         return *this;
     }

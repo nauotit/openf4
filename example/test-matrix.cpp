@@ -36,6 +36,11 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                    TEST MATRIX                        #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
     typedef ElementPrime<int> eltType;
     ElementPrime<int>::setModulo(65537);
     

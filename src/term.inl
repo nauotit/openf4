@@ -211,9 +211,9 @@ namespace F4
     
     template <typename Element>
     Term<Element> &
-    Term<Element>::operator*=(int numMon)
+    Term<Element>::operator*=(Element element)
     {
-        _numMonomial=Monomial::multNumMonomial(_numMonomial, numMon);
+        _coefficient*=element;
         return * this;
     }
     
@@ -233,12 +233,12 @@ namespace F4
         _numMonomial=(Monomial(_numMonomial)/monomial).monomialToInt();
         return * this;
     }
-            
+    
     template <typename Element>
     Term<Element> &
-    Term<Element>::operator/=(int numMon)
+    Term<Element>::operator/=(Element element)
     {
-        _numMonomial=(Monomial(_numMonomial)/Monomial(numMon)).monomialToInt();
+        _coefficient/=element;
         return * this;
     }
             

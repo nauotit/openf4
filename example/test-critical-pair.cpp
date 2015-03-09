@@ -35,37 +35,46 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                  TEST CRITICAL PAIR                   #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10);
     
+    // Init element-prime tools
+    typedef ElementPrime<long> eltType;
+    ElementPrime<long>::setModulo(65537);
+    
     // Create tagged polynomial array
-    vector<TaggedPolynomial<int>> List;
+    vector<TaggedPolynomial<eltType>> List;
     
     // Test static void setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray);
     cout << "________Test setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray)________" << endl;
-    CriticalPair<int>::setTaggedPolynomialArray(&List);
-    cout << "size of the tagged polynomial array: " << CriticalPair<int>::getSizeTaggedPolynomialArray() << endl << endl;
+    CriticalPair<eltType>::setTaggedPolynomialArray(&List);
+    cout << "size of the tagged polynomial array: " << CriticalPair<eltType>::getSizeTaggedPolynomialArray() << endl << endl;
     
     // Fill the tagged polynomial array
-    List.emplace_back(Polynomial<int>("x0+x1+x2+x3+x4+x5"));
-    List.emplace_back(Polynomial<int>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
-    List.emplace_back(Polynomial<int>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5"));
-    List.emplace_back(Polynomial<int>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x0+x1+x2+x3+x4+x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5"));
     
     // Test static int getSizeTaggedPolynomialArray();
     cout << "________Test getSizeTaggedPolynomialArray()________" << endl;
-    cout << "size of the tagged polynomial array: " << CriticalPair<int>::getSizeTaggedPolynomialArray() << endl << endl;
+    cout << "size of the tagged polynomial array: " << CriticalPair<eltType>::getSizeTaggedPolynomialArray() << endl << endl;
     
     // Test CriticalPair();
     cout << "________Test CriticalPair()________" << endl;
-    CriticalPair<int> cp1;
+    CriticalPair<eltType> cp1;
     cout << "cp1: " << cp1 << endl << endl;
     
     // Test CriticalPair(TaggedPolynomial<Element> const & p1, TaggedPolynomial<Element> const & p2);
     cout << "________Test CriticalPair(TaggedPolynomial<Element> const & p1, TaggedPolynomial<Element> const & p2)________" << endl;
-    CriticalPair<int> cp2(0,1);
-    CriticalPair<int> cp3(1,3);
-    CriticalPair<int> cp4(2,3);
+    CriticalPair<eltType> cp2(0,1);
+    CriticalPair<eltType> cp3(1,3);
+    CriticalPair<eltType> cp4(2,3);
     cout << "cp2: " << cp2 << endl;
     cout << "cp3: " << cp3 << endl;
     cout << "cp4: " << cp4 << endl << endl;
@@ -117,7 +126,7 @@ int main (int argc, char **argv)
     
     // Test copy constructor
     cout << "________Test generated copy constructor________" << endl;
-    CriticalPair<int> cp5(cp4);
+    CriticalPair<eltType> cp5(cp4);
     cout << "cp5: " << cp5 << endl << endl;
     
     // Test operator =

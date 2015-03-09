@@ -38,6 +38,11 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                       TEST TERM                       #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
     //Init monomial tools: 6 variables.
     Monomial::initMonomial(6,10,6,10);
     cout << endl;
@@ -120,8 +125,10 @@ int main (int argc, char **argv)
             
     // Test Element readCoefficient(std::string const s);
     cout << "________Test readCoefficient(std::string const s)________" << endl;
-    cout << Term<int>::readCoefficient("-123*x1*x2^2*x3^3*x4^4*x5^5") << endl;
-    cout << Term<double>::readCoefficient("-123.456*x1*x2^2*x3^3*x4^4*x5^5") << endl << endl;
+    t3.readCoefficient("-123*x1*x2^2*x3^3*x4^4*x5^5");
+    cout << t3 << endl;
+    t4.readCoefficient("-123.456*x1*x2^2*x3^3*x4^4*x5^5");
+    cout << t4 << endl << endl;
             
     // Test Term & operator=(Term const & term);
     cout << "________Test operator=(Term const & term)________" << endl;
@@ -137,12 +144,12 @@ int main (int argc, char **argv)
     cout << "t9 multiply by "<< Monomial(10000) << ": " << t9 << endl;
     cout << "t10 multiply by " << Monomial(20000) <<": " << t10 << endl << endl;
     
-    // Test Term & operator*=(int numMon);
-    cout << "________Test operator*=(int numMon)________" << endl;
+    // Test Term & operator*=(Element element);
+    cout << "________Test operator*=(Element element)________" << endl;
     t9*=1000;
     t10*=2000;
-    cout << "t9 multiply by "<< Monomial(1000) << ": " << t9 << endl;
-    cout << "t10 multiply by " << Monomial(2000) <<": " << t10 << endl << endl;
+    cout << "t9 multiply by "<< 1000 << ": " << t9 << endl;
+    cout << "t10 multiply by " << 2000 <<": " << t10 << endl << endl;
     
     // Test Term & operator*=(Term const & term);
     cout << "________Test operator*=(Term const & term)________" << endl;
@@ -161,7 +168,7 @@ int main (int argc, char **argv)
     // Test Term & operator/=(int numMon);
     cout << "________Test operator/=(int numMon)________" << endl;
     t10/=100;
-    cout << "t10 divided by " << Monomial(100) <<": " << t10 << endl << endl;
+    cout << "t10 divided by " << 100 <<": " << t10 << endl << endl;
             
     // Test Term & operator/=(Term const & term);
     cout << "________Test operator/=(Term const & term)________" << endl;

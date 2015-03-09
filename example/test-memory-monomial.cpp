@@ -34,6 +34,9 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << "#########################################################" << endl;
+    cout << "#                  TEST MEMORY MONOMIAL                 #" << endl;
+    cout << "#########################################################" << endl << endl;
     
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10);

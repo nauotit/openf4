@@ -71,11 +71,17 @@ obj/test-element-prime.o: example/test-element-prime.cpp
 bin/test-element-prime: obj/test-element-prime.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-ideal.o: example/test-ideal.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-ideal: obj/test-ideal.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
-example: bin/test-tagged-polynomial bin/test-critical-pair bin/test-polynomial bin/test-element-prime
-#bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term  bin/test-element-prime bin/test-matrix
+example: bin/test-ideal bin/test-tagged-polynomial bin/test-critical-pair bin/test-polynomial bin/test-element-prime bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term bin/test-element-prime bin/test-matrix 
+
 
 all: $(EXEC)
 

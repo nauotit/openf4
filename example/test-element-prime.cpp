@@ -35,6 +35,11 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                  TEST ELEMENT PRIME                   #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
     typedef long baseType;
     
     // Test static void setModulo(unsigned int modulo);
@@ -166,9 +171,19 @@ int main (int argc, char **argv)
     cout << ElementPrime<baseType>(0).isZero() << endl << endl;
     
     // Test bool isOne() const;
-    cout << "________Test isZero()________" << endl;
+    cout << "________Test isOne()________" << endl;
     cout << ElementPrime<baseType>(1000).isOne() << endl;
-    cout << ElementPrime<baseType>(1).isZero() << endl << endl;
+    cout << ElementPrime<baseType>(1).isOne() << endl << endl;
+    
+    // Test void setZero();
+    cout << "________Test setZero()________" << endl;
+    elt4.setZero();
+    cout << elt4 << endl << endl;
+            
+    // Test void setOne();
+    cout << "________Test setOne()________" << endl;
+    elt4.setOne();
+    cout << elt4 << endl << endl;
             
     return 0;
 }

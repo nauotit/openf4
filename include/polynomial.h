@@ -128,7 +128,7 @@ namespace F4
             /**
              * \brief Normalize this.
              */
-            //void normalize();
+            void normalize();
             
             
             // Internal operators
@@ -155,11 +155,11 @@ namespace F4
             Polynomial & operator*=(Monomial const & monomial);
             
             /**
-             * \brief Overload the operator *= to multiply this with a monomial.
-             * \param numMon: number of a monomial.
+             * \brief Overload the operator *= to multiply this with an Element.
+             * \param element: Element.
              * \return Reference on this.
              */
-            Polynomial & operator*=(int numMon);
+            Polynomial & operator*=(Element element);
             
             /**
              * \brief Overload the operator *= to multiply this with a term.

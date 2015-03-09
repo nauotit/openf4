@@ -35,12 +35,18 @@ int F4::VERBOSE=2;
 
 int main (int argc, char **argv)
 {
+    cout << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                     TEST POLYNOMIAL                   #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
+    
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10);
     
     // Init element-prime tools
-    typedef ElementPrime<int> eltType;
-    ElementPrime<int>::setModulo(65537);
+    typedef ElementPrime<long> eltType;
+    ElementPrime<long>::setModulo(65537);
             
     // Test Polynomial();
     cout << "________Test Polynomial()________" << endl;
@@ -127,15 +133,20 @@ int main (int argc, char **argv)
     p8*=Monomial("x1*x3");
     cout << "p8: " << p8 << endl << endl;
             
-    // Test Polynomial & operator*=(int numMon);
-    cout << "________Test operator*=(int numMon)________" << endl;
-    p7*=(Monomial("x1*x3").monomialToInt());
+    // Test Polynomial & operator*=(Element element);
+    cout << "________Test operator*=(Element element)________" << endl;
+    p7*=eltType(-566);
     cout << "p7: " << p7 << endl << endl;
             
     // Test Polynomial & operator*=(Term<Element> const & term);
     cout << "________Test operator*=(Term<Element> const & term)________" << endl;
     Polynomial<eltType> p9(p2);
     p9*=Term<eltType>("4*x1*x3");
+    cout << "p9: " << p9 << endl << endl;
+    
+    // Test void normalize();
+    cout << "________Test normalize()________" << endl;
+    p9.normalize();
     cout << "p9: " << p9 << endl << endl;
     
     // Free monomial tools

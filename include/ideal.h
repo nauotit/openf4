@@ -25,6 +25,7 @@
 #define F4_IDEAL_H
 
 #include <iostream>
+#include <queue>
 #include "critical-pair.h"
 #include "matrix.h"
 
@@ -42,8 +43,39 @@ namespace F4
     {
         public:
             
+            // Constructor
+            
+            /**
+             * \brief Constructor.
+             * \param polynomialArray: Array of polynomials.
+             */
+            Ideal(std::vector<Polynomial<Element>> & polynomialArray);
+            
+            
+            // Destructor 
+            
+            /**
+             * \brief Destructor.
+             */
+            ~Ideal();
+            
+            
+            // Miscellaneous
+            
+            
+            // F4 Algorithm
+            
+            /**
+             * \brief Compute a groebner basis of this using the F4 algorithm.
+             */
+            void f4();
+            
+            
+            
         private:
-            std::vector<TaggedPolynomial<Element>> taggedPolynomialArray;
+            std::vector<Polynomial<Element>> _polynomialArray; /*!< Array of polynomials */
+            
+            std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
     };
 }
 

@@ -146,8 +146,8 @@ namespace F4
     TaggedPolynomial<Element> & 
     TaggedPolynomial<Element>::operator=(TaggedPolynomial  && taggedPolynomial)
     {
-        _polynomial(taggedPolynomial._polynomial);
-        _simplyrules(taggedPolynomial._simplyrules);
+        _polynomial=taggedPolynomial._polynomial;
+        _simplyrules=taggedPolynomial._simplyrules;
         return * this;
     }
     

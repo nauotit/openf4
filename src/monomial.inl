@@ -387,7 +387,7 @@ namespace F4
         
         if(VERBOSE>1)
         {
-            cout << "Monomial::initMonomial: allocation done ! " << endl;
+            cout << "Monomial::initMonomial: allocation done ! " << endl << endl;
         }
     }
     
