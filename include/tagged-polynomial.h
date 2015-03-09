@@ -39,16 +39,7 @@ namespace F4
     class TaggedPolynomial
     {
         public:
-            
-            // Static methods
-            
-            static void insertTaggedPolynomialArray(TaggedPolynomial<Element> const & taggedPolynomial);
-            
-            static TaggedPolynomial<Element> const & getTaggedPolynomialArray(int numTaggedPolynomial);
-            
-            static int getSizeTaggedPolynomialArray();
-            
-            
+
             // Constructor 
             
             /**
@@ -67,6 +58,12 @@ namespace F4
              * \param taggedPolynomial: TaggedPolynomial.
              */ 
             TaggedPolynomial(TaggedPolynomial const & taggedPolynomial);
+            
+            /**
+             * \brief Move Constructor.
+             * \param taggedPolynomial: TaggedPolynomial.
+             */ 
+            TaggedPolynomial(TaggedPolynomial  && taggedPolynomial);
             
             
             // Destructor
@@ -108,12 +105,17 @@ namespace F4
              */
             TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);
             
+            /**
+             * \brief Overload the move operator =.
+             * \param taggedPolynomial: Tagged polynomial to move.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator=(TaggedPolynomial  && taggedPolynomial);
+            
         private:
         
             Polynomial<Element> _polynomial;           /*!< Polynomial . */
-            std::vector<int> _simplyrules;       /*!< Array of integer, mainly used by the simplify algorithm. simplifyrules[i] is the index of a tagged polynomial of List. */
-            
-            static std::vector<TaggedPolynomial<Element>> TAGGEG_POLYNOMIAL_ARRAY; /*!< Dynamic array of TaggedPolynomial */
+            int * _simplyrules;       /*!< Array of integer, mainly used by the simplify algorithm. simplifyrules[i] is the index of a tagged polynomial of List. */
     };
     
     // External operators

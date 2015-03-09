@@ -69,6 +69,16 @@ int main (int argc, char **argv)
     cout << "inverse of elt2: " << elt2.inverse() << endl;
     cout << "inverse of elt3: " << elt3.inverse() << endl;
     cout << "inverse of elt4: " << elt4.inverse() << endl << endl;
+    
+    // Test ElementPrime & operator=(ElementPrime const & element);
+    cout << "________Test operator=(ElementPrime const & element)________" << endl;
+    elt1=elt2;
+    cout << "elt1: " << elt1 << endl << endl;
+            
+    // Test ElementPrime & operator=(baseType element);
+    cout << "________Test operator=(baseType element)________" << endl;
+    elt1=-1;
+    cout << "elt1: " << elt1 << endl << endl;
             
     // Test ElementPrime & operator+=(ElementPrime const & element); 
     cout << "________Test operator+=(ElementPrime const & element)________" << endl;
@@ -154,6 +164,11 @@ int main (int argc, char **argv)
     cout << "________Test isZero()________" << endl;
     cout << ElementPrime<baseType>(1000).isZero() << endl;
     cout << ElementPrime<baseType>(0).isZero() << endl << endl;
+    
+    // Test bool isOne() const;
+    cout << "________Test isZero()________" << endl;
+    cout << ElementPrime<baseType>(1000).isOne() << endl;
+    cout << ElementPrime<baseType>(1).isZero() << endl << endl;
             
     return 0;
 }

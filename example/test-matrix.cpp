@@ -26,6 +26,7 @@
 #include <iostream>
 #include <vector>
 #include "../include/matrix.h"
+#include "../include/element-prime.h"
 
 using namespace F4;
 using namespace std;

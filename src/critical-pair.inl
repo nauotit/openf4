@@ -26,6 +26,36 @@
 
 namespace F4
 {
+    // Static variables
+    
+    template <typename Element>
+    vector<TaggedPolynomial<Element>> * CriticalPair<Element>::TAGGEG_POLYNOMIAL_ARRAY=0;
+    
+    
+    // Static methods
+    
+    template <typename Element>
+    void
+    CriticalPair<Element>::setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray)
+    {
+        TAGGEG_POLYNOMIAL_ARRAY=taggedPolynomialArray;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> const & 
+    CriticalPair<Element>::getTaggedPolynomialArray(int numTaggedPolynomial)
+    {
+        return (*TAGGEG_POLYNOMIAL_ARRAY)[numTaggedPolynomial];
+    }
+    
+    template <typename Element>
+    int
+    CriticalPair<Element>::getSizeTaggedPolynomialArray()
+    {
+        return (*TAGGEG_POLYNOMIAL_ARRAY).size();
+    }
+    
+    
     // Constructor
     
     template <typename Element>
@@ -37,23 +67,18 @@ namespace F4
     CriticalPair<Element>::CriticalPair(int p1, int p2): _p1(p1), _p2(p2)
     {
         int nbVars=Monomial::getNbVariable();
-        //Monomial lt_p1(((*_p1).getPolynomial()).getLM());
-        //Monomial lt_p2(((*_p2).getPolynomial()).getLM());
-        
-        //cout << "lt_p1: " << lt_p1 << endl;
-        //cout << "lt_p2: " << lt_p2 << endl;
         
         // Get the varlist of LM(p1) and LM(p2)
-        int * varlistp1=Monomial::getNumMonomial(((TaggedPolynomial<Element>::getTaggedPolynomialArray(p1)).getPolynomial()).getLM()).getVarlist();
-        int * varlistp2=Monomial::getNumMonomial(((TaggedPolynomial<Element>::getTaggedPolynomialArray(p2)).getPolynomial()).getLM()).getVarlist();
+        int * varlistp1=Monomial::getNumMonomial(((getTaggedPolynomialArray(p1)).getPolynomial()).getLM()).getVarlist();
+        int * varlistp2=Monomial::getNumMonomial(((getTaggedPolynomialArray(p2)).getPolynomial()).getLM()).getVarlist();
         
-        for(int i=0; i< Monomial::getNbVariable(); i++)
+        for(int i=0; i< nbVars; i++)
         {
             cout << varlistp1[i] <<  ", ";
         }
         cout << endl;
         
-        for(int i=0; i< Monomial::getNbVariable(); i++)
+        for(int i=0; i< nbVars; i++)
         {
             cout << varlistp2[i] << ", ";
         }
@@ -71,19 +96,14 @@ namespace F4
                 varlistU1[i] = varlistp2[i] - varlistp1[i];
                 varlistU2[i] = 0;
                 varlistLcm[i] = varlistp2[i];
-                //res->u1.deg += (res->u1.varlist)[i] * weight[i];
             }
             else
             {
                 varlistU1[i] = 0;
                 varlistU2[i] = varlistp1[i] - varlistp2[i];
                 varlistLcm[i] = varlistp1[i];
-                //res->u2.deg += (res->u2.varlist)[i] * weight[i];
             }
-            //res->lcm.deg += (res->lcm.varlist)[i] * weight[i];
         }
-        //res->p1 = p1;
-        //res->p2 = p2;
         
         _lcm=Monomial(varlistLcm).monomialToInt();
         _u1=Monomial(varlistU1).monomialToInt();
@@ -92,6 +112,13 @@ namespace F4
         //return (lt_f.deg + lt_g.deg != res->lcm.deg);
     }
     
+    
+    // Destructor
+    
+    template <typename Element>
+    CriticalPair<Element>::~CriticalPair()
+    {
+    }
     
     // Miscellaneous
     

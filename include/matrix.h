@@ -31,8 +31,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "element-prime.h"
-
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -70,13 +68,13 @@ namespace F4
             
             /**
              * \brief Copy constructor
-             * \param filename: Name of a matrix file.
+             * \param matrix: Matrix.
              */
             Matrix(Matrix const & matrix);
             
             /**
              * \brief Move constructor
-             * \param filename: Name of a matrix file.
+             * \param matrix: Matrix.
              */
             Matrix(Matrix && matrix);
             

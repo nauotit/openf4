@@ -24,6 +24,7 @@
  */
 
 #include <iostream>
+#include <vector>
 #include "../include/critical-pair.h"
 
 using namespace F4;
@@ -37,11 +38,23 @@ int main (int argc, char **argv)
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10);
     
-    // Init tagged polynomial array
-    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0+x1+x2+x3+x4+x5")));
-    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5")));
-    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5")));
-    TaggedPolynomial<int>::insertTaggedPolynomialArray(TaggedPolynomial<int>(Polynomial<int>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5")));
+    // Create tagged polynomial array
+    vector<TaggedPolynomial<int>> List;
+    
+    // Test static void setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray);
+    cout << "________Test setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray)________" << endl;
+    CriticalPair<int>::setTaggedPolynomialArray(&List);
+    cout << "size of the tagged polynomial array: " << CriticalPair<int>::getSizeTaggedPolynomialArray() << endl << endl;
+    
+    // Fill the tagged polynomial array
+    List.emplace_back(Polynomial<int>("x0+x1+x2+x3+x4+x5"));
+    List.emplace_back(Polynomial<int>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
+    List.emplace_back(Polynomial<int>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5"));
+    List.emplace_back(Polynomial<int>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5"));
+    
+    // Test static int getSizeTaggedPolynomialArray();
+    cout << "________Test getSizeTaggedPolynomialArray()________" << endl;
+    cout << "size of the tagged polynomial array: " << CriticalPair<int>::getSizeTaggedPolynomialArray() << endl << endl;
     
     // Test CriticalPair();
     cout << "________Test CriticalPair()________" << endl;

@@ -26,55 +26,46 @@
 
 namespace F4
 {
-    // Static variables
-    
-    template <typename Element>
-    vector<TaggedPolynomial<Element>> TaggedPolynomial<Element>::TAGGEG_POLYNOMIAL_ARRAY;
-    
-    
-    // Static methods
-    
-    template <typename Element>
-    void 
-    TaggedPolynomial<Element>::insertTaggedPolynomialArray(TaggedPolynomial<Element> const & taggedPolynomial)
-    {
-        TAGGEG_POLYNOMIAL_ARRAY.push_back(taggedPolynomial);
-    }
-    
-    template <typename Element>
-    TaggedPolynomial<Element> const & 
-    TaggedPolynomial<Element>::getTaggedPolynomialArray(int numTaggedPolynomial)
-    {
-        return TAGGEG_POLYNOMIAL_ARRAY[numTaggedPolynomial];
-    }
-    
-    template <typename Element>
-    int
-    TaggedPolynomial<Element>::getSizeTaggedPolynomialArray()
-    {
-        return TAGGEG_POLYNOMIAL_ARRAY.size();
-    }
-    
-    
     // Constructor
     
     template <typename Element>
     TaggedPolynomial<Element>::TaggedPolynomial()
     {
+        int nbVars=Monomial::getNbVariable();
+        _simplyrules=new int[nbVars];
+        for(int i=0; i< nbVars; i++)
+        {
+            _simplyrules[i]=-1;
+        }
     }
     
     template <typename Element>
-    TaggedPolynomial<Element>::TaggedPolynomial(Polynomial<Element> const & polynomial)
+    TaggedPolynomial<Element>::TaggedPolynomial(Polynomial<Element> const & polynomial):_polynomial(polynomial)
     {
-        _polynomial=polynomial;
+        int nbVars=Monomial::getNbVariable();
+        _simplyrules=new int[nbVars];
+        for(int i=0; i< nbVars; i++)
+        {
+            _simplyrules[i]=-1;
+        }
     }
     
     template <typename Element>
-    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial const & taggedPolynomial)
+    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial const & taggedPolynomial):_polynomial(taggedPolynomial._polynomial)
     {
-        _polynomial=taggedPolynomial._polynomial;
-        _simplyrules=taggedPolynomial._simplyrules;
+        int nbVars=Monomial::getNbVariable();
+        _simplyrules=new int[nbVars];
+        for(int i=0; i< nbVars; i++)
+        {
+            _simplyrules[i]=taggedPolynomial._simplyrules[i];
+        }
     }
+    
+    template <typename Element>
+    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial  && taggedPolynomial): _polynomial(taggedPolynomial._polynomial), _simplyrules(taggedPolynomial._simplyrules)
+    {
+    }
+    
     
     // Destructor
     
@@ -82,7 +73,7 @@ namespace F4
     TaggedPolynomial<Element>::~TaggedPolynomial()
     {
         _polynomial.reset();
-        _simplyrules.clear();
+        delete[] _simplyrules;
     }
     
     
@@ -104,13 +95,15 @@ namespace F4
         stream << "polynomial: ";
         _polynomial.printPolynomial(stream);
         stream << endl;
-        typename vector<int>::const_iterator it, it_tmp;
         stream << "Simplyrules: [";
-        for (it = _simplyrules.begin(); it != _simplyrules.end(); ++it)
+        int * it;
+        int * begin(_simplyrules);
+        int * end(_simplyrules+ Monomial::getNbVariable());
+        for (it = begin; it != end; ++it)
         {
-            it_tmp=it;
-            it_tmp++;
-            if(it_tmp !=_simplyrules.end())
+            //it_tmp=it;
+            //it_tmp++;
+            if((it+1) !=end)
             {
                 stream << *it << ", ";
             }
@@ -142,7 +135,19 @@ namespace F4
     TaggedPolynomial<Element>::operator=(TaggedPolynomial const & taggedPolynomial)
     {
         _polynomial=taggedPolynomial._polynomial;
-        _simplyrules=taggedPolynomial._simplyrules;
+        for(int i=0; i< Monomial::getNbVariable(); i++)
+        {
+            _simplyrules[i]=taggedPolynomial._simplyrules[i];
+        }
+        return * this;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator=(TaggedPolynomial  && taggedPolynomial)
+    {
+        _polynomial(taggedPolynomial._polynomial);
+        _simplyrules(taggedPolynomial._simplyrules);
         return * this;
     }
     

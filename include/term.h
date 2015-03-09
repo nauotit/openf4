@@ -25,6 +25,7 @@
 #define F4_TERM_H
 
 #include "monomial.h"
+#include "element-prime.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -39,16 +40,6 @@ namespace F4
     class Term
     {
         public:
-            
-            // Static methods
-            
-            /**
-             * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
-             * \param s: String representing the term.
-             * \return Coefficent the term.
-             */
-            static Element readCoefficient(std::string const s);
-            
         
             // Constructor
             
@@ -118,13 +109,20 @@ namespace F4
              */
             void setNumMonomial(int numMon);
             
-            // Miscellaneous
-            
             /**
              * \brief Initialize this with s.
              * \param s: String representing the term.
              */
             void setTerm(std::string const s);
+            
+            // Miscellaneous
+            
+            /**
+             * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
+             * \param s: String representing the term.
+             * \return Coefficent the term.
+             */
+            void readCoefficient(std::string const s);
             
             /**
              * \brief Print the term.

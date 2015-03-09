@@ -106,13 +106,36 @@ namespace F4
             
             /**
              * \brief Test if this is nul.
-             * \return  true if this==element.
+             * \return  true if this==zero.
              * \return  false otherwise.
              */
             bool isZero() const;
             
+            /**
+             * \brief Test if this is one (neutral multiplicative element).
+             * \return  true if this==one.
+             * \return  false otherwise.
+             */
+            bool isOne() const;
+            
             
             // Internal operators
+            
+            /**
+             * \brief Overload the operator =.
+             * \pre The static variable MODULO must be set beforehand.
+             * \param element: Element of a prime field.
+             * \return Reference on this.
+             */
+            ElementPrime & operator=(ElementPrime const & element);
+            
+            /**
+             * \brief Overload the operator =.
+             * \pre The static variable MODULO must be set beforehand.
+             * \param element: Element of a prime field.
+             * \return Reference on this.
+             */
+            ElementPrime & operator=(baseType element);
             
             /**
              * \brief Overload the operator +=.

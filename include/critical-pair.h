@@ -40,11 +40,49 @@ namespace F4
     {
         public:
             
+            // Static methods
+            
+            /**
+             * \brief Set the array of tagged polynomial to use.
+             * \param taggedPolynomialArray: Address of the array.
+             */
+            static void setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray);
+            
+            /**
+             * \brief Get a tagged polynomial from the array of tagged polynomial.
+             * \param numTaggedPolynomial: Index of a tagged polynomial in the array pointed by TAGGEG_POLYNOMIAL_ARRAY.
+             */
+            static TaggedPolynomial<Element> const &  getTaggedPolynomialArray(int numTaggedPolynomial);
+            
+             /**
+             * \brief Get the size of the array pointed by TAGGEG_POLYNOMIAL_ARRAY.
+             */
+            static int getSizeTaggedPolynomialArray();
+          
+            
+            
             // Constructor
             
+            /**
+             * \brief Constructor.
+             */ 
             CriticalPair();
             
+            /**
+             * \brief Constructor.
+             * \pre The static variable TAGGEG_POLYNOMIAL_ARRAY must be set beforhand.
+             * \param p1: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.
+             * \param p2: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.
+             */ 
             CriticalPair(int p1, int p2);
+            
+            
+            // Destructor
+            
+            /**
+             * \brief Destructor.
+             */ 
+            ~CriticalPair();
             
             
             // Miscellaneous
@@ -72,6 +110,8 @@ namespace F4
             int _p1;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
             int _u2;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
             int _p2;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
+            
+            static std::vector<TaggedPolynomial<Element>> * TAGGEG_POLYNOMIAL_ARRAY; /*!< Pointer on a dynamic array of TaggedPolynomial */
         
     };
     

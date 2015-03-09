@@ -25,7 +25,8 @@
 #define F4_IDEAL_H
 
 #include <iostream>
-#include <string.h>
+#include "critical-pair.h"
+#include "matrix.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -40,9 +41,9 @@ namespace F4
     class Ideal
     {
         public:
-        
+            
         private:
-            std::string * vars;
+            std::vector<TaggedPolynomial<Element>> taggedPolynomialArray;
     };
 }
 

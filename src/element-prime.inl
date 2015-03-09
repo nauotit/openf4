@@ -197,8 +197,38 @@ namespace F4
         return _element==0;
     }
     
+    template <typename baseType>
+    bool
+    ElementPrime<baseType>::isOne() const
+    {
+        if(_element<0)
+        {
+            return (_element+MODULO)==1;
+        }
+        else
+        {
+            return _element==1;
+        }
+    }
+    
     
     // Operator overload
+    
+    template <typename baseType>
+    ElementPrime<baseType> & 
+    ElementPrime<baseType>::operator=(ElementPrime const & element)
+    {
+        _element=element._element;
+        return * this;
+    }
+            
+    template <typename baseType>
+    ElementPrime<baseType> & 
+    ElementPrime<baseType>::operator=(baseType element)
+    {
+        _element=element;
+        return * this;
+    }
     
     template <typename baseType>
     ElementPrime<baseType> & 

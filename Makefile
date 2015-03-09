@@ -16,57 +16,57 @@
 
 CXX=g++
 # std=c++11 required by forward_list
-CFLAGS= -O3 -g -Wall -std=c++11
-#CFLAGS= -g -Wall -std=c++11 
+#CFLAGS= -O3 -g -Wall -std=c++11
+CFLAGS= -g -Wall -std=c++11 
 #LDFLAGS=
 LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
 EXEC = example
 
 # Regression tests
 obj/test-monomial.o: example/test-monomial.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-monomial: obj/test-monomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-memory-monomial.o: example/test-memory-monomial.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-memory-monomial: obj/test-memory-monomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-term.o: example/test-term.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-term: obj/test-term.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-polynomial.o: example/test-polynomial.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-polynomial: obj/test-polynomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-tagged-polynomial.o: example/test-tagged-polynomial.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-tagged-polynomial: obj/test-tagged-polynomial.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-critical-pair.o: example/test-critical-pair.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-critical-pair: obj/test-critical-pair.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-matrix.o: example/test-matrix.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-matrix: obj/test-matrix.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-element-prime.o: example/test-element-prime.cpp 
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-element-prime: obj/test-element-prime.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
@@ -74,8 +74,8 @@ bin/test-element-prime: obj/test-element-prime.o
 
 # Intermediate rules
 
-example: bin/test-element-prime bin/test-matrix
-#bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term bin/test-critical-pair bin/test-tagged-polynomial 
+example: bin/test-tagged-polynomial bin/test-critical-pair bin/test-polynomial bin/test-element-prime
+#bin/test-monomial bin/test-memory-monomial bin/test-polynomial bin/test-term  bin/test-element-prime bin/test-matrix
 
 all: $(EXEC)
 
@@ -83,7 +83,7 @@ all: $(EXEC)
 .PHONY: clean distclean
 
 clean:
-	rm -f obj/*.o bin/* 
+	rm -f obj/*.o bin/* data/*.pgm
 
 # require the indent program (GNU indent)
 indent: 

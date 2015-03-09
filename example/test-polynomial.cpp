@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include "../include/polynomial.h"
+#include "../include/element-prime.h"
 
 using namespace F4;
 using namespace std;
@@ -36,20 +37,24 @@ int main (int argc, char **argv)
 {
     // Init monomial tools
     Monomial::initMonomial(6,5,6,10);
+    
+    // Init element-prime tools
+    typedef ElementPrime<int> eltType;
+    ElementPrime<int>::setModulo(65537);
             
     // Test Polynomial();
     cout << "________Test Polynomial()________" << endl;
-    Polynomial<double> p0;
+    Polynomial<eltType> p0;
     cout << "p0: " << p0 << endl <<endl;
             
     // Test Polynomial(std::string const s);
     cout << "________Test Polynomial(std::string const s)________" << endl;
-    Polynomial<int> p1("x0+x1+x2+x3+x4+x5");
-    Polynomial<int> p2("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
-    Polynomial<int> p3("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
-    Polynomial<int> p4("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
-    Polynomial<int> p5("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
-    Polynomial<int> p6("x0*x1*x2*x3*x4*x5-1");
+    Polynomial<eltType> p1("x0+x1+x2+x3+x4+x5");
+    Polynomial<eltType> p2("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
+    Polynomial<eltType> p3("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
+    Polynomial<eltType> p4("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
+    Polynomial<eltType> p5("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
+    Polynomial<eltType> p6("x0*x1*x2*x3*x4*x5-1");
     cout << "p1: " << p1 << endl;
     cout << "p2: " << p2 << endl;
     cout << "p3: " << p3 << endl;
@@ -59,7 +64,7 @@ int main (int argc, char **argv)
     
     // Test Polynomial(Polynomial const & polynomial);
     cout << "________Test Polynomial(Polynomial const & polynomial)________" << endl;
-    Polynomial<int> p7(p3);
+    Polynomial<eltType> p7(p3);
     cout << "p7: " << p7 << endl << endl;
             
     // Test ~Polynomial();
@@ -85,6 +90,11 @@ int main (int argc, char **argv)
     cout << "Number of the leading monomial of p1: " << p1.getLM() << endl;
     cout << "Number of the leading term of p5: " << p5.getLM() << endl << endl;
     
+    // Test int getLC() const;
+    cout << "________Test getLC()________" << endl;
+    cout << "Leading coefficient of p1: " << p1.getLC() << endl;
+    cout << "Leading coefficient of p5: " << p5.getLC() << endl << endl;
+    
     // Test Element & getCoefficient(int numMon);
     cout << "________Test getCoefficient(int numMon)________" << endl;
     cout << "coefficient of x1*x2*x3*x4 in p4: " << p4.getCoefficient(Monomial("x1*x2*x3*x4").monomialToInt()) << endl ;
@@ -108,7 +118,7 @@ int main (int argc, char **argv)
             
     // Test Polynomial & operator=(Polynomial const & polynomial);
     cout << "________Test operator=(Polynomial const & polynomial)________" << endl;
-    Polynomial<int> p8;
+    Polynomial<eltType> p8;
     p8=p3;
     cout << "p8: " << p8 << endl << endl;
     
@@ -124,8 +134,8 @@ int main (int argc, char **argv)
             
     // Test Polynomial & operator*=(Term<Element> const & term);
     cout << "________Test operator*=(Term<Element> const & term)________" << endl;
-    Polynomial<int> p9(p2);
-    p9*=Term<int>("4*x1*x3");
+    Polynomial<eltType> p9(p2);
+    p9*=Term<eltType>("4*x1*x3");
     cout << "p9: " << p9 << endl << endl;
     
     // Free monomial tools

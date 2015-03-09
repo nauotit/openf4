@@ -25,7 +25,6 @@
 #define F4_POLYNOMIAL_H
 
 #include <forward_list>
-#include <string>
 #include "term.h"
 
 /** \namespace F4 
@@ -56,10 +55,16 @@ namespace F4
             Polynomial(std::string const s);
             
             /**
-             * \brief Constructor.
+             * \brief Copy constructor.
              * \param polynomial: Polynomial to copy.
              */
             Polynomial(Polynomial const & polynomial);
+            
+            /**
+             * \brief Move constructor.
+             * \param polynomial: Polynomial to move.
+             */
+            Polynomial(Polynomial && polynomial);
             
             
             // Destructor
@@ -98,6 +103,13 @@ namespace F4
             int getLM() const;
             
             /**
+            * \brief Get the leading coefficient of this.
+            * \pre _polynomial is not empty.
+            * \return Leading coefficient of this.
+            */
+            Element getLC() const;
+            
+            /**
             * \brief Get the coefficient of the term of monomial numMon.
             * \return Coefficient of the term of monomial numMon.
             */
@@ -113,6 +125,11 @@ namespace F4
              */
             void reset(); 
             
+            /**
+             * \brief Normalize this.
+             */
+            //void normalize();
+            
             
             // Internal operators
             
@@ -122,6 +139,13 @@ namespace F4
              * \return Reference on this.
              */
             Polynomial & operator=(Polynomial const & polynomial);
+            
+            /**
+             * \brief Overload the move operator =.
+             * \param polynomial: Polynomial to move.
+             * \return Reference on this.
+             */
+            Polynomial & operator=(Polynomial && polynomial);
             
             /**
              * \brief Overload the operator *= to multiply this with a monomial.

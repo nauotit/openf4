@@ -26,49 +26,6 @@
 
 namespace F4
 {
-    // Static methods
-    
-    template<typename Element>
-    Element
-    Term<Element>::readCoefficient(std::string const s)
-    {
-        cout << "Term: no defined readCoefficient method for this type" << endl;
-        return 0;
-    }
-    
-    template<>
-    int
-    Term<int>::readCoefficient(std::string const s)
-    {
-        int res;
-        try
-        { 
-            res=stoi(s);
-        }
-        catch(exception const & e)
-        {
-            res=1;
-        }
-        return res;
-    }
-    
-    template<>
-    double
-    Term<double>::readCoefficient(std::string const s)
-    {
-        double res;
-        try
-        { 
-            res=stod(s);
-        }
-        catch(exception const & e)
-        {
-            res=1;
-        }
-        return res;
-    }
-    
-    
     // Constructor 
     
     template <typename Element>
@@ -90,7 +47,7 @@ namespace F4
     Term<Element>::Term(std::string const s)
     {
         // Be carefull, a specialised readCoefficient method must be defined.
-        _coefficient=readCoefficient(s);
+        readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
     }
@@ -139,17 +96,89 @@ namespace F4
         _numMonomial=numMon;
     }
     
-    
-    // Miscellaneous
-    
     template <typename Element>
     void 
     Term<Element>::setTerm(std::string const s)
     {
         // Be carefull, a specialised readCoefficient method must be defined.
-        _coefficient=readCoefficient(s);
+        readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
+    }
+    
+    
+    // Miscellaneous
+    
+    template<typename Element>
+    void
+    Term<Element>::readCoefficient(std::string const s)
+    {
+        cout << "Term: no defined readCoefficient method for this type" << endl;
+        return 0;
+    }
+    
+    template<>
+    void
+    Term<int>::readCoefficient(std::string const s)
+    {
+        int res;
+        try
+        { 
+            res=stoi(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        _coefficient=res;
+    }
+    
+    template<>
+    void
+    Term<ElementPrime<int>>::readCoefficient(std::string const s)
+    {
+        int res;
+        try
+        { 
+            res=stoi(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        _coefficient=res;
+    }
+    
+    template<>
+    void
+    Term<ElementPrime<long>>::readCoefficient(std::string const s)
+    {
+        long res;
+        try
+        { 
+            res=stol(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        _coefficient=res;
+    }
+    
+    template<>
+    void
+    Term<double>::readCoefficient(std::string const s)
+    {
+        double res;
+        try
+        { 
+            res=stod(s);
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        _coefficient=res;
     }
     
     template <typename Element>
