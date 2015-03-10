@@ -94,7 +94,7 @@ int main (int argc, char **argv)
     // Test int getLM() const;
     cout << "________Test getLM()________" << endl;
     cout << "Number of the leading monomial of p1: " << p1.getLM() << endl;
-    cout << "Number of the leading term of p5: " << p5.getLM() << endl << endl;
+    cout << "Number of the leading monomial of p5: " << p5.getLM() << endl << endl;
     
     // Test int getLC() const;
     cout << "________Test getLC()________" << endl;
@@ -121,6 +121,11 @@ int main (int argc, char **argv)
     cout << "________Test reset()________" << endl;
     p1.reset();
     cout << "p1: " << p1 << endl << endl;
+    
+    // Test bool isEmpty();
+    cout << "________Test isEmpty()________" << endl;
+    cout << p1.isEmpty() << endl;
+    cout << p3.isEmpty() << endl << endl;
             
     // Test Polynomial & operator=(Polynomial const & polynomial);
     cout << "________Test operator=(Polynomial const & polynomial)________" << endl;
@@ -143,6 +148,30 @@ int main (int argc, char **argv)
     Polynomial<eltType> p9(p2);
     p9*=Term<eltType>("4*x1*x3");
     cout << "p9: " << p9 << endl << endl;
+    
+    // Test Polynomial & operator*(Monomial const & monomial, Polynomial const & polynomial);
+    cout << "________Test operator*(Monomial const & monomial, Polynomial const & polynomial)________" << endl;
+    cout << "x1*x2 * p2 : " << (Monomial("x1*x2")*p2) << endl << endl;
+    
+    // Test Polynomial & operator*(Polynomial const & polynomial, Monomial const & monomial);
+    cout << "________Test operator*(Polynomial const & polynomial, Monomial const & monomial)________" << endl;
+    cout << "p2 * x1*x2 : " << (p2*Monomial("x1*x2")) << endl << endl;
+
+    // Test Polynomial & operator*(Element element, Polynomial const & polynomial);
+    cout << "________Test operator*(Element element, Polynomial const & polynomial)________" << endl;
+    cout << "10 * p2 : " << (eltType(10)*p2) << endl << endl;
+    
+    // Test Polynomial & operator*(Polynomial const & polynomial, Element element);
+    cout << "________Test operator*(Polynomial const & polynomial, Element element)________" << endl;
+    cout << "p2 * (-10) : " << (p2*eltType(-10)) << endl << endl;
+
+    // Test Polynomial & operator*(Term const & term, Polynomial const & polynomial);
+    cout << "________Test operator*(Term const & term, Polynomial const & polynomial)________" << endl;
+    cout << "10*x5 * p2 : " << (Term<eltType>("10*x5")*p2) << endl << endl;
+    
+    // Test Polynomial & operator*(Polynomial const & polynomial, Term const & term);
+    cout << "________Test operator*(Polynomial const & polynomial, Term const & term)________" << endl;
+    cout << "p2* (-10*x5) : " << (p2*Term<eltType>("-10*x5")) << endl << endl;
     
     // Test void normalize();
     cout << "________Test normalize()________" << endl;

@@ -129,6 +129,12 @@ namespace F4
              */
             void printTerm (std::ostream & stream = std::cout) const;
             
+            /**
+             * \brief Multiply this with a monomial under integer form.
+             * \param numMon: number of a monomial.
+             */
+            void multNumMon(int numMon);
+            
             
             // Internal operators
             

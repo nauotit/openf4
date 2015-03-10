@@ -84,6 +84,48 @@ namespace F4
              */ 
             ~CriticalPair();
             
+            // Get / Set
+            
+            /**
+             * \brief Get the index of the first tagged polynomial.
+             * \return Index of the first tagged polynomial.
+             */
+            int getP1() const;
+            
+            /**
+             * \brief Get the index of the second tagged polynomial.
+             * \return Index of the second tagged polynomial.
+             */
+            int getP2() const;
+            
+            /**
+             * \brief Get the number of the lcm.
+             * \return Number of the lcm.
+             */
+            int getLcm() const;
+            
+            /**
+             * \brief Get the number of the monomial u1.
+             * \return Number of u1.
+             */
+            int getU1() const;
+            
+            /**
+             * \brief Get the number of the monomial u2.
+             * \return Number of u2.
+             */
+            int getU2() const;
+            
+            /**
+             * \brief Modify an already created critical pair.
+             * \pre The static variable TAGGEG_POLYNOMIAL_ARRAY must be set beforhand.
+             * \param p1: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.
+             * \param p2: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.
+             * \return true if the critical pair cannot be skipped with the 1st Buchberger criteria.
+             * \return false if it can.
+             */ 
+            bool setCriticalPair(int p1, int p2);
+            
             
             // Miscellaneous
             

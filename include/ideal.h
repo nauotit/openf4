@@ -25,7 +25,7 @@
 #define F4_IDEAL_H
 
 #include <iostream>
-#include <queue>
+#include <set>
 #include "critical-pair.h"
 #include "matrix.h"
 
@@ -62,6 +62,19 @@ namespace F4
             
             // Miscellaneous
             
+            /**
+             * \brief Print _taggedPolynomialArray.
+             */
+            void printTaggedPolynomialArray();
+            
+            /**
+             * \brief Simplify the product u*(_taggedPolynomialArray[numList].poly) by another polynomial with the same leading term but with less terms in its tail.
+             * \param u: Monomial.
+             * \param numList: Index of a tagged polynomial in _taggedPolynomialArray.
+             * \return Index of the simplified polynomial in the array Mon_Tab.
+             */
+            int simplify (Monomial const & u, int numList);
+            
             
             // F4 Algorithm
             
@@ -74,7 +87,13 @@ namespace F4
             
         private:
             std::vector<Polynomial<Element>> _polynomialArray; /*!< Array of polynomials */
-            
+            int _nbVariable; /*!< Number of variables of the polynomial ring. */
+            int NumPol; /*!< TODO : suppress */
+            int NumTot; /*!< TODO : suppress */
+            int NumGen; /*!< TODO : suppress */
+            std::vector<int> GTotal;
+            std::vector<int> GUsed;
+            std::vector<int> Gbasis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
     };
 }

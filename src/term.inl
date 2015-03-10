@@ -189,6 +189,12 @@ namespace F4
         stream << _coefficient << "*" << mon;
     }
     
+    template <typename Element>
+    void
+    Term<Element>::multNumMon(int numMon)
+    {
+        _numMonomial=Monomial::multNumMonomial(_numMonomial, numMon);
+    }
     
     // Operator overload
     

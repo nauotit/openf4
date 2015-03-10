@@ -60,6 +60,7 @@ int main (int argc, char **argv)
     List.emplace_back(Polynomial<eltType>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
     List.emplace_back(Polynomial<eltType>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5"));
     List.emplace_back(Polynomial<eltType>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x3+x1*x2*x3*x4+x2*x5+x4*x5+x2*x3*x4*x5"));
     
     // Test static int getSizeTaggedPolynomialArray();
     cout << "________Test getSizeTaggedPolynomialArray()________" << endl;
@@ -78,6 +79,34 @@ int main (int argc, char **argv)
     cout << "cp2: " << cp2 << endl;
     cout << "cp3: " << cp3 << endl;
     cout << "cp4: " << cp4 << endl << endl;
+    
+    // Test int getP1();
+    cout << "________Test getP1()________" << endl;
+    cout << cp4.getP1() << endl << endl;
+            
+    // Test int getP2();
+    cout << "________Test getP2()________" << endl;
+    cout << cp4.getP2() << endl << endl;
+            
+    // Test int getLcm();
+    cout << "________Test getLcm()________" << endl;
+    cout << cp4.getLcm() << endl << endl;
+            
+    // Test int getU1;
+    cout << "________Test getU1()________" << endl;
+    cout << cp4.getU1() << endl << endl;
+            
+    // Test int getU2;
+    cout << "________Test getU2()________" << endl;
+    cout << cp4.getU2() << endl << endl;
+    
+    // Test bool setCriticalPair(int p1, int p2);
+    cout << "________Test setCriticalPair(int p1, int p2)________" << endl;
+    cout << "cp1: " << cp1 << endl;
+    cout << cp1.setCriticalPair(2,3) << endl;
+    cout << "cp1: " << cp1 << endl;
+    cout << cp1.setCriticalPair(2,4) << endl; 
+    cout << "cp1: " << cp1 << endl << endl;
     
     // Test void printCriticalPair (std::ostream & stream = std::cout) const;
     cout << "________Test printCriticalPair (std::ostream & stream = std::cout)________" << endl;

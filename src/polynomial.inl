@@ -31,12 +31,12 @@ namespace F4
     // Constructor 
     
     template <typename Element>
-    Polynomial<Element>::Polynomial()
+    Polynomial<Element>::Polynomial():_nbTerm(0)
     {
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(string const s)
+    Polynomial<Element>::Polynomial(string const s):_nbTerm(0)
     {
         typename forward_list<Term<Element>>::const_iterator it=_polynomial.before_begin();
         string tmp;
@@ -59,17 +59,18 @@ namespace F4
                 // In case the first character is a sign
                 term.setTerm(tmp);
                 it=_polynomial.insert_after(it, term);
+                _nbTerm++;
             }
         }
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial)
+    Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial), _nbTerm(polynomial._nbTerm)
     {
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(Polynomial && polynomial): _polynomial(polynomial._polynomial)
+    Polynomial<Element>::Polynomial(Polynomial && polynomial): _polynomial(polynomial._polynomial), _nbTerm(polynomial._nbTerm)
     {
     }
     
@@ -80,6 +81,7 @@ namespace F4
     Polynomial<Element>::~Polynomial()
     {
         _polynomial.clear();
+        _nbTerm=0;
     }
     
     // Miscellaneous
@@ -108,7 +110,7 @@ namespace F4
     int 
     Polynomial<Element>::getNbTerm() const
     {
-        return distance(_polynomial.begin(), _polynomial.end());
+        return _nbTerm;
     }
     
     template <typename Element>
@@ -196,6 +198,13 @@ namespace F4
         }
     }
     
+    template <typename Element>
+    bool 
+    Polynomial<Element>::isEmpty()
+    {
+        return _polynomial.empty();
+    }
+    
     // Operator overload
     
     template <typename Element>
@@ -218,10 +227,11 @@ namespace F4
     Polynomial<Element> & 
     Polynomial<Element>::operator*=(Monomial const & monomial)
     {
+        int numMon=monomial.monomialToInt();
         typename forward_list<Term<Element>>::iterator it;
         for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
         {
-            (*it)*=monomial;
+            (*it).multNumMon(numMon);
         }
         return *this;
     }
@@ -250,6 +260,53 @@ namespace F4
         return *this;
     }
     
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Monomial const & monomial, Polynomial<Element> const & polynomial)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=monomial;
+    }
+    
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Polynomial<Element> const & polynomial, Monomial const & monomial)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=monomial;
+    }
+
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Element element, Polynomial<Element> const & polynomial)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=element;
+    }
+    
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Polynomial<Element> const & polynomial, Element element)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=element;
+    }
+
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Term<Element> const & term, Polynomial<Element> const & polynomial)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=term;
+    }
+    
+    template <typename Element>
+    Polynomial<Element> 
+    operator * (Polynomial<Element> const & polynomial, Term<Element> const & term)
+    {
+        Polynomial<Element> copy(polynomial);
+        return copy*=term;
+    }
     
     template <typename Element>
     ostream & operator<<(ostream & stream, Polynomial<Element> const & polynomial)

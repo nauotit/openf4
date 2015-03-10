@@ -79,6 +79,43 @@ namespace F4
              */
             Polynomial<Element> const & getPolynomial() const;
             
+            /**
+            * \brief Get the leading term of this.
+            * \pre _polynomial is not empty.
+            * \return Leading term of this.
+            */
+            const Term<Element> & getLT() const; 
+            
+            /**
+            * \brief Get the number of the leading monomial of this.
+            * \pre _polynomial is not empty.
+            * \return Number of the leading monomial of this.
+            */
+            int getLM() const;
+            
+            /**
+            * \brief Get the leading coefficient of this.
+            * \pre _polynomial is not empty.
+            * \return Leading coefficient of this.
+            */
+            Element getLC() const;
+            
+            /**
+             * \brief Get _simplyrules[i].
+             * \param index: Index of a variable in _simplyrules.
+             * \return _simplyrules[i].
+             */
+            int getSimplyrule(int index) const;
+            
+            /**
+             * \brief Set _simplyrules[i].
+             * \param index: Index of a variable in _simplyrules.
+             * \param numPol: Index of a tagged polynomial in a tagged polynomial Array.
+             * \return _simplyrules[i].
+             */
+            void setSimplyrule(int index, int numPol);
+            
+            
             // Miscellaneous
             
             /**
@@ -94,6 +131,13 @@ namespace F4
              * \return -1 if LM(this) < LM(taggedPolynomial).
              */
             int compareTaggedPolynomial (TaggedPolynomial const & taggedPolynomial) const;
+            
+            /**
+             * \brief Test if the polynomial is empty or not.
+             * \return true if _polynomial is empty.
+             * \return false otherwise.
+             */
+            bool isEmpty();
             
             
             // Internal operators
@@ -111,6 +155,27 @@ namespace F4
              * \return Reference on this.
              */
             TaggedPolynomial & operator=(TaggedPolynomial  && taggedPolynomial);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a monomial.
+             * \param mon: Monomial.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator*=(Monomial const & monomial);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with an Element.
+             * \param element: Element.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator*=(Element element);
+            
+            /**
+             * \brief Overload the operator *= to multiply this with a term.
+             * \param term: Term.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator*=(Term<Element> const & term);
             
         private:
         
@@ -166,6 +231,60 @@ namespace F4
      */
     template <typename Element>
     bool operator<=(TaggedPolynomial<Element> const & taggedPolynomial1, TaggedPolynomial<Element> const & taggedPolynomial2);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a monomial.
+     * \param mon: Monomial.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Monomial const & monomial, TaggedPolynomial<Element> const & taggedPolynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a monomial.
+     * \param mon: Monomial.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Monomial const & monomial);
+
+    /**
+     * \brief Overload the operator *= to multiply this with an Element.
+     * \param element: Element.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with an Element.
+     * \param element: Element.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Element element);
+
+    /**
+     * \brief Overload the operator *= to multiply this with a term.
+     * \param term: Term.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Term<Element> const & term, TaggedPolynomial<Element> const & taggedPolynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a term.
+     * \param term: Term.
+     * \param TaggedPolynomial: taggedPolynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Term<Element> const & term);
 }
 
 #include "../src/tagged-polynomial.inl"

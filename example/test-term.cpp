@@ -129,6 +129,11 @@ int main (int argc, char **argv)
     cout << t3 << endl;
     t4.readCoefficient("-123.456*x1*x2^2*x3^3*x4^4*x5^5");
     cout << t4 << endl << endl;
+    
+    // Test void multNumMon(int numMon);
+    cout << "________Test multNumMon(int numMon)________" << endl;
+    t3.multNumMon(1000);
+    cout << "t3: multiply by: " << Monomial(1000) << ": " << t3 << endl << endl;
             
     // Test Term & operator=(Term const & term);
     cout << "________Test operator=(Term const & term)________" << endl;

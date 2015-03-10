@@ -156,11 +156,19 @@ namespace F4
              static int compareNumMonomial(int numMon1, int numMon2);
              
              /**
-             * \brief Get the numMon-th monomial, using MONOMIAL_ARRAY if possible.
+             * \brief Get the numMon-th monomial, using MONOMIAL_ARRAY.
              * \param numMon: Number of the monomial.
              * \return Monomial.
              */
              static Monomial const & getNumMonomial(int numMon);
+             
+             /**
+             * \brief Get MONOMIAL_ARRAY[numMon]._varlist[i].
+             * \param numMon: Number of the monomial.
+             * \param index: Index of a variable in varlist.
+             * \return MONOMIAL_ARRAY[numMon]._varlist[i].
+             */
+             static int getNumVarlist(int numMon, int index);
              
              /**
               * \brief Initialise the static parameters of Monomial.
@@ -241,6 +249,12 @@ namespace F4
              * \return Varlist of this.
              */
             int * getVarlist() const;
+            
+            /**
+             * \brief Get varlist[index].
+             * \return varlist[index].
+             */
+            int getVarlist(int index) const;
             
             // Miscellaneous
             

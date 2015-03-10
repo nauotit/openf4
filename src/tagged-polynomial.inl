@@ -86,6 +86,43 @@ namespace F4
         return _polynomial;
     }
     
+    template <typename Element>
+    const Term<Element> & 
+    TaggedPolynomial<Element>::getLT() const
+    {
+        return _polynomial.getLT();
+    }
+            
+    template <typename Element>
+    int 
+    TaggedPolynomial<Element>::getLM() const
+    {
+        return _polynomial.getLM();
+    }
+            
+    template <typename Element>
+    Element 
+    TaggedPolynomial<Element>::getLC() const
+    {
+        return _polynomial.getLC();
+    }
+    
+    template <typename Element>
+    int 
+    TaggedPolynomial<Element>::getSimplyrule(int index) const
+    {
+        assert(index < Monomial::getNbVariable());
+        return _simplyrules[index];
+    }
+    
+    template <typename Element>
+    void 
+    TaggedPolynomial<Element>::setSimplyrule(int index, int numPol)
+    {
+        assert(index < Monomial::getNbVariable());
+        _simplyrules[index]=numPol;
+    }
+    
     // Miscellaneous
     
     template <typename Element>
@@ -127,6 +164,13 @@ namespace F4
         return cmp;
     }
     
+    template <typename Element>
+    bool 
+    TaggedPolynomial<Element>::isEmpty()
+    {
+        return _polynomial.isEmpty();
+    }
+    
     
     // Operator overload
     
@@ -149,6 +193,30 @@ namespace F4
         _polynomial=taggedPolynomial._polynomial;
         _simplyrules=taggedPolynomial._simplyrules;
         return * this;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator*=(Monomial const & monomial)
+    {
+        _polynomial*=monomial;
+        return *this;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator*=(Element element)
+    {
+        _polynomial*=element;
+        return *this;
+    }
+            
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator*=(Term<Element> const & term)
+    {
+        _polynomial*=term;
+        return *this;
     }
     
     template <typename Element>
@@ -188,6 +256,47 @@ namespace F4
         return (taggedPolynomial1.compareTaggedPolynomial(taggedPolynomial2)!=1);
     }
     
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Monomial const & monomial, TaggedPolynomial<Element> const & taggedPolynomial)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=monomial;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Monomial const & monomial)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=monomial;
+    }
+
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=element;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Element element)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=element;
+    }
+
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (Term<Element> const & term, TaggedPolynomial<Element> const & taggedPolynomial)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=term;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Term<Element> const & term)
+    {
+        TaggedPolynomial<Element> copy(taggedPolynomial);
+        return copy*=term;
+    }
 }
 
 #endif // F4_TAGGED_POLYNOMIAL_INL

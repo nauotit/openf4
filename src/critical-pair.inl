@@ -69,20 +69,11 @@ namespace F4
         int nbVars=Monomial::getNbVariable();
         
         // Get the varlist of LM(p1) and LM(p2)
-        int * varlistp1=Monomial::getNumMonomial(((getTaggedPolynomialArray(p1)).getPolynomial()).getLM()).getVarlist();
-        int * varlistp2=Monomial::getNumMonomial(((getTaggedPolynomialArray(p2)).getPolynomial()).getLM()).getVarlist();
+        Monomial ltP1(getTaggedPolynomialArray(p1).getLM());
+        int * varlistp1=ltP1.getVarlist();
         
-        for(int i=0; i< nbVars; i++)
-        {
-            cout << varlistp1[i] <<  ", ";
-        }
-        cout << endl;
-        
-        for(int i=0; i< nbVars; i++)
-        {
-            cout << varlistp2[i] << ", ";
-        }
-        cout << endl;
+        Monomial ltP2(getTaggedPolynomialArray(p2).getLM());
+        int * varlistp2=ltP2.getVarlist();
         
         int varlistLcm[nbVars];
         int varlistU1[nbVars];
@@ -118,6 +109,90 @@ namespace F4
     template <typename Element>
     CriticalPair<Element>::~CriticalPair()
     {
+    }
+    
+    
+    // Get / Set
+    
+    template <typename Element>
+    int 
+    CriticalPair<Element>::getP1() const
+    {
+        return _p1;
+    }
+            
+    template <typename Element>
+    int 
+    CriticalPair<Element>::getP2() const
+    {
+        return _p2;
+    }
+            
+    template <typename Element>
+    int 
+    CriticalPair<Element>::getLcm() const
+    {
+        return _lcm;
+    }
+            
+    template <typename Element>
+    int 
+    CriticalPair<Element>::getU1() const
+    {
+        return _u1;
+    }
+            
+    template <typename Element>
+    int 
+    CriticalPair<Element>::getU2() const
+    {
+        return _u2;
+    }
+    
+    template <typename Element>
+    bool 
+    CriticalPair<Element>::setCriticalPair(int p1, int p2)
+    {
+        _p1=p1;
+        _p2=p2;
+        
+        int nbVars=Monomial::getNbVariable();
+        
+        // Get the varlist of LM(p1) and LM(p2)
+        Monomial ltP1(getTaggedPolynomialArray(p1).getLM());
+        int * varlistp1=ltP1.getVarlist();
+        
+        Monomial ltP2(getTaggedPolynomialArray(p2).getLM());
+        int * varlistp2=ltP2.getVarlist();
+        
+        int varlistLcm[nbVars];
+        int varlistU1[nbVars];
+        int varlistU2[nbVars];
+        
+        // computation of _lcm, _u1 and _u2
+        for (int i = 0; i < nbVars; i++)
+        {
+            if (varlistp1[i] < varlistp2[i])
+            {
+                varlistU1[i] = varlistp2[i] - varlistp1[i];
+                varlistU2[i] = 0;
+                varlistLcm[i] = varlistp2[i];
+            }
+            else
+            {
+                varlistU1[i] = 0;
+                varlistU2[i] = varlistp1[i] - varlistp2[i];
+                varlistLcm[i] = varlistp1[i];
+            }
+        }
+        
+        Monomial lcm(varlistLcm);
+        
+        _lcm=lcm.monomialToInt();
+        _u1=Monomial(varlistU1).monomialToInt();
+        _u2=Monomial(varlistU2).monomialToInt();
+        
+        return ( (ltP1.getDegree() + ltP2.getDegree()) != lcm.getDegree());
     }
     
     // Miscellaneous

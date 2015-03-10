@@ -360,6 +360,22 @@ namespace F4
         return MONOMIAL_ARRAY[numMon];
     }
     
+    int
+    Monomial::getNumVarlist(int numMon, int index)
+    {
+        // Preconditions
+        assert(! NB_MONOMIAL.empty());
+        assert(NB_VARIABLE > 0);
+        assert(index < NB_VARIABLE);
+        
+        while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
+        {
+            // We increase NB_MONOMIAL:
+            setNbMonomial(MAX_DEGREE+5);
+        }
+        return MONOMIAL_ARRAY[numMon]._varlist[index];
+    }
+    
     void 
     Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2)
     {
@@ -579,6 +595,11 @@ namespace F4
         return _varlist;
     }
     
+    int 
+    Monomial::getVarlist(int index) const
+    {
+        return _varlist[index];
+    }
     
     // Miscellaneous
     

@@ -66,6 +66,11 @@ int main (int argc, char **argv)
     cyclic6.f4();
     cout << endl;
     
+    // Test void printTaggedPolynomialArray();
+    cout << "cyclic6: " << endl;
+    cyclic6.printTaggedPolynomialArray();
+    cout << endl << endl;
+    
     // Free monomial tools
     Monomial::freeMonomial();
     

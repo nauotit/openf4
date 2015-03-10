@@ -130,6 +130,13 @@ namespace F4
              */
             void normalize();
             
+            /**
+             * \brief Test if the polynomial is empty or not.
+             * \return true if _polynomial is empty.
+             * \return false otherwise.
+             */
+            bool isEmpty();
+            
             
             // Internal operators
             
@@ -148,7 +155,7 @@ namespace F4
             Polynomial & operator=(Polynomial && polynomial);
             
             /**
-             * \brief Overload the operator *= to multiply this with a monomial.
+             * \brief Overload the operator *= to multiply this with a monomial. Prefer multNumMon(int numMon) if the monomial is under integer form.
              * \param mon: Monomial.
              * \return Reference on this.
              */
@@ -170,6 +177,7 @@ namespace F4
             
         private:
             std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
+            int _nbTerm; /*!< Number of term of _polynomial */
     };
     
     /**
@@ -178,6 +186,60 @@ namespace F4
      */
     template <typename Element>
     std::ostream & operator<<(std::ostream & stream, Polynomial<Element> const & polynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a monomial.
+     * \param mon: Monomial.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Monomial const & monomial, Polynomial<Element> const & polynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a monomial.
+     * \param mon: Monomial.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Polynomial<Element> const & polynomial, Monomial const & monomial);
+
+    /**
+     * \brief Overload the operator *= to multiply this with an Element.
+     * \param element: Element.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Element element, Polynomial<Element> const & polynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with an Element.
+     * \param element: Element.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Polynomial<Element> const & polynomial, Element element);
+
+    /**
+     * \brief Overload the operator *= to multiply this with a term.
+     * \param term: Term.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Term<Element> const & term, Polynomial<Element> const & polynomial);
+    
+    /**
+     * \brief Overload the operator *= to multiply this with a term.
+     * \param term: Term.
+     * \param polynomial: Polynomial.
+     * \return Reference on this.
+     */
+    template <typename Element>
+    Polynomial<Element> operator * (Polynomial<Element> const & polynomial, Term<Element> const & term);
 }
 
 #include "../src/polynomial.inl"

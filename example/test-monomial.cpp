@@ -91,6 +91,10 @@ int main (int argc, char **argv)
         cout << varlist2[i] << " ";
     }
     cout << endl << endl;
+    
+    // Test int getVarlist(int index) const;
+    cout << "________Test getVarlist(int index)________" << endl;
+    cout << "varlist[2] of m3: " << m3.getVarlist(2) << endl << endl;
             
     // Test void setMonomial(int const * varlist);
     cout << "________Test setMonomial(int const * varlist)________" << endl;
@@ -107,10 +111,14 @@ int main (int argc, char **argv)
     m6.intToMonomial(20000);
     cout << "m6: "<< m6 << endl << endl;
     
-    // static const & Monomial getNumMonomial(int numMon);
+    // Test static const & Monomial getNumMonomial(int numMon);
     cout << "________Test getNumMonomial(int numMon)________" << endl;
     m5=Monomial::getNumMonomial(200000);
     cout << "m5: "<< m5 << endl << endl;
+    
+    // Test static int getNumVarlist(int numMon, int index);
+    cout << "________Test getNumVarlist(int numMon, int index)________" << endl;
+    cout << Monomial::getNumVarlist(200000, 3) << endl << endl;
             
     // Test int monomialToInt() const;
     cout << "________Test monomialToInt()________" << endl;
