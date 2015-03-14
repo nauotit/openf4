@@ -187,6 +187,11 @@ namespace F4
              */
             int * getEndCol();
             
+            /**
+             * \brief Set the informations required by echelonize.
+             */
+            void setInfo(int nbPiv, int *tau, int *sigma, int * startTail, int * endCol);
+            
             
             // Miscellaneous
             

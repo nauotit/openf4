@@ -80,6 +80,12 @@ namespace F4
             Polynomial<Element> const & getPolynomial() const;
             
             /**
+             * \brief Set the polynomial of this, but do not modify the simplyrules.
+             * \param Polynomial to move.
+             */
+            void setPolynomial(Polynomial<Element> && polynomial);
+            
+            /**
             * \brief Get the leading term of this.
             * \pre _polynomial is not empty.
             * \return Leading term of this.
@@ -115,6 +121,18 @@ namespace F4
              */
             void setSimplyrule(int index, int numPol);
             
+            /**
+            * \brief Get a constant iterator on the beginning of the polynomial.
+            * \return Constant iterator on the beginning of _polynomial._polynomial.
+            */
+            typename forward_list<Term<Element>>::const_iterator getPolynomialBegin() const;
+            
+            /**
+            * \brief Get a constant iterator on the beginning of the polynomial.
+            * \return Constant iterator on the beginning of _polynomial._polynomial.
+            */
+            typename forward_list<Term<Element>>::const_iterator getPolynomialEnd() const;
+            
             
             // Miscellaneous
             
@@ -138,6 +156,11 @@ namespace F4
              * \return false otherwise.
              */
             bool isEmpty();
+            
+            /**
+             * \brief Reset the simplyrules of this.
+             */
+            void resetSimplyrules();
             
             
             // Internal operators

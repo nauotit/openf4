@@ -106,6 +106,16 @@ int main (int argc, char **argv)
     cout << "coefficient of x1*x2*x3*x4 in p4: " << p4.getCoefficient(Monomial("x1*x2*x3*x4").monomialToInt()) << endl ;
     cout << "coefficient of x1*x2 in p4: " << p4.getCoefficient(Monomial("x1*x2").monomialToInt()) << endl << endl ;
     
+    // Test typename forward_list<Term<Element>>::const_iterator getPolynomialBegin();
+    cout << "________Test getPolynomialBegin() and getPolynomialEnd()________" << endl;
+    typename forward_list<Term<eltType>>::const_iterator itbeg=p4.getPolynomialBegin();
+    typename forward_list<Term<eltType>>::const_iterator itend=p4.getPolynomialEnd();
+    while(itbeg != itend)
+    {
+        cout << itbeg->getNumMonomial() << endl;
+        ++itbeg;
+    }
+    
     // Test void deleteLT();
     cout << "________Test deleteLT()________" << endl;
     p1.deleteLT();
@@ -126,6 +136,19 @@ int main (int argc, char **argv)
     cout << "________Test isEmpty()________" << endl;
     cout << p1.isEmpty() << endl;
     cout << p3.isEmpty() << endl << endl;
+    
+    // Test typename forward_list<Term<Element>>::const_iterator emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon);
+    cout << "________Test emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon)________" << endl;
+    typename forward_list<Term<eltType>>::const_iterator it;
+    it=p4.getPolynomialBegin();
+    it=p4.emplaceAfter(it, eltType(100), 1000);
+    cout << "p4: " << p4 << endl << endl; 
+    
+    // Test typename forward_list<Term<Element>>::const_iterator getPolynomialBeforeBegin() const;
+    cout << "________Test getPolynomialBeforeBegin()________" << endl;
+    it=p4.getPolynomialBeforeBegin();
+    it=p4.emplaceAfter(it, eltType(200), 10000);
+    cout << "p4: " << p4 << endl << endl; 
             
     // Test Polynomial & operator=(Polynomial const & polynomial);
     cout << "________Test operator=(Polynomial const & polynomial)________" << endl;

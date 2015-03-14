@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=2;
+int F4::VERBOSE=3;
 
 int main (int argc, char **argv)
 {
@@ -43,7 +43,7 @@ int main (int argc, char **argv)
     ElementPrime<long>::setModulo(65537);
     
     // Init monomial tools
-    Monomial::initMonomial(6,5,4,6);
+    Monomial::initMonomial(6,5,5,10);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polynomialArray;
@@ -60,6 +60,32 @@ int main (int argc, char **argv)
     cout << "________Test Ideal(std::vector<Polynomial<Element>> & polynomialArray)________" << endl;
     Ideal<eltType> cyclic6(polynomialArray);
     cout << endl;
+    
+    // Test Polynomial<Element> buildPolynomial (Element * row, int *tab_mon, int largeur, int start, int *tau);
+    cout << "________Test buildPolynomial (Element * row, int *tab_mon, int largeur, int start, int *tau)________" << endl;
+    int tab_mon[13];
+    tab_mon[0]= Monomial("x0^1*x1^1").monomialToInt();
+    tab_mon[1]= Monomial("x1^2").monomialToInt();
+    tab_mon[2]= Monomial("x1^1*x2^1").monomialToInt();
+    tab_mon[3]= Monomial("x1^1*x3^1").monomialToInt();
+    tab_mon[4]= Monomial("x2^1*x4^1").monomialToInt();
+    tab_mon[5]= Monomial("x1^1*x4^1").monomialToInt();
+    tab_mon[6]= Monomial("x3^1*x4^1").monomialToInt();
+    tab_mon[7]= Monomial("x0^1*x5^1").monomialToInt();
+    tab_mon[8]= Monomial("x1^1*x5^1").monomialToInt();
+    tab_mon[9]= Monomial("x2^1*x5^1").monomialToInt();
+    tab_mon[10]= Monomial("x3^1*x5^1").monomialToInt();
+    tab_mon[11]= Monomial("x4^1*x5^1").monomialToInt();
+    tab_mon[12]= Monomial("x5^2").monomialToInt();
+    
+    int tau[13]={ 0 , 2 , 3 , 4 , 5 , 6 , 7 , 1 , 8 , 9 , 10 , 11 , 12 };
+    
+    Matrix<eltType> Mat("../data/M_text_basic1_cyclic6.txt");
+    cout << Mat << endl;
+    
+    cout << "Polynomial row 0: " << cyclic6.buildPolynomial(Mat.getRow(0), tab_mon, 13, 0, tau) << endl;
+    cout << "Polynomial row 1: " << cyclic6.buildPolynomial(Mat.getRow(1), tab_mon, 13, 0, tau) << endl;
+    cout << "Polynomial row 2: " << cyclic6.buildPolynomial(Mat.getRow(2), tab_mon, 13, 0, tau) << endl << endl;
     
     // Test void f4();
     cout << "________Test f4()________" << endl;

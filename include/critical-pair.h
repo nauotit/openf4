@@ -117,6 +117,12 @@ namespace F4
             int getU2() const;
             
             /**
+             * \brief Get the degree of this.
+             * \return Degree of the critical pair.
+             */
+            int getDegree() const;
+            
+            /**
              * \brief Modify an already created critical pair.
              * \pre The static variable TAGGEG_POLYNOMIAL_ARRAY must be set beforhand.
              * \param p1: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.

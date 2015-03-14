@@ -116,6 +116,24 @@ namespace F4
             Element getCoefficient(int numMon) const;
             
             /**
+            * \brief Get a constant iterator on the beginning of the polynomial.
+            * \return Constant iterator on the beginning of _polynomial.
+            */
+            typename forward_list<Term<Element>>::const_iterator getPolynomialBegin() const;
+            
+            /**
+            * \brief Get a constant iterator before the beginning of the polynomial. 
+            * \return Constant iterator before the beginning of _polynomial.
+            */
+            typename forward_list<Term<Element>>::const_iterator getPolynomialBeforeBegin() const;
+            
+            /**
+            * \brief Get a constant iterator on the end of the polynomial.
+            * \return Constant iterator on the beginning of _polynomial.
+            */
+            typename forward_list<Term<Element>>::const_iterator getPolynomialEnd() const;
+            
+            /**
             * \brief Delete the leading term of this.
             */
             void deleteLT(); 
@@ -136,6 +154,15 @@ namespace F4
              * \return false otherwise.
              */
             bool isEmpty();
+            
+            /**
+             * \brief Add a term at the end of this. Beware to keep a correct order.
+             * \param pos: iterator, term is contructed after the position specified by pos.
+             * \param coeff: Coefficient of the new term.
+             * \param numMon: Number of the monomial of the new term.
+             * \return Iterator to the new term.
+             */
+            typename forward_list<Term<Element>>::const_iterator emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon);
             
             
             // Internal operators

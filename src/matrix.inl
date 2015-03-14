@@ -358,6 +358,16 @@ namespace F4
         return _endCol;
     }
     
+    template <typename Element>
+    void
+    Matrix<Element>::setInfo(int nbPiv, int *tau, int *sigma, int * startTail, int * endCol)
+    {
+         _nbPiv=nbPiv;
+         _tau=tau;
+         _sigma=sigma;
+         _startTail=startTail;
+         _endCol=endCol;
+    }
     
     // Miscellaneous
     
@@ -836,14 +846,30 @@ namespace F4
     Matrix<Element> &
     Matrix<Element>::operator=(Matrix<Element> && matrix)
     {
-        _matrix(matrix._matrix);
-        _height(matrix._height);
-        _width(matrix._width);
-        _nbPiv(matrix._nbPiv);
-        _tau(matrix._tau);
-        sigma(matrix._sigma);
-        _startTail(matrix._startTail); 
-        _endCol(matrix._endCol);
+        if(this != &matrix)
+        {
+            for(int i=0; i< _height; i++)
+            {
+                delete[] _matrix[i];
+                _matrix[i]=0;
+            } 
+            delete[] _matrix;
+            _matrix(matrix._matrix);
+            matrix._matrix=0;
+            _height(matrix._height);
+            matrix._height=0;
+            _width(matrix._width);
+            matrix._width=0;
+            _nbPiv(matrix._nbPiv);
+            matrix._nbPiv=0;
+            _tau(matrix._tau);
+            sigma(matrix._sigma);
+            matrix._sigma=0;
+            _startTail(matrix._startTail); 
+            matrix._startTail=0;
+            _endCol(matrix._endCol);
+            matrix._endCol=0;
+        }
     }
     
     template <typename Element>

@@ -154,6 +154,27 @@ namespace F4
     }
     
     template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    Polynomial<Element>::getPolynomialBegin() const
+    {
+        return _polynomial.begin();
+    }
+    
+    template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    Polynomial<Element>::getPolynomialBeforeBegin() const
+    {
+        return _polynomial.before_begin();
+    }
+    
+    template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    Polynomial<Element>::getPolynomialEnd() const
+    {
+        return _polynomial.end();
+    }
+    
+    template <typename Element>
     void
     Polynomial<Element>::deleteLT()
     {
@@ -205,6 +226,15 @@ namespace F4
         return _polynomial.empty();
     }
     
+    template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    Polynomial<Element>::emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon)
+    {
+        return _polynomial.emplace_after(pos, coeff, numMon);
+    }
+    
+    
+    
     // Operator overload
     
     template <typename Element>
@@ -212,6 +242,7 @@ namespace F4
     Polynomial<Element>::operator=(Polynomial const & polynomial)
     {
         _polynomial=polynomial._polynomial;
+        _nbTerm=polynomial._nbTerm;
         return * this;
     }
     
@@ -220,6 +251,7 @@ namespace F4
     Polynomial<Element>::operator=(Polynomial && polynomial)
     {
         _polynomial=polynomial._polynomial;
+        _nbTerm=polynomial._nbTerm;
         return * this;
     }
     

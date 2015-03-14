@@ -73,6 +73,13 @@ int main (int argc, char **argv)
     cout << "________Test getPolynomial()________" << endl;
     cout << "polynomial of tp5: " << tp5.getPolynomial() << endl << endl;
     
+    // Test void setPolynomial(Polynomial<Element> && polynomial);
+    cout << "________Test setPolynomial(Polynomial<Element> && polynomial)________" << endl;
+    tp4.setSimplyrule(0, 1);
+    tp4.setSimplyrule(2, 2);
+    tp4.setPolynomial(Polynomial<eltType>("x0+x1+x2+x3+x4+x5"));
+    cout << "tp4: " << tp4 << endl << endl;
+    
     // Test const Term<Element> & getLT(); 
     cout << "________Test getLT()________" << endl;
     cout << "Leading term of tp5: " << tp5.getLT() << endl << endl;
@@ -97,6 +104,16 @@ int main (int argc, char **argv)
     cout << "________Test getSimplyrule(int index)________" << endl;
     cout << "simplyrule[2] of tp5: " << tp5.getSimplyrule(2) << endl << endl;
     
+    // Test typename forward_list<Term<Element>>::const_iterator getPolynomialBegin();
+    cout << "________Test getPolynomialBegin() and getPolynomialEnd()________" << endl;
+    typename forward_list<Term<eltType>>::const_iterator itbeg=tp4.getPolynomialBegin();
+    typename forward_list<Term<eltType>>::const_iterator itend=tp4.getPolynomialEnd();
+    while(itbeg != itend)
+    {
+        cout << itbeg->getNumMonomial() << endl;
+        ++itbeg;
+    }
+    
     // Test void printTaggedPolynomial(std::ostream & stream = std::cout) const;
     cout << "________Test printTaggedPolynomial (std::ostream & stream = std::cout)________" << endl;
     cout << "tp2 :";
@@ -113,6 +130,11 @@ int main (int argc, char **argv)
     cout << "________Test isEmpty()________" << endl;
     cout << tp1.isEmpty() << endl;
     cout << tp3.isEmpty() << endl << endl;
+    
+    // Test void resetSimplyrules();
+    cout << "________Test resetSimplyrules()________" << endl;
+    tp4.resetSimplyrules();
+    cout << "tp4: " << tp4 << endl << endl;
     
     // Test TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);
     cout << "________Test operator=(TaggedPolynomial const & taggedPolynomial)________" << endl;

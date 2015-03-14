@@ -150,6 +150,13 @@ namespace F4
     }
     
     template <typename Element>
+    int 
+    CriticalPair<Element>::getDegree() const
+    {
+        return Monomial::getNumMonomial(_lcm).getDegree();
+    }
+    
+    template <typename Element>
     bool 
     CriticalPair<Element>::setCriticalPair(int p1, int p2)
     {

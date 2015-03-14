@@ -100,6 +100,10 @@ int main (int argc, char **argv)
     cout << "________Test getU2()________" << endl;
     cout << cp4.getU2() << endl << endl;
     
+    // Test int getDegree() const;
+    cout << "________Test getDegree()________" << endl;
+    cout << cp4.getDegree() << endl << endl;
+    
     // Test bool setCriticalPair(int p1, int p2);
     cout << "________Test setCriticalPair(int p1, int p2)________" << endl;
     cout << "cp1: " << cp1 << endl;

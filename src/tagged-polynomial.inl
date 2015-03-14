@@ -62,8 +62,9 @@ namespace F4
     }
     
     template <typename Element>
-    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial  && taggedPolynomial): _polynomial(taggedPolynomial._polynomial), _simplyrules(taggedPolynomial._simplyrules)
+    TaggedPolynomial<Element>::TaggedPolynomial(TaggedPolynomial  && taggedPolynomial):_polynomial(taggedPolynomial._polynomial), _simplyrules(taggedPolynomial._simplyrules)
     {
+        taggedPolynomial._simplyrules=0;
     }
     
     
@@ -73,7 +74,14 @@ namespace F4
     TaggedPolynomial<Element>::~TaggedPolynomial()
     {
         _polynomial.reset();
-        delete[] _simplyrules;
+        if(_simplyrules!=0)
+        {
+            delete[] _simplyrules;
+        }
+        else
+        {
+            cout << "DEBUG _simplyrules = 0 " << endl;
+        }
     }
     
     
@@ -84,6 +92,13 @@ namespace F4
     TaggedPolynomial<Element>::getPolynomial() const
     {
         return _polynomial;
+    }
+    
+    template <typename Element>
+    void  
+    TaggedPolynomial<Element>::setPolynomial(Polynomial<Element> && polynomial)
+    {
+        _polynomial=polynomial;
     }
     
     template <typename Element>
@@ -123,6 +138,21 @@ namespace F4
         _simplyrules[index]=numPol;
     }
     
+    template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    TaggedPolynomial<Element>::getPolynomialBegin() const
+    {
+        return _polynomial.getPolynomialBegin();
+    }
+    
+    template <typename Element>
+    typename forward_list<Term<Element>>::const_iterator 
+    TaggedPolynomial<Element>::getPolynomialEnd() const
+    {
+        return _polynomial.getPolynomialEnd();
+    }
+    
+    
     // Miscellaneous
     
     template <typename Element>
@@ -159,7 +189,15 @@ namespace F4
         int cmp=Monomial::compareNumMonomial(_polynomial.getLM(), taggedPolynomial._polynomial.getLM());
         if (cmp == 0)
         {
-            return (_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm());
+            if(_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm())
+            {
+                return 1;
+            }
+            else if (taggedPolynomial._polynomial.getNbTerm() - _polynomial.getNbTerm())
+            {   
+                return -1;
+            }
+            //return (_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm());
         }
         return cmp;
     }
@@ -171,6 +209,15 @@ namespace F4
         return _polynomial.isEmpty();
     }
     
+    template <typename Element>
+    void 
+    TaggedPolynomial<Element>::resetSimplyrules()
+    {
+        for(int i=0; i< Monomial::getNbVariable(); i++)
+        {
+            _simplyrules[i]=-1;
+        }
+    }
     
     // Operator overload
     
@@ -190,8 +237,13 @@ namespace F4
     TaggedPolynomial<Element> & 
     TaggedPolynomial<Element>::operator=(TaggedPolynomial  && taggedPolynomial)
     {
-        _polynomial=taggedPolynomial._polynomial;
-        _simplyrules=taggedPolynomial._simplyrules;
+        if(this != &taggedPolynomial)
+        {
+            _polynomial=taggedPolynomial._polynomial;
+            delete[] _simplyrules;
+            _simplyrules=taggedPolynomial._simplyrules;
+            taggedPolynomial._simplyrules=0;
+        }
         return * this;
     }
     

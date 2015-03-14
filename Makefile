@@ -80,8 +80,8 @@ bin/test-ideal: obj/test-ideal.o
 
 # Intermediate rules
 
-example: bin/test-ideal  
-# bin/test-critical-pair bin/test-monomial bin/test-tagged-polynomial bin/test-polynomial bin/test-term  bin/test-element-prime  bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-matrix 
+example:  bin/test-ideal
+# bin/test-polynomial bin/test-matrix  bin/test-tagged-polynomial  bin/test-critical-pair bin/test-monomial   bin/test-term  bin/test-element-prime  bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime 
 
 
 all: $(EXEC)
