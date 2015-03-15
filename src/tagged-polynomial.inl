@@ -73,14 +73,10 @@ namespace F4
     template <typename Element>
     TaggedPolynomial<Element>::~TaggedPolynomial()
     {
-        _polynomial.reset();
         if(_simplyrules!=0)
         {
             delete[] _simplyrules;
-        }
-        else
-        {
-            cout << "DEBUG _simplyrules = 0 " << endl;
+            _simplyrules=0;
         }
     }
     

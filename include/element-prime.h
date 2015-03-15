@@ -73,6 +73,14 @@ namespace F4
             ElementPrime();
             
             
+            // Destructor
+            
+             /**
+             * \brief Destructor.
+             */
+            ~ElementPrime();
+            
+            
             // Miscellaneous
             
             /**

@@ -80,8 +80,6 @@ namespace F4
     template <typename Element>
     Polynomial<Element>::~Polynomial()
     {
-        _polynomial.clear();
-        _nbTerm=0;
     }
     
     // Miscellaneous
@@ -90,18 +88,21 @@ namespace F4
     void
     Polynomial<Element>::printPolynomial (ostream & stream) const
     {
-        typename forward_list<Term<Element>>::const_iterator it, it_tmp;
-        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        if(!_polynomial.empty())
         {
-            it_tmp=it;
-            it_tmp++;
-            if(it_tmp !=_polynomial.end())
+            typename forward_list<Term<Element>>::const_iterator it, it_tmp;
+            for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
             {
-                stream << "(" << *it << ") + ";
-            }
-            else
-            {
-                stream << "(" << *it << ")";
+                it_tmp=it;
+                ++it_tmp;
+                if(it_tmp !=_polynomial.end())
+                {
+                    stream << "(" << *it << ") + ";
+                }
+                else
+                {
+                    stream << "(" << *it << ")";
+                }
             }
         }
     }
@@ -231,6 +232,7 @@ namespace F4
     Polynomial<Element>::emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon)
     {
         return _polynomial.emplace_after(pos, coeff, numMon);
+        _nbTerm++;
     }
     
     
@@ -252,6 +254,7 @@ namespace F4
     {
         _polynomial=polynomial._polynomial;
         _nbTerm=polynomial._nbTerm;
+        polynomial._nbTerm=0;
         return * this;
     }
     

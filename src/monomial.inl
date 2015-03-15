@@ -559,13 +559,10 @@ namespace F4
         // Preconditions
         assert(NB_VARIABLE > 0);
         
-        if(this!=&toCopy)
-        {
-            _deg=toCopy._deg;
-            toCopy._deg=0;
-            _varlist=toCopy._varlist;
-            toCopy._varlist=0;
-        }
+        _deg=toCopy._deg;
+        toCopy._deg=0;
+        _varlist=toCopy._varlist;
+        toCopy._varlist=0;
     }
 
 

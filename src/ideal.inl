@@ -33,9 +33,10 @@ namespace F4
     template <typename Element>
     Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0)
     {
-        _taggedPolynomialArray.reserve(1000);
-        GTotal.reserve(1000);
-        Gbasis.reserve(100);
+        _taggedPolynomialArray.reserve(10000);
+        GTotal.reserve(10000);
+        Gbasis.reserve(1000);
+        GUsed.reserve(10000);
     }
     
     
@@ -53,15 +54,15 @@ namespace F4
     void
     Ideal<Element>::printTaggedPolynomialArray()
     {
-        int i=0;
-        cout << "_taggedPolynomialArray: " << NumPol << endl;
-        typename vector<TaggedPolynomial<Element>>::const_iterator it;
-        for(it=_taggedPolynomialArray.begin(); it != _taggedPolynomialArray.end(); ++it)
-        {
-            cout << i << ": " << endl << *it << endl;
-            i++;
-        }
-        cout << endl;
+        //int i=0;
+        //cout << "_taggedPolynomialArray: " << NumPol << endl;
+        //typename vector<TaggedPolynomial<Element>>::const_iterator it;
+        //for(it=_taggedPolynomialArray.begin(); it != _taggedPolynomialArray.end(); ++it)
+        //{
+            //cout << i << ": " << endl << *it << endl;
+            //i++;
+        //}
+        //cout << endl;
         
         cout << "GTotal: ";
         for(vector<int>:: const_iterator it=GTotal.begin(); it != GTotal.end(); ++it)
@@ -173,6 +174,9 @@ namespace F4
         if (_taggedPolynomialArray[numList].isEmpty())
         {
             // le produit n'existe pas => on le cree
+            //cout << "DEBUG simplify: numListPrev= " << numList_prev << ", poly = " << _taggedPolynomialArray[numList_prev] << endl;
+            //cout << "monomial = " << Monomial(varlistTmp) << endl;
+            //cout << "numList = " << numList << ", poly = " << _taggedPolynomialArray[numList] << endl << endl;
             _taggedPolynomialArray[numList]=(_taggedPolynomialArray[numList_prev]*Monomial(varlistTmp));
             _taggedPolynomialArray[numList].resetSimplyrules();
         }
@@ -746,6 +750,9 @@ namespace F4
         typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg, itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
+        /* F4 matrix */
+        Matrix<Element> Mat;
+        
         long i, j, k;
 
         int step = 0;
@@ -945,11 +952,6 @@ namespace F4
                         //tmp_polEt->numList =
                             //Simplify (quotient, GTotal[Gbasis[i]], &mon_inter);
                         
-                        if (step==9)
-                        {
-                            cout << "i: " << i << ", Gbasis[i]: " << Gbasis[i] << " GTotal[Gbasis[i]]: " << GTotal[Gbasis[i]] << endl;
-                        }
-                        
                         int indexPol=simplify(quotient, GTotal[Gbasis[i]]);
                         //AVL_PolEt_Insert (&M, tmp_polEt, &ComparePolEtLT);
                         
@@ -997,7 +999,7 @@ namespace F4
             
             cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl;
             
-            Matrix<Element> Mat(hauteur, largeur);
+            Mat=Matrix<Element>(hauteur, largeur);
             tab_mon = new int[largeur];
             tau = new int[largeur];
             sigma = new int[largeur];
@@ -1101,12 +1103,13 @@ namespace F4
                 //ajout du nouveau gen dans la base
                 if (VERBOSE > 2)
                 {
-                    cout << endl << "GTotal[" << NumTot << "] = " << _taggedPolynomialArray[NumPol] << endl;
+                    //cout << endl << "GTotal[" << NumTot << "] = " << _taggedPolynomialArray[NumPol] << endl;
                 }
 
                 //GTotal[NumTot] = NumPol;
                 GTotal.push_back(NumPol);
-                GUsed[NumTot] = 1;
+                //GUsed[NumTot] = 1;
+                GUsed.push_back(1);
                 //Gbasis[NumGen] = NumTot;
                 
                 update(NumPol);
@@ -1201,6 +1204,12 @@ namespace F4
             {
                 cout << "--> Total computation time of step " << step << (((double)clock () - start2) * 1000) / CLOCKS_PER_SEC << " ms" << endl; 
             }
+            
+            delete[] tab_mon;
+            delete[] tau;
+            delete[] sigma;
+            delete[] start_tail;
+            delete[] end_col;
         }
         /* End of critical pair loop */
         

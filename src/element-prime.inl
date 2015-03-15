@@ -71,6 +71,14 @@ namespace F4
     }
     
     
+    // Destructor
+    
+    template <typename baseType>
+    ElementPrime<baseType>::~ElementPrime()
+    {
+    }
+    
+    
     // Miscellaneous
     
     

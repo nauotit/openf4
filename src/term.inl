@@ -59,10 +59,10 @@ namespace F4
     
     
     // Destructor
+    
     template <typename Element>
     Term<Element>::~Term()
     {
-        _coefficient.~Element();
     }
     
     

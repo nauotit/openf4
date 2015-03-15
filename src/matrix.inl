@@ -207,8 +207,33 @@ namespace F4
     }
             
     template <typename Element>
-    Matrix<Element>::Matrix(Matrix && matrix): _matrix(matrix._matrix), _height(matrix._height), _width(matrix._width), _nbPiv(matrix._nbPiv), _tau(matrix._tau), _sigma(matrix._sigma), _startTail(matrix._startTail), _endCol(matrix._endCol)
+    Matrix<Element>::Matrix(Matrix && matrix)
     {
+        if(_matrix!=0)
+        {
+            for(int i=0; i< _height; i++)
+            {
+                delete[] _matrix[i];
+                _matrix[i]=0;
+            } 
+            delete[] _matrix;
+        }
+        _matrix=matrix._matrix;
+        matrix._matrix=0;
+        _height=matrix._height;
+        matrix._height=0;
+        _width=matrix._width;
+        matrix._width=0;
+        _nbPiv=matrix._nbPiv;
+        matrix._nbPiv=0;
+        _tau=matrix._tau;
+        matrix._tau=0;
+        _sigma=matrix._sigma;
+        matrix._sigma=0;
+        _startTail=matrix._startTail; 
+        matrix._startTail=0;
+        _endCol=matrix._endCol;
+        matrix._endCol=0;
     }
     
     
@@ -217,13 +242,16 @@ namespace F4
     template <typename Element>
     Matrix<Element>::~Matrix()
     {
-        for(int i=0; i< _height; i++)
+        if(_matrix!=0)
         {
-            delete[] _matrix[i];
-            _matrix[i]=0;
-        } 
-        delete[] _matrix;
-        _matrix=0;
+            for(int i=0; i< _height; i++)
+            {
+                delete[] _matrix[i];
+                _matrix[i]=0;
+            } 
+            delete[] _matrix;
+            _matrix=0;
+        }
     }
     
     
@@ -835,39 +863,42 @@ namespace F4
                 _matrix[i][j]=matrix._matrix[i][j];
             }
         }
-        _nbPiv(matrix._nbPiv);
-        _tau(matrix._tau);
-        sigma(matrix._sigma);
-        _startTail(matrix._startTail); 
-        _endCol(matrix._endCol);
+        _nbPiv=matrix._nbPiv;
+        _tau=matrix._tau;
+        _sigma=matrix._sigma;
+        _startTail=matrix._startTail; 
+        _endCol=matrix._endCol;
     }
     
     template <typename Element>
     Matrix<Element> &
     Matrix<Element>::operator=(Matrix<Element> && matrix)
     {
+        cout << "DEBUG MATRIX operator = move called " << endl;
         if(this != &matrix)
         {
+            cout << "DEBUG MATRIX delete done " << endl;
             for(int i=0; i< _height; i++)
             {
                 delete[] _matrix[i];
                 _matrix[i]=0;
             } 
             delete[] _matrix;
-            _matrix(matrix._matrix);
+            _matrix=matrix._matrix;
             matrix._matrix=0;
-            _height(matrix._height);
+            _height=matrix._height;
             matrix._height=0;
-            _width(matrix._width);
+            _width=matrix._width;
             matrix._width=0;
-            _nbPiv(matrix._nbPiv);
+            _nbPiv=matrix._nbPiv;
             matrix._nbPiv=0;
-            _tau(matrix._tau);
-            sigma(matrix._sigma);
+            _tau=matrix._tau;
+            matrix._tau=0;
+            _sigma=matrix._sigma;
             matrix._sigma=0;
-            _startTail(matrix._startTail); 
+            _startTail=matrix._startTail; 
             matrix._startTail=0;
-            _endCol(matrix._endCol);
+            _endCol=matrix._endCol;
             matrix._endCol=0;
         }
     }
