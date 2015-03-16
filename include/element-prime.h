@@ -190,7 +190,7 @@ namespace F4
         private:
             baseType _element; /*!< Represent an element of the field of characteristic MODULO */
             
-            static unsigned int MODULO; /*!< Characteristic of the base field */
+            static baseType MODULO; /*!< Characteristic of the base field */
     };
     
     /**

@@ -136,6 +136,10 @@ int main (int argc, char **argv)
     cout << Monomial(10000).compareMonomial(Monomial(10000)) << endl;
     cout << Monomial(10001).compareMonomial(Monomial(10000)) << endl << endl;
     
+    cout << "________Test compareMonomial(Monomial const & mon)________" << endl;
+    cout << Monomial("x0^2*x3*x5^6").compareMonomial(Monomial("x0^6*x3*x5^6")) << endl;
+
+    
     // Test static int compareNumMonomial(int numMon1, int numMon2);
     cout << "________Test compareNumMonomial(int numMon1, int numMon2)________" << endl;
     cout << Monomial::compareNumMonomial(10000,10001) << endl;

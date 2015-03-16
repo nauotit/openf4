@@ -138,17 +138,27 @@ namespace F4
             /**
              * \brief Print _taggedPolynomialArray.
              */
-            void printTaggedPolynomialArray();
+            void printTaggedPolynomialArray() const;
+            
+            /**
+             * \brief Print printReducedGroebnerBasis.
+             */
+            void printReducedGroebnerBasis() const;
             
             /**
              * \brief Print M_mons.
              */
-            void printMonomialMap();
+            void printMonomialMap() const;
             
             /**
              * \brief Print M.
              */
-            void printTaggedPolynomialSet();
+            void printTaggedPolynomialSet() const;
+            
+            /**
+             * \brief Print Mat.
+             */
+            void printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename) const;
             
             /**
              * \brief Simplify the product u*(_taggedPolynomialArray[numList].poly) by another polynomial with the same leading term but with less terms in its tail.
@@ -162,7 +172,7 @@ namespace F4
              * \brief Update the set of critical pair and the current basis.
              * \param index: Index of a tagged polynomial in _taggedPolynomialArray.
              */
-            void update(int index);
+            void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis);
             
             void appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nb_piv);
             

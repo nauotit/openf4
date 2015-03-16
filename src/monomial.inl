@@ -208,18 +208,20 @@ namespace F4
             delete[] *it;
             *it=0;
         }
+        NB_MONOMIAL.clear();
         freeMonomialArray();
     }
 
     void Monomial::setMonomialArray()
     {
-        int size=NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1];
+        unsigned size=NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1];
         if (VERBOSE>1)
         {
             cout << "Monomial: " << ((double)size * (sizeof(Monomial) + NB_VARIABLE*sizeof(int)))/1000000 << " Mo reserved for MONOMIAL_ARRAY " << endl;
         }
+        cout << "DEBUG: setMonomialArray(), current size = " << MONOMIAL_ARRAY.size() << ", next size = " << size << ", nbVAriable = " << NB_VARIABLE << endl  << endl;
         MONOMIAL_ARRAY.reserve(size);
-        for(int i=(int)MONOMIAL_ARRAY.size(); i<size; i++)
+        for(unsigned i=MONOMIAL_ARRAY.size(); i<size; i++)
         {
             MONOMIAL_ARRAY.push_back(Monomial(i));
         }
@@ -321,7 +323,7 @@ namespace F4
         {
             if( VERBOSE > 1)
             {
-                cout << "Monomial: MultNumMonomial, cannot use TABULATED_PRODUCT " << MONOMIAL_ARRAY[numMon1].getDegree() <<" " << MONOMIAL_ARRAY[numMon2].getDegree()  << endl;
+                //cout << "Monomial: MultNumMonomial, cannot use TABULATED_PRODUCT " << MONOMIAL_ARRAY[numMon1].getDegree() <<" " << MONOMIAL_ARRAY[numMon2].getDegree()  << endl;
             }
             Monomial tmp=MONOMIAL_ARRAY[numMon1]*MONOMIAL_ARRAY[numMon2];
             return tmp.monomialToInt();
@@ -367,6 +369,7 @@ namespace F4
         assert(! NB_MONOMIAL.empty());
         assert(NB_VARIABLE > 0);
         assert(index < NB_VARIABLE);
+        assert(index >= 0);
         
         while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
         {
@@ -381,8 +384,8 @@ namespace F4
     {
         // Set the number of variable
         setNbVariable(nbVariable);
-        string *vars =new string[NB_VARIABLE];
-        int * weight=new int[NB_VARIABLE];
+        string *vars = new string[NB_VARIABLE];
+        int * weight = new int[NB_VARIABLE];
         for(int i=0; i < NB_VARIABLE; i++)
         {
             vars[i]="x"+to_string(i);
@@ -413,7 +416,14 @@ namespace F4
         freeTabulatedProduct();
         freeNbMonomial();
         delete[] VARS;
+        VARS = 0;
         delete[] WEIGHT;
+        WEIGHT = 0;
+        MAX_DEGREE = 0;
+        NB_VARIABLE = 0;
+        NUM_MAX_LINE = 0; 
+        NUM_MAX_COLUMN = 0;
+        
         if(VERBOSE>1)
         {
             cout << "Monomial::freeMonomial: liberation done ! " << endl;
@@ -509,36 +519,19 @@ namespace F4
         }
         //pour chaque variable on cherche la puissance correspondante
         int i, j;
-        if(WEIGHT!=0)
+
+        for (i = NB_VARIABLE - 1; i > 0; i--)
         {
-            for (i = NB_VARIABLE - 1; i > 0; i--)
+            j = d / WEIGHT[i];      //deg de la variable num i
+            while (numMon >= NB_MONOMIAL[d - j * WEIGHT[i]][i])
             {
-                j = d / WEIGHT[i];      //deg de la variable num i
-                while (numMon >= NB_MONOMIAL[d - j * WEIGHT[i]][i])
-                {
-                    numMon -= NB_MONOMIAL[d - j * WEIGHT[i]][i];
-                    j--;
-                }
-                _varlist[i] = j;
-                d -= j * WEIGHT[i];
+                numMon -= NB_MONOMIAL[d - j * WEIGHT[i]][i];
+                j--;
             }
-            _varlist[0] = d / WEIGHT[0];
+            _varlist[i] = j;
+            d -= j * WEIGHT[i];
         }
-        else
-        {
-            for (i = NB_VARIABLE - 1; i > 0; i--)
-            {
-                j = d;      //deg de la variable num i
-                while (numMon >= NB_MONOMIAL[d - j][i])
-                {
-                    numMon -= NB_MONOMIAL[d - j][i];
-                    j--;
-                }
-                _varlist[i] = j;
-                d -= j;
-            }
-            _varlist[0] = d;
-        }
+        _varlist[0] = d / WEIGHT[0];
     }
     
     Monomial::Monomial(Monomial const & toCopy): _deg(toCopy._deg)
@@ -595,6 +588,8 @@ namespace F4
     int 
     Monomial::getVarlist(int index) const
     {
+        assert(index<NB_VARIABLE);
+        assert(index >= 0);
         return _varlist[index];
     }
     

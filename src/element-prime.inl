@@ -36,7 +36,7 @@ namespace F4
     // Static variables
     
     template <typename baseType>
-    unsigned int ElementPrime<baseType>::MODULO=0;
+    baseType ElementPrime<baseType>::MODULO=0;
     
     
     // Static methods
@@ -67,7 +67,22 @@ namespace F4
     template <typename baseType>
     ElementPrime<baseType>::ElementPrime(baseType element)
     {
-        _element=element%MODULO;
+        if ((element >= -MODULO / 2) && (element <= MODULO / 2))
+        {
+            _element=element;
+        }
+        else
+        {
+            _element=element%MODULO;
+            if (_element > MODULO / 2)
+            {
+                _element -= MODULO;
+            }
+            if (_element < -MODULO / 2)
+            {
+                _element += MODULO;
+            }
+        }
     }
     
     
@@ -144,14 +159,7 @@ namespace F4
     void
     ElementPrime<baseType>::printElementPrime (std::ostream & stream) const
     {
-        if(_element >= 0)
-        {
-            stream << _element;
-        }
-        else
-        {
-            stream << _element + MODULO;
-        }
+        stream << _element;
     }
     
     template <typename baseType>
@@ -248,7 +256,22 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator=(baseType element)
     {
-        _element=element;
+        if ((element >= -MODULO / 2) && (element <= MODULO / 2))
+        {
+            _element=element;
+        }
+        else
+        {
+            _element=element%MODULO;
+            if (_element > MODULO / 2)
+            {
+                _element -= MODULO;
+            }
+            if (_element < -MODULO / 2)
+            {
+                _element += MODULO;
+            }
+        }
         return * this;
     }
     
@@ -258,6 +281,15 @@ namespace F4
     {
         _element+=element._element;
         _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
+        
         return * this;
     }
             
@@ -267,6 +299,14 @@ namespace F4
     {
         _element-=element._element;
         _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
         return * this;
     }
             
@@ -276,6 +316,14 @@ namespace F4
     {
         _element*=element._element;
         _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
         return * this;
     }
             
@@ -285,6 +333,14 @@ namespace F4
     {
         _element*=((element.inverse())._element);
         _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
         return * this;
     }
     

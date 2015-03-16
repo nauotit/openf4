@@ -511,8 +511,6 @@ namespace F4
         i = 0;
         l = 0;
         Element piv, inv;
-        //Element *exch;
-        //Element exval;
         int exc;
 
         if (VERBOSE > 1)
@@ -868,16 +866,15 @@ namespace F4
         _sigma=matrix._sigma;
         _startTail=matrix._startTail; 
         _endCol=matrix._endCol;
+        return * this;
     }
     
     template <typename Element>
     Matrix<Element> &
     Matrix<Element>::operator=(Matrix<Element> && matrix)
     {
-        cout << "DEBUG MATRIX operator = move called " << endl;
         if(this != &matrix)
         {
-            cout << "DEBUG MATRIX delete done " << endl;
             for(int i=0; i< _height; i++)
             {
                 delete[] _matrix[i];
@@ -901,6 +898,7 @@ namespace F4
             _endCol=matrix._endCol;
             matrix._endCol=0;
         }
+        return * this;
     }
     
     template <typename Element>

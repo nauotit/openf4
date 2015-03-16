@@ -39,8 +39,8 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Init element-prime tools
-    typedef ElementPrime<long> eltType;
-    ElementPrime<long>::setModulo(65537);
+    typedef ElementPrime<int> eltType;
+    ElementPrime<int>::setModulo(65537);
     
     // Init monomial tools
     Monomial::initMonomial(6,5,5,10);
@@ -108,9 +108,11 @@ int main (int argc, char **argv)
     cyclic6.f4();
     cout << endl;
     
+    cout << "size of int: " << sizeof(int) << endl;
+    
     // Test void printTaggedPolynomialArray();
     cout << "cyclic6: " << endl;
-    cyclic6.printTaggedPolynomialArray();
+    cyclic6.printReducedGroebnerBasis();
     cout << endl << endl;
     
     // Free monomial tools
