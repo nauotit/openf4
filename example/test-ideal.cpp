@@ -40,7 +40,7 @@ int main (int argc, char **argv)
     
     // Init element-prime tools
     typedef ElementPrime<int> eltType;
-    ElementPrime<int>::setModulo(65537);
+    ElementPrime<int>::setModulo(65521);
     
     // Init monomial tools
     Monomial::initMonomial(6,5,5,10);
@@ -107,8 +107,6 @@ int main (int argc, char **argv)
     cout << "________Test f4()________" << endl;
     cyclic6.f4();
     cout << endl;
-    
-    cout << "size of int: " << sizeof(int) << endl;
     
     // Test void printTaggedPolynomialArray();
     cout << "cyclic6: " << endl;

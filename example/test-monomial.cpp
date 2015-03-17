@@ -42,7 +42,7 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     //Init monomial tools: 6 variables.
-    Monomial::initMonomial(6,10,6,10);
+    Monomial::initMonomial(11,5,2,10);
     
     // Test Monomial(); 
     cout << "________Test Monomial()________" << endl;
@@ -51,13 +51,15 @@ int main (int argc, char **argv)
             
     // Test Monomial(int const * varlist);
     cout << "________Test Monomial(int const * varlist)________" << endl; 
-    int varlist1[8]={1,2,1,0,4,3};
+    int varlist1[11]={1,2,1,0,4,3,1,2,3,4,5};
     Monomial m2(varlist1);
     cout << "m2: " << m2 << endl << endl;
             
     // Test Monomial(std::string const s);
     cout << "________Test Monomial(std::string const s)________" << endl; 
-    Monomial m3("x1*x2^2*x3^3*x4^4*x5^5");
+    //Monomial m3("x0^2*x1*x2^2*x3^3*x4^4*x5^5*x10^2");
+    //cout << "m3: "<< m3 << endl;
+    Monomial m3("x10^2");
     cout << "m3: "<< m3 << endl << endl;
             
     // Test Monomial(int numMon); 

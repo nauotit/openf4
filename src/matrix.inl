@@ -638,6 +638,10 @@ namespace F4
             if (ca == _width)
             {
                 //toutes les lignes sous la l-ieme sont nulles
+                for(l2=l; l2<_height; l2++)
+                {
+                    delete[] _matrix[l2];
+                }
                 _height = l;        //on oublie toutes les lignes nulles
             }
             else
@@ -881,7 +885,8 @@ namespace F4
                 _matrix[i]=0;
             } 
             delete[] _matrix;
-            _matrix=matrix._matrix;
+            
+            _matrix=move(matrix._matrix);
             matrix._matrix=0;
             _height=matrix._height;
             matrix._height=0;

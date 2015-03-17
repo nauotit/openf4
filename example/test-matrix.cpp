@@ -215,7 +215,7 @@ int main (int argc, char **argv)
     {
         filename="../data/M_text_basic"+to_string(i+1)+".txt";
         matArray.emplace_back(filename);
-        filename2="../data/M_text_basic"+to_string(i)+".pgm";
+        filename2="../data/M"+to_string(i)+"_text_basic.pgm";
         matArray[i].printMatrix(filename2);
     }
     
@@ -223,8 +223,8 @@ int main (int argc, char **argv)
     for(size_t i=0; i< matArray.size(); i++)
     {
         matArray[i].echelonize();
-        //filename2="../data/M_text_echelonized"+to_string(i)+".pgm";
-        //matArray[i].printMatrix(filename2);
+        filename2="../data/M"+to_string(i)+"_text_echelonized.pgm";
+        matArray[i].printMatrix(filename2);
     }
     cout << "time to echenonize " << matArray.size() << " matrix: " << ((double)(clock() - start))/CLOCKS_PER_SEC << " s" << endl << endl;
     

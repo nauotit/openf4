@@ -138,7 +138,7 @@ namespace F4
             /**
              * \brief Print _taggedPolynomialArray.
              */
-            void printTaggedPolynomialArray() const;
+            void printInfo() const;
             
             /**
              * \brief Print printReducedGroebnerBasis.
@@ -174,11 +174,43 @@ namespace F4
              */
             void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis);
             
+            /**
+             * \brief Update M and M_mons with the critical pair p.
+             * \param p: Critical pair.
+             * \param h: Height of the F4 matrix.
+             * \param nb_piv: Number of pivots in the the F4 matrix.
+             */
             void appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nb_piv);
             
+            /**
+             * \brief Transform M and M_mons into an almost tringular matrix.
+             * \param Mat: Matrix to fill.
+             * \param tab_mon: Array of monomials involved in M.
+             * \param nb_piv: Number of pivots in the the F4 matrix.
+             * \param tau: tau[i]=column of the monomial tab_mon[i].
+             * \param sigma: sigma[i]=index in tab_mon of the column i monomial.
+             * \param start_tail: start_tail[i]=column of the first possibly non zero coefficient (in line i) after nb_piv if i < nb_piv. Otherwise start_tail[i]=0.
+             * \param end_col: end_col[i] = end of column i if i < nb_piv. Otherwise end_col[i]=end of column i without taking into account the lines under nb_piv.
+             * \return Percentage of non zero coefficients in Mat.
+             */
             double transform(Matrix<Element> & Mat, int *tab_mon, int nb_piv, int *tau, int *sigma, int *start_tail, int *end_col);
             
+            /**
+             * \brief Build a polynomial from a row of the F4 matrix.
+             * \param tab_mon: Array of monomials involved in M.
+             * \param largeur: End of the row.
+             * \param start: Beginning of the row.
+             * \param tau: tau[i]=column of the monomial tab_mon[i].
+             */
             Polynomial<Element> buildPolynomial (Element * row, int *tab_mon, int largeur, int start, int *tau);
+            
+            /**
+             * \brief Add polynomials to M in order to reduced queue of current polynomials.
+             * \param largeur: Width of the F4 matrix (number of monomials).
+             * \param height: Height of the F4 matrix (number of polynomials).
+             * \param nb_piv: Number of pivots in the the F4 matrix.
+             */
+            void preprocessing(int & largeur, int & hauteur, int & nb_piv);
             
             // F4 Algorithm
             
@@ -201,18 +233,7 @@ namespace F4
             std::vector<int> Gbasis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
             set<CriticalPair<Element>> _criticalPairSet; /*!< Set of critical pairs */
-            
-            /* Monomials used in M, decreasing order */
-            class cmpMonomial
-            {
-                public:
-                    bool operator()(int a , int b)
-                    {
-                        return Monomial::compareNumMonomial(a,b) == 1;
-                    }
-            };
-            map<int,bool, cmpMonomial> M_mons; 
-            typename map<int,bool>::iterator itmon1;
+            map<int,bool, std::greater<int>> M_mons; /*!< Monomials used in M, decreasing order */
             
             /* F4 Matrix = set of tagged polynomial index, decreasing order */ 
             struct cmpTaggedPolynomial

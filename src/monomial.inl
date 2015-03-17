@@ -119,7 +119,7 @@ namespace F4
         }
         if (VERBOSE > 1)
         {
-            cout << "Monomial: " << size / 1000000 << "Mo allocated for NB_MONOMIAL" <<endl;
+            cout << "Monomial: " << size / 1000000 << "Mo allocated for NB_MONOMIAL (MAXDEGREE = " << maxDegree << ")" <<endl;
         }
         
         if(MAX_DEGREE==0)
@@ -219,7 +219,6 @@ namespace F4
         {
             cout << "Monomial: " << ((double)size * (sizeof(Monomial) + NB_VARIABLE*sizeof(int)))/1000000 << " Mo reserved for MONOMIAL_ARRAY " << endl;
         }
-        cout << "DEBUG: setMonomialArray(), current size = " << MONOMIAL_ARRAY.size() << ", next size = " << size << ", nbVAriable = " << NB_VARIABLE << endl  << endl;
         MONOMIAL_ARRAY.reserve(size);
         for(unsigned i=MONOMIAL_ARRAY.size(); i<size; i++)
         {
@@ -357,7 +356,7 @@ namespace F4
         while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
         {
             // We increase NB_MONOMIAL:
-            setNbMonomial(MAX_DEGREE+5);
+            setNbMonomial(MAX_DEGREE+2);
         }
         return MONOMIAL_ARRAY[numMon];
     }
@@ -374,7 +373,7 @@ namespace F4
         while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
         {
             // We increase NB_MONOMIAL:
-            setNbMonomial(MAX_DEGREE+5);
+            setNbMonomial(MAX_DEGREE+2);
         }
         return MONOMIAL_ARRAY[numMon]._varlist[index];
     }
@@ -473,7 +472,7 @@ namespace F4
         for(int i=0; i<NB_VARIABLE; i++)
         {
             pos=s.find(VARS[i]);
-            if(pos != string::npos)
+            if((pos != string::npos) && ((s[pos+VARS[i].size()]<'0') || (s[pos+VARS[i].size()]>'9')) )
             {
                 // VARS[i] is used in s
                 pos+=VARS[i].size();
@@ -501,7 +500,7 @@ namespace F4
         while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
         {
             // We increase NB_MONOMIAL:
-            setNbMonomial(MAX_DEGREE+5);
+            setNbMonomial(MAX_DEGREE+2);
         }
         
         _deg=0;
@@ -657,7 +656,7 @@ namespace F4
         while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
         {
             // We increase NB_MONOMIAL:
-            setNbMonomial(MAX_DEGREE+5);
+            setNbMonomial(MAX_DEGREE+2);
         }
         
         int d;
@@ -695,6 +694,7 @@ namespace F4
         
         if(_deg > MAX_DEGREE)
         {
+            cout << "Monomial: monomialToInt, increase max degree" << endl;
             setNbMonomial(_deg);
         }
         
