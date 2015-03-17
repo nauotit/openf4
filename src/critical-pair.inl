@@ -96,11 +96,10 @@ namespace F4
             }
         }
         
-        _lcm=Monomial(varlistLcm).monomialToInt();
+        //_lcm=Monomial(varlistLcm).monomialToInt();
+        _lcm=Monomial(varlistLcm);
         _u1=Monomial(varlistU1).monomialToInt();
         _u2=Monomial(varlistU2).monomialToInt();
-        
-        //return (lt_f.deg + lt_g.deg != res->lcm.deg);
     }
     
     
@@ -128,8 +127,15 @@ namespace F4
         return _p2;
     }
             
+    //template <typename Element>
+    //int 
+    //CriticalPair<Element>::getLcm() const
+    //{
+        //return _lcm;
+    //}
+    
     template <typename Element>
-    int 
+    Monomial const & 
     CriticalPair<Element>::getLcm() const
     {
         return _lcm;
@@ -153,7 +159,8 @@ namespace F4
     int 
     CriticalPair<Element>::getDegree() const
     {
-        return Monomial::getNumMonomial(_lcm).getDegree();
+        //return Monomial::getNumMonomial(_lcm).getDegree();
+        return _lcm.getDegree();
     }
     
     template <typename Element>
@@ -193,13 +200,15 @@ namespace F4
             }
         }
         
-        Monomial lcm(varlistLcm);
+        //Monomial lcm(varlistLcm);
         
-        _lcm=lcm.monomialToInt();
+        //_lcm=lcm.monomialToInt();
+        _lcm=Monomial(varlistLcm);
         _u1=Monomial(varlistU1).monomialToInt();
         _u2=Monomial(varlistU2).monomialToInt();
         
-        return ( (ltP1.getDegree() + ltP2.getDegree()) != lcm.getDegree());
+        //return ( (ltP1.getDegree() + ltP2.getDegree()) != lcm.getDegree());
+        return ( (ltP1.getDegree() + ltP2.getDegree()) != _lcm.getDegree());
     }
     
     // Miscellaneous
@@ -210,7 +219,8 @@ namespace F4
     {
         if((_lcm >= 0) && (_u1 >= 0) && (_p1 >= 0) && (_u2 >= 0) && (_p2 >= 0)) 
         {
-            stream << "(" << Monomial::getNumMonomial(_lcm) << ", " << Monomial::getNumMonomial(_u1) << ", " << _p1 << ", " << Monomial::getNumMonomial(_u2) << ", " << _p2 << ")" ;
+            //stream << "(" << Monomial::getNumMonomial(_lcm) << ", " << Monomial::getNumMonomial(_u1) << ", " << _p1 << ", " << Monomial::getNumMonomial(_u2) << ", " << _p2 << ")" ;
+            stream << "(" << _lcm << ", " << Monomial::getNumMonomial(_u1) << ", " << _p1 << ", " << Monomial::getNumMonomial(_u2) << ", " << _p2 << ")" ;
         }
         else
         {
@@ -223,7 +233,8 @@ namespace F4
     int 
     CriticalPair<Element>::compareCriticalPair (CriticalPair const & criticalPair) const
     {
-        int cmp=Monomial::compareNumMonomial(_lcm, criticalPair._lcm);
+        //int cmp=Monomial::compareNumMonomial(_lcm, criticalPair._lcm);
+        int cmp=_lcm.compareMonomial(criticalPair._lcm);
         if (cmp == 0)
         {
             if (_p1 > criticalPair._p1)

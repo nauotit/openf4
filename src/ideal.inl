@@ -225,6 +225,7 @@ namespace F4
         
         Monomial lt_f;
         Monomial lt_g;
+        Monomial lcm;
         
         /* Strict divisibility criteria to avoid the problem of "eliminate 2 critical pairs over 3" */
         if (VERBOSE > 1)
@@ -241,9 +242,12 @@ namespace F4
             lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[itcp1->getP1()].getLM());
             lt_g=Monomial::getNumMonomial(_taggedPolynomialArray[itcp1->getP2()].getLM());
             
+            lcm=itcp1->getLcm();
+            
             for (j = 0; j < _nbVariable && div; j++)
             {
-                if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < Monomial::getNumVarlist(itcp1->getLcm(),j) )
+                //if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < Monomial::getNumVarlist(itcp1->getLcm(),j) )
+                if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < lcm.getVarlist(j) )
                 {
                     if(lt_f.getVarlist(j) < lt_g.getVarlist(j))
                     {
@@ -256,7 +260,8 @@ namespace F4
                 }
                 else
                 {
-                    if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > Monomial::getNumVarlist(itcp1->getLcm(),j) )
+                    //if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > Monomial::getNumVarlist(itcp1->getLcm(),j) )
+                    if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > lcm.getVarlist(j) )
                     {
                         div=0;
                     }
@@ -309,7 +314,8 @@ namespace F4
             itcp2=P0.begin();
             while (itcp2 != P0.end() && !div_trouve)
             {
-                if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
                 }
@@ -320,7 +326,8 @@ namespace F4
             itcp2=P1.begin();
             while (itcp2 != P1.end() && !div_trouve)
             {
-                if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
                 }
@@ -331,7 +338,8 @@ namespace F4
             itcp2=P2.begin();
             while (itcp2 != P2.end() && !div_trouve)
             {
-                if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
+                if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
                 }
@@ -936,13 +944,6 @@ namespace F4
             
             /* preprocessing de M */
             preprocessing(largeur, hauteur, nb_piv);
-            
-            if (VERBOSE > 1)
-            {
-                cout << endl << "Number of polynomials after preprocessing: " << hauteur << endl;
-                cout << "Number of monomials after preprocessing: " << M_mons.size() << endl;
-            }
-            cout << endl << "Preprocessing of M done" << endl;
         
             /*transformation de M sous forme de tableaux */
             cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl;

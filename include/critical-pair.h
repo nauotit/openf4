@@ -102,7 +102,8 @@ namespace F4
              * \brief Get the number of the lcm.
              * \return Number of the lcm.
              */
-            int getLcm() const;
+            //int getLcm() const;
+             Monomial const & getLcm() const;
             
             /**
              * \brief Get the number of the monomial u1.
@@ -153,7 +154,8 @@ namespace F4
             // Internal operator
         
         private:
-            int _lcm;              /*!< lcm( LT(List[GTotal[p1]].poly), LT(List[GTotal[p2]].poly) ). */
+            //int _lcm;              /*!< lcm( LT(List[GTotal[p1]].poly), LT(List[GTotal[p2]].poly) ). */
+            Monomial _lcm;
             int _u1;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
             int _p1;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
             int _u2;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
