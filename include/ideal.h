@@ -143,7 +143,7 @@ namespace F4
             /**
              * \brief Print printReducedGroebnerBasis.
              */
-            void printReducedGroebnerBasis() const;
+            void printReducedGroebnerBasis(bool printBasis=false) const;
             
             /**
              * \brief Print M_mons.
@@ -172,7 +172,8 @@ namespace F4
              * \brief Update the set of critical pair and the current basis.
              * \param index: Index of a tagged polynomial in _taggedPolynomialArray.
              */
-            void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis);
+            //void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis);
+            void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis, bool purge);
             
             /**
              * \brief Update M and M_mons with the critical pair p.

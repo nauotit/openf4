@@ -92,13 +92,19 @@ obj/benchmark-int.o: benchmark/benchmark-int.cpp
 bin/benchmark-int: obj/benchmark-int.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/benchmark-semaev.o: benchmark/benchmark-semaev.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/benchmark-semaev: obj/benchmark-semaev.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Intermediate rules
 
 example:   bin/test-matrix bin/test-element-prime
 #  bin/test-monomial bin/test-ideal    bin/test-polynomial  bin/test-tagged-polynomial  bin/test-critical-pair bin/test-monomial   bin/test-term    bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
 
-benchmark: bin/benchmark-int
+benchmark: bin/benchmark-int bin/benchmark-semaev
 
 all: $(EXEC)
 

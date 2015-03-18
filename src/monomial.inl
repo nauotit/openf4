@@ -414,10 +414,16 @@ namespace F4
     {
         freeTabulatedProduct();
         freeNbMonomial();
-        delete[] VARS;
-        VARS = 0;
-        delete[] WEIGHT;
-        WEIGHT = 0;
+        if(VARS!=NULL)
+        {
+            delete[] VARS;
+            VARS = 0;
+        }
+        if(WEIGHT!=NULL)
+        {
+            delete[] WEIGHT;
+            WEIGHT = 0;
+        }
         MAX_DEGREE = 0;
         NB_VARIABLE = 0;
         NUM_MAX_LINE = 0; 

@@ -90,7 +90,7 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printReducedGroebnerBasis() const
+    Ideal<Element>::printReducedGroebnerBasis(bool printBasis) const
     {
         cout << "Gbasis: ";
         for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
@@ -105,10 +105,7 @@ namespace F4
         }
         cout << endl;
         
-        cout << "Print basis ?" << endl;
-        bool yes;
-        cin >> yes;
-        if(yes)
+        if(printBasis)
         { 
             for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
             {
@@ -125,7 +122,8 @@ namespace F4
         typename map<int,bool>::const_iterator itMonBeg;
         for(itMonBeg=M_mons.begin(); itMonBeg != M_mons.end(); ++itMonBeg)
         {
-            cout << "Monomial number: " <<  itMonBeg->first << ": " << Monomial::getNumMonomial(itMonBeg->first) << ", lt = " << itMonBeg->second << endl;
+            //cout << "Monomial number: " <<  itMonBeg->first << ": " << Monomial::getNumMonomial(itMonBeg->first) << ", lt = " << itMonBeg->second << endl;
+            cout << itMonBeg->first << endl;
         }
         cout << endl << endl;
     }
@@ -138,7 +136,13 @@ namespace F4
         typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg;
         for(itPolBeg=M.begin(); itPolBeg != M.end(); ++itPolBeg)
         {
-            cout << "Tagged polynomial number: " <<  itPolBeg->getIndex() << ": " << _taggedPolynomialArray[itPolBeg->getIndex()].getPolynomial() << endl;
+            //cout << "Tagged polynomial number: " <<  itPolBeg->getIndex() << ": " << _taggedPolynomialArray[itPolBeg->getIndex()].getPolynomial() << endl;
+            //if(itPolBeg->getIndex()==1249 || itPolBeg->getIndex()== 1186 || itPolBeg->getIndex()==  1270 || itPolBeg->getIndex()==  1222 || itPolBeg->getIndex()== 1223 || itPolBeg->getIndex()==  1193  || itPolBeg->getIndex()== 1226|| itPolBeg->getIndex()==  1271|| itPolBeg->getIndex()==  1277 || itPolBeg->getIndex()==  1142|| itPolBeg->getIndex()==  1079|| itPolBeg->getIndex()==  1209|| itPolBeg->getIndex()== 1274|| itPolBeg->getIndex()==  1147|| itPolBeg->getIndex()==  1148|| itPolBeg->getIndex()==  1149|| itPolBeg->getIndex()==  1278)
+            //{
+                //cout << itPolBeg->getIndex() << " : " << Monomial::getNumMonomial(_taggedPolynomialArray[itPolBeg->getIndex()].getLM()) << endl;
+            //}
+        
+            cout << itPolBeg->getIndex() << " : " << Monomial::getNumMonomial(_taggedPolynomialArray[itPolBeg->getIndex()].getLM()) << endl;
         }
         cout << endl << endl;
     }
@@ -205,7 +209,7 @@ namespace F4
     
     template <typename Element>
     void 
-    Ideal<Element>::update(int index, int & cmpt_genpurg, double & time_purgeCP, double & time_addCP, double & time_majBasis)
+    Ideal<Element>::update(int index, int & cmpt_genpurg, double & time_purgeCP, double & time_addCP, double & time_majBasis, bool purge)
     {
         int j; 
         int div_trouve;
@@ -376,21 +380,44 @@ namespace F4
         }
         
         /* End of critical pair computation */
-
-        /* Purge of generators */
-        div_trouve = 0;
-        lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[index].getLM());
-        for (j = 0; j < Gbasis.size(); j++)
+        
+        if(purge)
         {
-            if (lt_f.isDivisible(Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM())))
+            /* Purge of generators */
+            div_trouve = 0;
+            lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[index].getLM());
+            for (j = 0; j < Gbasis.size(); j++)
             {
-                div_trouve = 1;
-                //GUsed[index]--;
-                break;
+                if (lt_f.isDivisible(Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM())))
+                {
+                    div_trouve = 1;
+                    //GUsed[index]--;
+                    break;
+                }
+            }
+            if (!div_trouve)
+            {
+                /* Add the polynomial in Gbasis */
+                Gbasis.push_back(NumTot);
+                //Gbasis.push_back(index);
+                NumGen++;
+                /* purge of Gbasis by the new polynomial */
+                for (j = 0; j < Gbasis.size()-1; j++)
+                {
+                    if (Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()).isDivisible(lt_f))
+                    { 
+                        //GUsed[GTotal[Gbasis[j]]]--;
+                        Gbasis.erase(Gbasis.begin()+j);
+                        NumGen--;
+                        cmpt_genpurg++;
+                        j--;
+                    }
+                }
             }
         }
-        if (!div_trouve)
+        else
         {
+            lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[index].getLM());
             /* Add the polynomial in Gbasis */
             Gbasis.push_back(NumTot);
             //Gbasis.push_back(index);
@@ -810,6 +837,11 @@ namespace F4
         if(VERBOSE > 1)
         {
             cout << "Number of equations: " << _polynomialArray.size() << endl;
+            //for(typename vector<Polynomial<Element>>::const_iterator it=_polynomialArray.begin(); it != _polynomialArray.end(); ++it)
+            //{
+                //cout << *it << endl;
+            //}
+            //cout << endl;
         }
 
         //pour la mise sous forme matricielle
@@ -859,7 +891,7 @@ namespace F4
             
             /*Initialisation : on calcule toutes les paires critiques */
             //purge de CP
-            update(i, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis);
+            update(i, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis, true);
             
             NumPol++;
             NumTot++;
@@ -934,6 +966,11 @@ namespace F4
                     cout << "Number of monomials: " << M_mons.size() << endl;
                 }
                 cout << endl << "Preprocessing of M" << endl;
+            }
+            
+            if(M_mons.size()==2070)
+            {
+                printTaggedPolynomialSet();
             }
             
             /* preprocessing de M */
@@ -1068,7 +1105,7 @@ namespace F4
 
                 GTotal.push_back(NumPol);
                 GUsed.push_back(1);
-                update(NumPol, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis);
+                update(NumPol, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis, false);
                 NumPol++;
                 NumTot++;
                 cmpt_newgen++;      //nv gen
