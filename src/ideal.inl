@@ -866,12 +866,6 @@ namespace F4
         }
         step++;
         
-        cout << "DEBUG TRANSFORM: " << endl;
-        for(i=0; i<_polynomialArray.size(); i++)
-        {
-            cout << i << " : " << _polynomialArray[i] << endl;
-        }
-        
         /* Main loop on critical pairs */
         while (!_criticalPairSet.empty())
         {

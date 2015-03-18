@@ -84,6 +84,18 @@ namespace F4
             // Miscellaneous
             
             /**
+             * \brief Set this in [-MODULO/2, MODULO/2].
+             * \return this.
+             */
+            ElementPrime<baseType> &  modulo ();
+            
+            /**
+             * \brief Set this+=(mult*element).
+             * \return this
+             */
+            ElementPrime<baseType> & addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult);
+            
+            /**
              * \brief Inverse this according to the base field.
              * \pre The static variable MODULO must be set beforehand. Beware, baseType must be signed.
              */

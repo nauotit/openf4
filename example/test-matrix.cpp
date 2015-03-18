@@ -42,7 +42,7 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     typedef ElementPrime<int> eltType;
-    ElementPrime<int>::setModulo(65537);
+    ElementPrime<int>::setModulo(65521);
     
     // Test Matrix();
     cout << "________Test Matrix()________" << endl;
@@ -208,6 +208,14 @@ int main (int argc, char **argv)
     mat3.echelonize();
     cout << mat3 << endl;
     
+    // Test int
+    cout << "________Test int________" << endl;
+    ElementPrime<int> e1(65520);
+    ElementPrime<int> e2(65537);
+    cout << "e1 = " << e1 << ", e2 = " << e2 << endl;
+    cout << "e1*e2 = " << e1*e2 << endl << endl;
+    
+    
     vector<Matrix<eltType>> matArray;
     string filename;
     string filename2;
@@ -215,16 +223,16 @@ int main (int argc, char **argv)
     {
         filename="../data/M_text_basic"+to_string(i+1)+".txt";
         matArray.emplace_back(filename);
-        filename2="../data/M"+to_string(i)+"_text_basic.pgm";
-        matArray[i].printMatrix(filename2);
+        //filename2="../data/M"+to_string(i)+"_text_basic.pgm";
+        //matArray[i].printMatrix(filename2);
     }
     
     clock_t start = clock();
     for(size_t i=0; i< matArray.size(); i++)
     {
         matArray[i].echelonize();
-        filename2="../data/M"+to_string(i)+"_text_echelonized.pgm";
-        matArray[i].printMatrix(filename2);
+        //filename2="../data/M"+to_string(i)+"_text_echelonized.pgm";
+        //matArray[i].printMatrix(filename2);
     }
     cout << "time to echenonize " << matArray.size() << " matrix: " << ((double)(clock() - start))/CLOCKS_PER_SEC << " s" << endl << endl;
     

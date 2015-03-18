@@ -98,6 +98,39 @@ namespace F4
     
     
     template <typename baseType>
+    ElementPrime<baseType> &
+    ElementPrime<baseType>::modulo ()
+    {
+        _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
+        return *this;
+    }
+    
+    template <typename baseType>
+    ElementPrime<baseType> &
+    ElementPrime<baseType>::addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)
+    {
+        _element+=(element._element*mult._element);
+        _element%=MODULO;
+        if (_element > MODULO / 2)
+        {
+            _element -= MODULO;
+        }
+        if (_element < -MODULO / 2)
+        {
+            _element += MODULO;
+        }
+        return * this;
+    }
+    
+    template <typename baseType>
     ElementPrime<baseType>
     ElementPrime<baseType>::inverse () const
     {
@@ -281,14 +314,14 @@ namespace F4
     {
         _element+=element._element;
         _element%=MODULO;
-        if (_element > MODULO / 2)
-        {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
-        }
+        //if (_element > MODULO / 2)
+        //{
+            //_element -= MODULO;
+        //}
+        //if (_element < -MODULO / 2)
+        //{
+            //_element += MODULO;
+        //}
         
         return * this;
     }
@@ -299,14 +332,14 @@ namespace F4
     {
         _element-=element._element;
         _element%=MODULO;
-        if (_element > MODULO / 2)
-        {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
-        }
+        //if (_element > MODULO / 2)
+        //{
+            //_element -= MODULO;
+        //}
+        //if (_element < -MODULO / 2)
+        //{
+            //_element += MODULO;
+        //}
         return * this;
     }
             
@@ -333,14 +366,14 @@ namespace F4
     {
         _element*=((element.inverse())._element);
         _element%=MODULO;
-        if (_element > MODULO / 2)
-        {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
-        }
+        //if (_element > MODULO / 2)
+        //{
+            //_element -= MODULO;
+        //}
+        //if (_element < -MODULO / 2)
+        //{
+            //_element += MODULO;
+        //}
         return * this;
     }
     

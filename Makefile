@@ -95,8 +95,8 @@ bin/benchmark-int: obj/benchmark-int.o
 
 # Intermediate rules
 
-example:  bin/test-monomial 
-#   bin/test-ideal bin/test-matrix   bin/test-polynomial  bin/test-tagged-polynomial  bin/test-critical-pair bin/test-monomial   bin/test-term  bin/test-element-prime  bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
+example:   bin/test-matrix bin/test-element-prime
+#  bin/test-monomial bin/test-ideal    bin/test-polynomial  bin/test-tagged-polynomial  bin/test-critical-pair bin/test-monomial   bin/test-term    bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
 
 benchmark: bin/benchmark-int
 

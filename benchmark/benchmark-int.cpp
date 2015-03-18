@@ -55,9 +55,13 @@ int main (int argc, char **argv)
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
     
+    
     cout << "#########################################################" << endl;
     cout << "#                         CYCLIC 6                      #" << endl;
     cout << "#########################################################" << endl << endl;
+        
+    // Time 
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(6,11,2,10);
@@ -77,8 +81,8 @@ int main (int argc, char **argv)
     Ideal<eltType> cyclic6(polCyclic6);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=cyclic6.f4();
+
     if (file)
     {
         file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
@@ -92,6 +96,9 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl;
     cout << "#                         CYCLIC 7                      #" << endl;
     cout << "#########################################################" << endl << endl;
+    
+    // Time 
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(7,13,2,12);
@@ -112,7 +119,6 @@ int main (int argc, char **argv)
     Ideal<eltType> cyclic7(polCyclic7);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=cyclic7.f4();
     if (file)
     {
@@ -127,6 +133,9 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl;
     cout << "#                         CYCLIC 8                      #" << endl;
     cout << "#########################################################" << endl << endl;
+    
+    // Time 
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(8,15,2,14);
@@ -148,11 +157,10 @@ int main (int argc, char **argv)
     Ideal<eltType> cyclic8(polCyclic8);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=cyclic8.f4();
     if (file)
     {
-        file << "Cyclic 8 : " << (clock()-start)/CLOCKS_PER_SEC << " s                   (" << nbGen << " generators)" << endl << endl;
+        file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
     // Free monomial tools
@@ -163,6 +171,9 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 9                     #" << endl;
     cout << "#########################################################" << endl << endl;
+    
+    // Time 
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(9,11,2,10);
@@ -185,7 +196,6 @@ int main (int argc, char **argv)
     Ideal<eltType> katsura9(polKatsura9);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=katsura9.f4();
     if (file)
     {
@@ -200,6 +210,9 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 10                    #" << endl;
     cout << "#########################################################" << endl << endl;
+    
+    // Time
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(10,12,2,11);
@@ -223,7 +236,6 @@ int main (int argc, char **argv)
     Ideal<eltType> katsura10(polKatsura10);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=katsura10.f4();
     if (file)
     {
@@ -238,6 +250,9 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 11                    #" << endl;
     cout << "#########################################################" << endl << endl;
+    
+    // Time
+    start=clock();
     
     // Init monomial tools
     Monomial::initMonomial(11,13,2,12);
@@ -262,7 +277,6 @@ int main (int argc, char **argv)
     Ideal<eltType> katsura11(polKatsura11);
     
     // Compute a reduced groebner basis;
-    start=clock();
     nbGen=katsura11.f4();
     if (file)
     {

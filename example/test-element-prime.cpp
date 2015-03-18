@@ -68,6 +68,19 @@ int main (int argc, char **argv)
     elt4.printElementPrime();
     cout << endl << endl;
     
+    // Test void modulo ();
+    cout << "________Test modulo ()________" << endl;
+    ElementPrime<baseType> e0(4);
+    e0*=elt3;
+    cout << "e0 = " << e0 << endl;
+    e0.modulo();
+    cout << "e0.modulo() = " << e0 << endl << endl;
+    
+    // Test ElementPrime<baseType>::addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)
+    cout << "________Test addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)________" << endl;
+    e0.addMult(elt3, elt1);
+    cout << "e0 = " << e0 << endl << endl; 
+
     // Test void inverse ();
     cout << "________Test inverse ()________" << endl;
     cout << "inverse of elt1: " << elt1.inverse() << endl;

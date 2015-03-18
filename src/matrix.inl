@@ -471,7 +471,8 @@ namespace F4
         Element * row2 = getRow(numRow2);
         for(int i=start; i<end; ++i)
         {
-            row1[i]+=(element*row2[i]);
+            //row1[i]+=(element*row2[i]);
+            row1[i].addMult(row2[i], element);
         }
     }
     
@@ -630,10 +631,14 @@ namespace F4
                 {
                     // TODO: _matrix[i][ca] = modulo (_matrix[i][ca]);
                     if (!isZero(i,ca) )
+                    {
                         break;
+                    }
                 }
                 if (i < _height)
+                {
                     break;          //pivot trouve dans la col ca
+                }
             }
             if (ca == _width)
             {
@@ -830,7 +835,7 @@ namespace F4
         }
         tmp_ech_dh = (((double)clock () - start) * 1000) / CLOCKS_PER_SEC;
 
-        // TODO: 
+         ////TODO: 
         //for (i = 0; i < _height; i++)
         //{
             //for (l = 0; l < _width; l++)
