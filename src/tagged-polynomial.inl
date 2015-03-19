@@ -120,6 +120,13 @@ namespace F4
     
     template <typename Element>
     int 
+    TaggedPolynomial<Element>::getNbTerm() const
+    {
+        return _polynomial.getNbTerm();
+    }
+    
+    template <typename Element>
+    int 
     TaggedPolynomial<Element>::getSimplyrule(int index) const
     {
         assert(index < Monomial::getNbVariable());

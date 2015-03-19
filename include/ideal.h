@@ -35,78 +35,6 @@
  */
 namespace F4
 {
-    template <typename Element>
-    class TaggedPolynomialIndex
-    {
-        public:
-        
-            // Static methods
-            
-            /**
-             * \brief Set the array of tagged polynomial to use.
-             * \param taggedPolynomialArray: Address of the array.
-             */
-            static void setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray);
-            
-            
-            // Constructor
-            
-            TaggedPolynomialIndex(int index):_index(index)
-            {
-            }
-            
-            TaggedPolynomialIndex():_index(-1)
-            {
-            }
-            
-            // Get / Set
-            
-            int getIndex() const
-            {
-                return _index;
-            }
-            
-            void setIndex(int index)
-            {
-                _index=index;
-            }
-            
-            // Miscellaneous
-            
-            int compareTaggedPolynomialIndex(TaggedPolynomialIndex const & index) const
-            {
-                int res=((*TAGGEG_POLYNOMIAL_ARRAY)[_index]).compareTaggedPolynomial((*TAGGEG_POLYNOMIAL_ARRAY)[index._index]);
-                if (res==0)
-                {
-                    if (_index > index._index)
-                    {
-                        return 1;
-                    }
-                    else if (_index < index._index)
-                    {
-                        return -1;
-                    }
-                }
-                return res;
-            }
-            
-        private: 
-            int _index;
-            
-            static std::vector<TaggedPolynomial<Element>> * TAGGEG_POLYNOMIAL_ARRAY; /*!< Pointer on a dynamic array of TaggedPolynomial */
-    };
-    
-    template <typename Element>
-    vector<TaggedPolynomial<Element>> * TaggedPolynomialIndex<Element>::TAGGEG_POLYNOMIAL_ARRAY=0;
-    
-    template <typename Element>
-    void
-    TaggedPolynomialIndex<Element>::setTaggedPolynomialArray(vector<TaggedPolynomial<Element>> * taggedPolynomialArray)
-    {
-        TAGGEG_POLYNOMIAL_ARRAY=taggedPolynomialArray;
-    }
-    
-    
     /**
      * \class Ideal
      * Represent an ideal.
@@ -236,16 +164,44 @@ namespace F4
             set<CriticalPair<Element>> _criticalPairSet; /*!< Set of critical pairs */
             map<int,bool, std::greater<int>> M_mons; /*!< Monomials used in M, decreasing order */
             
-            /* F4 Matrix = set of tagged polynomial index, decreasing order */ 
+            /* F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
             struct cmpTaggedPolynomial
             {
                 public:
-                    bool operator()(TaggedPolynomialIndex<Element> const & a , TaggedPolynomialIndex<Element> const & b)
+                    bool operator()(std::pair<TaggedPolynomial<Element>*, int> const & a , std::pair<TaggedPolynomial<Element>*, int> const & b)
                     {
-                        return a.compareTaggedPolynomialIndex(b) == 1;
+                        
+                        if( (a.first)->getLM() > (b.first)->getLM() )
+                        { 
+                            return true;
+                        }
+                        else if ((a.first)->getLM() < (b.first)->getLM() )
+                        {
+                            return false;
+                        }
+                        else if ((a.first)->getNbTerm() > (b.first)->getNbTerm() )
+                        {
+                            return true;
+                        }
+                        else if ((a.first)->getNbTerm() < (b.first)->getNbTerm() )
+                        {
+                            return false;
+                        }
+                        else if (a.second > b.second)
+                        {
+                            return true;
+                        }
+                        else if (a.second < b.second)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
             };
-            set<TaggedPolynomialIndex<Element>, cmpTaggedPolynomial> M;
+            set<std::pair<TaggedPolynomial<Element>*, int>, cmpTaggedPolynomial> M;
     };
 }
 

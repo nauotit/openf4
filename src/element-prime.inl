@@ -96,7 +96,6 @@ namespace F4
     
     // Miscellaneous
     
-    
     template <typename baseType>
     ElementPrime<baseType> &
     ElementPrime<baseType>::modulo ()
@@ -115,24 +114,19 @@ namespace F4
     
     template <typename baseType>
     ElementPrime<baseType> &
-    ElementPrime<baseType>::addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)
+    ElementPrime<baseType>::addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult)
     {
+        assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
+        assert((element._element>-MODULO) || (element._element<MODULO));
+        assert((_element>-MODULO) || (_element<MODULO));
         _element+=(element._element*mult._element);
         _element%=MODULO;
-        //if (_element > MODULO / 2)
-        //{
-            //_element -= MODULO;
-        //}
-        //if (_element < -MODULO / 2)
-        //{
-            //_element += MODULO;
-        //}
         return * this;
     }
     
     template <typename baseType>
-    ElementPrime<baseType>
-    ElementPrime<baseType>::inverse () const
+    ElementPrime<baseType> &
+    ElementPrime<baseType>::inverse ()
     {
         baseType a, b, c, inv;
         baseType a_x, a_p, b_x, b_p, c_x, c_p;
@@ -184,8 +178,9 @@ namespace F4
             cerr << "Inverse impossible Mod(" << _element << ", " << MODULO << ") -> gcd = " << b << endl; 
             exit (1);
         }
-
-        return ElementPrime(b_x);
+        _element=b_x;
+        modulo();
+        return *this;
     }
 
     template <typename baseType>
@@ -314,15 +309,6 @@ namespace F4
     {
         _element+=element._element;
         _element%=MODULO;
-        //if (_element > MODULO / 2)
-        //{
-            //_element -= MODULO;
-        //}
-        //if (_element < -MODULO / 2)
-        //{
-            //_element += MODULO;
-        //}
-        
         return * this;
     }
             
@@ -332,31 +318,17 @@ namespace F4
     {
         _element-=element._element;
         _element%=MODULO;
-        //if (_element > MODULO / 2)
-        //{
-            //_element -= MODULO;
-        //}
-        //if (_element < -MODULO / 2)
-        //{
-            //_element += MODULO;
-        //}
         return * this;
     }
             
     template <typename baseType>
     ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator*=(ElementPrime<baseType> const & element)
+    ElementPrime<baseType>::operator*=(ElementPrime<baseType> const & mult)
     {
-        _element*=element._element;
+        assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
+        assert((_element>-MODULO) || (_element<MODULO));
+        _element*=mult._element;
         _element%=MODULO;
-        //if (_element > MODULO / 2)
-        //{
-            //_element -= MODULO;
-        //}
-        //if (_element < -MODULO / 2)
-        //{
-            //_element += MODULO;
-        //}
         return * this;
     }
             
@@ -366,14 +338,6 @@ namespace F4
     {
         _element*=((element.inverse())._element);
         _element%=MODULO;
-        //if (_element > MODULO / 2)
-        //{
-            //_element -= MODULO;
-        //}
-        //if (_element < -MODULO / 2)
-        //{
-            //_element += MODULO;
-        //}
         return * this;
     }
     

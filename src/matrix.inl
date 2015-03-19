@@ -42,7 +42,6 @@ namespace F4
     template <typename Element>
     Matrix<Element>::Matrix(unsigned int height, unsigned int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
     {
-        //_matrix=new Element[_height*_width]();
         _matrix=new Element*[_height];
         for(int i=0; i< _height; i++)
         {
@@ -259,59 +258,54 @@ namespace F4
     
     template <typename Element>
     inline Element & 
-    Matrix<Element>::operator() (unsigned row, unsigned col) 
+    Matrix<Element>::operator() (unsigned int row, unsigned int col) 
     { 
         assert(row < _height && col < _width); 
-        //return _matrix[_width*row + col]; 
         return _matrix[row][col]; 
     } 
     
     template <typename Element>
     inline Element 
-    Matrix<Element>::operator() (unsigned row, unsigned col) const 
+    Matrix<Element>::operator() (unsigned int row, unsigned int col) const 
     { 
         assert(row < _height && col < _width);
-        //return _matrix[_width*row + col]; 
         return _matrix[row][col]; 
     }
     
     template <typename Element>
     inline Element 
-    Matrix<Element>::getElement(unsigned row, unsigned col) const
+    Matrix<Element>::getElement(unsigned int row, unsigned int col) const
     {
         assert(row < _height && col < _width); 
-        //return _matrix[_width*row + col]; 
         return _matrix[row][col]; 
     }
     
     template <typename Element>
     inline void 
-    Matrix<Element>::setElement (unsigned row, unsigned col, Element const & element)
+    Matrix<Element>::setElement (unsigned int row, unsigned int col, Element const & element)
     {
         assert(row < _height && col < _width); 
-        //_matrix[_width*row + col]=element;
         _matrix[row][col]=element; 
     }
     
     template <typename Element>
     Element *
-    Matrix<Element>::getRow (unsigned row) 
+    Matrix<Element>::getRow (unsigned int row) 
     { 
         assert(row < _height);
-        //return &(_matrix[_width*row]); 
         return _matrix[row]; 
     }
     
     template <typename Element>
     int
-    Matrix<Element>::getHeight()
+    Matrix<Element>::getHeight() const
     {
         return _height;
     }
     
     template <typename Element>
     int
-    Matrix<Element>::getWidth()
+    Matrix<Element>::getWidth() const
     {
         return _width;
     }
@@ -325,7 +319,7 @@ namespace F4
     
     template <typename Element>
     int
-    Matrix<Element>::getNbPiv()
+    Matrix<Element>::getNbPiv() const
     {
         return _nbPiv;
     }
@@ -407,7 +401,6 @@ namespace F4
         {
             for(int j=0; j<_width; j++)
             {
-                //stream << " " << _matrix[i*_width+j] << " ";
                 stream << " " << _matrix[i][j] << " "; 
             }
             stream << endl;
@@ -438,21 +431,20 @@ namespace F4
                 }
                 file << endl;
             }
-            //file.close();
+            file.close();
         }
     }
     
     template <typename Element>
     bool
-    Matrix<Element>::isZero(unsigned row, unsigned col) const
+    Matrix<Element>::isZero(unsigned int row, unsigned int col) const
     {
-        //return _matrix[_width*row + col].isZero();
         return (_matrix[row][col]).isZero(); 
     }
     
     template <typename Element>
     void
-    Matrix<Element>::multRow(unsigned numRow, Element element, unsigned start, unsigned end)
+    Matrix<Element>::multRow(unsigned int numRow, Element const & element, unsigned int start, unsigned int end)
     {
         assert((start >= 0) && (end <= _width));
         Element * row = getRow(numRow);
@@ -464,7 +456,7 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::addMultRow(unsigned numRow1, unsigned numRow2, Element element, unsigned start, unsigned end)
+    Matrix<Element>::addMultRow(unsigned int numRow1, unsigned int numRow2, Element element, unsigned int start, unsigned int end)
     {
         assert((start >= 0) && (end <= _width));
         Element * row1 = getRow(numRow1);
@@ -472,19 +464,15 @@ namespace F4
         element.modulo();
         for(int i=start; i<end; ++i)
         {
-            //row1[i]+=(element*row2[i]);
             row1[i].addMult(row2[i], element);
         }
     }
     
     template <typename Element>
     void
-    Matrix<Element>::swapRow(unsigned numRow1, unsigned numRow2, unsigned start, unsigned end)
+    Matrix<Element>::swapRow(unsigned int numRow1, unsigned int numRow2, unsigned int start, unsigned int end)
     {
         assert((start >= 0) && (end <= _width));
-        //Element * row1 = getRow(numRow1);
-        //Element * row2 = getRow(numRow2);
-        //swap_ranges(row1+start, row1+end, row2+start);
         Element * tmp = _matrix[numRow1];
         _matrix[numRow1] = _matrix[numRow2];
         _matrix[numRow2] = tmp;
@@ -492,12 +480,11 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::swapCol(unsigned numCol1, unsigned numCol2, unsigned start, unsigned end)
+    Matrix<Element>::swapCol(unsigned int numCol1, unsigned int numCol2, unsigned int start, unsigned int end)
     {
         assert((start >= 0) && (end <= _height));
         for(int i=start; i<end; i++)
         {
-            //swap(_matrix[i*_width+numCol1], _matrix[i*_width+numCol2]);
             swap(_matrix[i][numCol1], _matrix[i][numCol2]);
         }
     }

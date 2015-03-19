@@ -133,18 +133,16 @@ namespace F4
     Ideal<Element>::printTaggedPolynomialSet() const
     {
         cout << endl << "------------------- Tagged polynomial index set -------------------------" << endl;
-        typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg;
+        
+        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg;
         for(itPolBeg=M.begin(); itPolBeg != M.end(); ++itPolBeg)
         {
-            //cout << "Tagged polynomial number: " <<  itPolBeg->getIndex() << ": " << _taggedPolynomialArray[itPolBeg->getIndex()].getPolynomial() << endl;
             //if(itPolBeg->getIndex()==1249 || itPolBeg->getIndex()== 1186 || itPolBeg->getIndex()==  1270 || itPolBeg->getIndex()==  1222 || itPolBeg->getIndex()== 1223 || itPolBeg->getIndex()==  1193  || itPolBeg->getIndex()== 1226|| itPolBeg->getIndex()==  1271|| itPolBeg->getIndex()==  1277 || itPolBeg->getIndex()==  1142|| itPolBeg->getIndex()==  1079|| itPolBeg->getIndex()==  1209|| itPolBeg->getIndex()== 1274|| itPolBeg->getIndex()==  1147|| itPolBeg->getIndex()==  1148|| itPolBeg->getIndex()==  1149|| itPolBeg->getIndex()==  1278)
             //{
-                //cout << itPolBeg->getIndex() << " : " << Monomial::getNumMonomial(_taggedPolynomialArray[itPolBeg->getIndex()].getLM()) << endl;
+                //cout  << itPolBeg->second << " : number of LM = " << Monomial::getNumMonomial(itPolBeg->first->getLM()) << endl;
             //}
-        
-            cout << itPolBeg->getIndex() << " : " << Monomial::getNumMonomial(_taggedPolynomialArray[itPolBeg->getIndex()].getLM()) << endl;
+            cout  << itPolBeg->second << " : " << Monomial::getNumMonomial(itPolBeg->first->getLM()) << ", numLm = " << itPolBeg->first->getLM() << endl;
         }
-        cout << endl << endl;
     }
     
     template <typename Element>
@@ -451,7 +449,8 @@ namespace F4
         pair<map<int,bool>::const_iterator, bool> res;
         
         int u1p1=simplify(p.getU1(), p.getP1());
-        if(M.emplace(u1p1).second)
+        
+        if(M.emplace(&(_taggedPolynomialArray[u1p1]), u1p1).second)
         {
             /* If u1p1 is not already in M we insert its monomials in M_Mons */
             itTermBeg=_taggedPolynomialArray[u1p1].getPolynomialBegin();
@@ -484,7 +483,7 @@ namespace F4
         
         int u2p2=simplify(p.getU2(), p.getP2());
         
-        if(M.emplace(u2p2).second)
+        if(M.emplace(&(_taggedPolynomialArray[u2p2]), u2p2).second)
         {
             /* If u2p2 is not already in M we insert its monomials in M_Mons */
             itTermBeg=_taggedPolynomialArray[u2p2].getPolynomialBegin();
@@ -520,7 +519,8 @@ namespace F4
         
         /* Iterators on M_mons, M, and polynomials */
         typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
-        typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg, itPolEnd;
+        //typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg, itPolEnd;
+        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
         /* Temporary */
@@ -566,8 +566,8 @@ namespace F4
         itPolBeg=M.begin();
         itPolEnd=M.end();
         
-        itTermBeg=_taggedPolynomialArray[itPolBeg->getIndex()].getPolynomialBegin();
-        itTermEnd=_taggedPolynomialArray[itPolBeg->getIndex()].getPolynomialEnd();
+        itTermBeg=itPolBeg->first->getPolynomialBegin();
+        itTermEnd=itPolBeg->first->getPolynomialEnd();
                 
         ih = 0;
         ib = nb_piv;
@@ -602,13 +602,14 @@ namespace F4
             //List[tmp_polEt->numList].poly->next = NULL;
         //}
         
+        //++itPolBeg;
         ++itPolBeg;
-
+        
         //traitement des autres polynomes
         while(itPolBeg != itPolEnd)
         {
-            itTermBeg=_taggedPolynomialArray[itPolBeg->getIndex()].getPolynomialBegin();
-            itTermEnd=_taggedPolynomialArray[itPolBeg->getIndex()].getPolynomialEnd();
+            itTermBeg=itPolBeg->first->getPolynomialBegin();
+            itTermEnd=itPolBeg->first->getPolynomialEnd();
             
             if(itTermBeg->getNumMonomial()==numMonLT)
             {
@@ -665,7 +666,6 @@ namespace F4
                 }
                 ih++;
             }
-            
             ++itPolBeg;
 
             ////lib du pol de la ligne
@@ -774,10 +774,10 @@ namespace F4
                     //ajout dans M
                     //on teste si le calcul de ce multiple n'est pas deja fait
                     indexPol=simplify(quotient, GTotal[Gbasis[i]]);
-                    M.emplace(indexPol);
+                    M.emplace(&(_taggedPolynomialArray[indexPol]), indexPol);
                     
                     hauteur++;
-                    //insertion des monomes du nouveau pol dans M_mons                        
+                    //insertion des monomes du nouveau pol dans M_mons
                     itTermBeg=_taggedPolynomialArray[indexPol].getPolynomialBegin();
                     itTermEnd=_taggedPolynomialArray[indexPol].getPolynomialEnd();
                     
@@ -789,7 +789,7 @@ namespace F4
                     }
                     break;
                 }
-            }                  
+            }
             //fin recherche diviseur dans G
             do
             {
@@ -808,15 +808,12 @@ namespace F4
     int 
     Ideal<Element>::f4()
     {
-        // Specify the tagged polynomial array used by the TaggedPolynomialIndex class.
-        TaggedPolynomialIndex<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
-        
         // Specify the tagged polynomial array used by the CriticalPair class.
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
         
         /* Iterators */
         typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
-        typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg, itPolEnd;
+        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         typename set<CriticalPair<Element>>::iterator itcp1;
         
@@ -1024,21 +1021,18 @@ namespace F4
             cmpt_newgen = 0;        //comptage des nouveaux generateurs
             cmpt_genpurg = 0;       //comptage des generateurs purges
             
-            
             itPolBeg=M.begin();
             itPolEnd=M.end();
             for (i = 0; i < nb_piv; i++)
             {
                 num_lt = tab_mon[sigma[i]];
-                if (_taggedPolynomialArray[itPolBeg->getIndex()].getLM() != num_lt)
+                if(itPolBeg->first->getLM() != num_lt)
                 {
                     cout << "Wrong lt in postprocessing " << endl;
                 }
-                
-                while( (itPolBeg != itPolEnd) && (_taggedPolynomialArray[itPolBeg->getIndex()].getLM()==num_lt) )
+                while( (itPolBeg != itPolEnd) && (itPolBeg->first->getLM()==num_lt) )
                 {
-                    (_taggedPolynomialArray[itPolBeg->getIndex()]).setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
-                    //itPolBeg=M.erase(itPolBeg);
+                    itPolBeg->first->setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
                     ++itPolBeg;
                 }
             }
@@ -1180,7 +1174,7 @@ namespace F4
         for (i = 0; i < NumGen; i++)
         {
             index=GTotal[Gbasis[i]];
-            M.emplace(index);
+            M.emplace(&(_taggedPolynomialArray[index]), index);
             
             itTermBeg=_taggedPolynomialArray[index].getPolynomialBegin();
             itTermEnd=_taggedPolynomialArray[index].getPolynomialEnd();
@@ -1237,15 +1231,14 @@ namespace F4
         {
             num_lt = tab_mon[sigma[i]];
             
-            if (_taggedPolynomialArray[itPolBeg->getIndex()].getLM() != num_lt)
+            if(itPolBeg->first->getLM() != num_lt)
             {
                 cout << "Wrong lt in postprocessing " << endl;
             }
             
-            while( (itPolBeg != itPolEnd) && (_taggedPolynomialArray[itPolBeg->getIndex()].getLM()==num_lt) )
+            while( (itPolBeg != itPolEnd) && (itPolBeg->first->getLM()==num_lt) )
             {
-                (_taggedPolynomialArray[itPolBeg->getIndex()]).setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
-                //itPolBeg=M.erase(itPolBeg);
+                itPolBeg->first->setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
                 ++itPolBeg;
             }
         }

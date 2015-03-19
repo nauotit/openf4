@@ -62,6 +62,7 @@ namespace F4
             /**
              * \brief Constructor.
              * \pre The static variable MODULO must be set beforehand.
+             * \post this is set in [-MODULO/2, MODULO/2].
              * \param element: baseType element.
              */
             ElementPrime(baseType element);
@@ -85,21 +86,29 @@ namespace F4
             
             /**
              * \brief Set this in [-MODULO/2, MODULO/2].
+             * \post this is set in [-MODULO/2, MODULO/2].
              * \return this.
              */
             ElementPrime<baseType> &  modulo ();
             
             /**
              * \brief Set this+=(mult*element).
-             * \return this
+             * \param element: Element of the prime field.
+             * \param mult: Element of the prime field.
+             * \pre mult is set in [-MODULO/2, MODULO/2].
+             * \pre element is set in [-MODULO+1, MODULO-1].
+             * \post this is set in [-MODULO+1, MODULO-1].
+             * \return this.
              */
-            ElementPrime<baseType> & addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult);
+            ElementPrime<baseType> & addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult);
             
             /**
              * \brief Inverse this according to the base field.
              * \pre The static variable MODULO must be set beforehand. Beware, baseType must be signed.
+             * \post this is set in [-MODULO/2, MODULO/2].
+             * \return this.
              */
-            ElementPrime inverse() const;
+            ElementPrime<baseType> & inverse();
             
             /**
              * \brief Print the element.
@@ -163,6 +172,7 @@ namespace F4
              * \brief Overload the operator =.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
+             * \post this is set in [-MODULO/2, MODULO/2].
              * \return Reference on this.
              */
             ElementPrime & operator=(baseType element);
@@ -171,6 +181,7 @@ namespace F4
              * \brief Overload the operator +=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
+             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator+=(ElementPrime const & element); 
@@ -179,6 +190,7 @@ namespace F4
              * \brief Overload the operator -=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
+             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator-=(ElementPrime const & element); 
@@ -187,14 +199,17 @@ namespace F4
              * \brief Overload the operator *=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
+             * \pre mult is set in [-MODULO/2, MODULO/2].
+             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
-            ElementPrime & operator*=(ElementPrime const & element); 
+            ElementPrime & operator*=(ElementPrime const & mult); 
             
             /**
              * \brief Overload the operator /=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
+             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator/=(ElementPrime const & element); 

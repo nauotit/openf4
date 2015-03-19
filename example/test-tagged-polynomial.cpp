@@ -92,6 +92,10 @@ int main (int argc, char **argv)
     cout << "________Test getLC()________" << endl;
     cout << "Leading coefficient of tp5: " << tp5.getLC() << endl << endl;
     
+    // Test int getNbTerm() const;
+    cout << "________Test getNbTerm()________" << endl;
+    cout << "Number of terms of tp5: " << tp5.getNbTerm() << endl << endl;
+    
     // Test void setSimplyrule(int index, int numPol);
     cout << "________Test setSimplyrule(int index, int numPol)________" << endl;
     tp5.setSimplyrule(0, 3);

@@ -107,6 +107,12 @@ namespace F4
             Element getLC() const;
             
             /**
+            * \brief Get the number of terms of this.
+            * \return Number of terms of this.
+            */
+            int getNbTerm() const;
+            
+            /**
              * \brief Get _simplyrules[i].
              * \param index: Index of a variable in _simplyrules.
              * \return _simplyrules[i].
