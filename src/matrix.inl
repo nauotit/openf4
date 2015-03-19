@@ -469,6 +469,7 @@ namespace F4
         assert((start >= 0) && (end <= _width));
         Element * row1 = getRow(numRow1);
         Element * row2 = getRow(numRow2);
+        element.modulo();
         for(int i=start; i<end; ++i)
         {
             //row1[i]+=(element*row2[i]);

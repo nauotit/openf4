@@ -968,10 +968,10 @@ namespace F4
                 cout << endl << "Preprocessing of M" << endl;
             }
             
-            if(M_mons.size()==2070)
-            {
-                printTaggedPolynomialSet();
-            }
+            //if(M_mons.size()==2070)
+            //{
+                //printTaggedPolynomialSet();
+            //}
             
             /* preprocessing de M */
             preprocessing(largeur, hauteur, nb_piv);

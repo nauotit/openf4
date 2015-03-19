@@ -119,14 +119,14 @@ namespace F4
     {
         _element+=(element._element*mult._element);
         _element%=MODULO;
-        if (_element > MODULO / 2)
-        {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
-        }
+        //if (_element > MODULO / 2)
+        //{
+            //_element -= MODULO;
+        //}
+        //if (_element < -MODULO / 2)
+        //{
+            //_element += MODULO;
+        //}
         return * this;
     }
     
@@ -349,14 +349,14 @@ namespace F4
     {
         _element*=element._element;
         _element%=MODULO;
-        if (_element > MODULO / 2)
-        {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
-        }
+        //if (_element > MODULO / 2)
+        //{
+            //_element -= MODULO;
+        //}
+        //if (_element < -MODULO / 2)
+        //{
+            //_element += MODULO;
+        //}
         return * this;
     }
             
