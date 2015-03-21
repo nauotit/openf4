@@ -33,10 +33,10 @@ namespace F4
     template <typename Element>
     Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0)
     {
-        _taggedPolynomialArray.reserve(100000);
-        GTotal.reserve(1000);
-        Gbasis.reserve(100);
-        GUsed.reserve(1000);
+        _taggedPolynomialArray.reserve(40000);
+        GTotal.reserve(10000);
+        Gbasis.reserve(1000);
+        GUsed.reserve(10000);
     }
     
     
@@ -134,14 +134,14 @@ namespace F4
     {
         cout << endl << "------------------- Tagged polynomial index set -------------------------" << endl;
         
-        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg;
+        typename set<tuple<int, int, int>>::const_iterator itPolBeg;
         for(itPolBeg=M.begin(); itPolBeg != M.end(); ++itPolBeg)
         {
             //if(itPolBeg->getIndex()==1249 || itPolBeg->getIndex()== 1186 || itPolBeg->getIndex()==  1270 || itPolBeg->getIndex()==  1222 || itPolBeg->getIndex()== 1223 || itPolBeg->getIndex()==  1193  || itPolBeg->getIndex()== 1226|| itPolBeg->getIndex()==  1271|| itPolBeg->getIndex()==  1277 || itPolBeg->getIndex()==  1142|| itPolBeg->getIndex()==  1079|| itPolBeg->getIndex()==  1209|| itPolBeg->getIndex()== 1274|| itPolBeg->getIndex()==  1147|| itPolBeg->getIndex()==  1148|| itPolBeg->getIndex()==  1149|| itPolBeg->getIndex()==  1278)
             //{
-                //cout  << itPolBeg->second << " : number of LM = " << Monomial::getNumMonomial(itPolBeg->first->getLM()) << endl;
+                //cout << "NumPol = " << get<0>(*itPolBeg) << ", NumLM = " << get<1>(*itPolBeg) << ", Number of terms = " << get<2>(*itPolBeg) << endl;
             //}
-            cout  << itPolBeg->second << " : " << Monomial::getNumMonomial(itPolBeg->first->getLM()) << ", numLm = " << itPolBeg->first->getLM() << endl;
+            cout << "NumPol = " << get<0>(*itPolBeg) << ", NumLM = " << get<1>(*itPolBeg) << ", Number of terms = " << get<2>(*itPolBeg) << endl;
         }
     }
     
@@ -445,7 +445,7 @@ namespace F4
         
         int u1p1=simplify(p.getU1(), p.getP1()); 
         
-        if(M.emplace(&(_taggedPolynomialArray[u1p1]), u1p1).second)
+        if(M.emplace(u1p1, (_taggedPolynomialArray[u1p1]).getLM(), (_taggedPolynomialArray[u1p1]).getNbTerm()).second)
         {
             /* If u1p1 is not already in M we insert its monomials in M_Mons */
             itTermBeg=_taggedPolynomialArray[u1p1].getPolynomialBegin();
@@ -478,7 +478,7 @@ namespace F4
         
         int u2p2=simplify(p.getU2(), p.getP2());
         
-        if(M.emplace(&(_taggedPolynomialArray[u2p2]), u2p2).second)
+        if(M.emplace(u2p2, (_taggedPolynomialArray[u2p2]).getLM(), (_taggedPolynomialArray[u2p2]).getNbTerm()).second)
         {
             /* If u2p2 is not already in M we insert its monomials in M_Mons */
             itTermBeg=_taggedPolynomialArray[u2p2].getPolynomialBegin();
@@ -514,7 +514,7 @@ namespace F4
         
         /* Iterators on M_mons, M, and polynomials */
         typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
-        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg,itPolEnd;
+        typename set<tuple<int, int, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
         /* Temporary */
@@ -560,9 +560,9 @@ namespace F4
         itPolBeg=M.begin();
         itPolEnd=M.end();
         
-        itTermBeg=itPolBeg->first->getPolynomialBegin();
-        itTermEnd=itPolBeg->first->getPolynomialEnd();
-                
+        itTermBeg=_taggedPolynomialArray[get<0>(*itPolBeg)].getPolynomialBegin();
+        itTermEnd=_taggedPolynomialArray[get<0>(*itPolBeg)].getPolynomialEnd();
+            
         ih = 0;
         ib = nb_piv;
         int numMonLT;
@@ -600,8 +600,8 @@ namespace F4
         //traitement des autres polynomes
         while(itPolBeg != itPolEnd)
         {
-            itTermBeg=itPolBeg->first->getPolynomialBegin();
-            itTermEnd=itPolBeg->first->getPolynomialEnd();
+            itTermBeg=_taggedPolynomialArray[get<0>(*itPolBeg)].getPolynomialBegin();
+            itTermEnd=_taggedPolynomialArray[get<0>(*itPolBeg)].getPolynomialEnd();
             
             if(itTermBeg->getNumMonomial()==numMonLT)
             {
@@ -766,7 +766,7 @@ namespace F4
                     //ajout dans M
                     //on teste si le calcul de ce multiple n'est pas deja fait
                     indexPol=simplify(quotient, GTotal[Gbasis[i]]);
-                    M.emplace(&(_taggedPolynomialArray[indexPol]), indexPol);
+                    M.emplace(indexPol, (_taggedPolynomialArray[indexPol]).getLM(), (_taggedPolynomialArray[indexPol]).getNbTerm());
                     
                     hauteur++;
                     //insertion des monomes du nouveau pol dans M_mons
@@ -805,7 +805,7 @@ namespace F4
         
         /* Iterators */
         typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
-        typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg,itPolEnd;
+        typename set<tuple<int, int, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         typename set<CriticalPair<Element>>::iterator itcp1;
         
@@ -870,6 +870,15 @@ namespace F4
         clock_t testClear = 0;
         clock_t testClearStart = 0;
         
+        clock_t timeAppendMatrixF4 = 0;
+        clock_t timeAppendMatrixF4Start = 0;
+        clock_t timePreprocessing = 0;
+        clock_t timePreprocessingStart = 0;
+        clock_t timeTransform = 0;
+        clock_t timeTransformStart = 0;
+        clock_t timePostprocessing = 0;
+        clock_t timePostprocessingStart = 0;
+        
         /*step 0 */
         for (i = 0; i < _polynomialArray.size(); i++)
         {
@@ -914,6 +923,10 @@ namespace F4
             nb_piv = 0;
             /*construction des paires critiques de deg min */
             nbCP_d = 0;
+            
+            /* Time spent in appendMatrixF4 */
+            timeAppendMatrixF4Start=clock();
+            
             /* critical pair of minimal degree */
             itcp1=_criticalPairSet.begin();
             cp1=*itcp1;
@@ -949,6 +962,10 @@ namespace F4
                 //GUsed[cp1.getP1()]--;
                 //GUsed[cp1.getP2()]--;
             }
+            
+            /* Time spent in appendMatrixF4 */
+            timeAppendMatrixF4 +=(clock () - timeAppendMatrixF4Start);
+            
             if (VERBOSE > 0)
             {
                 cout << "Number of selected pairs: " << nbCP_d << endl;
@@ -966,7 +983,9 @@ namespace F4
             //}
             
             /* preprocessing de M */
+            timePreprocessingStart=clock();
             preprocessing(largeur, hauteur, nb_piv);
+            timePreprocessing +=(clock () - timePreprocessingStart);
         
             /*transformation de M sous forme de tableaux */
             cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl;
@@ -978,7 +997,10 @@ namespace F4
             start_tail = new int[hauteur];
             end_col = new int[largeur];
             
+            /* Time spent in appendMatrixF4 */
+            timeTransformStart = clock();
             sparse = transform (Mat, tab_mon, nb_piv, tau, sigma, start_tail, end_col);
+            timeTransform +=(clock () - timeTransformStart);
             
             //filename=to_string(step)+"before-echelonize.pgm";
             //printMatrix(Mat, tab_mon, sigma, filename);
@@ -1016,18 +1038,21 @@ namespace F4
             cmpt_newgen = 0;        //comptage des nouveaux generateurs
             cmpt_genpurg = 0;       //comptage des generateurs purges
             
+            /* Time spent in postProcessing */
+            timePostprocessingStart = clock();
+            
             itPolBeg=M.begin();
             itPolEnd=M.end();
             for (i = 0; i < nb_piv; i++)
             {
                 num_lt = tab_mon[sigma[i]];
-                if(itPolBeg->first->getLM() != num_lt)
+                if(get<1>(*itPolBeg) != num_lt)
                 {
                     cout << "Wrong lt in postprocessing " << endl;
                 }
-                while( (itPolBeg != itPolEnd) && (itPolBeg->first->getLM()==num_lt) )
+                while( (itPolBeg != itPolEnd) && (get<1>(*itPolBeg)==num_lt) )
                 {
-                    itPolBeg->first->setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
+                    _taggedPolynomialArray[get<0>(*itPolBeg)].setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
                     ++itPolBeg;
                 }
             }
@@ -1100,6 +1125,8 @@ namespace F4
                 cmpt_newgen++;      //nv gen
                 
             }
+            /* Time spent in postProcessing */
+            
             
             if (VERBOSE > 0)
             {
@@ -1111,6 +1138,7 @@ namespace F4
             }
             
             /* Recuperation de l'avl des monomes et des polEt */
+            timePostprocessing+=(clock()-timePostprocessingStart);
             
             testClearStart=clock();
             M_mons.clear();
@@ -1149,9 +1177,13 @@ namespace F4
         }
         /* End of critical pair loop */
         
-        cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
-        
-        cout << "---> " << (((double)testClear) * 1000) / CLOCKS_PER_SEC << "ms CPU used for clear" << endl << endl << endl;
+        cout << "Time analysis: " << endl;
+        cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU global computation time" << endl;
+        cout << "---> " << (((double)testClear) * 1000) / CLOCKS_PER_SEC << "ms CPU used for clear" << endl;
+        cout << "---> " << (((double)timeAppendMatrixF4) * 1000) / CLOCKS_PER_SEC << "ms CPU used for appendMatrixF4" << endl;
+        cout << "---> " << (((double)timePreprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for preprocessing" << endl;
+        cout << "---> " << (((double)timeTransform) * 1000) / CLOCKS_PER_SEC << "ms CPU used for transform" << endl;
+        cout << "---> " << (((double)timePostprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for postprocessing" << endl << endl << endl;
         
         //if(VERBOSE > 1)
         //{
@@ -1174,7 +1206,7 @@ namespace F4
         for (i = 0; i < NumGen; i++)
         {
             index=GTotal[Gbasis[i]];
-            M.emplace(&(_taggedPolynomialArray[index]), index);
+            M.emplace(index, (_taggedPolynomialArray[index]).getLM(), (_taggedPolynomialArray[index]).getNbTerm());
             
             itTermBeg=_taggedPolynomialArray[index].getPolynomialBegin();
             itTermEnd=_taggedPolynomialArray[index].getPolynomialEnd();
@@ -1231,14 +1263,14 @@ namespace F4
         {
             num_lt = tab_mon[sigma[i]];
             
-            if(itPolBeg->first->getLM() != num_lt)
+            if(get<1>(*itPolBeg) != num_lt)
             {
                 cout << "Wrong lt in postprocessing " << endl;
             }
             
-            while( (itPolBeg != itPolEnd) && (itPolBeg->first->getLM()==num_lt) )
+            while( (itPolBeg != itPolEnd) && (get<1>(*itPolBeg)==num_lt) )
             {
-                itPolBeg->first->setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
+                _taggedPolynomialArray[get<0>(*itPolBeg)].setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
                 ++itPolBeg;
             }
         }

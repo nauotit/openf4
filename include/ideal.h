@@ -27,6 +27,7 @@
 #include <iostream>
 #include <set>
 #include <map>
+#include <tuple>
 #include "critical-pair.h"
 #include "matrix.h"
 
@@ -168,30 +169,30 @@ namespace F4
             struct cmpTaggedPolynomial
             {
                 public:
-                    bool operator()(std::pair<TaggedPolynomial<Element>*, int> const & a , std::pair<TaggedPolynomial<Element>*, int> const & b)
+                    bool operator()(std::tuple<int, int, int> const & a , std::tuple<int, int, int> const & b)
                     {
                         
-                        if( (a.first)->getLM() > (b.first)->getLM() )
+                        if( std::get<1>(a) > std::get<1>(b) )
                         { 
                             return true;
                         }
-                        else if ((a.first)->getLM() < (b.first)->getLM() )
+                        else if (std::get<1>(a) < std::get<1>(b) )
                         {
                             return false;
                         }
-                        else if ((a.first)->getNbTerm() > (b.first)->getNbTerm() )
+                        else if (std::get<2>(a) > std::get<2>(b) )
                         {
                             return true;
                         }
-                        else if ((a.first)->getNbTerm() < (b.first)->getNbTerm() )
+                        else if (std::get<2>(a) < std::get<2>(b) )
                         {
                             return false;
                         }
-                        else if (a.second > b.second)
+                        else if (std::get<0>(a) > std::get<0>(b))
                         {
                             return true;
                         }
-                        else if (a.second < b.second)
+                        else if (std::get<0>(a) < std::get<0>(b))
                         {
                             return false;
                         }
@@ -201,7 +202,7 @@ namespace F4
                         }
                     }
             };
-            set<std::pair<TaggedPolynomial<Element>*, int>, cmpTaggedPolynomial> M;
+            set<std::tuple<int, int, int>, cmpTaggedPolynomial> M;
     };
 }
 
