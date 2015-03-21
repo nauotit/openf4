@@ -33,10 +33,10 @@ namespace F4
     template <typename Element>
     Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0)
     {
-        _taggedPolynomialArray.reserve(1000000);
-        GTotal.reserve(1000000);
-        Gbasis.reserve(1000);
-        GUsed.reserve(1000000);
+        _taggedPolynomialArray.reserve(100000);
+        GTotal.reserve(1000);
+        Gbasis.reserve(100);
+        GUsed.reserve(1000);
     }
     
     
@@ -248,7 +248,6 @@ namespace F4
             
             for (j = 0; j < _nbVariable && div; j++)
             {
-                //if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < Monomial::getNumVarlist(itcp1->getLcm(),j) )
                 if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < lcm.getVarlist(j) )
                 {
                     if(lt_f.getVarlist(j) < lt_g.getVarlist(j))
@@ -262,7 +261,6 @@ namespace F4
                 }
                 else
                 {
-                    //if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > Monomial::getNumVarlist(itcp1->getLcm(),j) )
                     if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > lcm.getVarlist(j) )
                     {
                         div=0;
@@ -316,7 +314,6 @@ namespace F4
             itcp2=P0.begin();
             while (itcp2 != P0.end() && !div_trouve)
             {
-                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
                 if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
@@ -328,7 +325,6 @@ namespace F4
             itcp2=P1.begin();
             while (itcp2 != P1.end() && !div_trouve)
             {
-                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
                 if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
@@ -340,7 +336,6 @@ namespace F4
             itcp2=P2.begin();
             while (itcp2 != P2.end() && !div_trouve)
             {
-                //if (Monomial::getNumMonomial(cp1.getLcm()).isDivisible(Monomial::getNumMonomial(itcp2->getLcm())))
                 if ((cp1.getLcm()).isDivisible(itcp2->getLcm()))
                 {
                     div_trouve = 1;
@@ -448,7 +443,7 @@ namespace F4
         
         pair<map<int,bool>::const_iterator, bool> res;
         
-        int u1p1=simplify(p.getU1(), p.getP1());
+        int u1p1=simplify(p.getU1(), p.getP1()); 
         
         if(M.emplace(&(_taggedPolynomialArray[u1p1]), u1p1).second)
         {
@@ -519,7 +514,6 @@ namespace F4
         
         /* Iterators on M_mons, M, and polynomials */
         typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
-        //typename set<TaggedPolynomialIndex<Element>>::const_iterator itPolBeg, itPolEnd;
         typename set<pair<TaggedPolynomial<Element>*, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
@@ -601,8 +595,6 @@ namespace F4
             //Pol_FL = List[tmp_polEt->numList].poly->next;
             //List[tmp_polEt->numList].poly->next = NULL;
         //}
-        
-        //++itPolBeg;
         ++itPolBeg;
         
         //traitement des autres polynomes
@@ -875,6 +867,9 @@ namespace F4
         clock_t start2 = 0;
         clock_t start1 = clock ();
         
+        clock_t testClear = 0;
+        clock_t testClearStart = 0;
+        
         /*step 0 */
         for (i = 0; i < _polynomialArray.size(); i++)
         {
@@ -1116,8 +1111,11 @@ namespace F4
             }
             
             /* Recuperation de l'avl des monomes et des polEt */
+            
+            testClearStart=clock();
             M_mons.clear();
             M.clear();
+            testClear+=(clock()-testClearStart);
             
             if (cmpt_newgen != (hauteur_reelle - nb_piv))
             {
@@ -1152,6 +1150,8 @@ namespace F4
         /* End of critical pair loop */
         
         cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
+        
+        cout << "---> " << (((double)testClear) * 1000) / CLOCKS_PER_SEC << "ms CPU used for clear" << endl << endl << endl;
         
         //if(VERBOSE > 1)
         //{
