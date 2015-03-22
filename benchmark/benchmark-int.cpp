@@ -82,14 +82,14 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=cyclic6.f4();
-
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
-    
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     
     
@@ -120,13 +120,14 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=cyclic7.f4();
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
-    
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     
     
@@ -158,13 +159,14 @@ int main (int argc, char **argv)
     
     // Compute a reduced groebner basis;
     nbGen=cyclic8.f4();
+    
+    // Free monomial tools
+    Monomial::freeMonomial();
+    
     if (file)
     {
         file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
     
     
     
@@ -197,13 +199,14 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=katsura9.f4();
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
-    
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     
     
@@ -237,13 +240,14 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=katsura10.f4();
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
-    
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     
     
@@ -278,13 +282,14 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=katsura11.f4();
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
-    
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     
     
@@ -320,13 +325,15 @@ int main (int argc, char **argv)
     
     //// Compute a reduced groebner basis;
     //nbGen=katsura12.f4();
+    
+    //// Free monomial tools
+    //Monomial::freeMonomial();
+    
     //if (file)
     //{
         //file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
     
     return 0;
 }

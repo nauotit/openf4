@@ -99,8 +99,8 @@ namespace F4
             int getP2() const;
             
             /**
-             * \brief Get the number of the lcm.
-             * \return Number of the lcm.
+             * \brief Get _lcm.
+             * \return lcm of the critical pair.
              */
             //int getLcm() const;
              Monomial const & getLcm() const;
@@ -109,13 +109,15 @@ namespace F4
              * \brief Get the number of the monomial u1.
              * \return Number of u1.
              */
-            int getU1() const;
+            //int getU1() const;
+            Monomial const & getU1() const;
             
             /**
              * \brief Get the number of the monomial u2.
              * \return Number of u2.
              */
-            int getU2() const;
+            //int getU2() const;
+            Monomial const & getU2() const;
             
             /**
              * \brief Get the degree of this.
@@ -156,9 +158,11 @@ namespace F4
         private:
             //int _lcm;              /*!< lcm( LT(List[GTotal[p1]].poly), LT(List[GTotal[p2]].poly) ). */
             Monomial _lcm;
-            int _u1;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            //int _u1;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            Monomial _u1;
             int _p1;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
-            int _u2;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            //int _u2;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            Monomial _u2;
             int _p2;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
             
             static std::vector<TaggedPolynomial<Element>> * TAGGEG_POLYNOMIAL_ARRAY; /*!< Pointer on a dynamic array of TaggedPolynomial */

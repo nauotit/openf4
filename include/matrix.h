@@ -58,7 +58,7 @@ namespace F4
              * \param height: Height of _matrix.
              * \param width: Width of _matrix.
              */
-            Matrix(unsigned int height, unsigned int width);
+            Matrix(int height, int width);
             
             /**
              * \brief Constructor
@@ -95,7 +95,7 @@ namespace F4
              * \param col: Column of the element.
              * \return Reference on the element.
              */
-            Element & operator() (unsigned int row, unsigned int col);
+            Element & operator() (int row, int col);
             
             /**
              * \brief Get matrix element.
@@ -103,7 +103,7 @@ namespace F4
              * \param col: Column of the element.
              * \return Element.
              */
-            Element operator() (unsigned int row, unsigned int col) const;
+            Element operator() (int row, int col) const;
             
             /**
              * \brief Get matrix element.
@@ -111,7 +111,7 @@ namespace F4
              * \param col: Column of the element.
              * \return Element.
              */
-            Element getElement(unsigned int row, unsigned int col) const;
+            Element getElement(int row, int col) const;
             
             /**
              * \brief Modify matrix element.
@@ -119,13 +119,13 @@ namespace F4
              * \param col: Column of the element.
              * \param element: Element.
              */
-            void setElement (unsigned int row, unsigned int col, Element const & element);
+            void setElement (int row, int col, Element const & element);
             
             /**
              * \brief Get the row-th row of this.
              * \param row: Index of the row.
              */
-            Element * getRow (unsigned int row);
+            Element * getRow (int row);
             
             /**
              * \brief Get the height of the matrix (number of rows).
@@ -212,7 +212,7 @@ namespace F4
              * \return  true if _matrix(row,col) is zero.
              * \return  false otherwise.
              */
-            bool isZero(unsigned int row, unsigned int col) const;
+            bool isZero(int row, int col) const;
             
             /**
              * \brief Multiply a slice of the row-th row by element.
@@ -221,7 +221,7 @@ namespace F4
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void multRow(unsigned int numRow, Element const & element, unsigned int start, unsigned int end);
+            void multRow(int numRow, Element const & element, int start, int end);
             
              /**
              * \brief Multiply a slice of the row1-th row by element and add a slice of the row2-th row.
@@ -231,7 +231,7 @@ namespace F4
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void addMultRow(unsigned int numRow1, unsigned int numRow2, Element element, unsigned int start, unsigned int end);
+            void addMultRow(int numRow1, int numRow2, Element element, int start, int end);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
@@ -240,7 +240,7 @@ namespace F4
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void swapRow(unsigned int numRow1, unsigned int numRow2, unsigned int start, unsigned int end);
+            void swapRow(int numRow1, int numRow2, int start, int end);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
@@ -249,7 +249,7 @@ namespace F4
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void swapCol(unsigned int numCol1, unsigned int numCol2, unsigned int start, unsigned int end);
+            void swapCol(int numCol1, int numCol2, int start, int end);
 
             /**
              * \brief Echelonize the matrix mat using the shape of the F4 matrix.
@@ -278,8 +278,8 @@ namespace F4
             
         private:
             Element ** _matrix; /*!< Macaulay matrix */
-            unsigned int _height; /*!< Height of _matrix. */
-            unsigned int _width; /*!< Width of _matrix. */
+            int _height; /*!< Height of _matrix. */
+            int _width; /*!< Width of _matrix. */
             int _nbPiv; /*!< Number of pivots. */
             int * _tau; /*!< Permutation, _sigma(_tau(i))=_tau(_sigma(i))=i. _tau[i]=column of the monomial tab_mon[i]. */
             int * _sigma; /*!< _sigma[i]=index in tab_mon of the column i monomial. */

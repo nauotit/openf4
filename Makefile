@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
-CXX=g++
+CXX=g++-4.9
 # std=c++11 required by forward_list
 CFLAGS= -O3 -g -Wall -std=c++11 -DNDEBUG
 #CFLAGS= -O3 -g -Wall -std=c++11
@@ -106,8 +106,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-ideal
-# bin/test-matrix bin/test-element-prime bin/test-monomial bin/test-avl    bin/test-polynomial  bin/test-tagged-polynomial  bin/test-critical-pair bin/test-monomial   bin/test-term    bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
+example: bin/test-ideal bin/test-tagged-polynomial
+# bin/test-matrix bin/test-element-prime bin/test-monomial bin/test-avl    bin/test-polynomial    bin/test-critical-pair bin/test-monomial   bin/test-term    bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
 
 benchmark: bin/benchmark-int bin/benchmark-semaev
 

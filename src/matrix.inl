@@ -40,7 +40,7 @@ namespace F4
     }
     
     template <typename Element>
-    Matrix<Element>::Matrix(unsigned int height, unsigned int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    Matrix<Element>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
     {
         _matrix=new Element*[_height];
         for(int i=0; i< _height; i++)
@@ -258,7 +258,7 @@ namespace F4
     
     template <typename Element>
     inline Element & 
-    Matrix<Element>::operator() (unsigned int row, unsigned int col) 
+    Matrix<Element>::operator() (int row, int col) 
     { 
         assert(row < _height && col < _width); 
         return _matrix[row][col]; 
@@ -266,7 +266,7 @@ namespace F4
     
     template <typename Element>
     inline Element 
-    Matrix<Element>::operator() (unsigned int row, unsigned int col) const 
+    Matrix<Element>::operator() (int row, int col) const 
     { 
         assert(row < _height && col < _width);
         return _matrix[row][col]; 
@@ -274,7 +274,7 @@ namespace F4
     
     template <typename Element>
     inline Element 
-    Matrix<Element>::getElement(unsigned int row, unsigned int col) const
+    Matrix<Element>::getElement(int row, int col) const
     {
         assert(row < _height && col < _width); 
         return _matrix[row][col]; 
@@ -282,7 +282,7 @@ namespace F4
     
     template <typename Element>
     inline void 
-    Matrix<Element>::setElement (unsigned int row, unsigned int col, Element const & element)
+    Matrix<Element>::setElement (int row, int col, Element const & element)
     {
         assert(row < _height && col < _width); 
         _matrix[row][col]=element; 
@@ -290,7 +290,7 @@ namespace F4
     
     template <typename Element>
     Element *
-    Matrix<Element>::getRow (unsigned int row) 
+    Matrix<Element>::getRow (int row) 
     { 
         assert(row < _height);
         return _matrix[row]; 
@@ -437,14 +437,14 @@ namespace F4
     
     template <typename Element>
     bool
-    Matrix<Element>::isZero(unsigned int row, unsigned int col) const
+    Matrix<Element>::isZero(int row, int col) const
     {
         return (_matrix[row][col]).isZero(); 
     }
     
     template <typename Element>
     void
-    Matrix<Element>::multRow(unsigned int numRow, Element const & element, unsigned int start, unsigned int end)
+    Matrix<Element>::multRow(int numRow, Element const & element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
         Element * row = getRow(numRow);
@@ -456,7 +456,7 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::addMultRow(unsigned int numRow1, unsigned int numRow2, Element element, unsigned int start, unsigned int end)
+    Matrix<Element>::addMultRow(int numRow1, int numRow2, Element element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
         Element * row1 = getRow(numRow1);
@@ -470,7 +470,7 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::swapRow(unsigned int numRow1, unsigned int numRow2, unsigned int start, unsigned int end)
+    Matrix<Element>::swapRow(int numRow1, int numRow2, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
         Element * tmp = _matrix[numRow1];
@@ -480,7 +480,7 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::swapCol(unsigned int numCol1, unsigned int numCol2, unsigned int start, unsigned int end)
+    Matrix<Element>::swapCol(int numCol1, int numCol2, int start, int end)
     {
         assert((start >= 0) && (end <= _height));
         for(int i=start; i<end; i++)
@@ -496,7 +496,7 @@ namespace F4
         clock_t start;
         double tmp_ech_g, tmp_ech_db, tmp_ech_dh;
         int ca = 0;
-        int i, l, l2;               //,_endCol;
+        int i, l, l2, ll;               //,_endCol;
         i = 0;
         l = 0;
         Element piv, inv;
@@ -508,7 +508,6 @@ namespace F4
     #define TRANCHE 64
         /*echelonnage de la partie gauche de la matrice */
         start = clock ();
-        int ll;
         for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)
         {
             //1er tranche

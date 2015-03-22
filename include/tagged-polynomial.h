@@ -168,6 +168,12 @@ namespace F4
              */
             void resetSimplyrules();
             
+            /**
+             * \brief Set this = taggedPolynomial * monomial. Do not modify the simplyrules.
+             * \param taggedPolynomial: TaggedPolynomial.
+             * \param monomial: Monomial.
+             */
+            void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial);
             
             // Internal operators
             
@@ -184,6 +190,20 @@ namespace F4
              * \return Reference on this.
              */
             TaggedPolynomial & operator=(TaggedPolynomial  && taggedPolynomial);
+            
+            /**
+             * \brief Overload the operator =.
+             * \param polynomial: Polynomial to copy.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator=(Polynomial<Element> const & polynomial);
+            
+            /**
+             * \brief Overload the move operator =.
+             * \param polynomial: Polynomial to move.
+             * \return Reference on this.
+             */
+            TaggedPolynomial & operator=(Polynomial<Element>  && polynomial);
             
             /**
              * \brief Overload the operator *= to multiply this with a monomial.

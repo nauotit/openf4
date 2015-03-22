@@ -95,13 +95,13 @@ namespace F4
              * \param numList: Index of a tagged polynomial in _taggedPolynomialArray.
              * \return Index of the simplified polynomial in the array Mon_Tab.
              */
-            int simplify (int u, int numList);
+            //int simplify (int u, int numList);
+            int simplify (Monomial const & u, int numList);
             
             /**
              * \brief Update the set of critical pair and the current basis.
              * \param index: Index of a tagged polynomial in _taggedPolynomialArray.
              */
-            //void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis);
             void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis, bool purge);
             
             /**
@@ -203,6 +203,8 @@ namespace F4
                     }
             };
             set<std::tuple<int, int, int>, cmpTaggedPolynomial> M;
+            
+            clock_t timeSimplify;
     };
 }
 

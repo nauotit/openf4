@@ -222,6 +222,22 @@ namespace F4
         }
     }
     
+    template <typename Element>
+    void 
+    TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial)
+    {
+        //_polynomial=(taggedPolynomial._polynomial*monomial);
+        int numMon=monomial.monomialToInt();
+        
+        typename forward_list<Term<Element>>::const_iterator pos, start;
+        pos=_polynomial.getPolynomialBeforeBegin();
+        
+        for (start=taggedPolynomial.getPolynomialBegin(); start!=taggedPolynomial.getPolynomialEnd() ; ++start)
+        {
+            pos=_polynomial.emplaceAfter(pos, start->getCoefficient(), Monomial::multNumMonomial(start->getNumMonomial(), numMon));
+        }
+    }
+    
     // Operator overload
     
     template <typename Element>
@@ -247,6 +263,22 @@ namespace F4
             _simplyrules=taggedPolynomial._simplyrules;
             taggedPolynomial._simplyrules=0;
         }
+        return * this;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator=(Polynomial<Element> const & polynomial)
+    {
+        _polynomial=polynomial;
+        return * this;
+    }
+    
+    template <typename Element>
+    TaggedPolynomial<Element> & 
+    TaggedPolynomial<Element>::operator=(Polynomial<Element>  && polynomial)
+    {
+        _polynomial=polynomial;
         return * this;
     }
     

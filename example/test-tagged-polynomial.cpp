@@ -140,6 +140,11 @@ int main (int argc, char **argv)
     tp4.resetSimplyrules();
     cout << "tp4: " << tp4 << endl << endl;
     
+    // Test void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial);
+    cout << "________Test setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial)________" << endl;
+    tp4.setTaggedPolynomial(tp2, Monomial("x1^5"));
+    cout << "tp4: " << tp4 << endl << endl; 
+    
     // Test TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);
     cout << "________Test operator=(TaggedPolynomial const & taggedPolynomial)________" << endl;
     tp1=tp4;
@@ -148,6 +153,10 @@ int main (int argc, char **argv)
     // Test TaggedPolynomial & operator=(TaggedPolynomial  && taggedPolynomial);
     cout << "________Test operator=(TaggedPolynomial  && taggedPolynomial)________" << endl;
     cout << endl;
+    
+    // Test TaggedPolynomial & operator=(Polynomial && polynomial);
+    tp1=Polynomial<eltType>("-6*x0^6*x1^5*x2^4+x5*x3^2");
+    cout << "tp1: " << tp1 << endl << endl;
     
     // Test TaggedPolynomial & operator*=(Monomial const & monomial);
     cout << "________Test operator*=(Monomial const & monomial)________" << endl;
