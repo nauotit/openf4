@@ -63,8 +63,8 @@ namespace F4
     
     // Memory gestion
     
-    Node<int> * nodeArray = new Node<int>[100000];
-    int numNode=0;
+    //Node<int> * nodeArray = new Node<int>[100000];
+    //int numNode=0;
     
     
     // Tools

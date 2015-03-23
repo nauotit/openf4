@@ -79,5 +79,22 @@ int main (int argc, char **argv)
     }
     cout << endl << endl;
     
+    // Test int getWidth();
+    cout << "________Test getWidth()________" << endl;
+    cout << "Width = " << da3.getWidth() << endl << endl;
+            
+    // Test int getMaxHeight();
+    cout << "________Test getMaxHeight()________" << endl;
+    cout << "Maximum height = " << da3.getMaxHeight() << endl << endl;
+            
+    // Test int getCurrentHeight();
+    cout << "________Test getCurrentHeight()________" << endl;
+    cout << "Current height = " << da3.getCurrentHeight() << endl << endl;
+    
+    // Test void reset();
+    cout << "________Test reset()________" << endl;
+    da3.reset();
+    cout << endl << endl;
+    
     return 0;
 }

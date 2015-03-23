@@ -93,6 +93,38 @@ namespace F4
         }
     }
     
+    template<typename dataType>
+    void
+    DynamicArray<dataType>::reset()
+    {
+        _colIt=0;
+        _rowIt=0;
+    }
+    
+    
+    // Get / Set
+            
+    template<typename dataType>
+    int
+    DynamicArray<dataType>::getWidth()
+    {
+        return _width;
+    }
+    
+    template<typename dataType>
+    int
+    DynamicArray<dataType>::getMaxHeight()
+    {
+        return _maxHeight;
+    }
+    
+    template<typename dataType>
+    int
+    DynamicArray<dataType>::getCurrentHeight()
+    {
+        return _currentHeight;
+    }
+    
     
     // Access
     

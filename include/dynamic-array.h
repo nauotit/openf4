@@ -69,17 +69,60 @@ namespace F4
             
             // Miscellaneous
             
+            /**
+             * \brief Print the dynamic array.
+             */
             void printDynamicArray(std::ostream & stream=std::cout) const;
+            
+            /**
+             * \brief Reset the dynamic array, do not free the memory.
+             */
+            void reset();
+            
+            
+            // Get / Set
+            
+            /**
+             * \brief Get the width of the dynamic array.
+             */
+            int getWidth();
+            
+            /**
+             * \brief Get the maximum height of the dynamic array.
+             */
+            int getMaxHeight();
+            
+            /**
+             * \brief Get the current height of the dynamic array.
+             */
+            int getCurrentHeight();
             
             
             // Access
             
+            /**
+             * \brief Overload the operator [].
+             * \return Reference on a cell of the dynamic array.
+             */
             dataType & operator[](int index);
             
+            /**
+             * \brief Overload the operator [].
+             * \return Reference on a cell of the dynamic array.
+             */
             dataType const & operator[](int index) const;
             
+            /**
+             * \brief Get an iterator to the beginning of the array.
+             * \return Pointer on a cell of the dynamic array.
+             */
             dataType * getBegin();
             
+            /**
+             * \brief Get an iterator to next data after data.
+             * \param data: Pointer on a cell of the dynamic array.
+             * \return Pointer on a cell of the dynamic array.
+             */
             dataType * getNext(dataType * data);
             
             

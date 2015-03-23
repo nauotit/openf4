@@ -227,10 +227,10 @@ namespace F4
         if( !p ) 
         {   
             // update parent
-            //return new Node<keyType>(k, parent);
-            nodeArray[numNode].setNode(k,parent);
-            p=nodeArray+numNode;
-            numNode++;
+            return new Node<keyType>(k, parent);
+            //nodeArray[numNode].setNode(k,parent);
+            //p=nodeArray+numNode;
+            //numNode++;
         }
         if( k < p->_key )
         {
@@ -340,20 +340,19 @@ namespace F4
     void
     clear(Node<keyType> * & p)
     {
-        delete nodeArray;
-        //if(p)
-        //{
-            //if(p->_left)
-            //{
-                //clear(p->_left);
-            //}
-            //if(p->_right)
-            //{
-                //clear(p->_right);
-            //}
-            //delete p;
-            //p=0;
-        //}
+        if(p)
+        {
+            if(p->_left)
+            {
+                clear(p->_left);
+            }
+            if(p->_right)
+            {
+                clear(p->_right);
+            }
+            delete p;
+            p=0;
+        }
     }
 }
 
