@@ -16,13 +16,13 @@
  */
 
   /**
-  * \file avl-monomial.h
-  * \brief Declaration of class AvlMonomial.
+  * \file avl-polynomial.h
+  * \brief Declaration of class AvlPolynomial.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON 
   */
 
-#ifndef F4_AVL_MONOMIAL_H
-#define F4_AVL_MONOMIAL_H
+#ifndef F4_AVL_POLYNOMIAL_H
+#define F4_AVL_POLYNOMIAL_H
 
 #include <iostream>
 #include <cassert>
@@ -35,10 +35,10 @@
 namespace F4
 {
     /**
-     * \struct NodeAvlMonomial.
-     * Represent a NodeAvlMonomial of the AVL.
+     * \struct NodeAvlPolynomial.
+     * Represent a NodeAvlPolynomial of the AVL.
      */
-    struct NodeAvlMonomial
+    struct NodeAvlPolynomial
     {        
         public:
             
@@ -47,30 +47,31 @@ namespace F4
             /**
              * \brief Constructor
              */
-            NodeAvlMonomial();
+            NodeAvlPolynomial();
             
             // Attributes
         
+            int _numPolynomial;
             int _numMonomial;
-            bool _lt;
+            int _nbTerms;
             signed char _bf;
-            NodeAvlMonomial* _parent;
-            NodeAvlMonomial* _left;
-            NodeAvlMonomial* _right;
+            NodeAvlPolynomial* _parent;
+            NodeAvlPolynomial* _left;
+            NodeAvlPolynomial* _right;
     };
     
     /**
      * \brief Print the AVL of root p.
-     * \param p: Pointer on a NodeAvlMonomial of an AVL.
+     * \param p: Pointer on a NodeAvlPolynomial of an AVL.
      */
-    void printNode(NodeAvlMonomial * p, int indent=0);
+    void printNode(NodeAvlPolynomial * p, int indent=0);
     
     
     /**
-     * \class AvlMonomial
-     * Represent an avl of pair (number of a monomial, is leading monomial).
+     * \class AvlPolynomial
+     * Represent an avl of triple (number of a polynomial, number of its leading monomial, number of terms).
      */
-    class AvlMonomial
+    class AvlPolynomial
     {        
         public:
             
@@ -79,7 +80,7 @@ namespace F4
             /**
              * \brief Constructor
              */
-            AvlMonomial();
+            AvlPolynomial();
             
             
             // Miscellaneous
@@ -88,7 +89,7 @@ namespace F4
              * \brief Print the AVL.
              * \param stream: Stream.
              */
-            void printAvlMonomial(std::ostream & stream=std::cout) const;
+            void printAvlPolynomial(std::ostream & stream=std::cout) const;
             
             /**
              * \brief Reset the AVL for a new usage, memory is not clear.
@@ -104,48 +105,48 @@ namespace F4
             // Insertion
             
             /**
-             * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
+             * \brief Insert a new polynomial into the AVL.
+             * \param numPol: Index of the polynomial.
              * \param numMon: Number of a monomial.
-             * \param lt: true if numMon is a leading monomial, false otherwise.
-             * \return 0 if a new NodeAvlMonomial is created.
-             * \return 1 if the monomial already exist.
-             * \return 2 if the monomial already exist but was not a leading term. In this case its lt flag is set to 1.
+             * \param nbTerms: Number of term of the polynomial.
+             * \return 0 if a new polynomial is created.
+             * \return 1 if the polynomial already exist.
              */
-            int insert(int numMon, bool lt);
+            int insert(int numPol, int numMon, int nbTerms);
             
             
             // Search
             
             /**
-             * \brief Find the biggest NodeAvlMonomial of the AVL.
+             * \brief Find the biggest node of the AVL.
              * \return Pointer on the biggest node.
              */
-            NodeAvlMonomial * findBiggest ();
+            NodeAvlPolynomial * findBiggest ();
             
             /**
-             * \brief Find the biggest NodeAvlMonomial of the AVL.
+             * \brief Find the biggest node of the AVL.
              * \return Pointer on the biggest node.
              */
-            NodeAvlMonomial const * findBiggest () const;
+            NodeAvlPolynomial const * findBiggest () const;
             
             /**
-             * \brief Find the next biggest NodeAvlMonomial after node.
+             * \brief Find the next biggest node after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlMonomial after node.
+             * \return Pointer on the next biggest node after node.
              */
-            NodeAvlMonomial * findNextBiggest(NodeAvlMonomial * node);
+            NodeAvlPolynomial * findNextBiggest(NodeAvlPolynomial * node);
             
             /**
-             * \brief Find the next biggest NodeAvlMonomial after node.
+             * \brief Find the next biggest node after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlMonomial after node.
+             * \return Pointer on the next biggest node after node.
              */
-            NodeAvlMonomial const * findNextBiggest(NodeAvlMonomial const * node) const;
+            NodeAvlPolynomial const * findNextBiggest(NodeAvlPolynomial const * node) const;
         
         private:
-            DynamicArray<NodeAvlMonomial> _array;
-            NodeAvlMonomial * _it;
-            NodeAvlMonomial * _root;
+            DynamicArray<NodeAvlPolynomial> _array;
+            NodeAvlPolynomial * _it;
+            NodeAvlPolynomial * _root;
             size_t _size;
             
             
@@ -156,9 +157,9 @@ namespace F4
      * \return ostream: Stream.
      */
     template <typename dataType>
-    std::ostream & operator<<(std::ostream & stream, AvlMonomial const & avlMonomial);
+    std::ostream & operator<<(std::ostream & stream, AvlPolynomial const & AvlPolynomial);
 }
 
-#include "../src/avl-monomial.inl"
+#include "../src/avl-polynomial.inl"
 
-#endif // F4_AVL_MONOMIAL_H
+#endif // F4_AVL_POLYNOMIAL_H

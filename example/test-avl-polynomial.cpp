@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file test-avl-monomial.cpp
- *  \example test-avl-monomial.cpp
- *  \brief AvlMonomial regression tests.
+ *  \file test-avl-polynomial.cpp
+ *  \example test-avl-polynomial.cpp
+ *  \brief AvlPolynomial regression tests.
  *  \ingroup examples
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -26,7 +26,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "../include/avl-monomial.h"
+#include "../include/avl-polynomial.h"
 
 using namespace F4;
 using namespace std;
@@ -37,52 +37,52 @@ int F4::VERBOSE=2;
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                    TEST AVL MONOMIAL                  #" << endl;
+    cout << "#                    TEST AVL POLYNOMIAL                #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Test AvlMonomial();
-    cout << "________Test AvlMonomial()________" << endl;
-    AvlMonomial avlMon1;
-    cout << avlMon1 << endl << endl;
+    // Test AvlPolynomial();
+    cout << "________Test AvlPolynomial()________" << endl;
+    AvlPolynomial avlPol1;
+    cout << avlPol1 << endl << endl;
     
-    // Test int insert(int numMon, bool lt);
-    cout << "________Test insert(int numMon, bool lt)________" << endl;
-    avlMon1.insert(10, true);
-    avlMon1.insert(20, true);
-    avlMon1.insert(30, true);
-    avlMon1.insert(50, true);
-    avlMon1.insert(100, true);
-    avlMon1.insert(40, true);
-    avlMon1.insert(25, true);
-    avlMon1.insert(60, true);
-    cout << "Result of insert: " << avlMon1.insert(25, true) << endl << "avlMon1: " << endl << avlMon1 << endl << endl;
+    // Test int insert(int numPol, int numMon, int nbTerms);
+    cout << "________Test insert(int numPol, int numMon, int nbTerms)________" << endl;
+    avlPol1.insert(10, 20, 5);
+    avlPol1.insert(20, 200, 10);
+    avlPol1.insert(30, 1, 1);
+    avlPol1.insert(50, 100, 10);
+    avlPol1.insert(100, 100, 10);
+    avlPol1.insert(40, 100, 5);
+    avlPol1.insert(25, 4, 20);
+    avlPol1.insert(60, 4, 30);
+    cout << "Result of insert: " << avlPol1.insert(25, 10, 100) << endl << "avlPol1: " << endl << avlPol1 << endl << endl;
     
     // Test Node* findBiggest();
     cout << "________Test findBiggest(Node* p)________" << endl;
-    NodeAvlMonomial * tmp = avlMon1.findBiggest();
+    NodeAvlPolynomial * tmp = avlPol1.findBiggest();
     cout << "Biggest node: " << tmp->_numMonomial << endl << endl;
     
     // Test Node* findNextBiggest(Node* p);
     cout << "________Test findNextBiggest(Node* p)________" << endl;
-    tmp=avlMon1.findNextBiggest(tmp);
-    cout << "Next biggest node: " << tmp->_numMonomial << endl;
-    tmp=avlMon1.findNextBiggest(tmp);
-    cout << "Next biggest node: " << tmp->_numMonomial << endl;
-    tmp=avlMon1.findNextBiggest(tmp);
-    cout << "Next biggest node: " << tmp->_numMonomial << endl;
-    tmp=avlMon1.findNextBiggest(tmp);
-    cout << "Next biggest node: " << tmp->_numMonomial << endl;
-    tmp=avlMon1.findNextBiggest(tmp);
-    cout << "Next biggest node: " << tmp->_numMonomial << endl << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl << endl;
     
     // Test int size();
     cout << "________Test size()________" << endl;
-    cout << "Size of avlMon1: " << avlMon1.size() << endl << endl;
+    cout << "Size of avlPol1: " << avlPol1.size() << endl << endl;
     
     // Test void reset();
     cout << "________Test reset()________" << endl;
-    avlMon1.reset();
-    cout << "Size of avlMon1: " << avlMon1.size() << endl << endl;
+    avlPol1.reset();
+    cout << "Size of avlPol1: " << avlPol1.size() << endl << endl;
     
     // benchmark 
     clock_t start;
@@ -95,24 +95,24 @@ int main (int argc, char **argv)
         start=clock();
         for(int j=0; j<100000; j++)
         {
-            avlMon1.insert(rand()%10000, 0);
+            avlPol1.insert(rand()%1000, rand()%10000, rand()%100);
         }
         cout << "Time insert 100000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
         
         start=clock();
         i=0;
-        tmp=avlMon1.findBiggest();
+        tmp=avlPol1.findBiggest();
         i++;
         while(tmp)
         {
-            tmp=avlMon1.findNextBiggest(tmp);
+            tmp=avlPol1.findNextBiggest(tmp);
             i++;
         }
         cout << "Number of elements: " << i << endl; 
         cout << "Time parcours 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
         
         start=clock();
-        avlMon1.reset();
+        avlPol1.reset();
         cout << "Time to reset the AVL " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     }
     

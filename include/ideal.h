@@ -30,6 +30,7 @@
 #include <tuple>
 #include "critical-pair.h"
 #include "matrix.h"
+#include "avl-monomial.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -163,7 +164,7 @@ namespace F4
             std::vector<int> Gbasis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
             set<CriticalPair<Element>> _criticalPairSet; /*!< Set of critical pairs */
-            map<int,bool, std::greater<int>> M_mons; /*!< Monomials used in M, decreasing order */
+            AvlMonomial M_mons; /*!< Monomials used in M, decreasing order */
             
             /* F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
             struct cmpTaggedPolynomial

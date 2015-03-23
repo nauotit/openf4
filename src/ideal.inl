@@ -119,11 +119,12 @@ namespace F4
     Ideal<Element>::printMonomialMap() const
     {
         cout << endl << "------------------- Monomial Map -------------------------" << endl;
-        typename map<int,bool>::const_iterator itMonBeg;
-        for(itMonBeg=M_mons.begin(); itMonBeg != M_mons.end(); ++itMonBeg)
+        NodeAvlMonomial * itMonBeg = M_mons.findBiggest();
+        while(itMonBeg= itMonBeg != 0)
         {
-            //cout << "Monomial number: " <<  itMonBeg->first << ": " << Monomial::getNumMonomial(itMonBeg->first) << ", lt = " << itMonBeg->second << endl;
-            cout << itMonBeg->first << endl;
+            //cout << "Monomial number: " <<  itMonBeg->_numMonomial << ": " << Monomial::getNumMonomial(itMonBeg->_numMonomial) << ", lt = " << itMonBeg->_lt << endl;
+            cout << itMonBeg->_numMonomial << endl;
+            itMonBeg=M_mons.findNextBiggest(itMonBeg);
         }
         cout << endl << endl;
     }
@@ -448,8 +449,6 @@ namespace F4
     {
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
-        pair<map<int,bool>::iterator, bool> res;
-        
         int u1p1=simplify(p.getU1(), p.getP1()); 
         
         if(M.emplace(u1p1, (_taggedPolynomialArray[u1p1]).getLM(), (_taggedPolynomialArray[u1p1]).getNbTerm()).second)
@@ -458,26 +457,15 @@ namespace F4
             itTermBeg=_taggedPolynomialArray[u1p1].getPolynomialBegin();
             itTermEnd=_taggedPolynomialArray[u1p1].getPolynomialEnd();
 
-            res=M_mons.emplace(itTermBeg->getNumMonomial(), true);
-            if(res.second)
+            if(M_mons.insert(itTermBeg->getNumMonomial(), true) != 1)
             {
-                /* The leading monomial insertion took place */
                 nb_piv++;
-            }
-            else
-            {
-                /* Change the lt flag to true */
-                if((res.first)->second==false)
-                {
-                    (res.first)->second=true;
-                    nb_piv++;
-                }
             }
             ++itTermBeg;
             while(itTermBeg!=itTermEnd)
             {
                 /* Insert the other monomials */
-                M_mons.emplace(itTermBeg->getNumMonomial(), false);
+                M_mons.insert(itTermBeg->getNumMonomial(), false);
                 ++itTermBeg;
             }
             h++;
@@ -491,18 +479,13 @@ namespace F4
             itTermBeg=_taggedPolynomialArray[u2p2].getPolynomialBegin();
             itTermEnd=_taggedPolynomialArray[u2p2].getPolynomialEnd();
             
-            res=M_mons.emplace(itTermBeg->getNumMonomial(), true);
-            if(res.second==false)
-            {
-                /* Change the lt flag to true */
-                (res.first)->second=true;
-            }
+            M_mons.insert(itTermBeg->getNumMonomial(), true);
 
             ++itTermBeg;
             while(itTermBeg!=itTermEnd)
             {
                 /* Insert the other monomials */
-                M_mons.emplace(itTermBeg->getNumMonomial(), false);
+                M_mons.insert(itTermBeg->getNumMonomial(), false);
                 ++itTermBeg;
             }
             h++;
@@ -520,7 +503,7 @@ namespace F4
         int c = 0;                  //colonne du dernier lt
         
         /* Iterators on M_mons, M, and polynomials */
-        typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
+        NodeAvlMonomial * itMonBeg;
         typename set<tuple<int, int, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
@@ -534,11 +517,10 @@ namespace F4
         icur = 0;
 
         /* We take the biggest monomial of M_mons */
-        itMonBeg=M_mons.begin();
-        itMonEnd=M_mons.end();
+        itMonBeg=M_mons.findBiggest();
         do
         {
-            if (itMonBeg->second == true)
+            if (itMonBeg->_lt == true)
             {
                 sigma[ih] = icur;
                 tau[icur] = ih;
@@ -552,11 +534,11 @@ namespace F4
                 end_col[ib] = ih;
                 ib++;
             }
-            tab_mon[icur]=itMonBeg->first;
+            tab_mon[icur]=itMonBeg->_numMonomial;
             icur++;
-            ++itMonBeg;
+            itMonBeg=M_mons.findNextBiggest(itMonBeg);
         }
-        while(itMonBeg != itMonEnd);
+        while(itMonBeg != 0);
         if (icur != largeur)
         {
             cout << "***pb depliage M_mons dans Transform***" << endl;
@@ -747,30 +729,30 @@ namespace F4
         int i;
         Monomial m1, m2, quotient;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
-        typename map<int,bool>::iterator itmon;
+        NodeAvlMonomial * itmon;
         largeur = 0;
         
         /* recherche du plus grand monome dans M_mons qui n'est pas un lt */
-        itmon=M_mons.begin();
+        itmon=M_mons.findBiggest();
         largeur++;
-        while (itmon != M_mons.end() && itmon->second == true)
+        while (itmon != 0 && itmon->_lt == true)
         {
-            ++itmon;
+            itmon=M_mons.findNextBiggest(itmon);
             largeur++;
         }
-        while(itmon != M_mons.end())
+        while(itmon != 0)
         {
             //recherche des reducteurs dans G
             for (i = NumGen - 1; i >= 0; i--)
             {
-                m1=Monomial::getNumMonomial(itmon->first);
+                m1=Monomial::getNumMonomial(itmon->_numMonomial);
                 m2=Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[i]]].getLM());
                 if(m1.isDivisible(m2))
                 {
                     //quotient=(m1/m2).monomialToInt();
                     quotient=(m1/m2);
                     //reducteur trouve dans G
-                    itmon->second=true;
+                    itmon->_lt=true;
                     nb_piv++;
                     //ajout dans M
                     //on teste si le calcul de ce multiple n'est pas deja fait
@@ -785,7 +767,7 @@ namespace F4
                     ++itTermBeg;
                     while(itTermBeg!=itTermEnd)
                     {
-                        M_mons.emplace(itTermBeg->getNumMonomial(), false);
+                        M_mons.insert(itTermBeg->getNumMonomial(), false);
                         ++itTermBeg;
                     }
                     break;
@@ -794,10 +776,10 @@ namespace F4
             //fin recherche diviseur dans G
             do
             {
-                ++itmon;
+                itmon=M_mons.findNextBiggest(itmon);
                 largeur++;
             }
-            while (itmon != M_mons.end() && itmon->second == true);
+            while (itmon != 0 && itmon->_lt == true);
         }
         largeur--;
     }
@@ -813,7 +795,6 @@ namespace F4
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
         
         /* Iterators */
-        typename map<int,bool>::const_iterator itMonBeg, itMonEnd;
         typename set<tuple<int, int, int>>::const_iterator itPolBeg,itPolEnd;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         typename set<CriticalPair<Element>>::iterator itcp1;
@@ -927,7 +908,7 @@ namespace F4
             {
                 start2 = clock ();
             }
-            M_mons.clear();
+            M_mons.reset();
             
             hauteur = 0;
             nb_piv = 0;
@@ -1089,7 +1070,7 @@ namespace F4
                     {
                         cout << "*** Problem in width computation: size of M_mons = " << M_mons.size() << ", width = " << largeur << " ***" << endl;
                     }
-                    M_mons.clear();
+                    M_mons.reset();
                     if(M.size() != (size_t)hauteur) 
                     {
                         cout << "*** Problem in height computation: size of M = " << M.size() << ", height = " << hauteur << " ***" << endl << endl;
@@ -1151,7 +1132,7 @@ namespace F4
             timePostprocessing+=(clock()-timePostprocessingStart);
             
             testClearStart=clock();
-            M_mons.clear();
+            M_mons.reset();
             M.clear();
             testClear+=(clock()-testClearStart);
             
@@ -1218,7 +1199,7 @@ namespace F4
         largeur = 0;
         hauteur = 0;
         
-        pair<map<int,bool>::iterator, bool> res;
+        //pair<map<int,bool>::iterator, bool> res;
         
         for (i = 0; i < NumGen; i++)
         {
@@ -1228,17 +1209,12 @@ namespace F4
             itTermBeg=_taggedPolynomialArray[index].getPolynomialBegin();
             itTermEnd=_taggedPolynomialArray[index].getPolynomialEnd();
             
-            res=M_mons.emplace(itTermBeg->getNumMonomial(), true);
-            if(res.second==false)
-            {
-                /* Change the lt flag to true */
-                (res.first)->second=true;
-            }
+            M_mons.insert(itTermBeg->getNumMonomial(), true);
             
             ++itTermBeg;
             while(itTermBeg!=itTermEnd)
             {
-                M_mons.emplace(itTermBeg->getNumMonomial(), false);
+                M_mons.insert(itTermBeg->getNumMonomial(), false);
                 ++itTermBeg;
             }
             hauteur++;
@@ -1296,7 +1272,7 @@ namespace F4
         {
             cout << "*** Problem in width computation ***" << endl;
         }
-        M_mons.clear();
+        M_mons.reset();
         if(M.size() != (size_t)hauteur) 
         {
             cout << "*** Problem in height computation ***" << endl << endl;

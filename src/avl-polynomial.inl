@@ -16,13 +16,13 @@
  */
 
   /**
-  * \file avl-monomial.inl
-  * \brief Definition of AvlMonomial methods.
+  * \file avl-polynomial.inl
+  * \brief Definition of AvlPolynomial methods.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_AVL_MONOMIAL_INL
-#define F4_AVL_MONOMIAL_INL
+#ifndef F4_AVL_POLYNOMIAL_INL
+#define F4_AVL_POLYNOMIAL_INL
 
 using namespace std;
 
@@ -34,11 +34,11 @@ namespace F4
     
     // Constructor
     
-    NodeAvlMonomial::NodeAvlMonomial():_numMonomial(-1), _lt(false), _bf(0), _parent(0), _left(0), _right(0)
+    NodeAvlPolynomial::NodeAvlPolynomial():_numPolynomial(-1), _numMonomial(-1), _nbTerms(0), _bf(0), _parent(0), _left(0), _right(0)
     {
     } 
     
-    AvlMonomial::AvlMonomial(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
+    AvlPolynomial::AvlPolynomial(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
     {
     }
     
@@ -46,7 +46,7 @@ namespace F4
     // Miscellaneous
     
     void 
-    printNode(NodeAvlMonomial* p, int indent)
+    printNode(NodeAvlPolynomial* p, int indent)
     {
         if(p) 
         {
@@ -64,11 +64,11 @@ namespace F4
             }
             if(p->_parent)
             {
-                cout<< p->_numMonomial << ", p: " << p->_parent->_numMonomial << "\n ";
+                cout<< p->_numPolynomial << ", p: " << p->_parent->_numPolynomial << "\n ";
             }
             else
             {
-                cout<< p->_numMonomial << "\n ";
+                cout<< p->_numPolynomial << "\n ";
             }
             if(p->_left) 
             {
@@ -79,13 +79,13 @@ namespace F4
     }
     
     void 
-    AvlMonomial::printAvlMonomial(ostream & stream) const
+    AvlPolynomial::printAvlPolynomial(ostream & stream) const
     {
         printNode(_root);
     }
     
     void 
-    AvlMonomial::reset()
+    AvlPolynomial::reset()
     {
         cout << "Current memory usage: " << _array.getCurrentHeight() << endl;
         _it=_array.getBegin();
@@ -95,7 +95,7 @@ namespace F4
     }
     
     size_t 
-    AvlMonomial::size() const
+    AvlPolynomial::size() const
     {
         return _size;
     }
@@ -104,17 +104,18 @@ namespace F4
     // Insertion
     
     int
-    AvlMonomial::insert(int numMon, bool lt)
+    AvlPolynomial::insert(int numPol, int numMon, int nbTerms)
     {
-        NodeAvlMonomial *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmp_parent, *node;
+        NodeAvlPolynomial *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmp_parent, *node;
         int adjust, cmp;
 
         if (_root == 0)
         {
             node = _it;
             _it=_array.getNext(_it);
+            node->_numPolynomial = numPol;
             node->_numMonomial = numMon;
-            node->_lt = lt;
+            node->_nbTerms = nbTerms;
 
             _root = node;
             
@@ -131,36 +132,49 @@ namespace F4
         while (tmpnode != 0)
         {
             tmpnode2 = tmpnode;
-            if ((tmpnode->_numMonomial) < numMon)
-            {
-                cmp = 1;
+            if( tmpnode->_numMonomial < numMon)
+            { 
+                cmp=1;
                 tmpnode = tmpnode->_right;
             }
-            else if ((tmpnode->_numMonomial) > numMon)
+            else if (tmpnode->_numMonomial > numMon)
             {
-                cmp = -1;
+                cmp=-1;
+                tmpnode = tmpnode->_left;
+            }
+            else if (tmpnode->_nbTerms < nbTerms )
+            {
+                cmp=1;
+                tmpnode = tmpnode->_right;
+            }
+            else if (tmpnode->_nbTerms > nbTerms)
+            {
+                cmp=-1;
+                tmpnode = tmpnode->_left;
+            }
+            else if (tmpnode->_numPolynomial < numPol)
+            {
+                cmp=1;
+                tmpnode = tmpnode->_right;
+            }
+            else if (tmpnode->_numPolynomial < numPol)
+            {
+                cmp=-1;
                 tmpnode = tmpnode->_left;
             }
             else
             {
-                /* Monomial found */
-                if (lt == true && tmpnode->_lt == false)
-                {
-                    tmpnode->_lt = true;
-                    return 2;
-                }
-                else
-                {
-                    return 1;
-                }
+                /* Polynomial found */
+                return 1;
             }
         }
 
-        /* Monomial is not here, we create it */
+        /* Polynomial is not here, we create it */
         node = _it;
         _it=_array.getNext(_it);
+        node->_numPolynomial=numPol;
         node->_numMonomial = numMon;
-        node->_lt = lt;
+        node->_nbTerms = nbTerms;
 
         /* Insertion */
         tmpnode = tmpnode2;
@@ -390,15 +404,15 @@ namespace F4
     
     // Search
     
-    NodeAvlMonomial *
-    AvlMonomial::findBiggest ()
+    NodeAvlPolynomial *
+    AvlPolynomial::findBiggest ()
     {
         if (_root == 0)       
         {
             /* Empty tree */
             return 0;
         }
-        NodeAvlMonomial * tmp = _root;
+        NodeAvlPolynomial * tmp = _root;
         while (tmp->_right != 0)
         {
             tmp = tmp->_right;
@@ -406,15 +420,15 @@ namespace F4
         return tmp;
     }
     
-    NodeAvlMonomial const *
-    AvlMonomial::findBiggest () const
+    NodeAvlPolynomial const *
+    AvlPolynomial::findBiggest () const
     {
         if (_root == 0)       
         {
             /* Empty tree */
             return 0;
         }
-        NodeAvlMonomial * tmp = _root;
+        NodeAvlPolynomial * tmp = _root;
         while (tmp->_right != 0)
         {
             tmp = tmp->_right;
@@ -423,8 +437,8 @@ namespace F4
     }
     
 
-    NodeAvlMonomial *
-    AvlMonomial::findNextBiggest(NodeAvlMonomial * node)
+    NodeAvlPolynomial *
+    AvlPolynomial::findNextBiggest(NodeAvlPolynomial * node)
     {
         if (node == 0)
         {
@@ -454,8 +468,8 @@ namespace F4
         return 0;
     }
     
-    NodeAvlMonomial const *
-    AvlMonomial::findNextBiggest(NodeAvlMonomial const * node) const
+    NodeAvlPolynomial const *
+    AvlPolynomial::findNextBiggest(NodeAvlPolynomial const * node) const
     {
         if (node == 0)
         {
@@ -488,12 +502,12 @@ namespace F4
     
     // Operator overload
     
-    std::ostream & operator<<(std::ostream & stream, AvlMonomial const & avlMonomial)
+    std::ostream & operator<<(std::ostream & stream, AvlPolynomial const & AvlPolynomial)
     {
-        avlMonomial.printAvlMonomial(stream);
+        AvlPolynomial.printAvlPolynomial(stream);
         return stream;
     }
     
 }
 
-#endif // F4_AVL_MONOMIAL_INL
+#endif // F4_AVL_POLYNOMIAL_INL
