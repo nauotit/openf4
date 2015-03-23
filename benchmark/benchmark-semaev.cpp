@@ -90,16 +90,16 @@ int main (int argc, char **argv)
     
     // Compute a reduced groebner basis;
     nbGen=semaev16.f4();
-
-    if (file)
-    {
-        file << "Semaev 16 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
     
     semaev16.printReducedGroebnerBasis(true);
     
     // Free monomial tools
     Monomial::freeMonomial();
+    
+    if (file)
+    {
+        file << "Semaev 16 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     cout << "#########################################################" << endl;
@@ -137,16 +137,16 @@ int main (int argc, char **argv)
     
     // Compute a reduced groebner basis;
     nbGen=semaev31.f4();
-
-    if (file)
-    {
-        file << "Semaev 31 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
     
     semaev31.printReducedGroebnerBasis(true);
     
     // Free monomial tools
     Monomial::freeMonomial();
+    
+    if (file)
+    {
+        file << "Semaev 31 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     cout << "#########################################################" << endl;
     cout << "#                         SEMAEV 32                     #" << endl;
@@ -182,14 +182,14 @@ int main (int argc, char **argv)
     
     // Compute a reduced groebner basis;
     nbGen=semaev32.f4();
-
-    if (file)
-    {
-        file << "Semaev 32 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
     
     semaev32.printReducedGroebnerBasis(true);
     
     // Free monomial tools
     Monomial::freeMonomial();
+    
+    if (file)
+    {
+        file << "Semaev 32 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
 }

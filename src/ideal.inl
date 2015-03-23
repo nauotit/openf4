@@ -56,8 +56,6 @@ namespace F4
     void
     Ideal<Element>::printInfo() const
     {
-        int i=0;
-        
         cout << "GTotal: ";
         for(vector<int>:: const_iterator it=GTotal.begin(); it != GTotal.end(); ++it)
         {
@@ -450,7 +448,7 @@ namespace F4
     {
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
-        pair<map<int,bool>::const_iterator, bool> res;
+        pair<map<int,bool>::iterator, bool> res;
         
         int u1p1=simplify(p.getU1(), p.getP1()); 
         
@@ -471,7 +469,7 @@ namespace F4
                 /* Change the lt flag to true */
                 if((res.first)->second==false)
                 {
-                    (res.first)->second==true;
+                    (res.first)->second=true;
                     nb_piv++;
                 }
             }
@@ -497,7 +495,7 @@ namespace F4
             if(res.second==false)
             {
                 /* Change the lt flag to true */
-                (res.first)->second==true;
+                (res.first)->second=true;
             }
 
             ++itTermBeg;
@@ -1220,7 +1218,7 @@ namespace F4
         largeur = 0;
         hauteur = 0;
         
-        pair<map<int,bool>::const_iterator, bool> res;
+        pair<map<int,bool>::iterator, bool> res;
         
         for (i = 0; i < NumGen; i++)
         {
@@ -1234,7 +1232,7 @@ namespace F4
             if(res.second==false)
             {
                 /* Change the lt flag to true */
-                (res.first)->second==true;
+                (res.first)->second=true;
             }
             
             ++itTermBeg;

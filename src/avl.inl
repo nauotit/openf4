@@ -33,6 +33,16 @@ namespace F4
     // Constructor
     
     template <typename keyType>
+    Node<keyType>::Node()
+    { 
+        _key = -1; 
+        _parent = 0;
+        _left = 0;
+        _right = 0; 
+        _height = 0; 
+    }
+    
+    template <typename keyType>
     Node<keyType>::Node(keyType k)
     { 
         _key = k; 
@@ -44,6 +54,31 @@ namespace F4
     
     template <typename keyType>
     Node<keyType>::Node(keyType k, Node<keyType> * parent)
+    { 
+        _key = k; 
+        _parent = parent;
+        _left = 0;
+        _right = 0; 
+        _height = 1; 
+    }
+    
+    
+    // Get / Set 
+    
+    template <typename keyType>
+    void
+    Node<keyType>::setNode(keyType k)
+    { 
+        _key = k; 
+        _parent = 0;
+        _left = 0;
+        _right = 0; 
+        _height = 1; 
+    }
+    
+    template <typename keyType>
+    void
+    Node<keyType>::setNode(keyType k, Node<keyType> * parent)
     { 
         _key = k; 
         _parent = parent;
@@ -192,7 +227,10 @@ namespace F4
         if( !p ) 
         {   
             // update parent
-            return new Node<keyType>(k, parent);
+            //return new Node<keyType>(k, parent);
+            nodeArray[numNode].setNode(k,parent);
+            p=nodeArray+numNode;
+            numNode++;
         }
         if( k < p->_key )
         {
@@ -302,19 +340,20 @@ namespace F4
     void
     clear(Node<keyType> * & p)
     {
-        if(p)
-        {
-            if(p->_left)
-            {
-                clear(p->_left);
-            }
-            if(p->_right)
-            {
-                clear(p->_right);
-            }
-            delete p;
-            p=0;
-        }
+        delete nodeArray;
+        //if(p)
+        //{
+            //if(p->_left)
+            //{
+                //clear(p->_left);
+            //}
+            //if(p->_right)
+            //{
+                //clear(p->_right);
+            //}
+            //delete p;
+            //p=0;
+        //}
     }
 }
 

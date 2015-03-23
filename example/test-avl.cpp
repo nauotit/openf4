@@ -76,8 +76,8 @@ int main (int argc, char **argv)
     
     // Test void clear(Node<keyType>* p);
     cout << "________Test clear(Node<keyType>* p)________" << endl;
-    clear(root);
-    printNode(root);
+    //clear(root);
+    //printNode(root);
     
     // benchmark 
     clock_t start;
@@ -86,11 +86,11 @@ int main (int argc, char **argv)
     cout << "______________AVL______________" << endl << endl;
     
     start=clock();
-    for(int j=0; j<10000; j++)
+    for(int j=0; j<100000; j++)
     {
-        root=insert(root, rand()%100000);
+        root=insert(root, rand()%10000);
     }
-    cout << "Time insert 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time insert 100000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     
     start=clock();
     i=0;
@@ -106,17 +106,17 @@ int main (int argc, char **argv)
     
     start=clock();
     clear(root);
-    cout << "Time clear 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time clear 100000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     
     
     cout << "______________set______________" << endl << endl;
     set<int> s;
     start=clock();
-    for(int j=0; j<10000; j++)
+    for(int j=0; j<100000; j++)
     {
-        s.emplace(rand()%100000);
+        s.emplace(rand()%10000);
     }
-    cout << "Time insert 10000 elements with set: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time insert 100000 elements with set: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     
     start=clock();
     i=0;
@@ -129,7 +129,7 @@ int main (int argc, char **argv)
     
     start=clock();
     s.clear();
-    cout << "Time clear 10000 elements with set: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time clear 100000 elements with set: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     
     return 0;
 }

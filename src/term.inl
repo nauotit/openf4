@@ -114,7 +114,6 @@ namespace F4
     Term<Element>::readCoefficient(std::string const s)
     {
         cout << "Term: no defined readCoefficient method for this type" << endl;
-        return 0;
     }
     
     template<>

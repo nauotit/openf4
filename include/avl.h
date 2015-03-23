@@ -43,8 +43,14 @@ namespace F4
             
             // Constructor
             
+            Node();
             Node(keyType k);
             Node(keyType k, Node * parent);
+            
+            // Set / Get
+            
+            void setNode(keyType k);
+            void setNode(keyType k, Node * parent);
             
             // Attributes
         
@@ -54,6 +60,12 @@ namespace F4
             Node* _left;
             Node* _right;
     };
+    
+    // Memory gestion
+    
+    Node<int> * nodeArray = new Node<int>[100000];
+    int numNode=0;
+    
     
     // Tools
     
