@@ -31,6 +31,7 @@
 #include "critical-pair.h"
 #include "matrix.h"
 #include "avl-monomial.h"
+#include "avl-polynomial.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -167,43 +168,44 @@ namespace F4
             AvlMonomial M_mons; /*!< Monomials used in M, decreasing order */
             
             /* F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
-            struct cmpTaggedPolynomial
-            {
-                public:
-                    bool operator()(std::tuple<int, int, int> const & a , std::tuple<int, int, int> const & b)
-                    {
+            //struct cmpTaggedPolynomial
+            //{
+                //public:
+                    //bool operator()(std::tuple<int, int, int> const & a , std::tuple<int, int, int> const & b)
+                    //{
                         
-                        if( std::get<1>(a) > std::get<1>(b) )
-                        { 
-                            return true;
-                        }
-                        else if (std::get<1>(a) < std::get<1>(b) )
-                        {
-                            return false;
-                        }
-                        else if (std::get<2>(a) > std::get<2>(b) )
-                        {
-                            return true;
-                        }
-                        else if (std::get<2>(a) < std::get<2>(b) )
-                        {
-                            return false;
-                        }
-                        else if (std::get<0>(a) > std::get<0>(b))
-                        {
-                            return true;
-                        }
-                        else if (std::get<0>(a) < std::get<0>(b))
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-            };
-            set<std::tuple<int, int, int>, cmpTaggedPolynomial> M;
+                        //if( std::get<1>(a) > std::get<1>(b) )
+                        //{ 
+                            //return true;
+                        //}
+                        //else if (std::get<1>(a) < std::get<1>(b) )
+                        //{
+                            //return false;
+                        //}
+                        //else if (std::get<2>(a) > std::get<2>(b) )
+                        //{
+                            //return true;
+                        //}
+                        //else if (std::get<2>(a) < std::get<2>(b) )
+                        //{
+                            //return false;
+                        //}
+                        //else if (std::get<0>(a) > std::get<0>(b))
+                        //{
+                            //return true;
+                        //}
+                        //else if (std::get<0>(a) < std::get<0>(b))
+                        //{
+                            //return false;
+                        //}
+                        //else
+                        //{
+                            //return false;
+                        //}
+                    //}
+            //};
+            //set<std::tuple<int, int, int>, cmpTaggedPolynomial> M;
+            AvlPolynomial M;
             
             clock_t timeSimplify;
     };

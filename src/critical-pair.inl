@@ -59,7 +59,7 @@ namespace F4
     // Constructor
     
     template <typename Element>
-    CriticalPair<Element>::CriticalPair(): _lcm(-1), _u1(-1), _p1(-1), _u2(-1), _p2(-1)
+    CriticalPair<Element>::CriticalPair(): _p1(-1), _p2(-1)
     {
     }
             

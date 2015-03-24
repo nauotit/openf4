@@ -16,13 +16,13 @@
  */
 
   /**
-  * \file avl-monomial.inl
-  * \brief Definition of AvlMonomial methods.
+  * \file avl-critical-pair.inl
+  * \brief Definition of AvlCriticalPair methods.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_AVL_MONOMIAL_INL
-#define F4_AVL_MONOMIAL_INL
+#ifndef F4_AVL_CRITICAL_PAIR_INL
+#define F4_AVL_CRITICAL_PAIR_INL
 
 using namespace std;
 
@@ -34,19 +34,22 @@ namespace F4
     
     // Constructor
     
-    NodeAvlMonomial::NodeAvlMonomial():_numMonomial(-1), _lt(false), _bf(0), _parent(0), _left(0), _right(0)
+    template<typename Element>
+    NodeAvlCriticalPair<Element>::NodeAvlCriticalPair(): _bf(0), _parent(0), _left(0), _right(0)
     {
     } 
     
-    AvlMonomial::AvlMonomial(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
+    template<typename Element>
+    AvlCriticalPair<Element>::AvlCriticalPair(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
     {
     }
     
     
     // Miscellaneous
     
+    template<typename Element>
     void 
-    printNode(NodeAvlMonomial* p, int indent)
+    printNode(NodeAvlCriticalPair<Element>* p, int indent)
     {
         if(p) 
         {
@@ -64,11 +67,11 @@ namespace F4
             }
             if(p->_parent)
             {
-                cout<< p->_numMonomial << ", p: " << p->_parent->_numMonomial << "\n ";
+                cout<< p->_cp.getLcm() << ", p: " << p->_parent->_cp.getLcm() << "\n ";
             }
             else
             {
-                cout<< p->_numMonomial << "\n ";
+                cout<< p->_cp.getLcm() << "\n ";
             }
             if(p->_left) 
             {
@@ -78,14 +81,16 @@ namespace F4
         }
     }
     
+    template<typename Element>
     void 
-    AvlMonomial::printAvlMonomial(ostream & stream) const
+    AvlCriticalPair<Element>::printAvlCriticalPair(ostream & stream) const
     {
         printNode(_root);
     }
     
+    template<typename Element>
     void 
-    AvlMonomial::reset()
+    AvlCriticalPair<Element>::reset()
     {
         cout << "Current memory usage: " << _array.getCurrentHeight() << endl;
         _it=_array.getBegin();
@@ -94,8 +99,9 @@ namespace F4
         _size=0;
     }
     
+    template<typename Element>
     size_t 
-    AvlMonomial::size() const
+    AvlCriticalPair<Element>::size() const
     {
         return _size;
     }
@@ -103,18 +109,18 @@ namespace F4
     
     // Insertion
     
+    template<typename Element>
     int
-    AvlMonomial::insert(int numMon, bool lt)
+    AvlCriticalPair<Element>::insert(CriticalPair<Element> cp)
     {
-        NodeAvlMonomial *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmp_parent, *node;
+        NodeAvlCriticalPair<Element> *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmp_parent, *node;
         int adjust, cmp;
 
         if (_root == 0)
         {
             node = _it;
             _it=_array.getNext(_it);
-            node->_numMonomial = numMon;
-            node->_lt = lt;
+            node->_cp = cp;
 
             _root = node;
             
@@ -131,36 +137,27 @@ namespace F4
         while (tmpnode != 0)
         {
             tmpnode2 = tmpnode;
-            if ((tmpnode->_numMonomial) < numMon)
-            {
-                cmp = 1;
+            if( tmpnode->_cp < cp)
+            { 
+                cmp=1;
                 tmpnode = tmpnode->_right;
             }
-            else if ((tmpnode->_numMonomial) > numMon)
+            else if (tmpnode->_cp > cp)
             {
-                cmp = -1;
+                cmp=-1;
                 tmpnode = tmpnode->_left;
             }
             else
             {
-                /* Monomial found */
-                if (lt == true && tmpnode->_lt == false)
-                {
-                    tmpnode->_lt = true;
-                    return 2;
-                }
-                else
-                {
-                    return 1;
-                }
+                /* Polynomial found */
+                return 1;
             }
         }
 
-        /* Monomial is not here, we create it */
+        /* Polynomial is not here, we create it */
         node = _it;
         _it=_array.getNext(_it);
-        node->_numMonomial = numMon;
-        node->_lt = lt;
+        node->_cp=cp;
 
         /* Insertion */
         tmpnode = tmpnode2;
@@ -390,15 +387,16 @@ namespace F4
     
     // Search
     
-    NodeAvlMonomial *
-    AvlMonomial::findBiggest ()
+    template<typename Element>
+    NodeAvlCriticalPair<Element> *
+    AvlCriticalPair<Element>::findBiggest ()
     {
         if (_root == 0)       
         {
             /* Empty tree */
             return 0;
         }
-        NodeAvlMonomial * tmp = _root;
+        NodeAvlCriticalPair<Element> * tmp = _root;
         while (tmp->_right != 0)
         {
             tmp = tmp->_right;
@@ -406,15 +404,16 @@ namespace F4
         return tmp;
     }
     
-    NodeAvlMonomial const *
-    AvlMonomial::findBiggest () const
+    template<typename Element>
+    NodeAvlCriticalPair<Element> const *
+    AvlCriticalPair<Element>::findBiggest () const
     {
         if (_root == 0)       
         {
             /* Empty tree */
             return 0;
         }
-        NodeAvlMonomial * tmp = _root;
+        NodeAvlCriticalPair<Element> * tmp = _root;
         while (tmp->_right != 0)
         {
             tmp = tmp->_right;
@@ -422,9 +421,9 @@ namespace F4
         return tmp;
     }
     
-
-    NodeAvlMonomial *
-    AvlMonomial::findNextBiggest(NodeAvlMonomial * node)
+    template<typename Element>
+    NodeAvlCriticalPair<Element> *
+    AvlCriticalPair<Element>::findNextBiggest(NodeAvlCriticalPair<Element> * node)
     {
         if (node == 0)
         {
@@ -454,8 +453,9 @@ namespace F4
         return 0;
     }
     
-    NodeAvlMonomial const *
-    AvlMonomial::findNextBiggest(NodeAvlMonomial const * node) const
+    template<typename Element>
+    NodeAvlCriticalPair<Element> const *
+    AvlCriticalPair<Element>::findNextBiggest(NodeAvlCriticalPair<Element> const * node) const
     {
         if (node == 0)
         {
@@ -476,6 +476,105 @@ namespace F4
             while (node->_parent != 0)
             {
                 if (node->_parent->_right == node)
+                {
+                    return node->_parent;
+                }
+                node = node->_parent;
+            }
+        }
+        return 0;
+    }
+    
+    
+    template<typename Element>
+    NodeAvlCriticalPair<Element> *
+    AvlCriticalPair<Element>::findSmallest ()
+    {
+        if (_root == 0)       
+        {
+            /* Empty tree */
+            return 0;
+        }
+        NodeAvlCriticalPair<Element> * tmp = _root;
+        while (tmp->_left != 0)
+        {
+            tmp = tmp->_left;
+        }
+        return tmp;
+    }
+    
+    template<typename Element>
+    NodeAvlCriticalPair<Element> const *
+    AvlCriticalPair<Element>::findSmallest () const
+    {
+        if (_root == 0)       
+        {
+            /* Empty tree */
+            return 0;
+        }
+        NodeAvlCriticalPair<Element> * tmp = _root;
+        while (tmp->_left != 0)
+        {
+            tmp = tmp->_left;
+        }
+        return tmp;
+    }
+    
+    template<typename Element>
+    NodeAvlCriticalPair<Element> *
+    AvlCriticalPair<Element>::findNextSmallest(NodeAvlCriticalPair<Element> * node)
+    {
+        if (node == 0)
+        {
+            return 0;
+        }
+        if (node->_right != 0)
+        {
+            node = node->_right;
+            while (node->_left != 0)
+            {
+                node = node->_left;
+            }
+            return node;
+        }
+        else
+        {
+            /* No right child */
+            while (node->_parent != 0)
+            {
+                if (node->_parent->_left == node)
+                {
+                    return node->_parent;
+                }
+                node = node->_parent;
+            }
+        }
+        return 0;
+    }
+    
+    template<typename Element>
+    NodeAvlCriticalPair<Element> const *
+    AvlCriticalPair<Element>::findNextSmallest(NodeAvlCriticalPair<Element> const * node) const
+    {
+        if (node == 0)
+        {
+            return 0;
+        }
+        if (node->_right != 0)
+        {
+            node = node->_right;
+            while (node->_left != 0)
+            {
+                node = node->_left;
+            }
+            return node;
+        }
+        else
+        {
+            /* No right child */
+            while (node->_parent != 0)
+            {
+                if (node->_parent->_left == node)
                 {
                     return node->_parent;
                 }
@@ -488,12 +587,13 @@ namespace F4
     
     // Operator overload
     
-    std::ostream & operator<<(std::ostream & stream, AvlMonomial const & avlMonomial)
+    template<typename Element>
+    std::ostream & operator<<(std::ostream & stream, AvlCriticalPair<Element> const & avlCriticalPair)
     {
-        avlMonomial.printAvlMonomial(stream);
+        avlCriticalPair.printAvlCriticalPair(stream);
         return stream;
     }
     
 }
 
-#endif // F4_AVL_MONOMIAL_INL
+#endif // F4_AVL_CRITICAL_PAIR_INL

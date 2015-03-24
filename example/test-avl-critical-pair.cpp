@@ -1,0 +1,160 @@
+/* 
+ * Copyright (C) 2010 Antoine Joux and Vanessa Vitse 
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ */
+
+/**
+ *  \file test-avl-critical-pair.cpp
+ *  \example test-avl-critical-pair.cpp
+ *  \brief AvlCriticalPair<eltType> regression tests.
+ *  \ingroup examples
+ *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
+ */
+
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include "../include/avl-critical-pair.h"
+
+using namespace F4;
+using namespace std;
+
+// Global variable
+int F4::VERBOSE=2;
+
+int main (int argc, char **argv)
+{
+    cout << "#########################################################" << endl;
+    cout << "#                 TEST AVL CRITICAL PAIR                #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
+    typedef ElementPrime<int> eltType;
+    ElementPrime<int>::setModulo(65521);
+    
+    // Init monomial tools
+    Monomial::initMonomial(6,5,2,10);
+    
+    // Create tagged polynomial array
+    vector<TaggedPolynomial<eltType>> List;
+    CriticalPair<eltType>::setTaggedPolynomialArray(&List);
+    cout << "size of the tagged polynomial array: " << CriticalPair<eltType>::getSizeTaggedPolynomialArray() << endl << endl;
+    
+    // Fill the tagged polynomial array
+    List.emplace_back(Polynomial<eltType>("x0+x1+x2+x3+x4+x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5"));
+    List.emplace_back(Polynomial<eltType>("x3+x1*x2*x3*x4+x2*x5+x4*x5+x2*x3*x4*x5"));
+    
+    
+    // Test AvlCriticalPair<eltType>();
+    cout << "________Test AvlCriticalPair<eltType>()________" << endl;
+    AvlCriticalPair<eltType> avlCp1;
+    cout << avlCp1 << endl << endl;
+    
+    // Test int insert(int numMon, bool lt);
+    cout << "________Test insert(int numMon, bool lt)________" << endl;
+    avlCp1.insert(CriticalPair<eltType>(0,1));
+    avlCp1.insert(CriticalPair<eltType>(0,4));
+    avlCp1.insert(CriticalPair<eltType>(1,3));
+    avlCp1.insert(CriticalPair<eltType>(2,1));
+    avlCp1.insert(CriticalPair<eltType>(4,1));
+    avlCp1.insert(CriticalPair<eltType>(4,3));
+    avlCp1.insert(CriticalPair<eltType>(2,3));
+    avlCp1.insert(CriticalPair<eltType>(0,3));
+    cout << "Result of insert: " << avlCp1.insert(CriticalPair<eltType>(0,1)) << endl << "avlCp1: " << endl << avlCp1 << endl << endl;
+    
+    // Test Node* findBiggest();
+    cout << "________Test findBiggest(Node* p)________" << endl;
+    NodeAvlCriticalPair<eltType> * tmp = avlCp1.findBiggest();
+    cout << "Biggest node: " << tmp->_cp << endl << endl;
+    
+    // Test Node* findNextBiggest(Node* p);
+    cout << "________Test findNextBiggest(Node* p)________" << endl;
+    tmp=avlCp1.findNextBiggest(tmp);
+    cout << "Next biggest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextBiggest(tmp);
+    cout << "Next biggest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextBiggest(tmp);
+    cout << "Next biggest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextBiggest(tmp);
+    cout << "Next biggest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextBiggest(tmp);
+    cout << "Next biggest node: " << tmp->_cp << endl << endl;
+    
+    // Test Node* findSmallest();
+    cout << "________Test findSmallest(Node* p)________" << endl;
+    tmp=avlCp1.findSmallest();
+    cout << "Smallest node: " << tmp->_cp << endl << endl;
+    
+    // Test Node* findNextSmallest(Node* p);
+    cout << "________Test findNextSmallest(Node* p)________" << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << tmp->_cp << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << tmp->_cp << endl << endl;
+    
+    // Test int size();
+    cout << "________Test size()________" << endl;
+    cout << "Size of avlCp1: " << avlCp1.size() << endl << endl;
+    
+    // Test void reset();
+    cout << "________Test reset()________" << endl;
+    avlCp1.reset();
+    cout << "Size of avlCp1: " << avlCp1.size() << endl << endl;
+    
+    //// benchmark 
+    //clock_t start;
+    //int i=0;
+    
+    //cout << "________Benchmark________" << endl << endl;
+    
+    //for(int k=0; k<10; k++)
+    //{
+        //start=clock();
+        //for(int j=0; j<100000; j++)
+        //{
+            //avlCp1.insert(rand()%10000, 0);
+        //}
+        //cout << "Time insert 100000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+        
+        //start=clock();
+        //i=0;
+        //tmp=avlCp1.findBiggest();
+        //i++;
+        //while(tmp)
+        //{
+            //tmp=avlCp1.findNextBiggest(tmp);
+            //i++;
+        //}
+        //cout << "Number of elements: " << i << endl; 
+        //cout << "Time parcours 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+        
+        //start=clock();
+        //avlCp1.reset();
+        //cout << "Time to reset the AVL " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    //}
+    
+    // Free monomial tools
+    Monomial::freeMonomial();
+    
+    return 0;
+}

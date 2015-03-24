@@ -157,7 +157,7 @@ namespace F4
                 cmp=1;
                 tmpnode = tmpnode->_right;
             }
-            else if (tmpnode->_numPolynomial < numPol)
+            else if (tmpnode->_numPolynomial > numPol)
             {
                 cmp=-1;
                 tmpnode = tmpnode->_left;
@@ -165,6 +165,8 @@ namespace F4
             else
             {
                 /* Polynomial found */
+                //cout << "AVL Polynomial inserted : equality ----> numPol = " << numPol << ", numMon = " << numMon << ", nbTerms = " << nbTerms << endl;
+                //cout << "AVL Polynomial compared : equality ----> numPol = " << tmpnode->_numPolynomial << ", numMon = " << tmpnode->_numMonomial << ", nbTerms = " << tmpnode->_nbTerms << endl;
                 return 1;
             }
         }
@@ -455,7 +457,7 @@ namespace F4
         }
         else
         {
-            /* No right child */
+            /* No left child */
             while (node->_parent != 0)
             {
                 if (node->_parent->_right == node)
@@ -486,7 +488,7 @@ namespace F4
         }
         else
         {
-            /* No right child */
+            /* No left child */
             while (node->_parent != 0)
             {
                 if (node->_parent->_right == node)

@@ -88,7 +88,7 @@ int main (int argc, char **argv)
     clock_t start;
     int i=0;
     
-    cout << "________Benchmark insert(int numMon, bool lt)________" << endl << endl;
+    cout << "________Benchmark________" << endl << endl;
     
     for(int k=0; k<10; k++)
     {

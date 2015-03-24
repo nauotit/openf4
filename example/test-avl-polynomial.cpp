@@ -26,6 +26,8 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <set>
+#include <tuple>
 #include "../include/avl-polynomial.h"
 
 using namespace F4;
@@ -84,11 +86,88 @@ int main (int argc, char **argv)
     avlPol1.reset();
     cout << "Size of avlPol1: " << avlPol1.size() << endl << endl;
     
+    // Test order 
+    cout << "________Test order, numPol fixed________" << endl;
+    avlPol1.reset();
+    avlPol1.insert(10, 20, 5);
+    avlPol1.insert(10, 20, 10);
+    avlPol1.insert(10, 30, 10);
+    avlPol1.insert(10, 40, 10);
+    cout << avlPol1 << endl << endl;
+    tmp = avlPol1.findBiggest();
+    cout << "Biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl << endl;
+    tmp = avlPol1.findNextBiggest(tmp);
+    if(tmp!=0)
+    {
+        cout << "tmp not nil" << endl;
+    }
+    else
+    {
+        cout << "tmp nil" << endl;
+    }
+    
+    cout << "________Test order, numMon fixed________" << endl;
+    avlPol1.reset();
+    avlPol1.insert(10, 20, 5);
+    avlPol1.insert(10, 20, 10);
+    avlPol1.insert(20, 20, 20);
+    avlPol1.insert(30, 20, 20);
+    cout << avlPol1 << endl << endl;
+    tmp = avlPol1.findBiggest();
+    cout << "Biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl << endl;
+    tmp = avlPol1.findNextBiggest(tmp);
+    if(tmp!=0)
+    {
+        cout << "tmp not nil" << endl;
+    }
+    else
+    {
+        cout << "tmp nil" << endl;
+    }
+    
+    cout << "________Test order, nbTerms fixed________" << endl;
+    avlPol1.reset();
+    avlPol1.insert(10, 20, 10);
+    avlPol1.insert(20, 20, 10);
+    avlPol1.insert(30, 30, 10);
+    avlPol1.insert(30, 40, 10);
+    cout << avlPol1 << endl << endl;
+    tmp = avlPol1.findBiggest();
+    cout << "Biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl;
+    tmp=avlPol1.findNextBiggest(tmp);
+    cout << "Next biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl << endl;
+    tmp = avlPol1.findNextBiggest(tmp);
+    if(tmp!=0)
+    {
+        cout << "tmp not nil" << endl;
+    }
+    else
+    {
+        cout << "tmp nil" << endl;
+    }
+    
+    
     // benchmark 
     clock_t start;
     int i=0;
     
-    cout << "________Benchmark insert(int numMon, bool lt)________" << endl << endl;
+    cout << "________Benchmark________" << endl << endl;
     
     for(int k=0; k<10; k++)
     {
@@ -102,19 +181,100 @@ int main (int argc, char **argv)
         start=clock();
         i=0;
         tmp=avlPol1.findBiggest();
+        tmp=avlPol1.findNextBiggest(tmp);
         i++;
         while(tmp)
         {
             tmp=avlPol1.findNextBiggest(tmp);
             i++;
         }
-        cout << "Number of elements: " << i << endl; 
+        cout << "Number of elements: " << i << ", avlPol1.size() = " << avlPol1.size() << endl; 
         cout << "Time parcours 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
         
         start=clock();
         avlPol1.reset();
         cout << "Time to reset the AVL " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
     }
+    
+    // comparison with set
+    cout << "________Comparison with set________" << endl << endl;
+
+    struct cmpTaggedPolynomial
+    {
+        public:
+            bool operator()(std::tuple<int, int, int> const & a , std::tuple<int, int, int> const & b)
+            {
+                
+                if( std::get<1>(a) > std::get<1>(b) )
+                { 
+                    return true;
+                }
+                else if (std::get<1>(a) < std::get<1>(b) )
+                {
+                    return false;
+                }
+                else if (std::get<2>(a) > std::get<2>(b) )
+                {
+                    return true;
+                }
+                else if (std::get<2>(a) < std::get<2>(b) )
+                {
+                    return false;
+                }
+                else if (std::get<0>(a) > std::get<0>(b))
+                {
+                    return true;
+                }
+                else if (std::get<0>(a) < std::get<0>(b))
+                {
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+    };
+    set<std::tuple<int, int, int>, cmpTaggedPolynomial> s;
+    typename set<tuple<int, int, int>>::const_iterator itPolBeg;
+    
+    int a, b, c;
+    start=clock();
+    for(int j=0; j<100000; j++)
+    {
+        a=rand()%1000;
+        b=rand()%10000;
+        c=rand()%100;
+        avlPol1.insert(a, b, c);
+        s.emplace(a, b, c);
+    }
+    cout << "Number of elements in avl: " << avlPol1.size() << endl; 
+    cout << "Number of elements in set: " << s.size() << endl;
+    s.clear();
+    
+    start=clock();
+    for(int j=0; j<100000; j++)
+    {
+        s.emplace(rand()%1000, rand()%10000, rand()%100);
+    }
+    cout << "Time insert 100000 elements with set: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    
+    start=clock();
+    i=0;
+    itPolBeg=s.begin();
+    while(itPolBeg!=s.end())
+    {
+        itPolBeg++;
+        i++;
+    }
+    cout << "Number of elements: " << i << ", s.size() = " << s.size() << endl; 
+    cout << "Time parcours 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    
+    start=clock();
+    s.clear();
+    cout << "Time to reset the AVL " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+
+    
     
     return 0;
 }
