@@ -503,7 +503,9 @@ namespace F4
         int exc;
 
         if (VERBOSE > 1)
+        {
             printf ("Echelonization time: ");
+        }
 
     #define TRANCHE 64
         /*echelonnage de la partie gauche de la matrice */
@@ -833,7 +835,7 @@ namespace F4
 
         if (VERBOSE > 1)
         {
-            printf ("%.1f + %.1f + %.1f ms = %.1f CPU\n", tmp_ech_g, tmp_ech_db, tmp_ech_dh, tmp_ech_g + tmp_ech_db + tmp_ech_dh);
+            printf ("%.1f + %.1f + %.1f ms = %.1f CPU \n\n", tmp_ech_g, tmp_ech_db, tmp_ech_dh, tmp_ech_g + tmp_ech_db + tmp_ech_dh);
         }
         return _height;
     }

@@ -40,7 +40,7 @@ namespace F4
     } 
     
     template<typename Element>
-    AvlCriticalPair<Element>::AvlCriticalPair(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
+    AvlCriticalPair<Element>::AvlCriticalPair(): _array(1000, 100, 1), _it(_array.getBegin()), _root(0), _size(0)
     {
     }
     
@@ -63,16 +63,11 @@ namespace F4
             }
             if (p->_right) 
             {
-                cout<<" /\n" << setw(indent) << ' ';
+                cout << " /\n" << setw(indent) << ' ';
             }
-            if(p->_parent)
-            {
-                cout<< p->_cp.getLcm() << ", p: " << p->_parent->_cp.getLcm() << "\n ";
-            }
-            else
-            {
-                cout<< p->_cp.getLcm() << "\n ";
-            }
+            
+            cout << p->_cp << "\n ";
+            
             if(p->_left) 
             {
                 cout << setw(indent) << ' ' << " \\\n";
@@ -92,7 +87,6 @@ namespace F4
     void 
     AvlCriticalPair<Element>::reset()
     {
-        cout << "Current memory usage: " << _array.getCurrentHeight() << endl;
         _it=_array.getBegin();
         _root=0;
         _array.reset();
@@ -104,6 +98,13 @@ namespace F4
     AvlCriticalPair<Element>::size() const
     {
         return _size;
+    }
+    
+    template<typename Element>
+    bool 
+    AvlCriticalPair<Element>::isEmpty() const
+    {
+        return _root==0;
     }
     
     
@@ -380,8 +381,352 @@ namespace F4
                 }
             }
         }
+        
         _size++;
         return 0;
+    }
+    
+    template<typename Element>
+    void testNode(NodeAvlCriticalPair<Element> * node)
+    {
+        if(node)
+        {
+            testNode(node->_left);
+            testNode(node->_right);
+            
+            if(node->_parent)
+            {
+                if((node->_parent->_left != node) && (node->_parent->_right != node))
+                {
+                    cout << endl << "!!!!!!!!!!!!!!!!!!!!    AVL INCONSISTENCY   !!!!!!!!!!!!!!!!!!" << endl;
+                }
+                else
+                {
+                    cout << " testNode: Node consistent !!!" << endl;
+                }
+            }
+        }
+    }
+    
+    template<typename Element>
+    void 
+    AvlCriticalPair<Element>::testAVL()
+    {
+        if(_root)
+        {
+            cout << " Test the AVL ...." << endl;
+            testNode(_root);
+        }
+        else
+        {
+            cout << "_root is nil" << endl;
+        }
+    }
+    
+    // Deletion
+    
+    template<typename Element>
+    NodeAvlCriticalPair<Element> *
+    AvlCriticalPair<Element>::erase(NodeAvlCriticalPair<Element> * node)
+    {
+        if(!node)
+        {
+            cout << " --------------> erase call with null ! " << endl << endl;
+            _root=0;
+            return node;
+        }
+        
+        int adjust, adjust_parent;
+        CriticalPair<Element> ptmp;
+        NodeAvlCriticalPair<Element> *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmpParent, *res;
+
+        /* Effacement de node (remonte du successeur immediat et effacement) */
+        tmpnode = node->_right;
+        if (tmpnode != 0)
+        {
+            while (tmpnode->_left != 0)
+            {
+                tmpnode = tmpnode->_left;
+            }
+            ptmp = node->_cp;
+            node->_cp = tmpnode->_cp;
+            tmpnode->_cp = ptmp;
+        }
+        else
+        {
+            tmpnode = node;
+        }
+
+        node = tmpnode;
+        tmpnode = node->_parent;
+        
+        /* Keep trace of the next smallest node after the deleted node */
+        res=tmpnode;
+        
+        if (tmpnode == 0)
+        {
+            _root = node->_left;
+            if (_root != 0)
+            {
+                _root->_parent = 0;
+            }
+            adjust = 0;
+        }
+        else
+        {
+            if (node->_left == 0)
+            {
+                tmpnode2 = node->_right;
+                if (tmpnode->_left == node)
+                {
+                    tmpnode->_left = tmpnode2;
+                    adjust = 1;
+                }
+                else
+                {
+                    tmpnode->_right = tmpnode2;
+                    adjust = -1;
+                }
+            }
+            else
+            {
+                tmpnode2 = node->_left;
+                if (tmpnode->_left == node)
+                {
+                    tmpnode->_left = tmpnode2;
+                    adjust = 1;
+                }
+                else
+                {
+                    tmpnode->_right = tmpnode2;
+                    adjust = -1;
+                }
+            }
+            if (tmpnode2 != 0)
+            {
+                tmpnode2->_parent = tmpnode;
+            }
+        }
+        while (adjust != 0)
+        {
+            if (tmpnode->_bf == adjust)
+            {
+                if (adjust == 1)
+                {
+                    tmpnode2 = tmpnode->_right;
+                    if (tmpnode2->_bf != -adjust)
+                    {
+                        tmpnode3 = tmpnode->_right = tmpnode2->_left;
+                        tmpnode2->_left = tmpnode;
+                        tmpParent = tmpnode2->_parent = tmpnode->_parent;
+                        if (tmpParent != 0)
+                        {
+                            if (tmpParent->_left == tmpnode)
+                            {
+                                tmpParent->_left = tmpnode2;
+                            }
+                            else
+                            {
+                                tmpParent->_right = tmpnode2;
+                            }
+                        }
+                        else
+                        {
+                            _root = tmpnode2;
+                        }
+                        tmpnode->_parent = tmpnode2;
+                        if (tmpnode3 != 0)
+                        {
+                            tmpnode3->_parent = tmpnode;
+                        }
+                        tmpnode->_bf = adjust - tmpnode2->_bf;
+                        adjust_parent = tmpnode2->_bf;
+                        tmpnode2->_bf -= adjust;
+                        tmpnode = tmpnode2;
+                    }
+                    else
+                    {
+                        tmpnode3 = tmpnode2->_left;
+                        tmpnode4 = tmpnode->_right = tmpnode3->_left;
+                        tmpnode5 = tmpnode2->_left = tmpnode3->_right;
+                        tmpnode3->_left = tmpnode;
+                        tmpnode3->_right = tmpnode2;
+                        tmpParent = tmpnode3->_parent = tmpnode->_parent;
+                        if (tmpParent != 0)
+                        {
+                            if (tmpParent->_left == tmpnode)
+                            {
+                                tmpParent->_left = tmpnode3;
+                            }
+                            else
+                            {
+                                tmpParent->_right = tmpnode3;
+                            }
+                        }
+                        else
+                        {
+                            _root = tmpnode3;
+                        }
+                        tmpnode->_parent = tmpnode3;
+                        tmpnode2->_parent = tmpnode3;
+                        if (tmpnode4 != 0)
+                        {
+                            tmpnode4->_parent = tmpnode;
+                        }
+                        if (tmpnode5 != 0)
+                        {
+                            tmpnode5->_parent = tmpnode2;
+                        }
+                        if (tmpnode3->_bf <= 0)
+                        {
+                            tmpnode->_bf = 0;
+                        }
+                        else
+                        {
+                            tmpnode->_bf = -1;
+                        }
+                        if (tmpnode3->_bf >= 0)
+                        {
+                            tmpnode2->_bf = 0;
+                        }
+                        else
+                        {
+                            tmpnode2->_bf = 1;
+                        }
+                        tmpnode3->_bf = 0;
+                        adjust_parent = 1;
+                        tmpnode = tmpnode3;
+                    }
+                }
+                else
+                {
+                    tmpnode2 = tmpnode->_left;
+                    if (tmpnode2->_bf != -adjust)
+                    {
+                        tmpnode3 = tmpnode->_left = tmpnode2->_right;
+                        tmpnode2->_right = tmpnode;
+                        tmpParent = tmpnode2->_parent = tmpnode->_parent;
+                        if (tmpParent != 0)
+                        {
+                            if (tmpParent->_left == tmpnode)
+                            {
+                                tmpParent->_left = tmpnode2;
+                            }
+                            else
+                            {
+                                tmpParent->_right = tmpnode2;
+                            }
+                        }
+                        else
+                        {
+                            _root = tmpnode2;
+                        }
+                        tmpnode->_parent = tmpnode2;
+                        if (tmpnode3 != 0)
+                        {
+                            tmpnode3->_parent = tmpnode;
+                        }
+                        tmpnode->_bf = adjust - tmpnode2->_bf;
+                        adjust_parent = tmpnode2->_bf;
+                        tmpnode2->_bf -= adjust;
+                        tmpnode = tmpnode2;
+                    }
+                    else
+                    {
+                        tmpnode3 = tmpnode2->_right;
+                        tmpnode4 = tmpnode->_left = tmpnode3->_right;
+                        tmpnode5 = tmpnode2->_right = tmpnode3->_left;
+                        tmpnode3->_right = tmpnode;
+                        tmpnode3->_left = tmpnode2;
+                        tmpParent = tmpnode3->_parent = tmpnode->_parent;
+                        if (tmpParent != 0)
+                        {
+                            if (tmpParent->_left == tmpnode)
+                            {
+                                tmpParent->_left = tmpnode3;
+                            }
+                            else
+                            {
+                                tmpParent->_right = tmpnode3;
+                            }
+                        }
+                        else
+                        {
+                            _root = tmpnode3;
+                        }
+                        tmpnode->_parent = tmpnode3;
+                        tmpnode2->_parent = tmpnode3;
+                        if (tmpnode4 != 0)
+                        {
+                            tmpnode4->_parent = tmpnode;
+                        }
+                        if (tmpnode5 != 0)
+                        {
+                            tmpnode5->_parent = tmpnode2;
+                        }
+                        if (tmpnode3->_bf >= 0)
+                        {
+                            tmpnode->_bf = 0;
+                        }
+                        else
+                        {
+                            tmpnode->_bf = 1;
+                        }
+                        if (tmpnode3->_bf <= 0)
+                        {
+                            tmpnode2->_bf = 0;
+                        }
+                        else
+                        {
+                            tmpnode2->_bf = -1;
+                        }
+                        tmpnode3->_bf = 0;
+                        adjust_parent = 1;
+                        tmpnode = tmpnode3;
+                    }
+                }
+                adjust = 0;
+            }
+            else
+            {
+                tmpnode->_bf += adjust;
+                if (tmpnode->_bf == 0)
+                {
+                    adjust_parent = 1;
+                }
+                else
+                {
+                    adjust_parent = 0;
+                }
+            }
+            if (adjust_parent)
+            {
+                tmpnode2 = tmpnode->_parent;
+                if (tmpnode2 == 0)
+                {
+                    adjust = 0;
+                }
+                else
+                {
+                    if (tmpnode == tmpnode2->_left)
+                    {
+                        adjust = 1;
+                    }
+                    else
+                    {
+                        adjust = -1;
+                    }
+                    tmpnode = tmpnode2;
+                }
+            }
+            else
+            {
+                adjust = 0;
+            }
+        }
+        
+        _size--;
+        return res;
     }
     
     

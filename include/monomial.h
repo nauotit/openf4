@@ -171,6 +171,21 @@ namespace F4
              static int getNumVarlist(int numMon, int index);
              
              /**
+              * \brief Compute the number of a monomial from its varlist.
+              * \param varlist: Array representing the degree of each variable of the monomial.
+              * \return Number of the corresponding monomial.
+              */
+             static int varlistToInt(int const * varlist);
+             
+             /**
+              * \brief Compute the number of a product of 2 monomials from their varlists.
+              * \param varlist1: Array representing the degree of each variable of the first monomial.
+              * \param varlist2: Array representing the degree of each variable of the second monomial.
+              * \return Number of the corresponding monomial.
+              */
+             static int varlistToInt(int const * varlist1, int const * varlist2);
+             
+             /**
               * \brief Initialise the static parameters of Monomial.
               * \param nbVariable: Number of variables of the polynomial ring.
               * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.

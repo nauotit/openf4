@@ -38,7 +38,7 @@ namespace F4
     {
     } 
     
-    AvlPolynomial::AvlPolynomial(): _array(1000, 1000, 10), _it(_array.getBegin()), _root(0), _size(0)
+    AvlPolynomial::AvlPolynomial(): _array(1000, 100, 1), _it(_array.getBegin()), _root(0), _size(0)
     {
     }
     
@@ -87,7 +87,6 @@ namespace F4
     void 
     AvlPolynomial::reset()
     {
-        cout << "Current memory usage: " << _array.getCurrentHeight() << endl;
         _it=_array.getBegin();
         _root=0;
         _array.reset();

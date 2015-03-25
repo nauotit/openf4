@@ -112,6 +112,17 @@ int main (int argc, char **argv)
     tmp=avlCp1.findNextSmallest(tmp);
     cout << "Next smallest node: " << tmp->_cp << endl << endl;
     
+    // Test NodeAvlCriticalPair<Element> * erase (NodeAvlCriticalPair<Element> * node);
+    cout << "________Test erase (NodeAvlCriticalPair<Element> * node)________" << endl;
+    tmp=avlCp1.findSmallest();
+    tmp=avlCp1.findNextSmallest(tmp);
+    tmp=avlCp1.findNextSmallest(tmp);
+    tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Node to delete: " << tmp->_cp << endl;
+    tmp=avlCp1.erase(tmp);
+    cout << "Deleted node: " << tmp->_cp << endl;
+    cout << avlCp1 << endl << endl;
+    
     // Test int size();
     cout << "________Test size()________" << endl;
     cout << "Size of avlCp1: " << avlCp1.size() << endl << endl;
@@ -120,6 +131,43 @@ int main (int argc, char **argv)
     cout << "________Test reset()________" << endl;
     avlCp1.reset();
     cout << "Size of avlCp1: " << avlCp1.size() << endl << endl;
+    
+    // Test the avl consistency
+    cout << "________Test testAVL()________" << endl;
+    avlCp1.insert(CriticalPair<eltType>(0,1));
+    avlCp1.insert(CriticalPair<eltType>(0,4));
+    avlCp1.insert(CriticalPair<eltType>(1,3));
+    avlCp1.insert(CriticalPair<eltType>(2,1));
+    avlCp1.insert(CriticalPair<eltType>(4,1));
+    avlCp1.insert(CriticalPair<eltType>(4,3));
+    avlCp1.insert(CriticalPair<eltType>(2,3));
+    avlCp1.insert(CriticalPair<eltType>(0,3));
+    
+    avlCp1.testAVL();
+    cout << endl;
+    
+    // Test bool isEmpty() const;
+    cout << "________Test isEmpty()________" << endl;
+    
+    cout << avlCp1 << endl << endl;
+    
+    tmp=avlCp1.findSmallest();
+    while(!avlCp1.isEmpty())
+    {
+        cout << "tmp before erase: " << tmp->_cp << endl;
+        tmp=avlCp1.erase(tmp);
+        if(tmp)
+        {
+            cout << "tmp after erase: " << tmp->_cp << endl;
+        }
+        else
+        {
+            cout << "tmp nil" << endl;
+        }
+        cout << "Test avl is empty: " << avlCp1.isEmpty() << ", AVL size: " << avlCp1.size() << endl << endl;
+        cout << avlCp1 << endl << endl;
+    }
+    cout << endl << endl;
     
     //// benchmark 
     //clock_t start;

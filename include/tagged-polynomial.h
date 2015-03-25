@@ -173,7 +173,7 @@ namespace F4
              * \param taggedPolynomial: TaggedPolynomial.
              * \param monomial: Monomial.
              */
-            void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial);
+            void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist);
             
             // Internal operators
             

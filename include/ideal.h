@@ -25,13 +25,10 @@
 #define F4_IDEAL_H
 
 #include <iostream>
-#include <set>
-#include <map>
-#include <tuple>
-#include "critical-pair.h"
 #include "matrix.h"
 #include "avl-monomial.h"
 #include "avl-polynomial.h"
+#include "avl-critical-pair.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -47,7 +44,7 @@ namespace F4
     {
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -56,7 +53,7 @@ namespace F4
             Ideal(std::vector<Polynomial<Element>> & polynomialArray);
             
             
-            // Destructor 
+            /* Destructor */ 
             
             /**
              * \brief Destructor.
@@ -64,7 +61,7 @@ namespace F4
             ~Ideal();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print _taggedPolynomialArray.
@@ -91,13 +88,15 @@ namespace F4
              */
             void printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename) const;
             
+            
+            /* Algorithms */
+            
             /**
              * \brief Simplify the product u*(_taggedPolynomialArray[numList].poly) by another polynomial with the same leading term but with less terms in its tail.
              * \param u: Number of a monomial.
              * \param numList: Index of a tagged polynomial in _taggedPolynomialArray.
              * \return Index of the simplified polynomial in the array Mon_Tab.
              */
-            //int simplify (int u, int numList);
             int simplify (Monomial const & u, int numList);
             
             /**
@@ -144,10 +143,15 @@ namespace F4
              */
             void preprocessing(int & largeur, int & hauteur, int & nb_piv);
             
-            // F4 Algorithm
+            
+            bool postprocessing(Matrix<Element> & matrix, int * tab_mon, int * sigma, int * tau, int hauteur, int largeur, int hauteur_reelle, int nb_piv, int & cmpt_genpurg, int & cmpt_newgen, double & time_purgeCP, double & time_addCP, double & time_majBasis);
+            
+            
+            /* F4 Algorithm */
             
             /**
              * \brief Compute a groebner basis of this using the F4 algorithm.
+             * \return Number of generators of the groebner basis.
              */
             int f4();
             
@@ -164,48 +168,12 @@ namespace F4
             std::vector<int> GUsed;
             std::vector<int> Gbasis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
-            set<CriticalPair<Element>> _criticalPairSet; /*!< Set of critical pairs */
+            AvlCriticalPair<Element> _criticalPairSet; /*!< Set of critical pairs */
+            AvlCriticalPair<Element> P0; /*!< Set of critical pairs for update */
+            AvlCriticalPair<Element> P1; /*!< Set of critical pairs for update */
+            AvlCriticalPair<Element> P2; /*!< Set of critical pairs for update */
             AvlMonomial M_mons; /*!< Monomials used in M, decreasing order */
-            
-            /* F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
-            //struct cmpTaggedPolynomial
-            //{
-                //public:
-                    //bool operator()(std::tuple<int, int, int> const & a , std::tuple<int, int, int> const & b)
-                    //{
-                        
-                        //if( std::get<1>(a) > std::get<1>(b) )
-                        //{ 
-                            //return true;
-                        //}
-                        //else if (std::get<1>(a) < std::get<1>(b) )
-                        //{
-                            //return false;
-                        //}
-                        //else if (std::get<2>(a) > std::get<2>(b) )
-                        //{
-                            //return true;
-                        //}
-                        //else if (std::get<2>(a) < std::get<2>(b) )
-                        //{
-                            //return false;
-                        //}
-                        //else if (std::get<0>(a) > std::get<0>(b))
-                        //{
-                            //return true;
-                        //}
-                        //else if (std::get<0>(a) < std::get<0>(b))
-                        //{
-                            //return false;
-                        //}
-                        //else
-                        //{
-                            //return false;
-                        //}
-                    //}
-            //};
-            //set<std::tuple<int, int, int>, cmpTaggedPolynomial> M;
-            AvlPolynomial M;
+            AvlPolynomial M; /*!< F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
             
             clock_t timeSimplify;
     };

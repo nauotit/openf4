@@ -104,6 +104,15 @@ namespace F4
              */
             size_t size() const;
             
+            /**
+             * \brief Test if the AVL is empty.
+             * \return true if the AVL is empty.
+             * \return false otherwise.
+             */
+            bool isEmpty() const;
+            
+            void testAVL();
+            
             // Insertion
             
             /**
@@ -115,6 +124,17 @@ namespace F4
              * \return 2 if the monomial already exist but was not a leading term. In this case its lt flag is set to 1.
              */
             int insert(CriticalPair<Element> cp);
+            
+            
+            // Deletion
+            
+            /**
+             * \brief Delete the node pointed by node from the AVL.
+             * \pre node belongs to the avl, if node = 0, the AVL is clear.
+             * \param node: Pointer on a node.
+             * \return Pointer the deleted node.
+             */
+            NodeAvlCriticalPair<Element> * erase(NodeAvlCriticalPair<Element> * node);
             
             
             // Search

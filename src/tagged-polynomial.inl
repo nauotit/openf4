@@ -224,10 +224,10 @@ namespace F4
     
     template <typename Element>
     void 
-    TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial)
+    TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist)
     {
         //_polynomial=(taggedPolynomial._polynomial*monomial);
-        int numMon=monomial.monomialToInt();
+        int numMon=Monomial::varlistToInt(varlist);
         
         typename forward_list<Term<Element>>::const_iterator pos, start;
         pos=_polynomial.getPolynomialBeforeBegin();

@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=3;
+int F4::VERBOSE=0;
 
 int main (int argc, char **argv)
 {
@@ -56,78 +56,78 @@ int main (int argc, char **argv)
     }
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         CYCLIC 6                      #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         CYCLIC 6                      #" << endl;
+    cout << "#########################################################" << endl << endl;
         
-    //// Time 
-    //start=clock();
+    // Time 
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(6,11,2,10);
+    // Init monomial tools
+    Monomial::initMonomial(6,11,2,10);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polCyclic6;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polCyclic6;
     
-    //// Fill the polynomial array
-    //polCyclic6.emplace_back("x0+x1+x2+x3+x4+x5");
-    //polCyclic6.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
-    //polCyclic6.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
-    //polCyclic6.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
-    //polCyclic6.emplace_back("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
-    //polCyclic6.emplace_back("x0*x1*x2*x3*x4*x5-1");
+    // Fill the polynomial array
+    polCyclic6.emplace_back("x0+x1+x2+x3+x4+x5");
+    polCyclic6.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
+    polCyclic6.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
+    polCyclic6.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
+    polCyclic6.emplace_back("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
+    polCyclic6.emplace_back("x0*x1*x2*x3*x4*x5-1");
 
-    //// Create cyclic6 ideal;
-    //Ideal<eltType> cyclic6(polCyclic6);
+    // Create cyclic6 ideal;
+    Ideal<eltType> cyclic6(polCyclic6);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=cyclic6.f4();
+    // Compute a reduced groebner basis;
+    nbGen=cyclic6.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         CYCLIC 7                      #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         CYCLIC 7                      #" << endl;
+    cout << "#########################################################" << endl << endl;
     
-    //// Time 
-    //start=clock();
+    // Time 
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(7,13,2,12);
+    // Init monomial tools
+    Monomial::initMonomial(7,13,2,12);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polCyclic7;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polCyclic7;
     
-    //// Fill the polynomial array
-    //polCyclic7.emplace_back("x0+x1+x2+x3+x4+x5+x6");
-    //polCyclic7.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x0*x6+x5*x6");
-    //polCyclic7.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x0*x1*x6+x0*x5*x6+x4*x5*x6");
-    //polCyclic7.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x0*x1*x2*x6+x0*x1*x5*x6+x0*x4*x5*x6+x3*x4*x5*x6");
-    //polCyclic7.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x0*x1*x2*x3*x6+x0*x1*x2*x5*x6+x0*x1*x4*x5*x6+x0*x3*x4*x5*x6+x2*x3*x4*x5*x6");
-    //polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5+x0*x1*x2*x3*x4*x6+x0*x1*x2*x3*x5*x6+x0*x1*x2*x4*x5*x6+x0*x1*x3*x4*x5*x6+x0*x2*x3*x4*x5*x6+x1*x2*x3*x4*x5*x6");
-    //polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5*x6-1");
+    // Fill the polynomial array
+    polCyclic7.emplace_back("x0+x1+x2+x3+x4+x5+x6");
+    polCyclic7.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x0*x6+x5*x6");
+    polCyclic7.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x0*x1*x6+x0*x5*x6+x4*x5*x6");
+    polCyclic7.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x0*x1*x2*x6+x0*x1*x5*x6+x0*x4*x5*x6+x3*x4*x5*x6");
+    polCyclic7.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x0*x1*x2*x3*x6+x0*x1*x2*x5*x6+x0*x1*x4*x5*x6+x0*x3*x4*x5*x6+x2*x3*x4*x5*x6");
+    polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5+x0*x1*x2*x3*x4*x6+x0*x1*x2*x3*x5*x6+x0*x1*x2*x4*x5*x6+x0*x1*x3*x4*x5*x6+x0*x2*x3*x4*x5*x6+x1*x2*x3*x4*x5*x6");
+    polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5*x6-1");
 
-    //// Create cyclic7 ideal;
-    //Ideal<eltType> cyclic7(polCyclic7);
+    // Create cyclic7 ideal;
+    Ideal<eltType> cyclic7(polCyclic7);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=cyclic7.f4();
+    // Compute a reduced groebner basis;
+    nbGen=cyclic7.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     
@@ -170,169 +170,169 @@ int main (int argc, char **argv)
     
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         KATSURA 9                     #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         KATSURA 9                     #" << endl;
+    cout << "#########################################################" << endl << endl;
     
-    //// Time 
-    //start=clock();
+    // Time 
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(9,11,2,10);
+    // Init monomial tools
+    Monomial::initMonomial(9,11,2,10);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polKatsura9;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polKatsura9;
     
-    //// Fill the polynomial array
-    //polKatsura9.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8-1");
-    //polKatsura9.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2-x0");
-    //polKatsura9.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8-x1");
-    //polKatsura9.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8-x2");
-    //polKatsura9.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8-x3");
-    //polKatsura9.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8-x4");
-    //polKatsura9.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8-x5");
-    //polKatsura9.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8-x6");
-    //polKatsura9.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
+    // Fill the polynomial array
+    polKatsura9.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8-1");
+    polKatsura9.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2-x0");
+    polKatsura9.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8-x1");
+    polKatsura9.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8-x2");
+    polKatsura9.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8-x3");
+    polKatsura9.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8-x4");
+    polKatsura9.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8-x5");
+    polKatsura9.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8-x6");
+    polKatsura9.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
 
-    //// Create katsura9 ideal;
-    //Ideal<eltType> katsura9(polKatsura9);
+    // Create katsura9 ideal;
+    Ideal<eltType> katsura9(polKatsura9);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=katsura9.f4();
+    // Compute a reduced groebner basis;
+    nbGen=katsura9.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         KATSURA 10                    #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         KATSURA 10                    #" << endl;
+    cout << "#########################################################" << endl << endl;
     
-    //// Time
-    //start=clock();
+    // Time
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(10,12,2,11);
+    // Init monomial tools
+    Monomial::initMonomial(10,12,2,11);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polKatsura10;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polKatsura10;
     
-    //// Fill the polynomial array
-    //polKatsura10.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9-1");
-    //polKatsura10.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2-x0");
-    //polKatsura10.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9-x1");
-    //polKatsura10.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9-x2");
-    //polKatsura10.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9-x3");
-    //polKatsura10.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9-x4");
-    //polKatsura10.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9-x5");
-    //polKatsura10.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9-x6");
-    //polKatsura10.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9-x7");
-    //polKatsura10.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
+    // Fill the polynomial array
+    polKatsura10.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9-1");
+    polKatsura10.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2-x0");
+    polKatsura10.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9-x1");
+    polKatsura10.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9-x2");
+    polKatsura10.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9-x3");
+    polKatsura10.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9-x4");
+    polKatsura10.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9-x5");
+    polKatsura10.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9-x6");
+    polKatsura10.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9-x7");
+    polKatsura10.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
 
-    //// Create katsura10 ideal;
-    //Ideal<eltType> katsura10(polKatsura10);
+    // Create katsura10 ideal;
+    Ideal<eltType> katsura10(polKatsura10);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=katsura10.f4();
+    // Compute a reduced groebner basis;
+    nbGen=katsura10.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         KATSURA 11                    #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         KATSURA 11                    #" << endl;
+    cout << "#########################################################" << endl << endl;
     
-    //// Time
-    //start=clock();
+    // Time
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(11,13,2,12);
+    // Init monomial tools
+    Monomial::initMonomial(11,13,2,12);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polKatsura11;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polKatsura11;
     
-    //// Fill the polynomial array
-    //polKatsura11.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10-1");
-    //polKatsura11.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2-x0");
-    //polKatsura11.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10-x1");
-    //polKatsura11.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10-x2");
-    //polKatsura11.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10-x3");
-    //polKatsura11.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10-x4");
-    //polKatsura11.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10-x5");
-    //polKatsura11.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10-x6");
-    //polKatsura11.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10-x7");
-    //polKatsura11.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10-x8");
-    //polKatsura11.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
+    // Fill the polynomial array
+    polKatsura11.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10-1");
+    polKatsura11.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2-x0");
+    polKatsura11.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10-x1");
+    polKatsura11.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10-x2");
+    polKatsura11.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10-x3");
+    polKatsura11.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10-x4");
+    polKatsura11.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10-x5");
+    polKatsura11.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10-x6");
+    polKatsura11.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10-x7");
+    polKatsura11.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10-x8");
+    polKatsura11.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
 
-    //// Create katsura11 ideal;
-    //Ideal<eltType> katsura11(polKatsura11);
+    // Create katsura11 ideal;
+    Ideal<eltType> katsura11(polKatsura11);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=katsura11.f4();
+    // Compute a reduced groebner basis;
+    nbGen=katsura11.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     
-    //cout << "#########################################################" << endl;
-    //cout << "#                         KATSURA 12                    #" << endl;
-    //cout << "#########################################################" << endl << endl;
+    cout << "#########################################################" << endl;
+    cout << "#                         KATSURA 12                    #" << endl;
+    cout << "#########################################################" << endl << endl;
     
-    //// Time
-    //start=clock();
+    // Time
+    start=clock();
     
-    //// Init monomial tools
-    //Monomial::initMonomial(12,14,2,13);
+    // Init monomial tools
+    Monomial::initMonomial(12,14,2,13);
     
-    //// Create polynomial array
-    //vector<Polynomial<eltType>> polKatsura12;
+    // Create polynomial array
+    vector<Polynomial<eltType>> polKatsura12;
     
-    //// Fill the polynomial array
-    //polKatsura12.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10+2*x11-1");
-    //polKatsura12.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2+2*x11^2-x0");
-    //polKatsura12.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10+2*x10*x11-x1");
-    //polKatsura12.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10+2*x9*x11-x2");
-    //polKatsura12.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10+2*x8*x11-x3");
-    //polKatsura12.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10+2*x7*x11-x4");
-    //polKatsura12.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10+2*x6*x11-x5");
-    //polKatsura12.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10+2*x5*x11-x6");
-    //polKatsura12.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10+2*x4*x11-x7");
-    //polKatsura12.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10+2*x3*x11-x8");
-    //polKatsura12.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10+2*x2*x11-x9");
-    //polKatsura12.emplace_back("x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
+    // Fill the polynomial array
+    polKatsura12.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10+2*x11-1");
+    polKatsura12.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2+2*x11^2-x0");
+    polKatsura12.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10+2*x10*x11-x1");
+    polKatsura12.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10+2*x9*x11-x2");
+    polKatsura12.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10+2*x8*x11-x3");
+    polKatsura12.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10+2*x7*x11-x4");
+    polKatsura12.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10+2*x6*x11-x5");
+    polKatsura12.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10+2*x5*x11-x6");
+    polKatsura12.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10+2*x4*x11-x7");
+    polKatsura12.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10+2*x3*x11-x8");
+    polKatsura12.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10+2*x2*x11-x9");
+    polKatsura12.emplace_back("x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
 
-    //// Create katsura12 ideal;
-    //Ideal<eltType> katsura12(polKatsura12);
+    // Create katsura12 ideal;
+    Ideal<eltType> katsura12(polKatsura12);
     
-    //// Compute a reduced groebner basis;
-    //nbGen=katsura12.f4();
+    // Compute a reduced groebner basis;
+    nbGen=katsura12.f4();
     
-    //// Free monomial tools
-    //Monomial::freeMonomial();
+    // Free monomial tools
+    Monomial::freeMonomial();
     
-    //if (file)
-    //{
-        //file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    if (file)
+    {
+        file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     
     return 0;

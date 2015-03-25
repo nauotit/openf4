@@ -324,8 +324,7 @@ namespace F4
             {
                 //cout << "Monomial: MultNumMonomial, cannot use TABULATED_PRODUCT " << MONOMIAL_ARRAY[numMon1].getDegree() <<" " << MONOMIAL_ARRAY[numMon2].getDegree()  << endl;
             }
-            Monomial tmp=MONOMIAL_ARRAY[numMon1]*MONOMIAL_ARRAY[numMon2];
-            return tmp.monomialToInt();
+            return varlistToInt(MONOMIAL_ARRAY[numMon1]._varlist, MONOMIAL_ARRAY[numMon2]._varlist);
         }
     }
     
@@ -376,6 +375,96 @@ namespace F4
             setNbMonomial(MAX_DEGREE+2);
         }
         return MONOMIAL_ARRAY[numMon]._varlist[index];
+    }
+    
+    int 
+    Monomial::varlistToInt(int const * varlist)
+    {
+        /* Preconditions */
+        assert(WEIGHT != 0);
+        assert(NB_VARIABLE > 0);
+        
+        int i, res;
+        int deg = 0;
+        for(i=0; i<NB_VARIABLE; i++)
+        {
+            deg+=varlist[i]*WEIGHT[i];
+        }
+        
+        if(deg > MAX_DEGREE)
+        {
+            cout << "Monomial: monomialToInt, increase max degree" << endl;
+            setNbMonomial(deg);
+        }
+        
+        assert(deg <= MAX_DEGREE);
+        
+        if (deg == 0)
+        {
+            return 0;
+        }
+
+        /* skip monomials of degree < deg */
+        res = NB_MONOMIAL[deg - 1][NB_VARIABLE + 1];
+        // on recherche la position du monome pour le degre deg
+        // tmp = degre restant apres avoir enleve le degre des dernieres variables
+        int tmp = deg - varlist[NB_VARIABLE - 1] * WEIGHT[NB_VARIABLE - 1];
+        for (i = NB_VARIABLE - 1; i > 0 && tmp > 0; i--)
+        {
+            // les mon dont le deg en les i premieres variables est <
+            if (tmp >= WEIGHT[i])
+            {
+                res += NB_MONOMIAL[tmp - WEIGHT[i]][i + 1];
+            }
+            tmp -= varlist[i - 1] * WEIGHT[i - 1];
+        }
+        return (res);
+    }
+    
+    int 
+    Monomial::varlistToInt(int const * varlist1, int const * varlist2)
+    {
+        /* Preconditions */
+        assert(WEIGHT != 0);
+        assert(NB_VARIABLE > 0);
+        
+        int i, res;
+        int deg = 0;
+        int varlist[NB_VARIABLE];
+        for(i=0; i<NB_VARIABLE; i++)
+        {
+            varlist[i]=varlist1[i]+varlist2[i];
+            deg+=varlist[i]*WEIGHT[i];
+        }
+        
+        if(deg > MAX_DEGREE)
+        {
+            cout << "Monomial: monomialToInt, increase max degree" << endl;
+            setNbMonomial(deg);
+        }
+        
+        assert(deg <= MAX_DEGREE);
+        
+        if (deg == 0)
+        {
+            return 0;
+        }
+
+        /* skip monomials of degree < deg */
+        res = NB_MONOMIAL[deg - 1][NB_VARIABLE + 1];
+        // on recherche la position du monome pour le degre deg
+        // tmp = degre restant apres avoir enleve le degre des dernieres variables
+        int tmp = deg - varlist[NB_VARIABLE - 1] * WEIGHT[NB_VARIABLE - 1];
+        for (i = NB_VARIABLE - 1; i > 0 && tmp > 0; i--)
+        {
+            // les mon dont le deg en les i premieres variables est <
+            if (tmp >= WEIGHT[i])
+            {
+                res += NB_MONOMIAL[tmp - WEIGHT[i]][i + 1];
+            }
+            tmp -= varlist[i - 1] * WEIGHT[i - 1];
+        }
+        return (res);
     }
     
     void 
