@@ -28,18 +28,18 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
     
-    // Static variables
+    /* Static variables */
     
     template <typename baseType>
     baseType ElementPrime<baseType>::MODULO=0;
     
     
-    // Static methods
+    /* Static methods */
     
     template <typename baseType>
     void 
@@ -56,7 +56,7 @@ namespace F4
     }
     
     
-    // Constructor
+    /* Constructor */
             
     template <typename baseType>
     ElementPrime<baseType>::ElementPrime()
@@ -94,10 +94,10 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template <typename baseType>
-    ElementPrime<baseType> &
+    inline ElementPrime<baseType> &
     ElementPrime<baseType>::modulo ()
     {
         _element%=MODULO;
@@ -270,7 +270,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename baseType>
     ElementPrime<baseType> & 

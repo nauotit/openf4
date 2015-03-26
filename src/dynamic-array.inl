@@ -28,12 +28,12 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
     
-    // Constructor
+    /* Constructor */
     
     template<typename dataType>
     DynamicArray<dataType>::DynamicArray(int width, int maxHeight):_width(width), _maxHeight(maxHeight), _currentHeight(0), _colIt(0), _rowIt(0)
@@ -52,7 +52,7 @@ namespace F4
     }
     
     
-    // Destructor
+    /* Destructor */
     
     template<typename dataType>
     DynamicArray<dataType>::~DynamicArray()
@@ -70,7 +70,7 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template<typename dataType>
     void
@@ -102,7 +102,7 @@ namespace F4
     }
     
     
-    // Get / Set
+    /* Get / Set */
             
     template<typename dataType>
     int
@@ -126,7 +126,7 @@ namespace F4
     }
     
     
-    // Access
+    /* Access */
     
     template<typename dataType>
     dataType &
@@ -198,7 +198,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename dataType>
     std::ostream & operator<<(std::ostream & stream, DynamicArray<dataType> const & dynamicArray)

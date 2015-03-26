@@ -46,7 +46,7 @@ namespace F4
     {
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
@@ -79,7 +79,7 @@ namespace F4
             Matrix(Matrix && matrix);
             
             
-            // Destructor
+            /* Destructor */
             
             /**
              * \brief Destructor
@@ -87,7 +87,7 @@ namespace F4
             ~Matrix();
             
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Modify matrix element.
@@ -193,7 +193,7 @@ namespace F4
             void setInfo(int nbPiv, int *tau, int *sigma, int * startTail, int * endCol);
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the matrix.
@@ -258,7 +258,7 @@ namespace F4
             int echelonize ();
             
             
-            // Internal operator
+            /* Internal operator */
             
             /**
              * \brief Overload the operator =.
@@ -286,6 +286,9 @@ namespace F4
             int * _startTail; /*!< startTail[i]=column of the first possibly non zero coefficient (in line i) after nb_piv if i < nb_piv. Otherwise startTail[i]=0. startTail[i] = min{j>=nb_piv : _igma[i]<_sigma[j]}. */
             int * _endCol; /*!< endCol[i] = end of column i if i < nbPiv. Otherwise endCol[i]=end of column i without taking into account the lines under nbPiv. */
     };
+    
+    
+    /* Internal operator */
     
     /**
      * \brief Overload the operator <<.

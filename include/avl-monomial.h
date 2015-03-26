@@ -42,14 +42,14 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
              */
             NodeAvlMonomial();
             
-            // Attributes
+            /* Attributes */
         
             int _numMonomial;
             bool _lt;
@@ -74,7 +74,7 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
@@ -82,7 +82,7 @@ namespace F4
             AvlMonomial();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the AVL.
@@ -101,7 +101,7 @@ namespace F4
              */
             size_t size() const;
             
-            // Insertion
+            /* Insertion */
             
             /**
              * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
@@ -114,7 +114,7 @@ namespace F4
             int insert(int numMon, bool lt);
             
             
-            // Search
+            /* Search */
             
             /**
              * \brief Find the biggest NodeAvlMonomial of the AVL.
@@ -150,6 +150,9 @@ namespace F4
             
             
     };
+    
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

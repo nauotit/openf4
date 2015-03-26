@@ -40,7 +40,7 @@ namespace F4
     {
         public:
 
-            // Constructor 
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -66,12 +66,12 @@ namespace F4
             TaggedPolynomial(TaggedPolynomial  && taggedPolynomial);
             
             
-            // Destructor
+            /* Destructor */
             
             ~TaggedPolynomial();
             
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Get the polynomial of this.
@@ -140,7 +140,7 @@ namespace F4
             typename forward_list<Term<Element>>::const_iterator getPolynomialEnd() const;
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the polynomial and the _simplyrules of this.
@@ -175,7 +175,7 @@ namespace F4
              */
             void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist);
             
-            // Internal operators
+            /* Internal operators */
             
             /**
              * \brief Overload the operator =.
@@ -232,7 +232,8 @@ namespace F4
             int * _simplyrules;       /*!< Array of integer, mainly used by the simplify algorithm. simplifyrules[i] is the index of a tagged polynomial of List. */
     };
     
-    // External operators
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

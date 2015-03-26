@@ -28,11 +28,11 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
-    // Constructor
+    /* Constructor */
     
     NodeAvlMonomial::NodeAvlMonomial():_numMonomial(-1), _lt(false), _bf(0), _parent(0), _left(0), _right(0)
     {
@@ -43,7 +43,7 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     void 
     printNode(NodeAvlMonomial* p, int indent)
@@ -100,7 +100,7 @@ namespace F4
     }
     
     
-    // Insertion
+    /* Insertion */
     
     int
     AvlMonomial::insert(int numMon, bool lt)
@@ -387,7 +387,7 @@ namespace F4
     }
     
     
-    // Search
+    /* Search */
     
     NodeAvlMonomial *
     AvlMonomial::findBiggest ()
@@ -485,7 +485,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     std::ostream & operator<<(std::ostream & stream, AvlMonomial const & avlMonomial)
     {

@@ -41,7 +41,7 @@ namespace F4
     {
         public:
         
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -75,7 +75,7 @@ namespace F4
             Term(Term const & toCopy);
             
             
-            // Destructor
+            /* Destructor */
             
             /**
              * \brief Destructor.
@@ -83,7 +83,7 @@ namespace F4
             ~Term();
             
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Get the coefficient of this.
@@ -115,7 +115,8 @@ namespace F4
              */
             void setTerm(std::string const s);
             
-            // Miscellaneous
+            
+            /* Miscellaneous */
             
             /**
              * \brief Get the coefficient of the term written s. Must be specialized for each type of Element.
@@ -136,7 +137,7 @@ namespace F4
             void multNumMon(int numMon);
             
             
-            // Internal operators
+            /* Internal operators */
             
             /**
              * \brief Overload the operator =.
@@ -191,6 +192,9 @@ namespace F4
             Element _coefficient; /*!< Coefficient of the term. */
             int _numMonomial; /*!< Number of the monomial of the term. */
     };
+    
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

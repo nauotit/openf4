@@ -40,7 +40,7 @@ namespace F4
     {
         public:
             
-            // Static methods
+            /* Static methods */
             
             /**
              * \brief Set the array of tagged polynomial to use.
@@ -61,7 +61,7 @@ namespace F4
           
             
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -77,14 +77,14 @@ namespace F4
             CriticalPair(int p1, int p2);
             
             
-            // Destructor
+            /* Destructor */
             
             /**
              * \brief Destructor.
              */ 
             ~CriticalPair();
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Get the index of the first tagged polynomial.
@@ -102,21 +102,18 @@ namespace F4
              * \brief Get _lcm.
              * \return lcm of the critical pair.
              */
-            //int getLcm() const;
              Monomial const & getLcm() const;
             
             /**
              * \brief Get the number of the monomial u1.
-             * \return Number of u1.
+             * \return Monomial u1.
              */
-            //int getU1() const;
             Monomial const & getU1() const;
             
             /**
              * \brief Get the number of the monomial u2.
-             * \return Number of u2.
+             * \return Monomial u2.
              */
-            //int getU2() const;
             Monomial const & getU2() const;
             
             /**
@@ -136,7 +133,7 @@ namespace F4
             bool setCriticalPair(int p1, int p2);
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the critical pair.
@@ -153,23 +150,21 @@ namespace F4
             int compareCriticalPair (CriticalPair const & criticalPair) const;
             
             
-            // Internal operator
+            /* Internal operator */
         
         private:
-            //int _lcm;              /*!< lcm( LT(List[GTotal[p1]].poly), LT(List[GTotal[p2]].poly) ). */
-            Monomial _lcm;
-            //int _u1;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
-            Monomial _u1;
-            int _p1;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
-            //int _u2;               /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
-            Monomial _u2;
-            int _p2;       /*!< Index in GTotal of the tagged polynomial (etiqPol). */
+            Monomial _lcm;          /*!< lcm of the critical pair */
+            Monomial _u1;           /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            int _p1;                /*!< Index of a tagged polynomial in an array. */
+            Monomial _u2;           /*!< Monomial such that lcm(u1*p1)=lcm=lcm(u2*p2). */
+            int _p2;                /*!< Index of a tagged polynomial in an array. */
             
             static std::vector<TaggedPolynomial<Element>> * TAGGEG_POLYNOMIAL_ARRAY; /*!< Pointer on a dynamic array of TaggedPolynomial */
         
     };
     
-    // External operator
+    
+    /* External operator */
     /**
      * \brief Overload the operator <<.
      * \return ostream: Stream.

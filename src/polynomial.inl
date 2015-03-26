@@ -28,7 +28,7 @@ using namespace std;
 
 namespace F4
 {
-    // Constructor 
+    /* Constructor */
     
     template <typename Element>
     Polynomial<Element>::Polynomial():_nbTerm(0)
@@ -50,13 +50,14 @@ namespace F4
             
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
-                // add sign
+                /* Add sign */
                 tmp=s[pos1-1]+tmp;
             }
-            pos1=pos2+1; // We skip +
+            /* We skip + or - */
+            pos1=pos2+1; 
             if(tmp != "")
             {
-                // In case the first character is a sign
+                /* In case the first character is a sign */
                 term.setTerm(tmp);
                 it=_polynomial.insert_after(it, term);
                 _nbTerm++;
@@ -75,14 +76,14 @@ namespace F4
     }
     
     
-    // Destructor
+    /* Destructor */
     
     template <typename Element>
     Polynomial<Element>::~Polynomial()
     {
     }
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template <typename Element>
     void
@@ -209,12 +210,12 @@ namespace F4
             typename forward_list<Term<Element>>::iterator it;
             it= _polynomial.begin();
             
-            // Modify the leading coefficient
+            /* Modify the leading coefficient */
             (*it).setCoefficient(1);
             ++it;
             for (; it != _polynomial.end(); ++it)
             {
-                // Modify the other coefficients
+                /* Modify the other coefficients */
                 (*it)*=invCoef;
             }
         }
@@ -237,7 +238,7 @@ namespace F4
     
     
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename Element>
     Polynomial<Element> & 

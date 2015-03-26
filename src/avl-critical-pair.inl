@@ -28,11 +28,11 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
-    // Constructor
+    /* Constructor */
     
     template<typename Element>
     NodeAvlCriticalPair<Element>::NodeAvlCriticalPair(): _bf(0), _parent(0), _left(0), _right(0)
@@ -45,7 +45,7 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template<typename Element>
     void 
@@ -108,7 +108,7 @@ namespace F4
     }
     
     
-    // Insertion
+    /* Insertion */
     
     template<typename Element>
     int
@@ -423,7 +423,7 @@ namespace F4
         }
     }
     
-    // Deletion
+    /* Deletion */
     
     template<typename Element>
     NodeAvlCriticalPair<Element> *
@@ -730,7 +730,7 @@ namespace F4
     }
     
     
-    // Search
+    /* Search */
     
     template<typename Element>
     NodeAvlCriticalPair<Element> *
@@ -930,7 +930,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     template<typename Element>
     std::ostream & operator<<(std::ostream & stream, AvlCriticalPair<Element> const & avlCriticalPair)

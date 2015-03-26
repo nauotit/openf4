@@ -43,7 +43,7 @@ namespace F4
     {
         public:
             
-            // static functions
+            /* Static methods */
              
             /**
              * \brief Modify the static variable NB_VARIABLE.
@@ -199,7 +199,7 @@ namespace F4
               */
              static void freeMonomial();
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -243,7 +243,7 @@ namespace F4
             Monomial(Monomial && toCopy);
              
              
-             // Destructor
+             /* Destructor */
             
             /**
              * \brief Destructor.
@@ -251,7 +251,7 @@ namespace F4
             ~Monomial();
             
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Get the degree of this.
@@ -271,7 +271,8 @@ namespace F4
              */
             int getVarlist(int index) const;
             
-            // Miscellaneous
+            
+            /* Miscellaneous */
             
             /**
              * \brief Initialize this with varlist. 
@@ -333,7 +334,7 @@ namespace F4
             void reset();
             
             
-            // Internal operators
+            /* Internal operators */
             
             /**
              * \brief Overload the operator =.
@@ -387,7 +388,7 @@ namespace F4
             
     };
     
-    // External operators
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

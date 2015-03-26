@@ -28,11 +28,11 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
-    // Constructor
+    /* Constructor */
     
     NodeAvlPolynomial::NodeAvlPolynomial():_numPolynomial(-1), _numMonomial(-1), _nbTerms(0), _bf(0), _parent(0), _left(0), _right(0)
     {
@@ -43,7 +43,7 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     void 
     printNode(NodeAvlPolynomial* p, int indent)
@@ -100,7 +100,7 @@ namespace F4
     }
     
     
-    // Insertion
+    /* Insertion */
     
     int
     AvlPolynomial::insert(int numPol, int numMon, int nbTerms)
@@ -164,8 +164,6 @@ namespace F4
             else
             {
                 /* Polynomial found */
-                //cout << "AVL Polynomial inserted : equality ----> numPol = " << numPol << ", numMon = " << numMon << ", nbTerms = " << nbTerms << endl;
-                //cout << "AVL Polynomial compared : equality ----> numPol = " << tmpnode->_numPolynomial << ", numMon = " << tmpnode->_numMonomial << ", nbTerms = " << tmpnode->_nbTerms << endl;
                 return 1;
             }
         }
@@ -403,7 +401,7 @@ namespace F4
     }
     
     
-    // Search
+    /* Search */
     
     NodeAvlPolynomial *
     AvlPolynomial::findBiggest ()
@@ -501,7 +499,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     std::ostream & operator<<(std::ostream & stream, AvlPolynomial const & AvlPolynomial)
     {

@@ -42,7 +42,7 @@ namespace F4
     {
         public:
             
-            // static methods
+            /* static methods */
             
             /**
              * \brief Set the static variable MODULO.
@@ -57,7 +57,7 @@ namespace F4
             static unsigned int getModulo();
             
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -74,7 +74,7 @@ namespace F4
             ElementPrime();
             
             
-            // Destructor
+            /* Destructor */
             
              /**
              * \brief Destructor.
@@ -82,7 +82,7 @@ namespace F4
             ~ElementPrime();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Set this in [-MODULO/2, MODULO/2].
@@ -158,7 +158,7 @@ namespace F4
             void setOne();
             
             
-            // Internal operators
+            /* Internal operators */
             
             /**
              * \brief Overload the operator =.
@@ -219,6 +219,9 @@ namespace F4
             
             static baseType MODULO; /*!< Characteristic of the base field */
     };
+    
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

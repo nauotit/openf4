@@ -41,7 +41,7 @@ namespace F4
     {
         public:
         
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -67,7 +67,7 @@ namespace F4
             Polynomial(Polynomial && polynomial);
             
             
-            // Destructor
+            /* Destructor */
             
             /**
              * \brief Destructor.
@@ -75,7 +75,7 @@ namespace F4
             ~Polynomial();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the polynomial.
@@ -165,7 +165,7 @@ namespace F4
             typename forward_list<Term<Element>>::const_iterator emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon);
             
             
-            // Internal operators
+            /* Internal operators */
             
             /**
              * \brief Overload the operator =.
@@ -206,6 +206,9 @@ namespace F4
             std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
             int _nbTerm; /*!< Number of term of _polynomial */
     };
+    
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

@@ -41,7 +41,7 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor.
@@ -59,7 +59,7 @@ namespace F4
             DynamicArray(int width, int maxHeight, int initialCapacity);
             
             
-            // Destructor
+            /* Destructor */
             
             /**
              * \brief Destructor.
@@ -67,7 +67,7 @@ namespace F4
             ~DynamicArray();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the dynamic array.
@@ -80,7 +80,7 @@ namespace F4
             void reset();
             
             
-            // Get / Set
+            /* Get / Set */
             
             /**
              * \brief Get the width of the dynamic array.
@@ -98,7 +98,7 @@ namespace F4
             int getCurrentHeight();
             
             
-            // Access
+            /* Access */
             
             /**
              * \brief Overload the operator [].

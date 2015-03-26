@@ -26,7 +26,7 @@
 
 namespace F4
 {
-    // Constructor
+    /* Constructor */
     
     template <typename Element>
     TaggedPolynomial<Element>::TaggedPolynomial()
@@ -68,7 +68,7 @@ namespace F4
     }
     
     
-    // Destructor
+    /* Destructor */
     
     template <typename Element>
     TaggedPolynomial<Element>::~TaggedPolynomial()
@@ -80,8 +80,8 @@ namespace F4
         }
     }
     
-    
-    // Get / Set
+     
+    /* Get / Set */
     
     template <typename Element>
     Polynomial<Element> const & 
@@ -156,7 +156,7 @@ namespace F4
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template <typename Element>
     void 
@@ -171,8 +171,6 @@ namespace F4
         int * end(_simplyrules+ Monomial::getNbVariable());
         for (it = begin; it != end; ++it)
         {
-            //it_tmp=it;
-            //it_tmp++;
             if((it+1) !=end)
             {
                 stream << *it << ", ";
@@ -200,7 +198,6 @@ namespace F4
             {   
                 return -1;
             }
-            //return (_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm());
         }
         return cmp;
     }
@@ -226,7 +223,6 @@ namespace F4
     void 
     TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist)
     {
-        //_polynomial=(taggedPolynomial._polynomial*monomial);
         int numMon=Monomial::varlistToInt(varlist);
         
         typename forward_list<Term<Element>>::const_iterator pos, start;
@@ -238,7 +234,7 @@ namespace F4
         }
     }
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename Element>
     TaggedPolynomial<Element> & 

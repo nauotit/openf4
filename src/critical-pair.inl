@@ -26,13 +26,13 @@
 
 namespace F4
 {
-    // Static variables
+    /* Static variables */
     
     template <typename Element>
     vector<TaggedPolynomial<Element>> * CriticalPair<Element>::TAGGEG_POLYNOMIAL_ARRAY=0;
     
     
-    // Static methods
+    /* Static methods */
     
     template <typename Element>
     void
@@ -56,7 +56,7 @@ namespace F4
     }
     
     
-    // Constructor
+    /* Constructor */
     
     template <typename Element>
     CriticalPair<Element>::CriticalPair(): _p1(-1), _p2(-1)
@@ -68,18 +68,19 @@ namespace F4
     {
         int nbVars=Monomial::getNbVariable();
         
-        // Get the varlist of LM(p1) and LM(p2)
-        Monomial ltP1(getTaggedPolynomialArray(p1).getLM());
+        /* Get the varlist of LM(p1) and LM(p2) */
+        
+        Monomial ltP1=Monomial::getNumMonomial(getTaggedPolynomialArray(p1).getLM());
         int * varlistp1=ltP1.getVarlist();
         
-        Monomial ltP2(getTaggedPolynomialArray(p2).getLM());
+        Monomial ltP2=Monomial::getNumMonomial(getTaggedPolynomialArray(p2).getLM());
         int * varlistp2=ltP2.getVarlist();
         
         int varlistLcm[nbVars];
         int varlistU1[nbVars];
         int varlistU2[nbVars];
         
-        // computation of _lcm, _u1 and _u2
+        /* Computation of _lcm, _u1 and _u2 */
         for (int i = 0; i < nbVars; i++)
         {
             if (varlistp1[i] < varlistp2[i])
@@ -97,14 +98,12 @@ namespace F4
         }
         
         _lcm=Monomial(varlistLcm);
-        //_u1=Monomial(varlistU1).monomialToInt();
-        //_u2=Monomial(varlistU2).monomialToInt();
         _u1=Monomial(varlistU1);
         _u2=Monomial(varlistU2);
     }
     
     
-    // Destructor
+    /* Destructor */
     
     template <typename Element>
     CriticalPair<Element>::~CriticalPair()
@@ -112,7 +111,7 @@ namespace F4
     }
     
     
-    // Get / Set
+    /* Get / Set */
     
     template <typename Element>
     int 
@@ -134,20 +133,6 @@ namespace F4
     {
         return _lcm;
     }
-            
-    //template <typename Element>
-    //int 
-    //CriticalPair<Element>::getU1() const
-    //{
-        //return _u1;
-    //}
-            
-    //template <typename Element>
-    //int 
-    //CriticalPair<Element>::getU2() const
-    //{
-        //return _u2;
-    //}
     
     template <typename Element>
     Monomial const & 
@@ -167,7 +152,6 @@ namespace F4
     int 
     CriticalPair<Element>::getDegree() const
     {
-        //return Monomial::getNumMonomial(_lcm).getDegree();
         return _lcm.getDegree();
     }
     
@@ -180,18 +164,18 @@ namespace F4
         
         int nbVars=Monomial::getNbVariable();
         
-        // Get the varlist of LM(p1) and LM(p2)
-        Monomial ltP1(getTaggedPolynomialArray(p1).getLM());
+        /* Get the varlist of LM(p1) and LM(p2) */
+        Monomial ltP1=Monomial::getNumMonomial(getTaggedPolynomialArray(p1).getLM());
         int * varlistp1=ltP1.getVarlist();
         
-        Monomial ltP2(getTaggedPolynomialArray(p2).getLM());
+        Monomial ltP2=Monomial::getNumMonomial(getTaggedPolynomialArray(p2).getLM());
         int * varlistp2=ltP2.getVarlist();
         
         int varlistLcm[nbVars];
         int varlistU1[nbVars];
         int varlistU2[nbVars];
         
-        // computation of _lcm, _u1 and _u2
+        /* Computation of _lcm, _u1 and _u2 */
         for (int i = 0; i < nbVars; i++)
         {
             if (varlistp1[i] < varlistp2[i])
@@ -209,15 +193,13 @@ namespace F4
         }
         
         _lcm=Monomial(varlistLcm);
-        //_u1=Monomial(varlistU1).monomialToInt();
-        //_u2=Monomial(varlistU2).monomialToInt();
         _u1=Monomial(varlistU1);
         _u2=Monomial(varlistU2);
         
         return ( (ltP1.getDegree() + ltP2.getDegree()) != _lcm.getDegree());
     }
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template <typename Element>
     void 
@@ -225,7 +207,6 @@ namespace F4
     {
         if((_lcm >= 0) && (_u1 >= 0) && (_p1 >= 0) && (_u2 >= 0) && (_p2 >= 0)) 
         {
-            //stream << "(" << _lcm << ", " << Monomial::getNumMonomial(_u1) << ", " << _p1 << ", " << Monomial::getNumMonomial(_u2) << ", " << _p2 << ")" ;
             stream << "(" << _lcm << ", " << _u1 << ", " << _p1 << ", " << _u2 << ", " << _p2 << ")" ;
         }
         else
@@ -239,7 +220,6 @@ namespace F4
     int 
     CriticalPair<Element>::compareCriticalPair (CriticalPair const & criticalPair) const
     {
-        //int cmp=Monomial::compareNumMonomial(_lcm, criticalPair._lcm);
         int cmp=_lcm.compareMonomial(criticalPair._lcm);
         if (cmp == 0)
         {
@@ -264,7 +244,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename Element>
     ostream & operator<<(ostream & stream, CriticalPair<Element> const & criticalPair)

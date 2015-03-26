@@ -42,14 +42,14 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
              */
             NodeAvlPolynomial();
             
-            // Attributes
+            /* Attributes */
         
             int _numPolynomial;
             int _numMonomial;
@@ -75,7 +75,7 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
@@ -83,7 +83,7 @@ namespace F4
             AvlPolynomial();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the AVL.
@@ -102,7 +102,7 @@ namespace F4
              */
             size_t size() const;
             
-            // Insertion
+            /* Insertion */
             
             /**
              * \brief Insert a new polynomial into the AVL.
@@ -115,7 +115,7 @@ namespace F4
             int insert(int numPol, int numMon, int nbTerms);
             
             
-            // Search
+            /* Search */
             
             /**
              * \brief Find the biggest node of the AVL.
@@ -151,6 +151,9 @@ namespace F4
             
             
     };
+    
+    
+    /* External operators */
     
     /**
      * \brief Overload the operator <<.

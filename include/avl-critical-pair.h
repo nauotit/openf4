@@ -44,14 +44,14 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
              */
             NodeAvlCriticalPair();
             
-            // Attributes
+            /* Attributes */
         
             CriticalPair<Element> _cp;
             signed char _bf;
@@ -77,7 +77,7 @@ namespace F4
     {        
         public:
             
-            // Constructor
+            /* Constructor */
             
             /**
              * \brief Constructor
@@ -85,7 +85,7 @@ namespace F4
             AvlCriticalPair();
             
             
-            // Miscellaneous
+            /* Miscellaneous */
             
             /**
              * \brief Print the AVL.
@@ -113,7 +113,7 @@ namespace F4
             
             void testAVL();
             
-            // Insertion
+            /* Insertion */
             
             /**
              * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
@@ -126,7 +126,7 @@ namespace F4
             int insert(CriticalPair<Element> cp);
             
             
-            // Deletion
+            /* Deletion */
             
             /**
              * \brief Delete the node pointed by node from the AVL.
@@ -137,7 +137,7 @@ namespace F4
             NodeAvlCriticalPair<Element> * erase(NodeAvlCriticalPair<Element> * node);
             
             
-            // Search
+            /* Search */
             
             /**
              * \brief Find the biggest NodeAvlCriticalPair of the AVL.

@@ -26,7 +26,7 @@
 
 namespace F4
 {
-    // Constructor 
+    /* Constructor */ 
     
     template <typename Element>
     Term<Element>::Term(): _coefficient(0), _numMonomial(-1)
@@ -46,7 +46,7 @@ namespace F4
     template <typename Element>
     Term<Element>::Term(std::string const s)
     {
-        // Be carefull, a specialised readCoefficient method must be defined.
+        /* Beware, a specialised readCoefficient method must be defined. */
         readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
@@ -58,7 +58,7 @@ namespace F4
     }
     
     
-    // Destructor
+    /* Destructor */
     
     template <typename Element>
     Term<Element>::~Term()
@@ -66,7 +66,7 @@ namespace F4
     }
     
     
-    // Get / Set 
+    /* Get / Set */
     
     template <typename Element>
     Element 
@@ -100,14 +100,14 @@ namespace F4
     void 
     Term<Element>::setTerm(std::string const s)
     {
-        // Be carefull, a specialised readCoefficient method must be defined.
+        /* Beware, a specialised readCoefficient method must be defined */
         readCoefficient(s);
         Monomial mon(s);
         _numMonomial=mon.monomialToInt();
     }
     
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template<typename Element>
     void
@@ -195,7 +195,8 @@ namespace F4
         _numMonomial=Monomial::multNumMonomial(_numMonomial, numMon);
     }
     
-    // Operator overload
+    
+    /* Operators overload */
     
     template <typename Element>
     Term<Element> & 

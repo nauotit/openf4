@@ -28,11 +28,12 @@ using namespace std;
 
 namespace F4
 {
-    // Global variables
+    /* Global variables */
     
     extern int VERBOSE;
     
-    // Constructor 
+    
+    /* Constructor */
     
     template <typename Element>
     Matrix<Element>::Matrix():_matrix(0), _height(0), _width(0), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
@@ -72,12 +73,12 @@ namespace F4
             getline(file, line);
             if (line.find(string1)!=string::npos)
             {
-                // Get height
+                /* Get height */
                 pos=string1.size();
                 tmp=line.substr(pos);
                 _height=stoul(tmp);
                 
-                // Get width
+                /* Get width */
                 pos=line.find(string3, pos);
                 tmp=line.substr(pos + string3.size());
                 _width=stoul(tmp);
@@ -95,7 +96,7 @@ namespace F4
             getline(file, line);
             if (line.find(string2)!=string::npos)
             {
-                // Get nbPiv
+                /* Get nbPiv */
                 pos=string2.size();
                 tmp=line.substr(pos);
                 _nbPiv=stoul(tmp);
@@ -104,10 +105,10 @@ namespace F4
             getline(file, line);
             if (line.find(string4)!=string::npos)
             {
-                // skip one line
+                /* Skip one line */
                 getline(file, line);
                 
-                // Get sigma
+                /* Get sigma */
                 i = 0;
                 stringstream ssin(line);
                 while (ssin.good() && i < _width)
@@ -120,7 +121,7 @@ namespace F4
             getline(file, line);
             if (line.find(string5)!=string::npos)
             {
-                // skip one line
+                /* Skip one line */
                 getline(file, line);
                 
                 // Get tau
@@ -152,10 +153,10 @@ namespace F4
             getline(file, line);
             if (line.find(string7)!=string::npos)
             {
-                // skip one line
+                /* Skip one line */
                 getline(file, line);
                 
-                // Get endCol
+                /* Get endCol */
                 i = 0;
                 stringstream ssin(line);
                 while (ssin.good() && i < _width)
@@ -168,7 +169,7 @@ namespace F4
             getline(file, line);
             if (line.find(string8)!=string::npos)
             {
-                // Get matrix
+                /* Get matrix */
                 while(getline(file, line) && row <_height)
                 {
                     i = 0;
@@ -236,7 +237,7 @@ namespace F4
     }
     
     
-    // Destructor 
+    /* Destructor */ 
     
     template <typename Element>
     Matrix<Element>::~Matrix()
@@ -254,7 +255,7 @@ namespace F4
     }
     
     
-    // Get / Set
+    /* Get / Set */
     
     template <typename Element>
     inline Element & 
@@ -391,7 +392,7 @@ namespace F4
          _endCol=endCol;
     }
     
-    // Miscellaneous
+    /* Miscellaneous */
     
     template <typename Element>
     void
@@ -455,7 +456,7 @@ namespace F4
     }
     
     template <typename Element>
-    void
+    inline void
     Matrix<Element>::addMultRow(int numRow1, int numRow2, Element element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
@@ -508,14 +509,14 @@ namespace F4
         }
 
     #define TRANCHE 64
-        /*echelonnage de la partie gauche de la matrice */
+        /* echelonnage de la partie gauche de la matrice */
         start = clock ();
         for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)
         {
-            //1er tranche
+            /* 1er tranche */
             if (l < TRANCHE)
             {
-                //partie triangulaire
+                /* partie triangulaire */
                 for (ll = l; ll > 0; ll--)
                 {
                     // TODO: multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
@@ -523,7 +524,6 @@ namespace F4
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
@@ -534,14 +534,13 @@ namespace F4
                 }
                 // TODO: multRow (1, _matrix[0], _width, 0);
                 
-                //partie rectangulaire basse (sous  _nbPiv)
+                /* partie rectangulaire basse (sous  _nbPiv) */
                 for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                 {
                     for (ll = l; ll >= 0; ll--)
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
@@ -551,10 +550,10 @@ namespace F4
                     }
                 }
             }
-            //autres tranches
+            /* Autres tranches */
             else
             {
-                //partie triangulaire de la tranche
+                /* partie triangulaire de la tranche */
                 for (ll = l; ll > l - TRANCHE; ll--)
                 {
                     // TODO multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
@@ -562,7 +561,6 @@ namespace F4
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
@@ -571,14 +569,13 @@ namespace F4
                         }
                     }
                 }
-                //partie rectangulaire haute
+                /* partie rectangulaire haute */
                 for (l2 = 0; l2 <= l - TRANCHE; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
@@ -587,14 +584,13 @@ namespace F4
                         }
                     }
                 }
-                //partie rectangulaire basse (sous  _nbPiv)
+                /* partie rectangulaire basse (sous  _nbPiv) */
                 for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
@@ -615,10 +611,9 @@ namespace F4
         {
             for (; ca < _width; ca++)
             {
-                //recherche d'un pivot dans la col ca
+                /* recherche d'un pivot dans la col ca */
                 for (i = l; i < _height; i++)
                 {
-                    // TODO: _matrix[i][ca] = modulo (_matrix[i][ca]);
                     if (!isZero(i,ca) )
                     {
                         break;
@@ -626,44 +621,31 @@ namespace F4
                 }
                 if (i < _height)
                 {
-                    break;          //pivot trouve dans la col ca
+                    /* pivot trouve dans la col ca */
+                    break;          
                 }
             }
             if (ca == _width)
             {
-                //toutes les lignes sous la l-ieme sont nulles
+                /* toutes les lignes sous la l-ieme sont nulles */
                 for(l2=l; l2<_height; l2++)
                 {
                     delete[] _matrix[l2];
                 }
-                _height = l;        //on oublie toutes les lignes nulles
+                /* on oublie toutes les lignes nulles */
+                _height = l;
             }
             else
             {
-                //echange avec la ligne de pivot
-                //exch = _matrix[l];
-                //_matrix[l] = _matrix[i];
-                //_matrix[i] = exch;
+                /* echange avec la ligne de pivot */
                 swapRow(l,i,0, _width);
                 if (ca != l)
                 {
-                    //echange de colonnes
+                    /* echange de colonnes */
                     ll = (_endCol[l] > _endCol[ca] ? _endCol[l] : _endCol[ca]);
                     swapCol(l,ca,0, ll);
-                    //for (l2 = 0; l2 < ll; l2++)
-                    //{
-                        //exval = _matrix(l2,l);
-                        //_matrix(l2,l) = _matrix(l2,ca);
-                        //_matrix(l2,ca) = exval;
-                    //}
                     swapCol(l, ca, _nbPiv, _height);
-                    //for (l2 = _nbPiv; l2 < _height; l2++)
-                    //{
-                        //exval = _matrix(l2,l);
-                        //_matrix(l2,l) = _matrix(l2,ca);
-                        //_matrix(l2,ca) = exval;
-                    //}
-                    //on retient l'echange de colonnes
+                    /* on retient l'echange de colonnes */
                     _tau[_sigma[l]] = ca;
                     _tau[_sigma[ca]] = l;
                     exc = _sigma[l];
@@ -672,15 +654,15 @@ namespace F4
                     exc = _endCol[l];
                     _endCol[l] = _endCol[ca];
                     _endCol[ca] = exc;
-                }                   //fin ech
+                }
                 piv = getElement(l,l);
                 inv = piv.inverse();
-                multRow (l, inv, ca + 1, _width);      //normalisation de toute la ligne
+                /* normalisation de toute la ligne */
+                multRow (l, inv, ca + 1, _width);      
                 setElement(l,l,1);
-                //elimination de termes de la colonne sous le pivot
+                /* elimination de termes de la colonne sous le pivot */
                 for (l2 = l + 1; l2 < _height; l2++)
                 {
-                    // TODO: _matrix(l2,l) = modulo (getElement(l2,l));
                     if (!isZero(l2,l) )
                     {
                         addMultRow (l2, l, -getElement(l2,l), ca, _width);
@@ -711,8 +693,8 @@ namespace F4
         {
             if (l < (_nbPiv + TRANCHE))
             {
-                //premiere tranche
-                //triangle
+                /* premiere tranche */
+                /* triangle */
                 for (ll = l; ll > _nbPiv; ll--)
                 {
                     // TODO: multRow (1, _matrix[ll], _width, ll);
@@ -720,7 +702,6 @@ namespace F4
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -732,12 +713,11 @@ namespace F4
                 // TODO: multRow (1, _matrix[_nbPiv], _width, _nbPiv);
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[_nbPiv];
-                //rectangle au dessus
+                /* rectangle au dessus */
                 for (l2 = 0; l2 < min_endcol; l2++)
                 {
                     for (ll = l; ll >= _nbPiv; ll--)
                     {
-                        // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                         if ((!isZero(l2,ll) ))
                         {
                             addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -749,7 +729,6 @@ namespace F4
                 {
                     for (ll = l; _endCol[ll] > l2; ll--)
                     {
-                        // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                         if ((!isZero(l2,ll) ))
                         {
                             addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -760,7 +739,7 @@ namespace F4
             }
             else
             {
-                //triangle
+                /* triangle */
                 for (ll = l; ll > l - TRANCHE + 1; ll--)
                 {
                     // TODO: multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
@@ -768,7 +747,6 @@ namespace F4
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -778,14 +756,13 @@ namespace F4
                     }
                 }
                 // TODO: multRow (1, _matrix[l - TRANCHE + 1], _width, l - TRANCHE + 1);
-                //rectangle au dessus
+                /* rectangle au dessus */
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[l - TRANCHE + 1];
                 for (l2 = 0; l2 < min_endcol; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
-                        // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                         if ((!isZero(l2,ll) ))
                         {
                             addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -797,7 +774,6 @@ namespace F4
                 {
                     for (ll = l; _endCol[ll] > l2; ll--)
                     {
-                        // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                         if ((!isZero(l2,ll) ))
                         {
                             addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -811,7 +787,6 @@ namespace F4
                     {
                         if ((!isZero(l2,ll) ))
                         {
-                            // TODO: getElement(l2,ll) = modulo (getElement(l2,ll));
                             if ((!isZero(l2,ll) ))
                             {
                                 addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
@@ -841,7 +816,7 @@ namespace F4
     }
     
     
-    // Operator overload
+    /* Operator overload */
     
     template <typename Element>
     Matrix<Element> &
