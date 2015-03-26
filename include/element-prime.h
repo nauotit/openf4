@@ -113,7 +113,7 @@ namespace F4
             /**
              * \brief Print the element.
              */
-            void printElementPrime (std::ostream & stream = std::cout) const;
+            void printElementPrime (std::ostream & stream) const;
             
             /**
              * \brief Compare ElementPrime.

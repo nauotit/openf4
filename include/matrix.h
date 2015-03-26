@@ -198,7 +198,7 @@ namespace F4
             /**
              * \brief Print the matrix.
              */
-            void printMatrix (std::ostream & stream = std::cout) const;
+            void printMatrix (std::ostream & stream) const;
             
             /**
              * \brief Print the matrix.

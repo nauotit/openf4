@@ -80,7 +80,7 @@ namespace F4
             /**
              * \brief Print the polynomial.
              */
-            void printPolynomial (std::ostream & stream = std::cout) const;
+            void printPolynomial (std::ostream & stream) const;
             
             /**
              * \brief Get the number of terms of this.

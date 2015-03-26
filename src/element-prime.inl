@@ -345,7 +345,7 @@ namespace F4
     ostream & 
     operator<<(ostream & stream, ElementPrime<baseType> const & element)
     {
-        element.printElementPrime();
+        element.printElementPrime(stream);
         return stream;
     }
     

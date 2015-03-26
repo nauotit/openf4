@@ -985,7 +985,7 @@ namespace F4
     
     ostream & operator<<(ostream & stream, Monomial const & mon)
     {
-        mon.printMonomial();
+        mon.printMonomial(stream);
         return stream;
     }
     

@@ -88,7 +88,7 @@ namespace F4
              * \brief Print the AVL.
              * \param stream: Stream.
              */
-            void printAvlMonomial(std::ostream & stream=std::cout) const;
+            void printAvlMonomial(std::ostream & stream) const;
             
             /**
              * \brief Reset the AVL for a new usage, memory is not clear.

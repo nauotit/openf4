@@ -128,7 +128,7 @@ namespace F4
             /**
              * \brief Print the term.
              */
-            void printTerm (std::ostream & stream = std::cout) const;
+            void printTerm (std::ostream & stream) const;
             
             /**
              * \brief Multiply this with a monomial under integer form.

@@ -145,7 +145,7 @@ namespace F4
             /**
              * \brief Print the polynomial and the _simplyrules of this.
              */
-            void printTaggedPolynomial (std::ostream & stream = std::cout) const;
+            void printTaggedPolynomial (std::ostream & stream) const;
             
             /**
              * \brief Compare this with taggedPolynomial.

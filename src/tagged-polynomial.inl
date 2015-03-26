@@ -305,7 +305,7 @@ namespace F4
     template <typename Element>
     ostream & operator<<(ostream & stream, TaggedPolynomial<Element> const & taggedPolynomial)
     {
-        taggedPolynomial.printTaggedPolynomial();
+        taggedPolynomial.printTaggedPolynomial(stream);
         return stream;
     }
     

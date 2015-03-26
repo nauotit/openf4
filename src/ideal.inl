@@ -116,9 +116,39 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printMonomialMap() const
+    Ideal<Element>::printReducedGroebnerBasis(string const filename, long modulo) const
     {
-        cout << endl << "------------------- Monomial Map -------------------------" << endl;
+        ofstream file(filename);
+        if (file)
+        {
+            file << "FF:=FiniteField(" << modulo << ");" << endl;
+            file << "P<";
+            for(int i=0; i< _nbVariable - 1; i++)
+            {
+                file << Monomial::getVariable()[i] << ",";
+            }
+            file << Monomial::getVariable()[_nbVariable-1];
+            file << ">:=PolynomialRing(FF, "<< _nbVariable << ", \"grevlex\");" << endl;
+            file << "S:={ " << endl;
+            
+            for(int i = 0; i < NumGen - 1 ; i++)
+            {
+                file << _taggedPolynomialArray[GTotal[Gbasis[i]]].getPolynomial() << "," << endl;
+            }
+            file << _taggedPolynomialArray[GTotal[Gbasis[NumGen - 1]]].getPolynomial() << "};" << endl;
+            file.close();
+        }
+        else
+        {
+            cout << "File open failed" << endl;
+        }
+    }
+    
+    template <typename Element>
+    void
+    Ideal<Element>::printMonomialAvl() const
+    {
+        cout << endl << "------------------- Monomial AVL -------------------------" << endl;
         NodeAvlMonomial * itMonBeg = M_mons.findBiggest();
         while(itMonBeg= itMonBeg != 0)
         {
@@ -130,9 +160,9 @@ namespace F4
             
     template <typename Element>
     void
-    Ideal<Element>::printTaggedPolynomialSet() const
+    Ideal<Element>::printTaggedPolynomialAvl() const
     {
-        cout << endl << "------------------- Tagged polynomial index set -------------------------" << endl;
+        cout << endl << "------------------- Tagged polynomial index AVL -------------------------" << endl;
         
         NodeAvlPolynomial * itPolBeg = M.findBiggest(); 
         while(itPolBeg != 0)

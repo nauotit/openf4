@@ -306,7 +306,7 @@ namespace F4
              * \brief Print the monomial. 
              * \pre The static variable NB_VARIABLE must be set beforehand.
              */
-            void printMonomial (std::ostream & stream = std::cout) const;
+            void printMonomial (std::ostream & stream) const;
             
             /**
              * \brief Compare monomials according to the grevlex order.

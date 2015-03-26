@@ -347,7 +347,7 @@ namespace F4
     template <typename Element>
     ostream & operator<<(ostream & stream, Polynomial<Element> const & polynomial)
     {
-        polynomial.printPolynomial();
+        polynomial.printPolynomial(stream);
         return stream;
     }
 }

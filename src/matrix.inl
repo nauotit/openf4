@@ -878,7 +878,7 @@ namespace F4
     template <typename Element>
     ostream & operator<<(ostream & stream, Matrix<Element> const & matrix)
     {
-        matrix.printMatrix();
+        matrix.printMatrix(stream);
         return stream;
     }
 

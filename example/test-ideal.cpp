@@ -110,7 +110,7 @@ int main (int argc, char **argv)
     
     // Test void printTaggedPolynomialArray();
     cout << "cyclic6: " << endl;
-    cyclic6.printReducedGroebnerBasis();
+    cyclic6.printReducedGroebnerBasis("cyclic6", 65521);
     cout << endl << endl;
     
     // Free monomial tools

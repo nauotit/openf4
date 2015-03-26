@@ -69,19 +69,24 @@ namespace F4
             void printInfo() const;
             
             /**
-             * \brief Print printReducedGroebnerBasis.
+             * \brief Print the reduced Groebner basis.
              */
             void printReducedGroebnerBasis(bool printBasis=false) const;
             
             /**
+             * \brief Print the reduced Groebner basis in a file.
+             */
+            void printReducedGroebnerBasis(string const filename, long modulo) const;
+            
+            /**
              * \brief Print M_mons.
              */
-            void printMonomialMap() const;
+            void printMonomialAvl() const;
             
             /**
              * \brief Print M.
              */
-            void printTaggedPolynomialSet() const;
+            void printTaggedPolynomialAvl() const;
             
             /**
              * \brief Print Mat.

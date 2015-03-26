@@ -260,7 +260,7 @@ namespace F4
     template <typename Element>
     ostream & operator<<(ostream & stream, Term<Element> const & term)
     {
-        term.printTerm();
+        term.printTerm(stream);
         return stream;
     }
     
