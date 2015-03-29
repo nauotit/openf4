@@ -79,7 +79,7 @@ int main (int argc, char **argv)
     // Test void printPolynomial (std::ostream & stream = std::cout) const;
     cout << "________Test printPolynomial (std::ostream & stream = std::cout)________" << endl;
     cout << "p7: ";
-    p7.printPolynomial();
+    p7.printPolynomial(cout);
     cout << endl << endl;
             
     // Test int getNbTerm();

@@ -40,10 +40,14 @@ int main (int argc, char **argv)
     
     // Init element-prime tools
     typedef ElementPrime<int> eltType;
-    ElementPrime<int>::setModulo(65521);
+    int modulo=65521;
+    ElementPrime<int>::setModulo(modulo);
     
     // Time
     clock_t start;
+    
+    // Magma output
+    bool magma = true;
     
     // Number of generator
     int nbGen;
@@ -83,6 +87,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=cyclic6.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        cyclic6.printReducedGroebnerBasis("cyclic6", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -90,7 +100,6 @@ int main (int argc, char **argv)
     {
         file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     
     cout << "#########################################################" << endl;
@@ -121,6 +130,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=cyclic7.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        cyclic7.printReducedGroebnerBasis("cyclic7", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -128,7 +143,6 @@ int main (int argc, char **argv)
     {
         file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     
     cout << "#########################################################" << endl;
@@ -160,6 +174,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=cyclic8.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        cyclic8.printReducedGroebnerBasis("cyclic8", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -167,7 +187,6 @@ int main (int argc, char **argv)
     {
         file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     
     cout << "#########################################################" << endl;
@@ -200,6 +219,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=katsura9.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        katsura9.printReducedGroebnerBasis("katsura9", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -207,7 +232,6 @@ int main (int argc, char **argv)
     {
         file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     
     cout << "#########################################################" << endl;
@@ -241,14 +265,19 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=katsura10.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        katsura10.printReducedGroebnerBasis("katsura10", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
     if (file)
     {
         file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
+    }    
     
     
     cout << "#########################################################" << endl;
@@ -283,6 +312,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=katsura11.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        katsura11.printReducedGroebnerBasis("katsura11", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -290,7 +325,6 @@ int main (int argc, char **argv)
     {
         file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     
     cout << "#########################################################" << endl;
@@ -326,6 +360,12 @@ int main (int argc, char **argv)
     // Compute a reduced groebner basis;
     nbGen=katsura12.f4();
     
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        katsura12.printReducedGroebnerBasis("katsura12", modulo);
+    }
+    
     // Free monomial tools
     Monomial::freeMonomial();
     
@@ -333,7 +373,6 @@ int main (int argc, char **argv)
     {
         file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
-    
     
     return 0;
 }

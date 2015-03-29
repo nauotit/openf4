@@ -115,10 +115,10 @@ int main (int argc, char **argv)
     // Test void printCriticalPair (std::ostream & stream = std::cout) const;
     cout << "________Test printCriticalPair (std::ostream & stream = std::cout)________" << endl;
     cout << "cp1 :";
-    cp1.printCriticalPair();
+    cp1.printCriticalPair(cout);
     cout << endl;
     cout << "cp2 :";
-    cp2.printCriticalPair();
+    cp2.printCriticalPair(cout);
     cout << endl << endl;
     
     // Test int compareCriticalPair (CriticalPair const & criticalPair) const;

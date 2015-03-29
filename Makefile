@@ -20,9 +20,9 @@
 #CFLAGS= -O3 -g -Wall -std=c++11 -DNDEBUG
 #CFLAGS= -O3 -g -Wall -std=c++11
 CFLAGS= -g -Wall -std=c++11 
-#LDFLAGS=
+LDFLAGS=
 #LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
-LDFLAGS= 
+#LDFLAGS= 
 
 EXEC = example benchmark
 
@@ -31,6 +31,12 @@ obj/test-monomial.o: example/test-monomial.cpp
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
 bin/test-monomial: obj/test-monomial.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+obj/test-monomial-array.o: example/test-monomial-array.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-monomial-array: obj/test-monomial-array.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 obj/test-memory-monomial.o: example/test-memory-monomial.cpp 
@@ -81,18 +87,6 @@ obj/test-ideal.o: example/test-ideal.cpp
 bin/test-ideal: obj/test-ideal.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-obj/test-valarray.o: example/test-valarray.cpp 
-	$(CXX) $(CFLAGS) -o $@ -c $<
-
-bin/test-valarray: obj/test-valarray.o 
-	$(CXX) -o $@ $^ $(LDFLAGS)
-
-obj/test-avl.o: example/test-avl.cpp 
-	$(CXX) $(CFLAGS) -o $@ -c $<
-
-bin/test-avl: obj/test-avl.o 
-	$(CXX) -o $@ $^ $(LDFLAGS)
-
 obj/test-dynamic-array.o: example/test-dynamic-array.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -134,8 +128,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example:  bin/test-ideal  bin/test-avl-critical-pair bin/test-critical-pair
-# bin/test-dynamic-array bin/test-avl-monomial bin/test-avl-polynomial bin/test-avl  bin/test-matrix bin/test-element-prime bin/test-monomial   bin/test-tagged-polynomial  bin/test-polynomial  bin/test-avl   bin/test-monomial   bin/test-term    bin/test-memory-monomial bin/test-polynomial  bin/test-element-prime bin/test-valarray
+example:  bin/test-monomial bin/test-monomial-array
+# bin/test-ideal bin/test-avl-critical-pair bin/test-critical-pair bin/test-dynamic-array bin/test-avl-monomial bin/test-avl-polynomial bin/test-matrix bin/test-element-prime bin/test-monomial bin/test-tagged-polynomial bin/test-polynomial bin/test-term bin/test-memory-monomial bin/test-polynomial bin/test-element-prime 
 
 benchmark: bin/benchmark-int bin/benchmark-semaev
 

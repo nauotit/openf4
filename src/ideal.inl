@@ -745,7 +745,7 @@ namespace F4
         NodeAvlMonomial * itmon;
         largeur = 0;
         
-        /* Seach the biggest monomial in M_mons which is not a leading monomial */
+        /* Search the biggest monomial in M_mons which is not a leading monomial */
         itmon=M_mons.findBiggest();
         largeur++;
         while (itmon != 0 && itmon->_lt == true)
@@ -843,18 +843,18 @@ namespace F4
             update(NumPol, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis, false);
             NumPol++;
             NumTot++;
-            cmpt_newgen++;      //nv gen
+            cmpt_newgen++;
         }
         return true;
     }
     
-    // F4 Algorithm
+    /* F4 Algorithm */
     
     template <typename Element>
     int 
     Ideal<Element>::f4()
     {
-        // Specify the tagged polynomial array used by the CriticalPair class.
+        /* Specify the tagged polynomial array used by the CriticalPair class. */
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
         
         /* Iterators */
@@ -992,7 +992,7 @@ namespace F4
             }
             if (VERBOSE > 1)
             {
-                // Matrix construction time
+                /* Matrix construction time */
                 start = clock ();   
             }
 
@@ -1226,7 +1226,7 @@ namespace F4
         preprocessing(largeur, hauteur, nb_piv);
         nb_piv = hauteur;
 
-        /* Transformation de M sous forme de tableaux */
+        /* Transform M into a matrix */
         cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl;
             
         Mat=Matrix<Element>(hauteur, largeur);
@@ -1249,7 +1249,7 @@ namespace F4
         Mat.setInfo(nb_piv, tau, sigma, start_tail, end_col);
         hauteur_reelle=Mat.echelonize();
 
-        // recuperation des generateurs de la base minimale
+        /* Retrieve generators of the minimal basis */
         itPolBeg = M.findBiggest();
         for (i = 0; i < nb_piv; i++)
         {

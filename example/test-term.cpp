@@ -118,9 +118,9 @@ int main (int argc, char **argv)
             
     // Test void printTerm (std::ostream & stream = std::cout) const;
     cout << "________Test printTerm (std::ostream & stream = std::cout)________" << endl;
-    t9.printTerm();
+    t9.printTerm(cout);
     cout << endl;
-    t10.printTerm();
+    t10.printTerm(cout);
     cout << endl << endl;
             
     // Test Element readCoefficient(std::string const s);

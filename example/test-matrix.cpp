@@ -178,7 +178,7 @@ int main (int argc, char **argv)
     // Test void printMatrix (std::ostream & stream = std::cout) const;
     cout << "________Test printMatrix (std::ostream & stream = std::cout)________" << endl;
     cout << "mat2: " << endl;
-    mat2.printMatrix();
+    mat2.printMatrix(cout);
     cout << endl;
     
     // void multRow(unsigned numRow, Element element, unsigned start, unsigned end);

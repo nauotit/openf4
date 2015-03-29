@@ -65,7 +65,7 @@ int main (int argc, char **argv)
     // Test void printElementPrime (std::ostream & stream = std::cout) const
     cout << "________Test printElementPrime (std::ostream & stream = std::cout)________" << endl;
     cout << "elt4: ";
-    elt4.printElementPrime();
+    elt4.printElementPrime(cout);
     cout << endl << endl;
     
     // Test void modulo ();
@@ -139,8 +139,8 @@ int main (int argc, char **argv)
     cout << "time to inverse " << vec.size() << " elements: " << (clock() - start) << endl << endl;
     
             
-    // Test ElementPrime & operator/=(ElementPrime const & element); 
-    cout << "________Test operator/=(ElementPrime const & element)________" << endl;
+    // Test ElementPrime & operator/=(ElementPrime element); 
+    cout << "________Test operator/=(ElementPrime element)________" << endl;
     ElementPrime<baseType> elt9=elt1;
     elt9/=1000;
     cout << "elt1: " << elt1 << endl;

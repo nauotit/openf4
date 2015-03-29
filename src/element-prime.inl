@@ -334,7 +334,7 @@ namespace F4
             
     template <typename baseType>
     ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator/=(ElementPrime<baseType> const & element)
+    ElementPrime<baseType>::operator/=(ElementPrime<baseType> element)
     {
         _element*=((element.inverse())._element);
         _element%=MODULO;

@@ -121,7 +121,7 @@ int main (int argc, char **argv)
     // Test void printTaggedPolynomial(std::ostream & stream = std::cout) const;
     cout << "________Test printTaggedPolynomial (std::ostream & stream = std::cout)________" << endl;
     cout << "tp2 :";
-    tp2.printTaggedPolynomial();
+    tp2.printTaggedPolynomial(cout);
     cout << endl << endl;
     
     // Test int compareTaggedPolynomial(TaggedPolynomial const & taggedPolynomial) const;
@@ -142,7 +142,7 @@ int main (int argc, char **argv)
     
     // Test void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial);
     cout << "________Test setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial)________" << endl;
-    tp4.setTaggedPolynomial(tp2, Monomial("x1^5"));
+    tp4.setTaggedPolynomial(tp2, Monomial("x1^5").getVarlist());
     cout << "tp4: " << tp4 << endl << endl; 
     
     // Test TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);

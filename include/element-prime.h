@@ -212,7 +212,7 @@ namespace F4
              * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
-            ElementPrime & operator/=(ElementPrime const & element); 
+            ElementPrime & operator/=(ElementPrime element); 
             
         private:
             baseType _element; /*!< Represent an element of the field of characteristic MODULO */

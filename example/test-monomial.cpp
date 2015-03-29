@@ -47,38 +47,40 @@ int main (int argc, char **argv)
     // Test Monomial(); 
     cout << "________Test Monomial()________" << endl;
     Monomial m1;
-    cout << "m1: " << m1 << endl;
+    m1.allocate();
+    cout << "m1: " << m1 << endl << endl;
             
-    // Test Monomial(int const * varlist);
-    cout << "________Test Monomial(int const * varlist)________" << endl; 
+    // Test void setMonomial(int const * varlist);
+    cout << "________Test setMonomial(int const * varlist)________" << endl; 
     int varlist1[11]={1,2,1,0,4,3,1,2,3,4,5};
-    Monomial m2(varlist1);
+    Monomial m2;
+    m2.allocate();
+    m2.setMonomial(varlist1);
     cout << "m2: " << m2 << endl << endl;
             
-    // Test Monomial(std::string const s);
-    cout << "________Test Monomial(std::string const s)________" << endl; 
-    //Monomial m3("x0^2*x1*x2^2*x3^3*x4^4*x5^5*x10^2");
-    //cout << "m3: "<< m3 << endl;
-    Monomial m3("x10^2");
+    // Test void setMonomial(std::string const s);
+    cout << "________Test setMonomial(std::string const s)________" << endl; 
+    Monomial m3;
+    m3.allocate();
+    m3.setMonomial("x10^2");
     cout << "m3: "<< m3 << endl << endl;
             
-    // Test Monomial(int numMon); 
-    cout << "________Test Monomial(int numMon)________" << endl;
-    Monomial m4(10000);
+    // Test void setMonomial(int numMon); 
+    cout << "________Test setMonomial(int numMon)________" << endl;
+    Monomial m4;
+    m4.allocate();
+    m4.setMonomial(10000);
     cout << "m4: "<< m4 << endl << endl;
             
-    // Test Monomial(Monomial const & toCopy);
-    cout << "________Test Monomial(Monomial const & toCopy)________" << endl;
-    Monomial m5(m3);
+    // Test Monomial & operator=(Monomial const & mon);
+    cout << "________Test operator=(Monomial const & mon)________" << endl;
+    Monomial m5;
+    m5.allocate();
+    m5=m3;
     cout << "m5: "<< m5 << endl << endl;
             
     // Test Monomial(Monomial && toCopy);
-    cout << "________Test Monomial(Monomial && toCopy)________" << endl;
-    Monomial m6(Monomial(20000));
-    cout << "m6: "<< m6 << endl << endl;
-             
-    // Test ~Monomial();
-    // Automatically called at the end of the scope
+    cout << "________Test Monomial(Monomial && toCopy)________" << endl << endl;
             
     // Test int getDegree() const;
     cout << "________Test getDegree()________" << endl;
@@ -100,6 +102,8 @@ int main (int argc, char **argv)
             
     // Test void setMonomial(int const * varlist);
     cout << "________Test setMonomial(int const * varlist)________" << endl;
+    Monomial m6;
+    m6.allocate();
     m6.setMonomial(varlist2);
     cout << "m6: "<< m6 << endl << endl;
             
@@ -107,20 +111,22 @@ int main (int argc, char **argv)
     cout << "________Test setMonomial(std::string const s)________" << endl;
     m6.setMonomial("x0^9*x2^10*x4^11");
     cout << "m6: "<< m6 << endl << endl;
+    
+    // Test void setMonomialMultiply(Monomial const & mon1, Monomial const & mon2);
+    cout << "________Test setMonomialMultiply(Monomial const & mon1, Monomial const & mon2)________" << endl;
+    Monomial tmp1;
+    tmp1.allocate();
+    tmp1.setMonomial("x0^3*x1^4");
+    Monomial tmp2;
+    tmp2.allocate();
+    tmp2.setMonomial("x1^2*x8^6");
+    m6.setMonomialMultiply(tmp1, tmp2);
+    cout << "m6: "<< m6 << endl << endl;
             
     // Test void intToMonomial(int numMon);
     cout << "________Test intToMonomial(int numMon)________" << endl;
     m6.intToMonomial(20000);
     cout << "m6: "<< m6 << endl << endl;
-    
-    // Test static const & Monomial getNumMonomial(int numMon);
-    cout << "________Test getNumMonomial(int numMon)________" << endl;
-    m5=Monomial::getNumMonomial(200000);
-    cout << "m5: "<< m5 << endl << endl;
-    
-    // Test static int getNumVarlist(int numMon, int index);
-    cout << "________Test getNumVarlist(int numMon, int index)________" << endl;
-    cout << Monomial::getNumVarlist(200000, 3) << endl << endl;
             
     // Test int monomialToInt() const;
     cout << "________Test monomialToInt()________" << endl;
@@ -129,18 +135,25 @@ int main (int argc, char **argv)
     // Test void printMonomial (std::ostream & stream = std::cout) const;
     cout << "________Test printMonomial (std::ostream & stream = std::cout)________" << endl;
     cout << "m6 :";
-    m6.printMonomial();
+    m6.printMonomial(cout);
     cout << endl << endl;
             
     // Test int compareMonomial(Monomial const & mon) const;
     cout << "________Test compareMonomial(Monomial const & mon)________" << endl;
-    cout << Monomial(10000).compareMonomial(Monomial(10001)) << endl;
-    cout << Monomial(10000).compareMonomial(Monomial(10000)) << endl;
-    cout << Monomial(10001).compareMonomial(Monomial(10000)) << endl << endl;
+    tmp1.setMonomial(10000);
+    tmp2.setMonomial(10001);
+    cout <<tmp1.compareMonomial(tmp2) << endl;
+    tmp1.setMonomial(10000);
+    tmp2.setMonomial(10000);
+    cout << tmp1.compareMonomial(tmp2) << endl;
+    tmp1.setMonomial(10001);
+    tmp2.setMonomial(10000);
+    cout <<tmp1.compareMonomial(tmp2) << endl << endl;
     
     cout << "________Test compareMonomial(Monomial const & mon)________" << endl;
-    cout << Monomial("x0^2*x3*x5^6").compareMonomial(Monomial("x0^6*x3*x5^6")) << endl;
-
+    tmp1.setMonomial("x0^2*x3*x5^6");
+    tmp2.setMonomial("x0^6*x3*x5^6");
+    cout << tmp1.compareMonomial(tmp2) << endl << endl;
     
     // Test static int compareNumMonomial(int numMon1, int numMon2);
     cout << "________Test compareNumMonomial(int numMon1, int numMon2)________" << endl;
@@ -150,8 +163,13 @@ int main (int argc, char **argv)
             
     // Test bool isDivisible(Monomial const & mon) const;
     cout << "________Test isDivisible(Monomial const & mon)________" << endl;
-    cout << Monomial(10000).isDivisible(Monomial(5000)) << endl;
-    cout << (Monomial(10000)*Monomial(5000)).isDivisible(Monomial(5000)) << endl << endl;
+    tmp1.setMonomial(10000);
+    tmp2.setMonomial(5000);
+    cout << tmp1.isDivisible(tmp2) << endl;
+    Monomial tmp3;
+    tmp3.allocate();
+    tmp3.setMonomialMultiply(tmp1,tmp2);
+    cout << tmp3.isDivisible(tmp2) << endl << endl;
             
     // Test void reset();
     cout << "________Test reset()________" << endl;
@@ -164,27 +182,37 @@ int main (int argc, char **argv)
     cout << "m6: "<< m6 << endl << endl;
             
     // Test Monomial & operator=(Monomial && mon);
-    cout << "________Test operator=(Monomial && mon)________" << endl;
-    m6=Monomial(20000)*Monomial(10000);
-    cout << "m6: "<< m6 << endl << endl;
+    cout << "________Test operator=(Monomial && mon)________" << endl << endl;
     
     // Test Monomial & operator*=(Monomial const & mon); 
     cout << "________Test operator*=(Monomial const & mon)________" << endl;
     m6*=m3;
     cout << "m6: "<< m6 << endl << endl;
-            
+    
+    // Test friend int multiplyMonomial(Monomial const & mon1, Monomial const & mon2);
+    cout << "________Test multiplyMonomial(Monomial const & mon1, Monomial const & mon2)________" << endl;
+    tmp1.setMonomial(multiplyMonomial(m3, m6));
+    cout << "Number of m6 * m3: " << multiplyMonomial(m3, m6) << ", " << tmp1 << endl << endl;
+    
     // Test Monomial & operator/=(Monomial const & mon);
     cout << "________Test operator/=(Monomial const & mon)________" << endl; 
     m6/=m3;
     cout << "m6: "<< m6 << endl;
-    m6/=Monomial(12345);
+    tmp1.setMonomial(12345);
+    m6/=tmp1;
     cout << "m6: "<< m6 << endl << endl;
     
     // Test std::ostream & operator<<(std::ostream & stream, Monomial const & mon);
     cout << "________Test operator<<(std::ostream & stream, Monomial const & mon)________" << endl;
-    Monomial m7(100000);
-    Monomial m8(100001);
-    Monomial m9(100002);
+    Monomial m7;
+    m7.allocate();
+    m7.setMonomial(100000);
+    Monomial m8;
+    m8.allocate();
+    m8.setMonomial(100001);
+    Monomial m9;
+    m9.allocate();
+    m9.setMonomial(100002);
     cout << m7 << endl;
     cout << m8 << endl;
     cout << m9 << endl << endl;
@@ -219,13 +247,29 @@ int main (int argc, char **argv)
     cout << "m9 <= m7: " << (m9 <= m7) << endl;
     cout << "m7 <= m7: " << (m7 <= m7) << endl << endl;
     
-    // Test Monomial operator * (Monomial const & mon1, Monomial const & mon2);
-    cout << "________Test operator * (Monomial const & mon1, Monomial const & mon2)________" << endl;
-    cout << "m7 * m8: " << (m7 * m8) << endl << endl;
+    // Test void setMonomialMultiply(Monomial const & mon1, Monomial const & mon2);
+    cout << "________Test setMonomialMultiply(Monomial const & mon1, Monomial const & mon2)________" << endl;
+    tmp1.setMonomialMultiply(m7,m8);
+    cout << "m7 * m8: " << tmp1 << endl << endl;
     
-    // Test Monomial operator / (Monomial const & mon1, Monomial const & mon2);
-    cout << "________Test operator / (Monomial const & mon1, Monomial const & mon2)________" << endl;
-    cout << "(m7 * m8)/m7 : " << ((m7 * m8)/m7) << endl << endl;
+    // Test void setMonomialDivide(Monomial const & mon1, Monomial const & mon2);
+    cout << "________Test setMonomialDivide(Monomial const & mon1, Monomial const & mon2)________" << endl;
+    tmp2.setMonomialDivide(tmp1,m7);
+    cout << "(m7 * m8)/m7 : " << tmp2 << endl << endl;
+    
+    // Free monomial
+    m1.erase();
+    m2.erase();
+    m3.erase();
+    m4.erase();
+    m5.erase();
+    m6.erase();
+    m7.erase();
+    m8.erase();
+    m9.erase();
+    tmp1.erase();
+    tmp2.erase();
+    tmp3.erase();
     
     // Free monomial tools
     Monomial::freeMonomial();
