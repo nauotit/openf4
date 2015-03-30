@@ -39,6 +39,15 @@ namespace F4
     class TaggedPolynomial
     {
         public:
+        
+            /* Static methods */
+            
+            /**
+             * \brief Set the monomial array to use.
+             * \param monomialArray: Address of the array.
+             */
+            static void setMonomialArray(MonomialArray * monomialArray);
+            
 
             /* Constructor */
             
@@ -171,9 +180,10 @@ namespace F4
             /**
              * \brief Set this = taggedPolynomial * monomial. Do not modify the simplyrules.
              * \param taggedPolynomial: TaggedPolynomial.
-             * \param monomial: Monomial.
+             * \param varlist: Array representing the degree of each variable of the monomial
              */
             void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist);
+            
             
             /* Internal operators */
             
@@ -230,6 +240,8 @@ namespace F4
         
             Polynomial<Element> _polynomial;           /*!< Polynomial . */
             int * _simplyrules;       /*!< Array of integer, mainly used by the simplify algorithm. simplifyrules[i] is the index of a tagged polynomial of List. */
+            
+            static MonomialArray * MONOMIAL_ARRAY; /*!< Pointer on a monomial array */
     };
     
     

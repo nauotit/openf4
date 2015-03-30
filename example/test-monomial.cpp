@@ -42,7 +42,7 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     //Init monomial tools: 6 variables.
-    Monomial::initMonomial(11,5,2,10);
+    Monomial::initMonomial(11, 10);
     
     // Test Monomial(); 
     cout << "________Test Monomial()________" << endl;
@@ -71,6 +71,11 @@ int main (int argc, char **argv)
     m4.allocate();
     m4.setMonomial(10000);
     cout << "m4: "<< m4 << endl << endl;
+    
+    // Test void setMonomial(Monomial const & mon);
+    cout << "________Test setMonomial(Monomial const & mon)________" << endl;
+    m4.setMonomial(m3);
+    cout << "m4: "<< m4 << endl << endl;
             
     // Test Monomial & operator=(Monomial const & mon);
     cout << "________Test operator=(Monomial const & mon)________" << endl;
@@ -78,9 +83,6 @@ int main (int argc, char **argv)
     m5.allocate();
     m5=m3;
     cout << "m5: "<< m5 << endl << endl;
-            
-    // Test Monomial(Monomial && toCopy);
-    cout << "________Test Monomial(Monomial && toCopy)________" << endl << endl;
             
     // Test int getDegree() const;
     cout << "________Test getDegree()________" << endl;

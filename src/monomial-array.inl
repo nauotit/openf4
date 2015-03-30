@@ -37,12 +37,18 @@ namespace F4
     
     MonomialArray::MonomialArray(int nbVariable, int capacity):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
+        /* Initialise Monomial */
+        Monomial::initMonomial(nbVariable, 0);
+        
         /* Initialise _monomialArray */
         _monomialArray = new Monomial[_capacity];
     }
              
     MonomialArray::MonomialArray(int nbVariable, int capacity, int degree):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
+        /* Initialise Monomial */
+        Monomial::initMonomial(nbVariable, degree);
+        
         /* Fill NB_MONOMIAL up to degree "degree" */
         Monomial::setNbMonomial(degree);
         
@@ -55,6 +61,9 @@ namespace F4
              
     MonomialArray::MonomialArray(int nbVariable, int capacity, int degree, int deg1, int deg2):_nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
+        /* Initialise Monomial */
+        Monomial::initMonomial(nbVariable, degree);
+        
         /* Fill NB_MONOMIAL up to degree "degree" */
          Monomial::setNbMonomial(degree);
         
@@ -85,6 +94,9 @@ namespace F4
         
         /* Free _tabulatedProduct */
         freeTabulatedProduct();
+        
+        /* Free Monomial */
+        Monomial::freeMonomial();
     }
     
     
@@ -120,7 +132,6 @@ namespace F4
         Monomial::setNbMonomial(deg1+deg2);
         setMonomialArray();
         
-        //int nb;
         double size=0;
         _numMaxRow = Monomial::getNbMonomial(deg1, _nbVariable + 1);
         _numMaxColumn = Monomial::getNbMonomial(deg2, _nbVariable + 1);
@@ -143,14 +154,6 @@ namespace F4
         for (int numMon1 = 0; numMon1 < _numMaxRow; numMon1++)
         {
             tmp1=_monomialArray[numMon1];
-            
-            //nb = NB_MONOMIAL[MAX_DEGREE - tmp1._deg][NB_VARIABLE + 1];
-            //nb=Monomial::getNbMonomial(MAX_DEGREE - tmp1._deg, NB_VARIABLE + 1);
-            //if (nb > _numMaxColumn)
-            //{
-                //nb = _numMaxColumn;
-            //}
-            //_tabulatedProduct[numMon1] = new int[nb];
             _tabulatedProduct[numMon1]=new int[_numMaxColumn];
             size += _numMaxColumn * sizeof (int);
             for (int numMon2 = 0; numMon2 < _numMaxColumn; numMon2++)
@@ -200,6 +203,12 @@ namespace F4
             {
                 cout << "MonomialArray::MultNumMonomial: cannot use _tabulatedProduct, deg " << _monomialArray[numMon1].getDegree() << " * " << _monomialArray[numMon2].getDegree()  << endl;
             }
+            if(numMon1 > (int)_size || numMon2 > (int)_size)
+            {
+                Monomial::increaseNbMonomial(max(numMon1, numMon2));
+                setMonomialArray();
+            }
+            
             return multiplyMonomial(_monomialArray[numMon1], _monomialArray[numMon2]);
         }
     }
@@ -219,7 +228,18 @@ namespace F4
     
     /* Access */
     
-    Monomial & 
+    Monomial const & 
+    MonomialArray::getNumMonomial(int index)
+    {
+        if(index>(int)_size)
+        {
+            Monomial::increaseNbMonomial(index);
+            setMonomialArray();
+        }
+        return _monomialArray[index];
+    }
+    
+    Monomial const & 
     MonomialArray::operator[](int index)
     {
         if(index>(int)_size)

@@ -30,45 +30,26 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=0;
+int F4::VERBOSE=3;
 
-int main (int argc, char **argv)
+// Init element-prime tools
+typedef ElementPrime<int> eltType;
+int modulo=65521;
+
+int cyclic6F4(bool magma)
 {
     cout << "#########################################################" << endl;
-    cout << "#                     BENCHMARK INT                     #" << endl;
+    cout << "#                         CYCLIC 6                      #" << endl;
     cout << "#########################################################" << endl << endl;
     
     // Init element-prime tools
-    typedef ElementPrime<int> eltType;
-    int modulo=65521;
-    ElementPrime<int>::setModulo(modulo);
-    
-    // Time
-    clock_t start;
-    
-    // Magma output
-    bool magma = true;
+    eltType::setModulo(modulo);
     
     // Number of generator
     int nbGen;
     
-    // File
-    ofstream file("benchmark-int.txt");
-    if (file)
-    {
-        file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
-    }
-    
-    
-    cout << "#########################################################" << endl;
-    cout << "#                         CYCLIC 6                      #" << endl;
-    cout << "#########################################################" << endl << endl;
-        
-    // Time 
-    start=clock();
-    
     // Init monomial tools
-    Monomial::initMonomial(6,11,2,10);
+    Monomial::initMonomial(6,11);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic6;
@@ -82,7 +63,7 @@ int main (int argc, char **argv)
     polCyclic6.emplace_back("x0*x1*x2*x3*x4*x5-1");
 
     // Create cyclic6 ideal;
-    Ideal<eltType> cyclic6(polCyclic6);
+    Ideal<eltType> cyclic6(polCyclic6, 6, 100000, 11, 2, 10);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic6.f4();
@@ -93,24 +74,23 @@ int main (int argc, char **argv)
         cyclic6.printReducedGroebnerBasis("cyclic6", modulo);
     }
     
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
-    
+    return nbGen;
+}
+
+int cyclic7F4(bool magma)
+{
     cout << "#########################################################" << endl;
     cout << "#                         CYCLIC 7                      #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time 
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(7,13,2,12);
+    Monomial::initMonomial(7,13);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic7;
@@ -125,7 +105,7 @@ int main (int argc, char **argv)
     polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5*x6-1");
 
     // Create cyclic7 ideal;
-    Ideal<eltType> cyclic7(polCyclic7);
+    Ideal<eltType> cyclic7(polCyclic7, 7 , 1000000, 13, 2, 12);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic7.f4();
@@ -136,24 +116,24 @@ int main (int argc, char **argv)
         cyclic7.printReducedGroebnerBasis("cyclic7", modulo);
     }
     
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
+    return nbGen;
+}
+
+int cyclic8F4(bool magma)
+{
     
     cout << "#########################################################" << endl;
     cout << "#                         CYCLIC 8                      #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time 
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(8,15,2,14);
+    Monomial::initMonomial(8,15);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic8;
@@ -169,7 +149,7 @@ int main (int argc, char **argv)
     polCyclic8.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7-1");
 
     // Create cyclic8 ideal;
-    Ideal<eltType> cyclic8(polCyclic8);
+    Ideal<eltType> cyclic8(polCyclic8, 8, 1000000, 15, 2, 14);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic8.f4();
@@ -180,24 +160,23 @@ int main (int argc, char **argv)
         cyclic8.printReducedGroebnerBasis("cyclic8", modulo);
     }
     
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
-    
+    return nbGen;
+}
+
+int katsura9F4(bool magma)
+{
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 9                     #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time 
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(9,11,2,10);
+    Monomial::initMonomial(9,11);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura9;
@@ -214,7 +193,7 @@ int main (int argc, char **argv)
     polKatsura9.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
 
     // Create katsura9 ideal;
-    Ideal<eltType> katsura9(polKatsura9);
+    Ideal<eltType> katsura9(polKatsura9, 9 ,1000000, 11, 2, 10);
     
     // Compute a reduced groebner basis;
     nbGen=katsura9.f4();
@@ -225,24 +204,23 @@ int main (int argc, char **argv)
         katsura9.printReducedGroebnerBasis("katsura9", modulo);
     }
     
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
-    
+    return nbGen;
+}
+
+int katsura10F4(bool magma)
+{
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 10                    #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(10,12,2,11);
+    Monomial::initMonomial(10,12);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura10;
@@ -260,7 +238,7 @@ int main (int argc, char **argv)
     polKatsura10.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
 
     // Create katsura10 ideal;
-    Ideal<eltType> katsura10(polKatsura10);
+    Ideal<eltType> katsura10(polKatsura10, 10, 10000000, 12, 2, 11);
     
     // Compute a reduced groebner basis;
     nbGen=katsura10.f4();
@@ -270,25 +248,23 @@ int main (int argc, char **argv)
     {
         katsura10.printReducedGroebnerBasis("katsura10", modulo);
     }
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }    
-    
-    
+    return nbGen;
+}
+
+int katsura11F4(bool magma)
+{
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 11                    #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(11,13,2,12);
+    Monomial::initMonomial(11,13);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura11;
@@ -307,7 +283,7 @@ int main (int argc, char **argv)
     polKatsura11.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
 
     // Create katsura11 ideal;
-    Ideal<eltType> katsura11(polKatsura11);
+    Ideal<eltType> katsura11(polKatsura11, 11, 10000000, 13, 2, 12);
     
     // Compute a reduced groebner basis;
     nbGen=katsura11.f4();
@@ -317,25 +293,23 @@ int main (int argc, char **argv)
     {
         katsura11.printReducedGroebnerBasis("katsura11", modulo);
     }
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
-    
-    if (file)
-    {
-        file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
-    
-    
+    return nbGen;
+}
+
+int katsura12F4(bool magma)
+{
     cout << "#########################################################" << endl;
     cout << "#                         KATSURA 12                    #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Time
-    start=clock();
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(12,14,2,13);
+    Monomial::initMonomial(12,14);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura12;
@@ -355,7 +329,7 @@ int main (int argc, char **argv)
     polKatsura12.emplace_back("x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
 
     // Create katsura12 ideal;
-    Ideal<eltType> katsura12(polKatsura12);
+    Ideal<eltType> katsura12(polKatsura12, 12, 20000000, 14, 2, 13);
     
     // Compute a reduced groebner basis;
     nbGen=katsura12.f4();
@@ -366,13 +340,79 @@ int main (int argc, char **argv)
         katsura12.printReducedGroebnerBasis("katsura12", modulo);
     }
     
-    // Free monomial tools
-    Monomial::freeMonomial();
+    return nbGen;
+}
+
+int main (int argc, char **argv)
+{
+    cout << "#########################################################" << endl;
+    cout << "#                     BENCHMARK INT                     #" << endl;
+    cout << "#########################################################" << endl << endl;
+
+    // Time
+    clock_t start;
     
+    // Magma output
+    bool magma = true;
+    
+    // Number of generator
+    int nbGen;
+    
+    // File
+    ofstream file("benchmark-int.txt");
     if (file)
     {
-        file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+        file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
+    
+    //start=clock();
+    //nbGen=cyclic6F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
+    
+    //start=clock();
+    //nbGen=cyclic7F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
+    
+    start=clock();
+    nbGen=cyclic8F4(magma);
+    if (file)
+    {
+        file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
+    
+    //start=clock();
+    //nbGen=katsura9F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
+    
+    //start=clock();
+    //nbGen=katsura10F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}  
+    
+    //start=clock();
+    //nbGen=katsura11F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
+    
+    //start=clock();
+    //nbGen=katsura12F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     return 0;
 }

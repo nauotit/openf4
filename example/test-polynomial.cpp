@@ -42,7 +42,8 @@ int main (int argc, char **argv)
     
     
     // Init monomial tools
-    Monomial::initMonomial(6,5,6,10);
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<ElementPrime<long>>::setMonomialArray(&monArray);
     
     // Init element-prime tools
     typedef ElementPrime<long> eltType;
@@ -73,9 +74,6 @@ int main (int argc, char **argv)
     Polynomial<eltType> p7(p3);
     cout << "p7: " << p7 << endl << endl;
             
-    // Test ~Polynomial();
-    // Automatically called at the end of the scope
-    
     // Test void printPolynomial (std::ostream & stream = std::cout) const;
     cout << "________Test printPolynomial (std::ostream & stream = std::cout)________" << endl;
     cout << "p7: ";
@@ -103,8 +101,12 @@ int main (int argc, char **argv)
     
     // Test Element & getCoefficient(int numMon);
     cout << "________Test getCoefficient(int numMon)________" << endl;
-    cout << "coefficient of x1*x2*x3*x4 in p4: " << p4.getCoefficient(Monomial("x1*x2*x3*x4").monomialToInt()) << endl ;
-    cout << "coefficient of x1*x2 in p4: " << p4.getCoefficient(Monomial("x1*x2").monomialToInt()) << endl << endl ;
+    Monomial tmp1;
+    tmp1.allocate();
+    tmp1.setMonomial("x1*x2*x3*x4");
+    cout << "coefficient of x1*x2*x3*x4 in p4: " << p4.getCoefficient(tmp1.monomialToInt()) << endl ;
+    tmp1.setMonomial("x1*x2");
+    cout << "coefficient of x1*x2 in p4: " << p4.getCoefficient(tmp1.monomialToInt()) << endl << endl ;
     
     // Test typename forward_list<Term<Element>>::const_iterator getPolynomialBegin();
     cout << "________Test getPolynomialBegin() and getPolynomialEnd()________" << endl;
@@ -158,7 +160,8 @@ int main (int argc, char **argv)
     
     // Test Polynomial & operator*=(Monomial const & monomial);
     cout << "________Test operator*=(Monomial const & monomial);________" << endl;
-    p8*=Monomial("x1*x3");
+    tmp1.setMonomial("x1*x3");
+    p8*=tmp1;
     cout << "p8: " << p8 << endl << endl;
             
     // Test Polynomial & operator*=(Element element);
@@ -174,11 +177,12 @@ int main (int argc, char **argv)
     
     // Test Polynomial & operator*(Monomial const & monomial, Polynomial const & polynomial);
     cout << "________Test operator*(Monomial const & monomial, Polynomial const & polynomial)________" << endl;
-    cout << "x1*x2 * p2 : " << (Monomial("x1*x2")*p2) << endl << endl;
+    tmp1.setMonomial("x1*x2");
+    cout << "x1*x2 * p2 : " << (tmp1*p2) << endl << endl;
     
     // Test Polynomial & operator*(Polynomial const & polynomial, Monomial const & monomial);
     cout << "________Test operator*(Polynomial const & polynomial, Monomial const & monomial)________" << endl;
-    cout << "p2 * x1*x2 : " << (p2*Monomial("x1*x2")) << endl << endl;
+    cout << "p2 * x1*x2 : " << (p2*tmp1) << endl << endl;
 
     // Test Polynomial & operator*(Element element, Polynomial const & polynomial);
     cout << "________Test operator*(Element element, Polynomial const & polynomial)________" << endl;
@@ -201,8 +205,8 @@ int main (int argc, char **argv)
     p9.normalize();
     cout << "p9: " << p9 << endl << endl;
     
-    // Free monomial tools
-    Monomial::freeMonomial();
+    // Free monomial
+    tmp1.erase();
     
     
     return 0;

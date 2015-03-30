@@ -63,8 +63,8 @@ namespace F4
               * \brief Constructor.
               * \param nbVariable: Number of variable of the polynomial ring.
               * \param degree: Initialise the monomial array up to monomial of degree "degree". 
-              * \param deg1: Maximum degree of row monomials.
-              * \param deg2: Maximum degree of column monomials.
+              * \param deg1: Maximum degree of row tabulated monomials.
+              * \param deg2: Maximum degree of column tabulated monomials.
               */
              MonomialArray(int nbVariable, int capacity, int degree, int deg1, int deg2);
              
@@ -122,7 +122,13 @@ namespace F4
              * \brief Overload the operator [].
              * \return Reference on a monomial.
              */
-            Monomial & operator[](int index);
+            Monomial const & getNumMonomial(int index);
+             
+             /**
+             * \brief Overload the operator [].
+             * \return Reference on a monomial.
+             */
+            Monomial const & operator[](int index);
              
              
         

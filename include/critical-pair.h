@@ -58,6 +58,12 @@ namespace F4
              * \brief Get the size of the array pointed by TAGGEG_POLYNOMIAL_ARRAY.
              */
             static int getSizeTaggedPolynomialArray();
+            
+            /**
+             * \brief Set the monomial array to use.
+             * \param monomialArray: Address of the array.
+             */
+            static void setMonomialArray(MonomialArray * monomialArray);
           
             
             
@@ -75,6 +81,11 @@ namespace F4
              * \param p2: Index of a tagged polynomial in TAGGEG_POLYNOMIAL_ARRAY.
              */ 
             CriticalPair(int p1, int p2);
+            
+            /**
+             * \brief Copy constructor.
+             */ 
+            CriticalPair(CriticalPair const & cp);
             
             
             /* Destructor */
@@ -151,6 +162,13 @@ namespace F4
             
             
             /* Internal operator */
+            
+            /**
+             * \brief Overload the operator =.
+             * \param criticalPair: Critical pair to copy.
+             * \return Reference on this.
+             */
+            CriticalPair & operator=(CriticalPair const & criticalPair);
         
         private:
             Monomial _lcm;          /*!< lcm of the critical pair */
@@ -160,6 +178,7 @@ namespace F4
             int _p2;                /*!< Index of a tagged polynomial in an array. */
             
             static std::vector<TaggedPolynomial<Element>> * TAGGEG_POLYNOMIAL_ARRAY; /*!< Pointer on a dynamic array of TaggedPolynomial */
+            static MonomialArray * MONOMIAL_ARRAY; /*!< Pointer on a monomial array */
         
     };
     

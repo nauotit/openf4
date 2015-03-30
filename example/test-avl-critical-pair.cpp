@@ -44,7 +44,11 @@ int main (int argc, char **argv)
     ElementPrime<int>::setModulo(65521);
     
     // Init monomial tools
-    Monomial::initMonomial(6,5,2,10);
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<eltType>::setMonomialArray(&monArray);
+    TaggedPolynomial<eltType>::setMonomialArray(&monArray);
+    CriticalPair<eltType>::setMonomialArray(&monArray);
+    cout << endl;
     
     // Create tagged polynomial array
     vector<TaggedPolynomial<eltType>> List;
@@ -168,41 +172,6 @@ int main (int argc, char **argv)
         cout << avlCp1 << endl << endl;
     }
     cout << endl << endl;
-    
-    //// benchmark 
-    //clock_t start;
-    //int i=0;
-    
-    //cout << "________Benchmark________" << endl << endl;
-    
-    //for(int k=0; k<10; k++)
-    //{
-        //start=clock();
-        //for(int j=0; j<100000; j++)
-        //{
-            //avlCp1.insert(rand()%10000, 0);
-        //}
-        //cout << "Time insert 100000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
-        
-        //start=clock();
-        //i=0;
-        //tmp=avlCp1.findBiggest();
-        //i++;
-        //while(tmp)
-        //{
-            //tmp=avlCp1.findNextBiggest(tmp);
-            //i++;
-        //}
-        //cout << "Number of elements: " << i << endl; 
-        //cout << "Time parcours 10000 elements with avl: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
-        
-        //start=clock();
-        //avlCp1.reset();
-        //cout << "Time to reset the AVL " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
-    //}
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
     
     return 0;
 }

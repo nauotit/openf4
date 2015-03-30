@@ -24,7 +24,7 @@
 #ifndef F4_TERM_H
 #define F4_TERM_H
 
-#include "monomial.h"
+#include "monomial-array.h"
 #include "element-prime.h"
 
 /** \namespace F4 
@@ -40,6 +40,15 @@ namespace F4
     class Term
     {
         public:
+            
+            /* Static methods */
+            
+            /**
+             * \brief Set the monomial array to use.
+             * \param monomialArray: Address of the array.
+             */
+            static void setMonomialArray(MonomialArray * monomialArray);
+            
         
             /* Constructor */
             
@@ -166,31 +175,12 @@ namespace F4
              * \return Reference on this.
              */
             Term & operator*=(Term const & term);
-            
-            /**
-             * \brief Overload the operator /= to divide this with a monomial.
-             * \param mon: Monomial.
-             * \return Reference on this.
-             */
-            Term & operator/=(Monomial const & monomial);
-            
-            /**
-             * \brief Overload the operator /= to divide this with an Element.
-             * \param element: Element.
-             * \return Reference on this.
-             */
-            Term & operator/=(Element element);
-            
-            /**
-             * \brief Overload the operator /= to divide this with a term (Beware of the coefficient division).
-             * \param term: Term.
-             * \return Reference on this.
-             */
-            Term & operator/=(Term const & term);
         
         private:
             Element _coefficient; /*!< Coefficient of the term. */
             int _numMonomial; /*!< Number of the monomial of the term. */
+            
+            static MonomialArray * MONOMIAL_ARRAY; /*!< Pointer on a monomial array */
     };
     
     
@@ -223,20 +213,6 @@ namespace F4
      */
     template <typename Element>
     Term<Element> operator * (Term<Element> const & term1, Term<Element> const & term2);
-    
-    /**
-     * \brief Overload the operator /.
-     * \return term / mon.
-     */
-    template <typename Element>
-    Term<Element> operator / (Term<Element> const & term, Monomial const & mon);
-    
-    /**
-     * \brief Overload the operator /.
-     * \return term1 / term2.
-     */
-    template <typename Element>
-    Term<Element> operator / (Term<Element> const & term1, Term<Element> const & term2);
 }
 
 #include "../src/term.inl"

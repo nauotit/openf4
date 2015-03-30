@@ -41,17 +41,9 @@ namespace F4
     
     int * Monomial::WEIGHT = 0;
     
-    //vector<Monomial> Monomial::MONOMIAL_ARRAY;
-    
     vector<int *> Monomial::NB_MONOMIAL;
     
     int Monomial::MAX_DEGREE = 0;
-    
-    //int Monomial::NUM_MAX_LINE = 0; 
-    
-    //int Monomial::NUM_MAX_COLUMN = 0;
-    
-    //int ** Monomial::TABULATED_PRODUCT = 0;
     
     
     /* Static methods */
@@ -191,9 +183,6 @@ namespace F4
                 }
             }
             MAX_DEGREE=maxDegree;
-            
-            /* Update MONOMIAL_ARRAY */
-            //setMonomialArray(); 
         }
     }
     
@@ -224,131 +213,7 @@ namespace F4
             *it=0;
         }
         NB_MONOMIAL.clear();
-        //freeMonomialArray();
     }
-
-    //void Monomial::setMonomialArray()
-    //{
-        //size_t size=NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1];
-        //if (VERBOSE>1)
-        //{
-            //cout << "Monomial: " << (size - MONOMIAL_ARRAY.size()) << " new monomials, " << ((double)size * (sizeof(Monomial) + NB_VARIABLE*sizeof(int)))/1000000 << " Mo reserved for MONOMIAL_ARRAY " << endl;
-        //}
-        //MONOMIAL_ARRAY.reserve(size);
-        //for(size_t i=MONOMIAL_ARRAY.size(); i<size; i++)
-        //{
-            //MONOMIAL_ARRAY.emplace_back((int)i);
-        //}
-    //}
-     
-    //vector<Monomial> & Monomial::getMonomialArray()
-    //{
-        //return MONOMIAL_ARRAY;
-    //}
-    
-    //void Monomial::freeMonomialArray()
-    //{
-        //MONOMIAL_ARRAY.clear();
-    //}
-    
-    //void Monomial::setTabulatedProduct(int deg1, int deg2)
-    //{
-        ///* Preconditions */
-        //assert(NB_VARIABLE > 0);
-        //assert(!NB_MONOMIAL.empty());
-        
-        //if((int)NB_MONOMIAL.size() < deg1+deg2)
-        //{
-            //setNbMonomial(deg1+deg2);
-        //}
-        
-        //int nb;
-        //double size=0;
-        //NUM_MAX_LINE = NB_MONOMIAL[deg1][NB_VARIABLE + 1];
-        //NUM_MAX_COLUMN = NB_MONOMIAL[deg2][NB_VARIABLE + 1];
-        
-        //if (VERBOSE > 2)
-        //{
-            //cout << "Monomial::setTabulatedProduct: NUM_MAX_LINE: " << NUM_MAX_LINE << endl;
-            //cout << "Monomial::setTabulatedProduct: NUM_MAX_COLUMN: " << NUM_MAX_COLUMN << endl;
-        //}
-        
-        //TABULATED_PRODUCT = new int*[NUM_MAX_LINE];
-        //size += NUM_MAX_LINE * sizeof (int *);
-
-        //assert(TABULATED_PRODUCT!=0);
-        
-        //Monomial tmp1;
-        //tmp1.allocate();
-        //Monomial tmp2;
-        //tmp2.allocate();
-
-        //for (int numMon1 = 0; numMon1 < NUM_MAX_LINE; numMon1++)
-        //{
-            //tmp1=MONOMIAL_ARRAY[numMon1];
-            //nb = NB_MONOMIAL[MAX_DEGREE - tmp1._deg][NB_VARIABLE + 1];
-            //if (nb > NUM_MAX_COLUMN)
-            //{
-                //nb = NUM_MAX_COLUMN;
-            //}
-            //TABULATED_PRODUCT[numMon1] = new int[nb];
-            //size += nb * sizeof (int);
-            //for (int numMon2 = 0; numMon2 < nb; numMon2++)
-            //{
-                //tmp2=tmp1*MONOMIAL_ARRAY[numMon2];
-                //TABULATED_PRODUCT[numMon1][numMon2] = tmp2.monomialToInt();
-            //}
-        //}
-        //if (VERBOSE > 1)
-        //{
-            //cout << "Monomial: products computed up to deg "<< deg1 <<" x " << deg2 <<endl; 
-            //cout << "Monomial: " << size/1000000 << "Mo allocated for TABULATED_PRODUCT " << endl;
-        //}
-        //tmp1.erase();
-        //tmp2.erase();
-    //}
-    
-    //int ** 
-    //Monomial::getTabulatedProduct()
-    //{
-        //return TABULATED_PRODUCT;
-    //}
-    
-    //void 
-    //Monomial::freeTabulatedProduct()
-    //{
-        ///* Preconditions */
-        //assert(NB_VARIABLE > 0);
-        
-        //for (int numMon = 0; numMon < NUM_MAX_LINE; numMon++)
-        //{
-            //delete[] TABULATED_PRODUCT[numMon];
-            //TABULATED_PRODUCT[numMon]=0;
-        //}
-        //delete[] TABULATED_PRODUCT;
-        //TABULATED_PRODUCT=0;
-    //}
-    
-    //int 
-    //Monomial::multNumMonomial(int numMon1, int numMon2)
-    //{
-        //if (numMon1 > numMon2)
-        //{
-            //swap(numMon1,numMon2);
-        //}
-        //if (numMon1 < NUM_MAX_LINE && numMon2 < NUM_MAX_COLUMN)
-        //{
-            //return TABULATED_PRODUCT[numMon1][numMon2];
-        //}
-        //else
-        //{
-            //if( VERBOSE > 3)
-            //{
-                //cout << "Monomial::MultNumMonomial: cannot use TABULATED_PRODUCT " << MONOMIAL_ARRAY[numMon1].getDegree() <<" " << MONOMIAL_ARRAY[numMon2].getDegree()  << endl;
-            //}
-            //return varlistToInt(MONOMIAL_ARRAY[numMon1]._varlist, MONOMIAL_ARRAY[numMon2]._varlist);
-        //}
-    //}
     
     int 
     Monomial::compareNumMonomial(int numMon1, int numMon2)
@@ -366,38 +231,6 @@ namespace F4
             return 0;
         }
     }
-    
-    //Monomial const &
-    //Monomial::getNumMonomial(int numMon)
-    //{
-        ///* Preconditions */
-        //assert(! NB_MONOMIAL.empty());
-        //assert(NB_VARIABLE > 0);
-        
-        //while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
-        //{
-            ///* We increase NB_MONOMIAL */
-            //setNbMonomial(MAX_DEGREE+2);
-        //}
-        //return MONOMIAL_ARRAY[numMon];
-    //}
-    
-    //int
-    //Monomial::getNumVarlist(int numMon, int index)
-    //{
-        ///* Preconditions */
-        //assert(! NB_MONOMIAL.empty());
-        //assert(NB_VARIABLE > 0);
-        //assert(index < NB_VARIABLE);
-        //assert(index >= 0);
-        
-        //while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
-        //{
-            ///* We increase NB_MONOMIAL */
-            //setNbMonomial(MAX_DEGREE+2);
-        //}
-        //return MONOMIAL_ARRAY[numMon]._varlist[index];
-    //}
     
     int 
     Monomial::varlistToInt(int const * varlist)
@@ -481,29 +314,37 @@ namespace F4
     }
     
     void 
-    Monomial::initMonomial(int nbVariable, int maxDegree, int deg1, int deg2)
+    Monomial::initMonomial(int nbVariable, int degree)
     {
-        /* Set the number of variables */
-        setNbVariable(nbVariable);
-        string *vars = new string[NB_VARIABLE];
-        int * weight = new int[NB_VARIABLE];
-        for(int i=0; i < NB_VARIABLE; i++)
+        if(nbVariable != NB_VARIABLE)
         {
-            vars[i]="x"+to_string(i);
-            weight[i]=1;
+            if (VARS != 0)
+            {
+                delete[] VARS;
+            }
+            if( WEIGHT != 0)
+            {
+                delete[] WEIGHT;
+            }
+            /* Set the number of variables */
+            setNbVariable(nbVariable);
+            string *vars = new string[NB_VARIABLE];
+            int * weight = new int[NB_VARIABLE];
+            for(int i=0; i < NB_VARIABLE; i++)
+            {
+                vars[i]="x"+to_string(i);
+                weight[i]=1;
+            }
+            
+            /* Set variable names */
+            setVariable(vars);
+            
+            /* Set weights */
+            setWeight(weight);
         }
         
-        /* Set variable names */
-        setVariable(vars);
-        
-        /* Set weights */
-        setWeight(weight);
-        
-        /* Set NB_MONOMIAL and MONOMIAL_ARRAY */
-        setNbMonomial(maxDegree);
-        
-        /* Set TABULATED_PRODUCT */
-        //setTabulatedProduct(deg1, deg2);
+        /* Set NB_MONOMIAL */
+        setNbMonomial(degree);
         
         if(VERBOSE>1)
         {
@@ -514,7 +355,6 @@ namespace F4
     void 
     Monomial::freeMonomial()
     {
-        //freeTabulatedProduct();
         freeNbMonomial();
         if(VARS!=0)
         {
@@ -528,8 +368,6 @@ namespace F4
         }
         MAX_DEGREE = 0;
         NB_VARIABLE = 0;
-        //NUM_MAX_LINE = 0; 
-        //NUM_MAX_COLUMN = 0;
         
         if(VERBOSE>1)
         {
@@ -544,121 +382,7 @@ namespace F4
     {
     }
     
-    //Monomial::Monomial(int const * varlist): _deg(0)
-    //{
-        ///* Preconditions */
-        //assert(NB_VARIABLE > 0);
-        //assert(WEIGHT!=0);
-        
-        //_varlist=new int[NB_VARIABLE]();
-        //assert(_varlist != 0);
-        //for (int i=0; i<NB_VARIABLE; i++)
-        //{
-            //_varlist[i]=varlist[i];
-            //_deg+=varlist[i]*WEIGHT[i];
-        //}
-    //}
     
-    //Monomial::Monomial(std::string const s)
-    //{
-        ///* Preconditions */
-        //assert(NB_VARIABLE > 0);
-        //assert(WEIGHT!=0);
-        //assert(VARS!=0);
-        
-        //_deg=0;
-        //_varlist=new int[NB_VARIABLE]();
-        //assert(_varlist != 0);
-        
-        //size_t pos=0;
-        
-        //for(int i=0; i<NB_VARIABLE; i++)
-        //{
-            //pos=s.find(VARS[i]);
-            //if((pos != string::npos) && ((s[pos+VARS[i].size()]<'0') || (s[pos+VARS[i].size()]>'9')) )
-            //{
-                ///* VARS[i] is used in s */
-                //pos+=VARS[i].size();
-                //if(s[pos]=='^')
-                //{
-                    //_varlist[i]=stoi(s.substr(pos+1));
-                    //_deg+=_varlist[i]*WEIGHT[i];
-                //}
-                //else
-                //{
-                    //_varlist[i]=1;
-                    //_deg+=_varlist[i]*WEIGHT[i];
-                //}
-            //}
-        //}
-    //}
-    
-    //Monomial::Monomial(int numMon)
-    //{
-        ///* Preconditions */
-        //assert(WEIGHT != 0);
-        //assert(!NB_MONOMIAL.empty());
-        //assert(NB_VARIABLE > 0);
-        
-        //while(NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]<numMon)
-        //{
-            ///* We increase NB_MONOMIAL */
-            //setNbMonomial(MAX_DEGREE+2);
-        //}
-        
-        //_deg=0;
-        //_varlist=new int[NB_VARIABLE]();
-        //assert(_varlist != 0);
-        
-        //int d;
-        ///* Degree of monomial numMon */
-        //for (d = 0; NB_MONOMIAL[d][NB_VARIABLE + 1] <= numMon; d++);
-        //_deg = d;
-        ///* Look for its number among the degree d monomials */
-        //if (d != 0)
-        //{
-            //numMon -= NB_MONOMIAL[d - 1][NB_VARIABLE + 1];
-        //}
-        ///* For each variable, look for the matching power */
-        //int i, j;
-
-        //for (i = NB_VARIABLE - 1; i > 0; i--)
-        //{
-            ///* Degree of variable number i */
-            //j = d / WEIGHT[i];      
-            //while (numMon >= NB_MONOMIAL[d - j * WEIGHT[i]][i])
-            //{
-                //numMon -= NB_MONOMIAL[d - j * WEIGHT[i]][i];
-                //j--;
-            //}
-            //_varlist[i] = j;
-            //d -= j * WEIGHT[i];
-        //}
-        //_varlist[0] = d / WEIGHT[0];
-    //}
-    
-    //Monomial::Monomial(Monomial const & toCopy): _deg(toCopy._deg)
-    //{
-        ///* Preconditions */
-        //assert(NB_VARIABLE > 0);
-        
-        //_varlist=new int[NB_VARIABLE];
-        //assert(_varlist != 0);
-        //for(int i=0; i<NB_VARIABLE; i++)
-        //{
-            //_varlist[i]=toCopy._varlist[i];
-        //}
-    //}
-    
-    Monomial::Monomial(Monomial && toCopy)
-    {
-        _deg=toCopy._deg;
-        toCopy._deg=0;
-        _varlist=toCopy._varlist;
-        toCopy._varlist=0;
-    }
-
-
     /* Destructor */
     
     Monomial::~Monomial()
@@ -720,10 +444,11 @@ namespace F4
         assert(NB_VARIABLE > 0);
         assert(WEIGHT!=0);
         
+        _deg=0;
         for (int i=0; i<NB_VARIABLE; i++)
         {
             _varlist[i]=varlist[i];
-            _deg+=varlist[i]*WEIGHT[i];
+            _deg+=_varlist[i]*WEIGHT[i];
         }
     }
     
@@ -762,7 +487,6 @@ namespace F4
             }
         }
     }
-    
     
     void
     Monomial::setMonomial(int numMon)
@@ -805,7 +529,18 @@ namespace F4
         _varlist[0] = d / WEIGHT[0];
     }
     
-    
+    void
+    Monomial::setMonomial(Monomial const & mon)
+    {
+        if(this!=&mon)
+        {
+            _deg=mon._deg;
+            for(int i=0; i<NB_VARIABLE; i++)
+            {
+                _varlist[i]=mon._varlist[i];
+            }
+        }
+    }
     
     void 
     Monomial::setMonomialMultiply(Monomial const & mon1, Monomial const & mon2)
@@ -830,7 +565,7 @@ namespace F4
         
         for (int i=0; i<NB_VARIABLE; i++)
         {
-            _varlist[i]=mon1._varlist[i]-mon2._varlist[i];
+            _varlist[i]=(mon1._varlist[i]-mon2._varlist[i]);
         }
         _deg=(mon1._deg-mon2._deg);
     }
@@ -960,7 +695,8 @@ namespace F4
         if (_deg == mon._deg)
         {
             for (int k = NB_VARIABLE - 1; k > 0; k--)
-            {   /* deggrevlex monomial order */
+            {   
+                /* deggrevlex monomial order */
                 if ((_varlist)[k] > (mon._varlist)[k])
                 {
                     return -1;

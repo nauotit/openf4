@@ -49,8 +49,12 @@ namespace F4
             /**
              * \brief Constructor.
              * \param polynomialArray: Array of polynomials.
+             * \param nbVariable: Number of variable of the polynomial ring.
+             * \param degree: Initialise the monomial array up to monomial of degree "degree". 
+             * \param deg1: Maximum degree of row tabulated monomials.
+             * \param deg2: Maximum degree of column tabulated monomials.
              */
-            Ideal(std::vector<Polynomial<Element>> & polynomialArray);
+            Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2);
             
             
             /* Destructor */ 
@@ -91,7 +95,7 @@ namespace F4
             /**
              * \brief Print Mat.
              */
-            void printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename) const;
+            void printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename);
             
             
             /* Algorithms */
@@ -148,7 +152,19 @@ namespace F4
              */
             void preprocessing(int & largeur, int & hauteur, int & nb_piv);
             
-            
+            /**
+             * \brief Rebuild M from Mat, update the basis and the set of critical pairs.
+             * \param Mat: Matrix to fill.
+             * \param tab_mon: Array of monomials involved in M.
+             * \param sigma: sigma[i]=index in tab_mon of the column i monomial.
+             * \param tau: tau[i]=column of the monomial tab_mon[i].
+             * \param hauteur: Height of the matrix before echelonize.
+             * \param largeur: Width of the matrix before echelonize.
+             * \param hauteur_reelle: Height of the matrix after echelonize.
+             * \param nb_piv: Number of pivots in the the F4 matrix.
+             * \return false if the computation end with a trivial groebner basis (1).
+             * \return true otherwise.
+             */
             bool postprocessing(Matrix<Element> & matrix, int * tab_mon, int * sigma, int * tau, int hauteur, int largeur, int hauteur_reelle, int nb_piv, int & cmpt_genpurg, int & cmpt_newgen, double & time_purgeCP, double & time_addCP, double & time_majBasis);
             
             
@@ -173,6 +189,7 @@ namespace F4
             std::vector<int> GUsed;
             std::vector<int> Gbasis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
+            MonomialArray _monomialArray; /*!< Array of monomials, endow with a tabulated product 2D array */
             AvlCriticalPair<Element> _criticalPairSet; /*!< Set of critical pairs */
             AvlCriticalPair<Element> P0; /*!< Set of critical pairs for update */
             AvlCriticalPair<Element> P1; /*!< Set of critical pairs for update */

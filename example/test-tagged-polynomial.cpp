@@ -40,12 +40,15 @@ int main (int argc, char **argv)
     cout << "#                 TEST TAGGED POLYNOMIAL                #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Init monomial tools
-    Monomial::initMonomial(6,5,6,10);
-    
     // Init element-prime tools
     typedef ElementPrime<long> eltType;
     ElementPrime<long>::setModulo(65537);
+    
+    // Init monomial tools
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<eltType>::setMonomialArray(&monArray);
+    TaggedPolynomial<eltType>::setMonomialArray(&monArray);
+    cout << endl;
     
     // Test TaggedPolynomial();
     cout << "________Test TaggedPolynomial()________" << endl;
@@ -142,7 +145,10 @@ int main (int argc, char **argv)
     
     // Test void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial);
     cout << "________Test setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, Monomial const & monomial)________" << endl;
-    tp4.setTaggedPolynomial(tp2, Monomial("x1^5").getVarlist());
+    Monomial tmp1;
+    tmp1.allocate();
+    tmp1.setMonomial("x1^5");
+    tp4.setTaggedPolynomial(tp2, tmp1.getVarlist());
     cout << "tp4: " << tp4 << endl << endl; 
     
     // Test TaggedPolynomial & operator=(TaggedPolynomial const & taggedPolynomial);
@@ -160,7 +166,8 @@ int main (int argc, char **argv)
     
     // Test TaggedPolynomial & operator*=(Monomial const & monomial);
     cout << "________Test operator*=(Monomial const & monomial)________" << endl;
-    tp5*=Monomial("x1*x2");
+    tmp1.setMonomial("x1*x2");
+    tp5*=tmp1;
     cout << "tp5: " << tp5 << endl << endl;
             
     // Test TaggedPolynomial & operator*=(Element element);
@@ -204,11 +211,13 @@ int main (int argc, char **argv)
     
     // Test TaggedPolynomial<Element> operator * (Monomial const & monomial, TaggedPolynomial<Element> const & taggedPolynomial);
     cout << "________Test operator * (Monomial const & monomial, TaggedPolynomial<Element> const & taggedPolynomial)________" << endl;
-    cout << "x1^5*x2^5 * tp2: " << (Monomial("x1^5*x2^5")*tp2) << endl << endl;
+    tmp1.setMonomial("x1^5*x2^5");
+    cout << "x1^5*x2^5 * tp2: " << (tmp1*tp2) << endl << endl;
     
     // Test TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Monomial const & monomial);
     cout << "________Test operator * (TaggedPolynomial<Element> const & taggedPolynomial, Monomial const & monomial)________" << endl;
-    cout << "tp2 * x1^5*x2^5: " << (tp2 *Monomial("x1^10*x2^5")) << endl << endl;
+    tmp1.setMonomial("x1^10*x2^5");
+    cout << "tp2 * x1^5*x2^5: " << (tp2 * tmp1) << endl << endl;
 
     // Test TaggedPolynomial<Element> operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial);
     cout << "________Test operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial)________" << endl;
@@ -226,8 +235,8 @@ int main (int argc, char **argv)
     cout << "________Test operator * (TaggedPolynomial<Element> const & taggedPolynomial, Term<Element> const & term)_______" << endl;
     cout << "tp2* (-1000)*x5^10: " << (tp2*Term<eltType>("-1000*x5^10")) << endl << endl;
     
-    // Free monomial tools
-    Monomial::freeMonomial();
+    // Free monomial
+    tmp1.erase();
     
     return 0;
 }

@@ -62,14 +62,7 @@ namespace F4
             {
                 cout<<" /\n" << setw(indent) << ' ';
             }
-            if(p->_parent)
-            {
-                cout<< p->_numMonomial << ", p: " << p->_parent->_numMonomial << "\n ";
-            }
-            else
-            {
-                cout<< p->_numMonomial << "\n ";
-            }
+            cout << p->_numMonomial << ", lt=" << p->_lt << "\n ";
             if(p->_left) 
             {
                 cout << setw(indent) << ' ' << " \\\n";

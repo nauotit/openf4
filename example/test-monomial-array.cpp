@@ -40,9 +40,6 @@ int main (int argc, char **argv)
     cout << "#                   TEST MONOMIAL ARRAY                 #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Init monomial tools
-    Monomial::initMonomial(8,20,2,10);
-    
     // Time 
     clock_t start;
     
@@ -108,9 +105,6 @@ int main (int argc, char **argv)
     m2.erase();
     m3.erase();
     m4.erase();
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
     
     return 0;
 }

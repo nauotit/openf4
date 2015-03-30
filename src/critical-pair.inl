@@ -31,6 +31,9 @@ namespace F4
     template <typename Element>
     vector<TaggedPolynomial<Element>> * CriticalPair<Element>::TAGGEG_POLYNOMIAL_ARRAY=0;
     
+    template <typename Element>
+    MonomialArray * CriticalPair<Element>::MONOMIAL_ARRAY=0;
+    
     
     /* Static methods */
     
@@ -55,25 +58,39 @@ namespace F4
         return (*TAGGEG_POLYNOMIAL_ARRAY).size();
     }
     
+    template <typename Element>
+    void
+    CriticalPair<Element>::setMonomialArray(MonomialArray * monomialArray)
+    {
+        MONOMIAL_ARRAY=monomialArray;
+    }
+    
     
     /* Constructor */
     
     template <typename Element>
     CriticalPair<Element>::CriticalPair(): _p1(-1), _p2(-1)
     {
+        _lcm.allocate();
+        _u1.allocate();
+        _u2.allocate();
     }
             
     template <typename Element>
     CriticalPair<Element>::CriticalPair(int p1, int p2): _p1(p1), _p2(p2)
     {
+        _lcm.allocate();
+        _u1.allocate();
+        _u2.allocate();
+        
         int nbVars=Monomial::getNbVariable();
         
         /* Get the varlist of LM(p1) and LM(p2) */
         
-        Monomial ltP1=Monomial::getNumMonomial(getTaggedPolynomialArray(p1).getLM());
+        Monomial const & ltP1=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p1).getLM());
         int * varlistp1=ltP1.getVarlist();
         
-        Monomial ltP2=Monomial::getNumMonomial(getTaggedPolynomialArray(p2).getLM());
+        Monomial const & ltP2=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p2).getLM());
         int * varlistp2=ltP2.getVarlist();
         
         int varlistLcm[nbVars];
@@ -97,9 +114,20 @@ namespace F4
             }
         }
         
-        _lcm=Monomial(varlistLcm);
-        _u1=Monomial(varlistU1);
-        _u2=Monomial(varlistU2);
+        _lcm.setMonomial(varlistLcm);
+        _u1.setMonomial(varlistU1);
+        _u2.setMonomial(varlistU2);
+    }
+    
+    template <typename Element>
+    CriticalPair<Element>::CriticalPair(CriticalPair<Element> const & cp): _p1(cp._p1), _p2(cp._p2)
+    {
+        _lcm.allocate();
+        _lcm.setMonomial(cp._lcm);
+        _u1.allocate();
+        _u1.setMonomial(cp._u1);
+        _u2.allocate();
+        _u2.setMonomial(cp._u2);
     }
     
     
@@ -108,6 +136,9 @@ namespace F4
     template <typename Element>
     CriticalPair<Element>::~CriticalPair()
     {
+        _lcm.erase();
+        _u1.erase();
+        _u2.erase();
     }
     
     
@@ -165,10 +196,10 @@ namespace F4
         int nbVars=Monomial::getNbVariable();
         
         /* Get the varlist of LM(p1) and LM(p2) */
-        Monomial ltP1=Monomial::getNumMonomial(getTaggedPolynomialArray(p1).getLM());
+        Monomial const & ltP1=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p1).getLM());
         int * varlistp1=ltP1.getVarlist();
         
-        Monomial ltP2=Monomial::getNumMonomial(getTaggedPolynomialArray(p2).getLM());
+        Monomial const & ltP2=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p2).getLM());
         int * varlistp2=ltP2.getVarlist();
         
         int varlistLcm[nbVars];
@@ -192,9 +223,9 @@ namespace F4
             }
         }
         
-        _lcm=Monomial(varlistLcm);
-        _u1=Monomial(varlistU1);
-        _u2=Monomial(varlistU2);
+        _lcm.setMonomial(varlistLcm);
+        _u1.setMonomial(varlistU1);
+        _u2.setMonomial(varlistU2);
         
         return ( (ltP1.getDegree() + ltP2.getDegree()) != _lcm.getDegree());
     }
@@ -205,14 +236,7 @@ namespace F4
     void 
     CriticalPair<Element>::printCriticalPair (std::ostream & stream) const
     {
-        if((_lcm >= 0) && (_u1 >= 0) && (_p1 >= 0) && (_u2 >= 0) && (_p2 >= 0)) 
-        {
-            stream << "(" << _lcm << ", " << _u1 << ", " << _p1 << ", " << _u2 << ", " << _p2 << ")" ;
-        }
-        else
-        {
-            stream << "(" << _lcm << ", " <<_u1 << ", " << _p1 << ", " << _u2 << ", " << _p2 << ")" ;
-        }
+        stream << "(" << _lcm << ", " <<_u1 << ", " << _p1 << ", " << _u2 << ", " << _p2 << ")" ;
     }
     
     
@@ -245,6 +269,19 @@ namespace F4
     
     
     /* Operator overload */
+    
+    
+    template <typename Element>
+    CriticalPair<Element> & 
+    CriticalPair<Element>::operator=(CriticalPair const & criticalPair)
+    {
+        _p1=criticalPair._p1;
+        _p2=criticalPair._p2;
+        _lcm.setMonomial(criticalPair._lcm);
+        _u1.setMonomial(criticalPair._u1);
+        _u2.setMonomial(criticalPair._u2);
+        return * this;
+    }
     
     template <typename Element>
     ostream & operator<<(ostream & stream, CriticalPair<Element> const & criticalPair)

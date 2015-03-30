@@ -62,14 +62,7 @@ namespace F4
             {
                 cout<<" /\n" << setw(indent) << ' ';
             }
-            if(p->_parent)
-            {
-                cout<< p->_numPolynomial << ", p: " << p->_parent->_numPolynomial << "\n ";
-            }
-            else
-            {
-                cout<< p->_numPolynomial << "\n ";
-            }
+            cout << "(" << p->_numMonomial << "," << p->_nbTerms << "," << p->_numPolynomial << ")\n ";
             if(p->_left) 
             {
                 cout << setw(indent) << ' ' << " \\\n";
@@ -141,12 +134,12 @@ namespace F4
                 cmp=-1;
                 tmpnode = tmpnode->_left;
             }
-            else if (tmpnode->_nbTerms < nbTerms )
+            else if (tmpnode->_nbTerms > nbTerms )
             {
                 cmp=1;
                 tmpnode = tmpnode->_right;
             }
-            else if (tmpnode->_nbTerms > nbTerms)
+            else if (tmpnode->_nbTerms < nbTerms)
             {
                 cmp=-1;
                 tmpnode = tmpnode->_left;

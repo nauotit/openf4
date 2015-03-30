@@ -40,12 +40,16 @@ int main (int argc, char **argv)
     cout << "#                  TEST CRITICAL PAIR                   #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Init monomial tools
-    Monomial::initMonomial(6,5,6,10);
-    
     // Init element-prime tools
     typedef ElementPrime<long> eltType;
     ElementPrime<long>::setModulo(65537);
+    
+    // Init monomial tools
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<eltType>::setMonomialArray(&monArray);
+    TaggedPolynomial<eltType>::setMonomialArray(&monArray);
+    CriticalPair<eltType>::setMonomialArray(&monArray);
+    cout << endl;
     
     // Create tagged polynomial array
     vector<TaggedPolynomial<eltType>> List;
@@ -158,18 +162,14 @@ int main (int argc, char **argv)
     cout << "cp3 <= cp3: " << (cp3<=cp3) << endl << endl;
     
     // Test copy constructor
-    cout << "________Test generated copy constructor________" << endl;
+    cout << "________Test copy constructor________" << endl;
     CriticalPair<eltType> cp5(cp4);
     cout << "cp5: " << cp5 << endl << endl;
     
     // Test operator =
-    cout << "________Test generated operator=________" << endl;
-    cp5=cp1;
-    cout << "cp5: " << cp5 << endl << endl;
-    
-    
-    // Free monomial tools
-    Monomial::freeMonomial();
+    cout << "________Test operator =________" << endl;
+    cp4=cp1;
+    cout << "cp4: " << cp4 << endl << endl;
 
     return 0;
 }

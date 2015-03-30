@@ -26,6 +26,22 @@
 
 namespace F4
 {
+    /* Static variables */
+    
+    template <typename Element>
+    MonomialArray * TaggedPolynomial<Element>::MONOMIAL_ARRAY=0;
+    
+    
+    /* Static methods */
+    
+    template <typename Element>
+    void
+    TaggedPolynomial<Element>::setMonomialArray(MonomialArray * monomialArray)
+    {
+        MONOMIAL_ARRAY=monomialArray;
+    }
+    
+    
     /* Constructor */
     
     template <typename Element>
@@ -230,7 +246,7 @@ namespace F4
         
         for (start=taggedPolynomial.getPolynomialBegin(); start!=taggedPolynomial.getPolynomialEnd() ; ++start)
         {
-            pos=_polynomial.emplaceAfter(pos, start->getCoefficient(), Monomial::multNumMonomial(start->getNumMonomial(), numMon));
+            pos=_polynomial.emplaceAfter(pos, start->getCoefficient(), MONOMIAL_ARRAY->multNumMonomial(start->getNumMonomial(), numMon));
         }
     }
     

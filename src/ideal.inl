@@ -31,8 +31,15 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0), _monomialArray(nbVariable, capacity, degree, deg1, deg2)
     {
+        /* Share the monomial array. */
+        Term<Element>::setMonomialArray(&_monomialArray);
+        TaggedPolynomial<Element>::setMonomialArray(&_monomialArray);
+        CriticalPair<Element>::setMonomialArray(&_monomialArray);
+        /* Share the tagged polynomial array. */
+        CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
+        
         _taggedPolynomialArray.reserve(40000);
         GTotal.reserve(10000);
         Gbasis.reserve(1000);
@@ -47,6 +54,7 @@ namespace F4
     template <typename Element>
     Ideal<Element>::~Ideal()
     {
+        Monomial::freeMonomial();
     }
     
     
@@ -149,8 +157,8 @@ namespace F4
     Ideal<Element>::printMonomialAvl() const
     {
         cout << endl << "------------------- Monomial AVL -------------------------" << endl;
-        NodeAvlMonomial * itMonBeg = M_mons.findBiggest();
-        while(itMonBeg= itMonBeg != 0)
+        NodeAvlMonomial const * itMonBeg = M_mons.findBiggest();
+        while(itMonBeg != 0)
         {
             cout << itMonBeg->_numMonomial << ", lt = " << itMonBeg->_lt << endl;
             itMonBeg=M_mons.findNextBiggest(itMonBeg);
@@ -164,7 +172,7 @@ namespace F4
     {
         cout << endl << "------------------- Tagged polynomial index AVL -------------------------" << endl;
         
-        NodeAvlPolynomial * itPolBeg = M.findBiggest(); 
+        NodeAvlPolynomial const * itPolBeg = M.findBiggest(); 
         while(itPolBeg != 0)
         {
             cout << "NumPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
@@ -174,7 +182,7 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename) const
+    Ideal<Element>::printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename)
     {
         ofstream file(filename);
         int d;
@@ -190,7 +198,7 @@ namespace F4
                 {
                     if (!Mat.isZero(i,j))
                     {
-                        d=Monomial::getNumMonomial(tab_mon[sigma[j]]).getDegree();
+                        d=_monomialArray[tab_mon[sigma[j]]].getDegree();
                         file << color[d%7];
                     }
                     else
@@ -290,10 +298,6 @@ namespace F4
         CriticalPair<Element> cp1;
         CriticalPair<Element> sp;
         
-        Monomial lt_f;
-        Monomial lt_g;
-        Monomial lcm;
-        
         /* Strict divisibility criteria to avoid the problem of "eliminate 2 critical pairs over 3" */
         if (VERBOSE > 1)
         {
@@ -305,14 +309,16 @@ namespace F4
             strct1 = false;
             strct2 = false;
             
-            lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[itcp1->_cp.getP1()].getLM());
-            lt_g=Monomial::getNumMonomial(_taggedPolynomialArray[itcp1->_cp.getP2()].getLM());
+            Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP1()].getLM()];
+            Monomial const & lt_g=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP2()].getLM()];
             
-            lcm=itcp1->_cp.getLcm();
+            Monomial const & lcm=itcp1->_cp.getLcm();
+            
+            //cout << "lt_f = " << lt_f << ", lt_g = " << lt_g << ", lcm = " << lcm << endl;
             
             for (j = 0; j < (size_t)_nbVariable && div; j++)
             {
-                if(Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < lcm.getVarlist(j) )
+                if(_monomialArray.getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < lcm.getVarlist(j) )
                 {
                     if(lt_f.getVarlist(j) < lt_g.getVarlist(j))
                     {
@@ -325,7 +331,7 @@ namespace F4
                 }
                 else
                 {
-                    if (Monomial::getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > lcm.getVarlist(j) )
+                    if (_monomialArray.getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > lcm.getVarlist(j) )
                     {
                         div=false;
                     }
@@ -334,6 +340,7 @@ namespace F4
             
             if (div && strct1 && strct2)
             {
+                //cout << "Critical pair deleted " << endl;
                 /* Suppress the critical pair */
                 //GUsed[itcp1->getP1()]--;
                 //GUsed[itcp1->getP2()]--;
@@ -358,10 +365,12 @@ namespace F4
         {
             if (!sp.setCriticalPair(index, GTotal[Gbasis[j]]))
             {
+                //cout << "Insert int P0, sp = " << sp << endl;
                 P0.insert(sp);
             }
             else
             {
+                //cout << "Insert int P1, sp = " << sp << endl;
                 P1.insert(sp);
             }
         }
@@ -441,10 +450,10 @@ namespace F4
         {
             /* Purge of generators */
             div_trouve = false;
-            lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[index].getLM());
+            Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
             for (j = 0; j < Gbasis.size(); j++)
             {
-                if (lt_f.isDivisible(Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM())))
+                if (lt_f.isDivisible(_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()]))
                 {
                     div_trouve = true;
                     //GUsed[index]--;
@@ -459,7 +468,7 @@ namespace F4
                 /* purge of Gbasis by the new polynomial */
                 for (j = 0; j < Gbasis.size()-1; j++)
                 {
-                    if (Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()).isDivisible(lt_f))
+                    if (_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()].isDivisible(lt_f))
                     { 
                         //GUsed[GTotal[Gbasis[j]]]--;
                         Gbasis.erase(Gbasis.begin()+j);
@@ -472,14 +481,14 @@ namespace F4
         }
         else
         {
-            lt_f=Monomial::getNumMonomial(_taggedPolynomialArray[index].getLM());
+            Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
             /* Add the polynomial in Gbasis */
             Gbasis.push_back(NumTot);
             NumGen++;
             /* Purge of Gbasis by the new polynomial */
             for (j = 0; j < Gbasis.size()-1; j++)
             {
-                if (Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()).isDivisible(lt_f))
+                if (_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()].isDivisible(lt_f))
                 { 
                     //GUsed[GTotal[Gbasis[j]]]--;
                     Gbasis.erase(Gbasis.begin()+j);
@@ -493,7 +502,6 @@ namespace F4
         {
             time_majBasis +=(((double)clock () - start_majBasis) * 1000) / CLOCKS_PER_SEC;
         }
-        
     }
     
     template <typename Element>
@@ -740,7 +748,8 @@ namespace F4
     {
         int indexPol;
         int i;
-        Monomial m1, m2, quotient;
+        Monomial quotient;
+        quotient.allocate();
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         NodeAvlMonomial * itmon;
         largeur = 0;
@@ -755,14 +764,14 @@ namespace F4
         }
         while(itmon != 0)
         {
+            Monomial const & m1=_monomialArray[itmon->_numMonomial];
             /* Search reducer in the basis */
             for (i = NumGen - 1; i >= 0; i--)
             {
-                m1=Monomial::getNumMonomial(itmon->_numMonomial);
-                m2=Monomial::getNumMonomial(_taggedPolynomialArray[GTotal[Gbasis[i]]].getLM());
+                Monomial const & m2=_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[i]]].getLM()];
                 if(m1.isDivisible(m2))
                 {
-                    quotient=(m1/m2);
+                    quotient.setMonomialDivide(m1,m2);
                     /* Reducer found */
                     itmon->_lt=true;
                     nb_piv++;
@@ -792,6 +801,7 @@ namespace F4
             while (itmon != 0 && itmon->_lt == true);
         }
         largeur--;
+        quotient.erase();
     }
     
     
@@ -854,9 +864,6 @@ namespace F4
     int 
     Ideal<Element>::f4()
     {
-        /* Specify the tagged polynomial array used by the CriticalPair class. */
-        CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
-        
         /* Iterators */
         NodeAvlPolynomial * itPolBeg = 0;
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
@@ -897,9 +904,6 @@ namespace F4
 
         /* For preprocessing */
         int hauteur, largeur, hauteur_reelle, index;
-        Monomial lt_f;
-        Monomial lt_g;
-        Monomial m1, m2;
         
         /* Percentage of non zero coefficient in Mat */
         double sparse;
@@ -1197,7 +1201,7 @@ namespace F4
         if (VERBOSE > 0)
         {
             cout << endl << "---------------------------------------" << endl;
-            cout << "Reducing the basis..." << endl;;
+            cout << "Reducing the basis..." << endl;
         }
 
         largeur = 0;
@@ -1225,9 +1229,13 @@ namespace F4
         /* Preprocessing */
         preprocessing(largeur, hauteur, nb_piv);
         nb_piv = hauteur;
-
+        
         /* Transform M into a matrix */
-        cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl;
+        if (VERBOSE > 0)
+        {
+            cout << "Preprocessing of M: " << endl;
+            cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl << endl;
+        }
             
         Mat=Matrix<Element>(hauteur, largeur);
         tab_mon = new int[largeur];
@@ -1280,6 +1288,8 @@ namespace F4
         delete[] sigma;
         delete[] start_tail;
         delete[] end_col;
+        
+        cout << "Groebner basis: " << NumGen << " generators. Computed in " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
 
         return NumGen;
     }

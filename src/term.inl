@@ -26,6 +26,22 @@
 
 namespace F4
 {
+    /* Static variables */
+    
+    template <typename Element>
+    MonomialArray * Term<Element>::MONOMIAL_ARRAY=0;
+    
+    
+    /* Static methods */
+    
+    template <typename Element>
+    void
+    Term<Element>::setMonomialArray(MonomialArray * monomialArray)
+    {
+        MONOMIAL_ARRAY=monomialArray;
+    }
+    
+    
     /* Constructor */ 
     
     template <typename Element>
@@ -48,8 +64,11 @@ namespace F4
     {
         /* Beware, a specialised readCoefficient method must be defined. */
         readCoefficient(s);
-        Monomial mon(s);
+        Monomial mon;
+        mon.allocate();
+        mon.setMonomial(s);
         _numMonomial=mon.monomialToInt();
+        mon.erase();
     }
     
     template <typename Element>
@@ -102,8 +121,11 @@ namespace F4
     {
         /* Beware, a specialised readCoefficient method must be defined */
         readCoefficient(s);
-        Monomial mon(s);
+        Monomial mon;
+        mon.allocate();
+        mon.setMonomial(s);
         _numMonomial=mon.monomialToInt();
+        mon.erase();
     }
     
     
@@ -184,15 +206,18 @@ namespace F4
     void
     Term<Element>::printTerm (ostream & stream) const
     {
-        Monomial mon(_numMonomial);
+        Monomial mon;
+        mon.allocate();
+        mon.setMonomial(_numMonomial);
         stream << _coefficient << "*" << mon;
+        mon.erase();
     }
     
     template <typename Element>
     void
     Term<Element>::multNumMon(int numMon)
     {
-        _numMonomial=Monomial::multNumMonomial(_numMonomial, numMon);
+        _numMonomial=MONOMIAL_ARRAY->multNumMonomial(_numMonomial, numMon);
     }
     
     
@@ -211,7 +236,7 @@ namespace F4
     Term<Element> &
     Term<Element>::operator*=(Monomial const & monomial)
     {
-        _numMonomial=Monomial::multNumMonomial(_numMonomial, monomial.monomialToInt());
+        _numMonomial=MONOMIAL_ARRAY->multNumMonomial(_numMonomial, monomial.monomialToInt());
         return * this;
     }
     
@@ -228,33 +253,8 @@ namespace F4
     Term<Element>::operator*=(Term const & term)
     {
         _coefficient*=term._coefficient;
-        _numMonomial=Monomial::multNumMonomial(_numMonomial, term._numMonomial);
+        _numMonomial=MONOMIAL_ARRAY->multNumMonomial(_numMonomial, term._numMonomial);
         return *this;
-    }
-    
-    template <typename Element>
-    Term<Element> &
-    Term<Element>::operator/=(Monomial const & monomial)
-    {
-        _numMonomial=(Monomial(_numMonomial)/monomial).monomialToInt();
-        return * this;
-    }
-    
-    template <typename Element>
-    Term<Element> &
-    Term<Element>::operator/=(Element element)
-    {
-        _coefficient/=element;
-        return * this;
-    }
-            
-    template <typename Element>
-    Term<Element> &
-    Term<Element>::operator/=(Term const & term)
-    {
-        _coefficient/=term._coefficient;
-        _numMonomial=(Monomial(_numMonomial)/Monomial(term._numMonomial)).monomialToInt();
-        return * this;
     }
     
     template <typename Element>
@@ -283,20 +283,6 @@ namespace F4
     {
         Term<Element> copy(term1);
         return copy*=term2;
-    }
-    
-    template <typename Element>
-    Term<Element> operator / (Term<Element> const & term, Monomial const & mon)
-    {
-        Term<Element> copy(term);
-        return copy/=mon;
-    }
-   
-    template <typename Element>
-    Term<Element> operator / (Term<Element> const & term1, Term<Element> const & term2)
-    {
-        Term<Element> copy(term1);
-        return copy/=term2;
     }
 }
 

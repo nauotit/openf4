@@ -115,51 +115,6 @@ namespace F4
              */
              static void freeNbMonomial();
              
-             ///**
-             //* \brief Modify the dynamic array MONOMIAL_ARRAY.
-             //* \pre Static variables NB_VARIABLE and NB_MONOMIAL must be set beforehand.
-             //*/
-             //static void setMonomialArray();
-             
-             ///**
-             //* \brief Get the dynamic array MONOMIAL_ARRAY.
-             //* \return Reference on MONOMIAL_ARRAY.
-             //*/
-             //static std::vector<Monomial> & getMonomialArray();
-             
-             ///**
-             //* \brief Free the dynamic array MONOMIAL_ARRAY.
-             //*/
-             //static void freeMonomialArray();
-             
-             ///**
-             //* \brief Modify the static 2D array TABULATED_PRODUCT.
-             //* \pre Static variables NB_VARIABLE, NB_MONOMIAL and MONOMIAL_ARRAY must be set beforehand.
-             //* \param deg1: Maximum degree of line monomials.
-             //* \param deg2: Maximum degree of column monomials.
-             //*/
-             //static void setTabulatedProduct(int deg1, int deg2);
-             
-             ///**
-             //* \brief Get the static 2D array NB_MONOMIAL.
-             //* \return Value of NB_MONOMIAL.
-             //*/
-             //static int ** getTabulatedProduct();
-             
-             ///**
-             //* \brief Free the static 2D array NB_MONOMIAL.
-             //* \pre The static variables NB_VARIABLE must be set beforehand.
-             //*/
-             //static void freeTabulatedProduct();
-             
-             ///**
-             //* \brief Multiply two monomials, using TABULATED_PRODUCT if possible. Prefer numMon1<numMon2.
-             //* \param numMon1: Number of the first monomial.
-             //* \param numMon2: Number of the second monomial.
-             //* \return Number of the product intToMonomial[numMon1] * intToMonomial[numMon2].
-             //*/
-             //static int multNumMonomial(int numMon1, int numMon2);
-             
              /**
              * \brief Compare two monomials, using MONOMIAL_ARRAY if possible.
              * \param numMon1: Number of the first monomial.
@@ -169,21 +124,6 @@ namespace F4
              * \return -1 if numMon1<numMon2.
              */
              static int compareNumMonomial(int numMon1, int numMon2);
-             
-             ///**
-             //* \brief Get the numMon-th monomial, using MONOMIAL_ARRAY.
-             //* \param numMon: Number of the monomial.
-             //* \return Monomial.
-             //*/
-             //static Monomial const & getNumMonomial(int numMon);
-             
-             ///**
-             //* \brief Get MONOMIAL_ARRAY[numMon]._varlist[i].
-             //* \param numMon: Number of the monomial.
-             //* \param index: Index of a variable in varlist.
-             //* \return MONOMIAL_ARRAY[numMon]._varlist[i].
-             //*/
-             //static int getNumVarlist(int numMon, int index);
              
              /**
               * \brief Compute the number of a monomial from its varlist.
@@ -203,11 +143,9 @@ namespace F4
              /**
               * \brief Initialise the static parameters of Monomial.
               * \param nbVariable: Number of variables of the polynomial ring.
-              * \param maxDegree: maxDegree: Maximal degree (height) of NB_MONOMIAL.
-              * \param deg1: Maximum degree of line monomials in TABULATED_PRODUCT.
-              * \param deg2: Maximum degree of column monomials in TABULATED_PRODUCT.
+              * \param degree: Initialise NB_MONOMIAL up to degree "degree".
               */
-             static void initMonomial(int nbVariable, int maxDegree, int deg1, int deg2);
+             static void initMonomial(int nbVariable, int degree);
              
              /**
               * \brief Free the space allocated by initMonomial.
@@ -220,41 +158,6 @@ namespace F4
              * \brief Constructor. Beware, varlist is not allocated.
              */
             Monomial();
-            
-            ///**
-             //* \brief Constructor.
-             //* \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
-             //* \param varlist: Array representing the degree of each variable of the monomial.
-             //*/
-            //Monomial(int const * varlist); 
-            
-            ///**
-             //* \brief Constructor.
-             //* \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
-             //* \param s: String representing the monomial.
-             //*/
-            //Monomial(std::string const s); 
-            
-            ///**
-             //* \brief Constructor.
-             //* \pre Static variables NB_VARIABLE, WEIGHT and VARS must be set beforehand.
-             //* \param numMon: number of the constructed monomial, 0 is the smallest monomial.
-             //*/
-            //Monomial(int numMon); 
-            
-            /**
-             * \brief Copy constructor.
-             * \pre The static variable NB_VARIABLE must be set beforehand.
-             * \param toCopy: Monomial.
-             */
-            //Monomial(Monomial const & toCopy);
-            
-            /**
-             * \brief Move constructor. Used when mon is unnamed.
-             * \param toCopy: Monomial.
-             */
-            Monomial(Monomial && toCopy);
-             
              
              /* Destructor */
             
@@ -322,6 +225,13 @@ namespace F4
              * \param numMon: number of the constructed monomial, 0 is the smallest monomial.
              */
             void setMonomial(int numMon);
+            
+            /**
+             * \brief Initialize this with mon. 
+             * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
+             * \param mon: Monomial.
+             */
+            void setMonomial(Monomial const & mon);
             
             /**
              * \brief Initialize this with mon1 * mon2. 
@@ -441,11 +351,7 @@ namespace F4
              * NB_MONOMIAL[d][NB_VARIABLE+1] = Number of monomials of degree <= d.
              */
             static std::vector<int *> NB_MONOMIAL;
-            //static std::vector<Monomial> MONOMIAL_ARRAY; /*!< Dynamic array of monomial */
             static int MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
-            //static int NUM_MAX_LINE; /*!< Number of line in TABULATED_PRODUCT. */
-            //static int NUM_MAX_COLUMN; /*!< Number of column in TABULATED_PRODUCT. */
-            //static int ** TABULATED_PRODUCT; /*!< TABULATED_PRODUCT[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
             
     };
     
@@ -501,23 +407,6 @@ namespace F4
      * \return false otherwise.
      */
     bool operator<=(Monomial const & mon1, Monomial const & mon2);
-    
-    ///**
-     //* \brief Overload the operator *.
-     //* \param mon1: Monomial.
-     //* \param mon2: Monomial.
-     //* \return mon1 * mon2.
-     //*/
-    //Monomial operator * (Monomial const & mon1, Monomial const & mon2);
-    
-    ///**
-     //* \brief Overload the operator /.
-     //* \pre mon1 must be divisible by mon2.
-     //* \param mon1: Monomial.
-     //* \param mon2: Monomial.
-     //* \return mon1 / mon2.
-     //*/
-    //Monomial operator / (Monomial const & mon1, Monomial const & mon2);
 }
 
 

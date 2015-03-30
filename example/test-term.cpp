@@ -43,9 +43,12 @@ int main (int argc, char **argv)
     cout << "#                       TEST TERM                       #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    //Init monomial tools: 6 variables.
-    Monomial::initMonomial(6,10,6,10);
+    // Init monomial tools:
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<int>::setMonomialArray(&monArray);
+    Term<double>::setMonomialArray(&monArray);
     cout << endl;
+    
     
     // Test Term()
     cout << "________Test Term()________" << endl;
@@ -56,15 +59,21 @@ int main (int argc, char **argv)
     
     // Test Term(Element coeff, Monomial const & mon)
     cout << "________Test Term(Element coeff, Monomial const & mon)________" << endl;
-    Term<int> t3(123, Monomial("x0^2*x1^3*x2^4"));
-    Term<double> t4(123.456, Monomial("x0^2*x1^3*x2^4*x5"));
+    Monomial tmp1;
+    tmp1.allocate();
+    tmp1.setMonomial("x0^2*x1^3*x2^4");
+    Term<int> t3(123, tmp1);
+    tmp1.setMonomial("x0^2*x1^3*x2^4*x5");
+    Term<double> t4(123.456, tmp1);
     cout << "t3: " << t3 << endl;
     cout << "t4: " << t4 << endl << endl;
     
     // Test Term(Element coeff, int numMon);
     cout << "________Test Term(Element coeff, int numMon)________" << endl;
-    Term<int> t5(123, Monomial("x0^2*x1^3*x2^4").monomialToInt());
-    Term<double> t6(123.456, Monomial("x0^2*x1^3*x2^4*x5").monomialToInt());
+    tmp1.setMonomial("x0^2*x1^3*x2^4");
+    Term<int> t5(123, tmp1.monomialToInt());
+    tmp1.setMonomial("x0^2*x1^3*x2^4*x5");
+    Term<double> t6(123.456, tmp1.monomialToInt());
     cout << "t5: " << t5 << endl;
     cout << "t6: " << t6 << endl << endl;
             
@@ -82,9 +91,6 @@ int main (int argc, char **argv)
     cout << "t9: " << t9 << endl;
     cout << "t10: " << t10 << endl << endl;
             
-    // Test ~Term();
-    // Usefull only if Element use dynamic allocation. 
-            
     // Test Element getCoefficient() const;
     cout << "________Test getCoefficient()________" << endl;
     cout << "Coefficient of t9: " << t9.getCoefficient() << endl;
@@ -99,8 +105,10 @@ int main (int argc, char **argv)
             
     // Test int getNumMonomial() const;
     cout << "________Test getNumMonomial()________" << endl;
-    cout << t9.getNumMonomial() << " which match monomial: " << Monomial(t9.getNumMonomial()) << endl;
-    cout << t10.getNumMonomial() << " which match monomial: " << Monomial(t10.getNumMonomial()) << endl << endl;
+    tmp1.setMonomial(t9.getNumMonomial());
+    cout << t9.getNumMonomial() << " which match monomial: " << tmp1 << endl;
+    tmp1.setMonomial(t10.getNumMonomial());
+    cout << t10.getNumMonomial() << " which match monomial: " << tmp1 << endl << endl;
             
     // Test void setNumMonomial(int numMon);
     cout << "________Test setNumMonomial(int numMon)________" << endl;
@@ -133,7 +141,8 @@ int main (int argc, char **argv)
     // Test void multNumMon(int numMon);
     cout << "________Test multNumMon(int numMon)________" << endl;
     t3.multNumMon(1000);
-    cout << "t3: multiply by: " << Monomial(1000) << ": " << t3 << endl << endl;
+    tmp1.setMonomial(1000);
+    cout << "t3: multiply by: " << tmp1 << ": " << t3 << endl << endl;
             
     // Test Term & operator=(Term const & term);
     cout << "________Test operator=(Term const & term)________" << endl;
@@ -144,10 +153,12 @@ int main (int argc, char **argv)
             
     // Test Term & operator*=(Monomial const & monomial);
     cout << "________Test operator*=(Monomial const & monomial)________" << endl;
-    t9*=Monomial(10000);
-    t10*=Monomial(20000);
-    cout << "t9 multiply by "<< Monomial(10000) << ": " << t9 << endl;
-    cout << "t10 multiply by " << Monomial(20000) <<": " << t10 << endl << endl;
+    tmp1.setMonomial(10000);
+    t9*=tmp1;
+    cout << "t9 multiply by "<< tmp1 << ": " << t9 << endl;
+    tmp1.setMonomial(20000);
+    t10*=tmp1;
+    cout << "t10 multiply by " << tmp1 << ": " << t10 << endl << endl;
     
     // Test Term & operator*=(Element element);
     cout << "________Test operator*=(Element element)________" << endl;
@@ -163,51 +174,17 @@ int main (int argc, char **argv)
     t9*=t7;
     cout << "t9 multiplied by t7: "<< t9 << endl << endl;
     
-    // Test Term & operator/=(Monomial const & monomial);
-    cout << "________Test operator/=(Monomial const & monomial)________" << endl;
-    t10/=Monomial(20000);
-    cout << "t10 divided by " << Monomial(20000) <<": " << t10 << endl;
-    t10/=Monomial(200000);
-    cout << "t10 divided by " << Monomial(200000) <<": " << t10 << endl << endl;
-            
-    // Test Term & operator/=(int numMon);
-    cout << "________Test operator/=(int numMon)________" << endl;
-    t10/=100;
-    cout << "t10 divided by " << 100 <<": " << t10 << endl << endl;
-            
-    // Test Term & operator/=(Term const & term);
-    cout << "________Test operator/=(Term const & term)________" << endl;
-    cout << "t9: " << t9 << endl;
-    cout << "t7: " << t7 << endl;
-    t9/=t7;
-    cout << "t9 divided by t7: "<< t9 << endl << endl;
-    
     // Test Term<Element> operator * (Monomial const & mon, Term<Element> const & term);
     cout << "________Test operator * (Monomial const & mon, Term<Element> const & term)________" << endl;
-    cout << Monomial(100) << " * " << t7 << ": " << (Monomial(100)*t7) << endl;
-    cout << t7 << " * " << Monomial(100) << ": " << (t7*Monomial(100)) << endl << endl;
+    tmp1.setMonomial(100);
+    cout << tmp1 << " * " << t7 << ": " << (tmp1*t7) << endl;
+    cout << t7 << " * " << tmp1 << ": " << (t7*tmp1) << endl << endl;
     
     // Test Term operator * (Term const & term1, Term const & term2);
     cout << "________Test operator * (Term const & term1, Term const & term2)________" << endl;
     cout << "t9: " << t9 << endl;
     cout << "t7: " << t7 << endl;
     cout << "t9 * t7: "<< (t9 * t7) << endl << endl;
-    
-    // Test Term<Element> operator / (Term<Element> const & term, Monomial const & mon);
-    cout << "________operator / (Term<Element> const & term, Monomial const & mon)________" << endl;
-    cout << "t9: " << t9 << endl;
-    Monomial m1(1234);
-    cout << "m1: " << m1 << endl;
-    cout << "t9 / m1: "<< (t9 / m1) << endl;
-    m1=Monomial(100);
-    cout << "m1: " << m1 << endl;
-    cout << "t9 / m1: "<< (t9 / m1) << endl << endl;
-    
-    // Test Term operator / (Term const & term1, Term const & term2);
-    cout << "________Test operator / (Term const & term1, Term const & term2)________" << endl;
-    cout << "t9: " << t9 << endl;
-    cout << "t7: " << t7 << endl;
-    cout << "t9 / t7: "<< (t9 / t7) << endl << endl;
     
     // Test Linbox compatibility :
     // Term with modular coefficient (prime finite field)
@@ -217,7 +194,8 @@ int main (int argc, char **argv)
     typedef FieldModular::Element elt1;
     elt1 e1;
     field1.init(e1, 123456789);
-    Term<elt1> t11(e1, Monomial(123456));
+    tmp1.setMonomial(123456);
+    Term<elt1> t11(e1, tmp1);
     cout << "t12: " << t11 << endl << endl;
     
     // Term with givaro coefficient (non prime finite field)
@@ -227,11 +205,11 @@ int main (int argc, char **argv)
     typedef FieldGivaro::Element elt2;
     elt2 e2;
     field2.init(e2, 545);
-    Term<elt2> t12(e2, Monomial(123456));
+    Term<elt2> t12(e2, tmp1);
     cout << "t12: " << t12 << endl << endl;
     
-    // Free monomial tools
-    Monomial::freeMonomial();
+    // Free monomial
+    tmp1.erase();
 
     return 0;
 }

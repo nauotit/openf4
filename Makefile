@@ -15,14 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
 #CXX=clang++
-#CXX=g++-4.9
+CXX=g++-4.9
 # std=c++11 required by forward_list
-#CFLAGS= -O3 -g -Wall -std=c++11 -DNDEBUG
+CFLAGS= -O3 -g -Wall -std=c++11 -DNDEBUG
 #CFLAGS= -O3 -g -Wall -std=c++11
-CFLAGS= -g -Wall -std=c++11 
-LDFLAGS=
+#CFLAGS= -g -Wall -std=c++11 
 #LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
-#LDFLAGS= 
+LDFLAGS= 
 
 EXEC = example benchmark
 
@@ -128,8 +127,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example:  bin/test-monomial bin/test-monomial-array
-# bin/test-ideal bin/test-avl-critical-pair bin/test-critical-pair bin/test-dynamic-array bin/test-avl-monomial bin/test-avl-polynomial bin/test-matrix bin/test-element-prime bin/test-monomial bin/test-tagged-polynomial bin/test-polynomial bin/test-term bin/test-memory-monomial bin/test-polynomial bin/test-element-prime 
+example: bin/test-monomial bin/test-monomial-array bin/test-ideal bin/test-critical-pair bin/test-avl-critical-pair bin/test-polynomial bin/test-tagged-polynomial bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
+#bin/test-term
 
 benchmark: bin/benchmark-int bin/benchmark-semaev
 

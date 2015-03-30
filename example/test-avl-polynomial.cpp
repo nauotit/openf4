@@ -62,7 +62,7 @@ int main (int argc, char **argv)
     // Test Node* findBiggest();
     cout << "________Test findBiggest(Node* p)________" << endl;
     NodeAvlPolynomial * tmp = avlPol1.findBiggest();
-    cout << "Biggest node: " << tmp->_numMonomial << endl << endl;
+    cout << "Biggest node: numMon = " << tmp->_numMonomial << ", nbTerm = " << tmp->_nbTerms << ", numPol = " << tmp->_numPolynomial << endl << endl;
     
     // Test Node* findNextBiggest(Node* p);
     cout << "________Test findNextBiggest(Node* p)________" << endl;

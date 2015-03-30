@@ -48,11 +48,11 @@ int main (int argc, char **argv)
     // Test int insert(int numMon, bool lt);
     cout << "________Test insert(int numMon, bool lt)________" << endl;
     avlMon1.insert(10, true);
-    avlMon1.insert(20, true);
+    avlMon1.insert(20, false);
     avlMon1.insert(30, true);
-    avlMon1.insert(50, true);
+    avlMon1.insert(50, false);
     avlMon1.insert(100, true);
-    avlMon1.insert(40, true);
+    avlMon1.insert(40, false);
     avlMon1.insert(25, true);
     avlMon1.insert(60, true);
     cout << "Result of insert: " << avlMon1.insert(25, true) << endl << "avlMon1: " << endl << avlMon1 << endl << endl;
