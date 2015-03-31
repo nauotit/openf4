@@ -76,6 +76,13 @@ int main (int argc, char **argv)
     e0.modulo();
     cout << "e0.modulo() = " << e0 << endl << endl;
     
+    // Test void normalize();
+    cout << "________Test normalize ()________" << endl;
+    e0*=elt4;
+    cout << "e0 = " << e0 << endl;
+    e0.normalize();
+    cout << "e0.normalize() = " << e0 << endl << endl;
+    
     // Test ElementPrime<baseType>::addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)
     cout << "________Test addMult(ElementPrime<baseType> & element, ElementPrime<baseType> & mult)________" << endl;
     e0.addMult(elt3, elt1);
@@ -124,7 +131,7 @@ int main (int argc, char **argv)
     cout << "elt8: " << elt8 << endl << endl;
     
     vector <ElementPrime<baseType> > vec;
-    for(size_t i=1; i<100002; i++)
+    for(baseType i=1; i<100002; i++)
     {
         if(i!=ElementPrime<baseType>::getModulo())
         {

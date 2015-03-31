@@ -39,8 +39,8 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Init element-prime tools
-    typedef ElementPrime<int> eltType;
-    ElementPrime<int>::setModulo(65521);
+    typedef ElementPrime<long> eltType;
+    eltType::setModulo(65521);
     
     // Init monomial tools
     Monomial::initMonomial(6,5);

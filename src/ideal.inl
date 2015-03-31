@@ -31,7 +31,7 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), NumPol(0), NumTot(0), NumGen(0), nbCP(0), _monomialArray(nbVariable, capacity, degree, deg1, deg2)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree, deg1, deg2)
     {
         /* Share the monomial array. */
         Term<Element>::setMonomialArray(&_monomialArray);
@@ -41,9 +41,9 @@ namespace F4
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
         
         _taggedPolynomialArray.reserve(40000);
-        GTotal.reserve(10000);
-        Gbasis.reserve(1000);
-        GUsed.reserve(10000);
+        _total.reserve(10000);
+        _basis.reserve(1000);
+        _used.reserve(10000);
         
         timeSimplify=0;
     }
@@ -54,7 +54,6 @@ namespace F4
     template <typename Element>
     Ideal<Element>::~Ideal()
     {
-        Monomial::freeMonomial();
     }
     
     
@@ -64,60 +63,60 @@ namespace F4
     void
     Ideal<Element>::printInfo() const
     {
-        cout << "GTotal: ";
-        for(vector<int>:: const_iterator it=GTotal.begin(); it != GTotal.end(); ++it)
+        cout << "_total: ";
+        for(vector<int>:: const_iterator it=_total.begin(); it != _total.end(); ++it)
         {
             cout << *it << " ";
         }
         cout << endl;
         
-        cout << "GUsed: ";
-        for(vector<int>:: const_iterator it=GUsed.begin(); it != GUsed.end(); ++it)
+        cout << "_used: ";
+        for(vector<int>:: const_iterator it=_used.begin(); it != _used.end(); ++it)
         {
             cout << *it << " ";
         }
         cout << endl;
         
-        cout << "Gbasis: ";
-        for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
+        cout << "_basis: ";
+        for(vector<int>:: const_iterator it=_basis.begin(); it != _basis.end(); ++it)
         {
             cout << *it << " ";
         }
         cout << endl;
-        cout << "GTotal[Gbasis]: ";
-        for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
+        cout << "_total[_basis]: ";
+        for(vector<int>:: const_iterator it=_basis.begin(); it != _basis.end(); ++it)
         {
-            cout << GTotal[*it] << " ";
+            cout << _total[*it] << " ";
         }
         cout << endl;
         
-        cout << "NumPol: " << NumPol << endl;
-        cout << "NumTot: " << NumTot << endl;
-        cout << "NumGen: " << NumGen << endl << endl << endl;
+        cout << "_numPol: " << _numPol << endl;
+        cout << "_numTot: " << _numTot << endl;
+        cout << "_numGen: " << _numGen << endl << endl << endl;
     }
     
     template <typename Element>
     void
     Ideal<Element>::printReducedGroebnerBasis(bool printBasis) const
     {
-        cout << "Gbasis: ";
-        for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
+        cout << "_basis: ";
+        for(vector<int>:: const_iterator it=_basis.begin(); it != _basis.end(); ++it)
         {
             cout << *it << " ";
         }
         cout << endl;
-        cout << "GTotal[Gbasis]: ";
-        for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
+        cout << "_total[_basis]: ";
+        for(vector<int>:: const_iterator it=_basis.begin(); it != _basis.end(); ++it)
         {
-            cout << GTotal[*it] << " ";
+            cout << _total[*it] << " ";
         }
         cout << endl;
         
         if(printBasis)
         { 
-            for(vector<int>:: const_iterator it=Gbasis.begin(); it != Gbasis.end(); ++it)
+            for(vector<int>:: const_iterator it=_basis.begin(); it != _basis.end(); ++it)
             {
-                cout << GTotal[*it] << ": " << _taggedPolynomialArray[GTotal[*it]] << endl << endl;
+                cout << _total[*it] << ": " << _taggedPolynomialArray[_total[*it]] << endl << endl;
             }
         }
     }
@@ -139,11 +138,11 @@ namespace F4
             file << ">:=PolynomialRing(FF, "<< _nbVariable << ", \"grevlex\");" << endl;
             file << "S:={ " << endl;
             
-            for(int i = 0; i < NumGen - 1 ; i++)
+            for(int i = 0; i < _numGen - 1 ; i++)
             {
-                file << _taggedPolynomialArray[GTotal[Gbasis[i]]].getPolynomial() << "," << endl;
+                file << _taggedPolynomialArray[_total[_basis[i]]].getPolynomial() << "," << endl;
             }
-            file << _taggedPolynomialArray[GTotal[Gbasis[NumGen - 1]]].getPolynomial() << "};" << endl;
+            file << _taggedPolynomialArray[_total[_basis[_numGen - 1]]].getPolynomial() << "};" << endl;
             file.close();
         }
         else
@@ -175,14 +174,14 @@ namespace F4
         NodeAvlPolynomial const * itPolBeg = M.findBiggest(); 
         while(itPolBeg != 0)
         {
-            cout << "NumPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
+            cout << "_numPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
             itPolBeg=M.findNextBiggest(itPolBeg);
         }
     }
     
     template <typename Element>
     void
-    Ideal<Element>::printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename)
+    Ideal<Element>::printMatrix (Matrix<Element> & mat, int *tabMon, int *sigma, string const & filename)
     {
         ofstream file(filename);
         int d;
@@ -190,15 +189,15 @@ namespace F4
 
         if (file)
         {
-            file << "P3" << endl << Mat.getWidth() << " " << Mat.getHeight() << endl << 1 << endl;
+            file << "P3" << endl << mat.getWidth() << " " << mat.getHeight() << endl << 1 << endl;
             int i, j;
-            for (i = 0; i < Mat.getHeight(); i++)
+            for (i = 0; i < mat.getHeight(); i++)
             {
-                for (j = 0; j < Mat.getWidth(); j++)
+                for (j = 0; j < mat.getWidth(); j++)
                 {
-                    if (!Mat.isZero(i,j))
+                    if (!mat.isZero(i,j))
                     {
-                        d=_monomialArray[tab_mon[sigma[j]]].getDegree();
+                        d=_monomialArray[tabMon[sigma[j]]].getDegree();
                         file << color[d%7];
                     }
                     else
@@ -259,12 +258,12 @@ namespace F4
                 }
                 else
                 {
-                    _taggedPolynomialArray[numList].setSimplyrule(i, NumPol);
+                    _taggedPolynomialArray[numList].setSimplyrule(i, _numPol);
                     
                     /* Insert a new "empty" tagged polynomial in _taggedPolynomialArray */
                     _taggedPolynomialArray.emplace_back();
-                    numList = NumPol;
-                    NumPol++;
+                    numList = _numPol;
+                    _numPol++;
                 }
             }
         }
@@ -284,13 +283,13 @@ namespace F4
     
     template <typename Element>
     void 
-    Ideal<Element>::update(int index, int & cmpt_genpurg, double & time_purgeCP, double & time_addCP, double & time_majBasis, bool purge)
+    Ideal<Element>::update(int index, bool purge, Stat & stat)
     {
         size_t j; 
-        bool div_trouve, div, strct1, strct2;
-        clock_t start_purgeCP = 0;
-        clock_t start_addCP = 0;
-        clock_t start_majBasis = 0;
+        bool divisorFound, div, strct1, strct2;
+        clock_t startPurgeCp = 0;
+        clock_t startAddCp = 0;
+        clock_t startMajBasis = 0;
         
         NodeAvlCriticalPair<Element> * itcp1 = _criticalPairSet.findSmallest();
         NodeAvlCriticalPair<Element> * itcp2 = 0;
@@ -301,7 +300,7 @@ namespace F4
         /* Strict divisibility criteria to avoid the problem of "eliminate 2 critical pairs over 3" */
         if (VERBOSE > 1)
         {
-            start_purgeCP = clock ();
+            startPurgeCp = clock ();
         }
         while(itcp1 != 0)
         {
@@ -311,10 +310,7 @@ namespace F4
             
             Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP1()].getLM()];
             Monomial const & lt_g=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP2()].getLM()];
-            
             Monomial const & lcm=itcp1->_cp.getLcm();
-            
-            //cout << "lt_f = " << lt_f << ", lt_g = " << lt_g << ", lcm = " << lcm << endl;
             
             for (j = 0; j < (size_t)_nbVariable && div; j++)
             {
@@ -342,9 +338,9 @@ namespace F4
             {
                 //cout << "Critical pair deleted " << endl;
                 /* Suppress the critical pair */
-                //GUsed[itcp1->getP1()]--;
-                //GUsed[itcp1->getP2()]--;
-                nbCP--;
+                //_used[itcp1->getP1()]--;
+                //_used[itcp1->getP2()]--;
+                stat._nbCp--;
                 itcp1=_criticalPairSet.erase(itcp1);
                 
             }
@@ -356,124 +352,124 @@ namespace F4
         
         if (VERBOSE > 1)
         {
-            time_purgeCP += (((double)clock () - start_purgeCP) * 1000) / CLOCKS_PER_SEC;
-            start_addCP = clock ();
+            stat._timePurgeCp += (clock () - startPurgeCp);
+            startAddCp = clock ();
         }
 
         /* Computation of critical pairs */ 
-        for (j = 0; j < Gbasis.size(); j++)
+        for (j = 0; j < _basis.size(); j++)
         {
-            if (!sp.setCriticalPair(index, GTotal[Gbasis[j]]))
+            if (!sp.setCriticalPair(index, _total[_basis[j]]))
             {
-                //cout << "Insert int P0, sp = " << sp << endl;
-                P0.insert(sp);
+                //cout << "Insert int _cpSet0, sp = " << sp << endl;
+                _cpSet0.insert(sp);
             }
             else
             {
-                //cout << "Insert int P1, sp = " << sp << endl;
-                P1.insert(sp);
+                //cout << "Insert int _cpSet1, sp = " << sp << endl;
+                _cpSet1.insert(sp);
             }
         }
         
-        itcp1=P1.findSmallest();
+        itcp1=_cpSet1.findSmallest();
         while(itcp1 != 0)
         {
             cp1=itcp1->_cp;
-            itcp1=P1.findNextSmallest(itcp1);
+            itcp1=_cpSet1.findNextSmallest(itcp1);
             
             /* Test if cp1 verifies criteria 2 */
-            div_trouve = false;
+            divisorFound = false;
             
-            /* Scan P0 */
-            itcp2=P0.findSmallest();
-            while (itcp2 != 0 && !div_trouve)
+            /* Scan _cpSet0 */
+            itcp2=_cpSet0.findSmallest();
+            while (itcp2 != 0 && !divisorFound)
             {
                 if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
                 {
-                    div_trouve = true;
+                    divisorFound = true;
                 }
-                itcp2=P0.findNextSmallest(itcp2);
+                itcp2=_cpSet0.findNextSmallest(itcp2);
             }
             
-            /* Scan P1 */
+            /* Scan _cpSet1 */
             itcp2=itcp1;
-            while (itcp2 != 0 && !div_trouve)
+            while (itcp2 != 0 && !divisorFound)
             {
                 if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
                 {
-                    div_trouve = true;
+                    divisorFound = true;
                 }
-                itcp2=P1.findNextSmallest(itcp2);
+                itcp2=_cpSet1.findNextSmallest(itcp2);
             }
             
-            /* Scan P2 */
-            itcp2=P2.findSmallest();
-            while (itcp2 != 0 && !div_trouve)
+            /* Scan _cpSet2 */
+            itcp2=_cpSet2.findSmallest();
+            while (itcp2 != 0 && !divisorFound)
             {
                 if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
                 {
-                    div_trouve = true;
+                    divisorFound = true;
                 }
-                itcp2=P2.findNextSmallest(itcp2);
+                itcp2=_cpSet2.findNextSmallest(itcp2);
             }
-            if (!div_trouve)
+            if (!divisorFound)
             {
-                /* Add cp1 to P2 */
-                P2.insert(cp1);
+                /* Add cp1 to _cpSet2 */
+                _cpSet2.insert(cp1);
             }
         }
-        P1.reset();
+        _cpSet1.reset();
         
-        /* CP <- CP U P2 */
-        itcp1=P2.findSmallest();
+        /* CP <- CP U _cpSet2 */
+        itcp1=_cpSet2.findSmallest();
         while(itcp1!=0)
         { 
-            //GUsed[itcp1->getP1()]++;
-            //GUsed[itcp1->getP2()]++;
+            //_used[itcp1->getP1()]++;
+            //_used[itcp1->getP2()]++;
             _criticalPairSet.insert(itcp1->_cp);
-            itcp1=P2.findNextSmallest(itcp1);
-            nbCP++;
+            itcp1=_cpSet2.findNextSmallest(itcp1);
+            stat._nbCp++;
         }
-        P2.reset();
+        _cpSet2.reset();
         
-        /* Free P0 */
-        P0.reset();
+        /* Free _cpSet0 */
+        _cpSet0.reset();
         
         if (VERBOSE > 1)
         {
-            time_addCP +=(((double)clock () - start_addCP) * 1000) / CLOCKS_PER_SEC;
-            start_majBasis = clock ();
+            stat._timeAddCp +=(clock () - startAddCp);
+            startMajBasis = clock ();
         }
         /* End of critical pair computation */
         
         if(purge)
         {
             /* Purge of generators */
-            div_trouve = false;
+            divisorFound = false;
             Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
-            for (j = 0; j < Gbasis.size(); j++)
+            for (j = 0; j < _basis.size(); j++)
             {
-                if (lt_f.isDivisible(_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()]))
+                if (lt_f.isDivisible(_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()]))
                 {
-                    div_trouve = true;
-                    //GUsed[index]--;
+                    divisorFound = true;
+                    //_used[index]--;
                     break;
                 }
             }
-            if (!div_trouve)
+            if (!divisorFound)
             {
-                /* Add the polynomial in Gbasis */
-                Gbasis.push_back(NumTot);
-                NumGen++;
-                /* purge of Gbasis by the new polynomial */
-                for (j = 0; j < Gbasis.size()-1; j++)
+                /* Add the polynomial in _basis */
+                _basis.push_back(_numTot);
+                _numGen++;
+                /* purge of _basis by the new polynomial */
+                for (j = 0; j < _basis.size()-1; j++)
                 {
-                    if (_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()].isDivisible(lt_f))
+                    if (_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()].isDivisible(lt_f))
                     { 
-                        //GUsed[GTotal[Gbasis[j]]]--;
-                        Gbasis.erase(Gbasis.begin()+j);
-                        NumGen--;
-                        cmpt_genpurg++;
+                        //_used[_total[_basis[j]]]--;
+                        _basis.erase(_basis.begin()+j);
+                        _numGen--;
+                        stat._cmptGenPurg++;
                         j--;
                     }
                 }
@@ -482,31 +478,31 @@ namespace F4
         else
         {
             Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
-            /* Add the polynomial in Gbasis */
-            Gbasis.push_back(NumTot);
-            NumGen++;
-            /* Purge of Gbasis by the new polynomial */
-            for (j = 0; j < Gbasis.size()-1; j++)
+            /* Add the polynomial in _basis */
+            _basis.push_back(_numTot);
+            _numGen++;
+            /* Purge of _basis by the new polynomial */
+            for (j = 0; j < _basis.size()-1; j++)
             {
-                if (_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[j]]].getLM()].isDivisible(lt_f))
+                if (_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()].isDivisible(lt_f))
                 { 
-                    //GUsed[GTotal[Gbasis[j]]]--;
-                    Gbasis.erase(Gbasis.begin()+j);
-                    NumGen--;
-                    cmpt_genpurg++;
+                    //_used[_total[_basis[j]]]--;
+                    _basis.erase(_basis.begin()+j);
+                    _numGen--;
+                    stat._cmptGenPurg++;
                     j--;
                 }
             }
         }
         if (VERBOSE > 1)
         {
-            time_majBasis +=(((double)clock () - start_majBasis) * 1000) / CLOCKS_PER_SEC;
+            stat._timeMajBasis +=(clock () - startMajBasis);
         }
     }
     
     template <typename Element>
     void 
-    Ideal<Element>::appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nb_piv)
+    Ideal<Element>::appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nbPiv)
     {
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         
@@ -520,7 +516,7 @@ namespace F4
 
             if(M_mons.insert(itTermBeg->getNumMonomial(), true) != 1)
             {
-                nb_piv++;
+                nbPiv++;
             }
             ++itTermBeg;
             while(itTermBeg!=itTermEnd)
@@ -555,10 +551,10 @@ namespace F4
     
     template <typename Element>
     double 
-    Ideal<Element>::transform(Matrix<Element> & Mat, int *tab_mon, int nb_piv, int *tau, int *sigma, int *start_tail, int *end_col)
+    Ideal<Element>::transform(Matrix<Element> & mat, int *tabMon, int nbPiv, int *tau, int *sigma, int *startTail, int *endCol)
     {
-        int hauteur=Mat.getHeight();
-        int largeur=Mat.getWidth();
+        int height=mat.getHeight();
+        int width=mat.getWidth();
         int nb = 0;                 /* for sparsitude */
         int icur, ih, ib, j;
         int c = 0;                  /* Column of the last lt */
@@ -574,7 +570,7 @@ namespace F4
 
         /* Unroll the AVL of monomial into an array */
         ih = 0;
-        ib = nb_piv;
+        ib = nbPiv;
         icur = 0;
 
         /* We take the biggest monomial of M_mons */
@@ -585,25 +581,25 @@ namespace F4
             {
                 sigma[ih] = icur;
                 tau[icur] = ih;
-                start_tail[ih] = ib;
+                startTail[ih] = ib;
                 ih++;
             }
             else
             {
                 sigma[ib] = icur;
                 tau[icur] = ib;
-                end_col[ib] = ih;
+                endCol[ib] = ih;
                 ib++;
             }
-            tab_mon[icur]=itMonBeg->_numMonomial;
+            tabMon[icur]=itMonBeg->_numMonomial;
             icur++;
             itMonBeg=M_mons.findNextBiggest(itMonBeg);
         }
         while(itMonBeg != 0);
-        if (icur != largeur)
+        if (icur != width)
         {
             cout << "***pb depliage M_mons dans Transform***" << endl;
-            cout << "icur = " << icur << ", largeur = " << largeur << endl;
+            cout << "icur = " << icur << ", width = " << width << endl;
         }
 
         /* Fill the matrix with a triangular shape */
@@ -612,12 +608,12 @@ namespace F4
         itTermEnd=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialEnd();
             
         ih = 0;
-        ib = nb_piv;
+        ib = nbPiv;
         
         /* Process first polynomial apart */
         numMonLT=itTermBeg->getNumMonomial();
         j = c;
-        Mat.setElement(0,tau[j], itTermBeg->getCoefficient());
+        mat.setElement(0,tau[j], itTermBeg->getCoefficient());
         nb++;
         j++;
         ++itTermBeg;
@@ -625,11 +621,11 @@ namespace F4
         {
             /* Search column */
             numMon = itTermBeg->getNumMonomial();
-            while ( numMon != tab_mon[j])
+            while ( numMon != tabMon[j])
             {
                 j++;
             }
-            Mat.setElement(0, tau[j], itTermBeg->getCoefficient());
+            mat.setElement(0, tau[j], itTermBeg->getCoefficient());
             j++;
             nb++;
             ++itTermBeg;
@@ -653,7 +649,7 @@ namespace F4
             if(itTermBeg->getNumMonomial()==numMonLT)
             {
                 /* Place the polynomial in the upper part of the matrix */
-                Mat.setElement(ib, tau[c], itTermBeg->getCoefficient());
+                mat.setElement(ib, tau[c], itTermBeg->getCoefficient());
                 j = c;
                 nb++;
                 j++;
@@ -663,11 +659,11 @@ namespace F4
                 {
                     /* Search column */
                     numMon = itTermBeg->getNumMonomial() ;
-                    while(numMon != tab_mon[j])
+                    while(numMon != tabMon[j])
                     {
                         j++;
                     }
-                    Mat.setElement(ib, tau[j], itTermBeg->getCoefficient());
+                    mat.setElement(ib, tau[j], itTermBeg->getCoefficient());
                     j++;
                     nb++;
                     ++itTermBeg;
@@ -677,17 +673,17 @@ namespace F4
             else
             {
                 /* Place the polynomial in the lower part of the matrix */
-                end_col[tau[c]] = ib;
+                endCol[tau[c]] = ib;
                 numMonLT = itTermBeg->getNumMonomial();
                 
-                while (numMonLT != tab_mon[c])
+                while (numMonLT != tabMon[c])
                 {
                     c++;
                 }
                 
                 j = c;
                 
-                Mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
+                mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
                 nb++;
                 j++;
                 ++itTermBeg;
@@ -695,11 +691,11 @@ namespace F4
                 {
                     /* Search column */
                     numMon=itTermBeg->getNumMonomial();
-                    while (numMon != tab_mon[j])
+                    while (numMon != tabMon[j])
                     {
                         j++;
                     }
-                    Mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
+                    mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
                     j++;
                     nb++;
                     ++itTermBeg;
@@ -716,23 +712,23 @@ namespace F4
                 //List[tmp_polEt->numList].poly->next = NULL;
             //}
         }
-        end_col[nb_piv - 1] = ib;
-        return ((double)nb) * 100. / ((double)largeur * (double)hauteur);
+        endCol[nbPiv - 1] = ib;
+        return ((double)nb) * 100. / ((double)width * (double)height);
 
     }
     
     template <typename Element>
     Polynomial<Element>
-    Ideal<Element>::buildPolynomial (Element * row, int *tab_mon, int largeur, int start, int *tau)
+    Ideal<Element>::buildPolynomial (Element * row, int *tabMon, int width, int start, int *tau)
     {
         Polynomial<Element> res;
         typename forward_list<Term<Element>>::const_iterator pos=res.getPolynomialBeforeBegin();
         
-        for (int j = start; j < largeur; j++)
+        for (int j = start; j < width; j++)
         {
             if (!row[tau[j]].isZero())
             {
-                pos=res.emplaceAfter(pos, row[tau[j]], tab_mon[j]);
+                pos=res.emplaceAfter(pos, row[tau[j]], tabMon[j]);
             }
         }
         if(res.isEmpty())
@@ -742,9 +738,28 @@ namespace F4
         return res;
     }
     
+    //template <typename Element>
+    //void
+    //Ideal<Element>::buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau)
+    //{
+        //typename forward_list<Term<Element>>::const_iterator pos=res.getPolynomialBeforeBegin();
+        
+        //for (int j = start; j < width; j++)
+        //{
+            //if (!row[tau[j]].isZero())
+            //{
+                //pos=res.emplaceAfter(pos, row[tau[j]], tabMon[j]);
+            //}
+        //}
+        //if(res.isEmpty())
+        //{
+            //cout << "Row empty --> see echelonize" << endl;
+        //}
+    //}
+    
     template <typename Element>
     void
-    Ideal<Element>::preprocessing(int & largeur, int & hauteur, int & nb_piv) 
+    Ideal<Element>::preprocessing(int & width, int & height, int & nbPiv) 
     {
         int indexPol;
         int i;
@@ -752,34 +767,34 @@ namespace F4
         quotient.allocate();
         typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
         NodeAvlMonomial * itmon;
-        largeur = 0;
+        width = 0;
         
         /* Search the biggest monomial in M_mons which is not a leading monomial */
         itmon=M_mons.findBiggest();
-        largeur++;
+        width++;
         while (itmon != 0 && itmon->_lt == true)
         {
             itmon=M_mons.findNextBiggest(itmon);
-            largeur++;
+            width++;
         }
         while(itmon != 0)
         {
             Monomial const & m1=_monomialArray[itmon->_numMonomial];
             /* Search reducer in the basis */
-            for (i = NumGen - 1; i >= 0; i--)
+            for (i = _numGen - 1; i >= 0; i--)
             {
-                Monomial const & m2=_monomialArray[_taggedPolynomialArray[GTotal[Gbasis[i]]].getLM()];
+                Monomial const & m2=_monomialArray[_taggedPolynomialArray[_total[_basis[i]]].getLM()];
                 if(m1.isDivisible(m2))
                 {
                     quotient.setMonomialDivide(m1,m2);
                     /* Reducer found */
                     itmon->_lt=true;
-                    nb_piv++;
+                    nbPiv++;
                     /* Test if the computation of this multiple is not already done */ 
-                    indexPol=simplify(quotient, GTotal[Gbasis[i]]);
+                    indexPol=simplify(quotient, _total[_basis[i]]);
                     /* Add the multiple in M */
                     M.insert(indexPol, (_taggedPolynomialArray[indexPol]).getLM(), (_taggedPolynomialArray[indexPol]).getNbTerm());
-                    hauteur++;
+                    height++;
                     /* Insert monomials of the new polynomial in M_mons */
                     itTermBeg=_taggedPolynomialArray[indexPol].getPolynomialBegin();
                     itTermEnd=_taggedPolynomialArray[indexPol].getPolynomialEnd();
@@ -796,11 +811,11 @@ namespace F4
             do
             {
                 itmon=M_mons.findNextBiggest(itmon);
-                largeur++;
+                width++;
             }
             while (itmon != 0 && itmon->_lt == true);
         }
-        largeur--;
+        width--;
         quotient.erase();
     }
     
@@ -808,55 +823,57 @@ namespace F4
     
     template <typename Element>
     bool
-    Ideal<Element>::postprocessing(Matrix<Element> & matrix, int * tab_mon, int * sigma, int * tau, int hauteur, int largeur, int hauteur_reelle, int nb_piv, int & cmpt_genpurg, int & cmpt_newgen, double & time_purgeCP, double & time_addCP, double & time_majBasis) 
+    Ideal<Element>::postprocessing(Matrix<Element> & matrix, int * tabMon, int * sigma, int * tau, int height, int width, int heightReal, int nbPiv, Stat & stat) 
     {
         /* Iterators */
         NodeAvlPolynomial * itPolBeg = M.findBiggest();
         int num_lt, i;
-        for (i = 0; i < nb_piv; i++)
+        for (i = 0; i < nbPiv; i++)
         {
-            num_lt = tab_mon[sigma[i]];
+            num_lt = tabMon[sigma[i]];
             if(itPolBeg->_numMonomial != num_lt)
             {
                 cout << "Wrong lt in postprocessing " << endl;
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(matrix.getRow(i), tab_mon, largeur, sigma[i], tau));
+                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(matrix.getRow(i), tabMon, width, sigma[i], tau));
+                //buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), matrix.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }
         }
-        for (i = nb_piv; i < hauteur_reelle; i++)
+        for (i = nbPiv; i < heightReal; i++)
         {
             /* Create new generators */
-            num_lt = tab_mon[sigma[i]];
-            if (tab_mon[sigma[i]] == 0)
+            num_lt = tabMon[sigma[i]];
+            if (tabMon[sigma[i]] == 0)
             {
                 return false;
             }
             if (VERBOSE > 2)
             {
-                if (tab_mon[sigma[i]] <= _nbVariable)
+                if (tabMon[sigma[i]] <= _nbVariable)
                 {
-                    cout << endl << "!! Polynom of degree 1: P[" << NumPol - 1 << " = " << _taggedPolynomialArray[NumPol-1] << " !! " << endl;
+                    cout << endl << "!! Polynom of degree 1: P[" << _numPol - 1 << " = " << _taggedPolynomialArray[_numPol-1] << " !! " << endl;
                 }
             }
             /* Update the set of critical pairs and the current basis */
-            _taggedPolynomialArray.emplace_back(buildPolynomial(matrix.getRow(i), tab_mon, largeur, sigma[i], tau));
+            _taggedPolynomialArray.emplace_back(buildPolynomial(matrix.getRow(i), tabMon, width, sigma[i], tau));
             if (VERBOSE > 3)
             {
-                cout << endl << "GTotal[" << NumTot << "] = " << _taggedPolynomialArray[NumPol] << endl;
+                cout << endl << "_total[" << _numTot << "] = " << _taggedPolynomialArray[_numPol] << endl;
             }
             /* Add the new generator in the basis */
-            GTotal.push_back(NumPol);
-            GUsed.push_back(1);
-            update(NumPol, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis, false);
-            NumPol++;
-            NumTot++;
-            cmpt_newgen++;
+            _total.push_back(_numPol);
+            _used.push_back(1);
+            update(_numPol, false, stat);
+            _numPol++;
+            _numTot++;
+            stat._cmptNewGen++;
         }
         return true;
     }
+    
     
     /* F4 Algorithm */
     
@@ -870,7 +887,7 @@ namespace F4
         NodeAvlCriticalPair<Element> * itcp1;
         
         /* F4 matrix */
-        Matrix<Element> Mat;
+        Matrix<Element> mat;
         
         /* Temporary critical pair */
         CriticalPair<Element> cp1;
@@ -881,7 +898,6 @@ namespace F4
         int i;
         int step = 0;
         int d;
-        int nbCP_d;
         int num_lt;
         
         if(VERBOSE > 3)
@@ -895,31 +911,27 @@ namespace F4
         }
 
         /* For convertion under matrix for */
-        int *tab_mon;               /* Monomial array */
-        int nb_piv;                 /* We set the pivots in the upper part of Mat, after nb_piv, polynomials can be some new generators */
+        int *tabMon;               /* Monomial array */
+        int nbPiv;                 /* We set the pivots in the upper part of mat, after nbPiv, polynomials can be some new generators */
         int *tau;                   /* sigma(tau(i))=tau(sigma(i))=i */
-        int *sigma;                 /* To get Mat under triangular shape, we permute some columns */
-        int *start_tail;            /* start_tail[i] = min{j>=nb_piv : sigma[i]<sigma[j]} */
-        int *end_col;               
+        int *sigma;                 /* To get mat under triangular shape, we permute some columns */
+        int *startTail;            /* startTail[i] = min{j>=nbPiv : sigma[i]<sigma[j]} */
+        int *endCol;               
 
         /* For preprocessing */
-        int hauteur, largeur, hauteur_reelle, index;
+        int height, width, heightReal, index;
         
-        /* Percentage of non zero coefficient in Mat */
+        /* Percentage of non zero coefficient in mat */
         double sparse;
         
         /* Counters */
-        NumGen = 0;             /* Number of polynomials in the groebner basis */
-        NumPol = 0;             /* Number of polynomials in _taggedPolynomialArray */
-        NumTot = 0;             /* Number of polynomials used to update the basis and the critical pairs set */
+        _numGen = 0;             /* Number of polynomials in the groebner basis */
+        _numPol = 0;             /* Number of polynomials in _taggedPolynomialArray */
+        _numTot = 0;             /* Number of polynomials used to update the basis and the critical pairs set */
 
         /* Statistic */
-        int cmpt_newgen = 0;
-        int cmpt_genpurg = 0;
-
-        double time_purgeCP = 0;
-        double time_addCP = 0;
-        double time_majBasis = 0;
+        Stat stat;
+        
         clock_t start = 0;
         clock_t start2 = 0;
         clock_t start1 = clock ();
@@ -940,13 +952,13 @@ namespace F4
         {
             _polynomialArray[i].normalize();
             _taggedPolynomialArray.emplace_back(_polynomialArray[i]);
-            GTotal.push_back(NumPol);
-            GUsed.push_back(1);
+            _total.push_back(_numPol);
+            _used.push_back(1);
 
             /* Initialisation : compute all the critical pairs and purge of the basis */
-            update(i, cmpt_genpurg, time_purgeCP, time_addCP, time_majBasis, true);
-            NumPol++;
-            NumTot++;
+            update(i, true, stat);
+            _numPol++;
+            _numTot++;
         }
         step++;
         
@@ -961,9 +973,9 @@ namespace F4
             }
             
             //cout << "DEBUG " << endl;
-            //cout << "NumPol: " << NumPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
-            //cout << "NumTot: " << NumTot << " GTotal size: " << GTotal.size() << " GUsed size: " << GUsed.size() << endl;
-            //cout << "NumGen: " << NumGen << " Gbasis size: " << Gbasis.size() << endl << endl;
+            //cout << "_numPol: " << _numPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
+            //cout << "_numTot: " << _numTot << " _total size: " << _total.size() << " _used size: " << _used.size() << endl;
+            //cout << "_numGen: " << _numGen << " _basis size: " << _basis.size() << endl << endl;
             
             if (VERBOSE > 1)
             {
@@ -972,9 +984,9 @@ namespace F4
             M_mons.reset();
             
             /* Construction of critical pairs with minimal degree */
-            hauteur = 0;
-            nb_piv = 0;
-            nbCP_d = 0;
+            height = 0;
+            nbPiv = 0;
+            stat._nbCpDeg = 0;
             
             if(VERBOSE > 1)
             {
@@ -987,12 +999,12 @@ namespace F4
             cp1=itcp1->_cp;
             itcp1=_criticalPairSet.erase(itcp1);
             
-            nbCP--;
+            stat._nbCp--;
             d = cp1.getDegree();
 
             if (VERBOSE > 0)
             {
-                cout << "Step degree: " << d << ", Basis length: " << NumGen << ", Pairs queue length " << nbCP +1 << endl << endl;
+                cout << "Step degree: " << d << ", Basis length: " << _numGen << ", Pairs queue length " << stat._nbCp+1 << endl << endl;
             }
             if (VERBOSE > 1)
             {
@@ -1000,23 +1012,23 @@ namespace F4
                 start = clock ();   
             }
 
-            appendMatrixF4 (cp1, hauteur, nb_piv);
+            appendMatrixF4 (cp1, height, nbPiv);
             //recuperation du noeud
-            //GUsed[cp1.getP1()]--;
-            //GUsed[cp1.getP2()]--;
-            nbCP_d++;
+            //_used[cp1.getP1()]--;
+            //_used[cp1.getP2()]--;
+            stat._nbCpDeg++;
 
             /* Get the other critical pairs of degree d */
             while ( (itcp1 != 0) && (itcp1->_cp.getDegree()==d))
             {
                 cp1=itcp1->_cp;
                 itcp1=_criticalPairSet.erase(itcp1);
-                nbCP--;
-                appendMatrixF4 (cp1, hauteur, nb_piv);
-                nbCP_d++;
+                stat._nbCp--;
+                appendMatrixF4 (cp1, height, nbPiv);
+                stat._nbCpDeg++;
                 //recuperation du noeud de la cp
-                //GUsed[cp1.getP1()]--;
-                //GUsed[cp1.getP2()]--;
+                //_used[cp1.getP1()]--;
+                //_used[cp1.getP2()]--;
             }
             if(VERBOSE > 1)
             {
@@ -1026,8 +1038,8 @@ namespace F4
             if (VERBOSE > 0)
             {
                 cout << "Construction of M: " << endl;
-                cout << "Number of selected pairs: " << nbCP_d << endl;
-                cout << "Number of polynomials: " << hauteur << endl;
+                cout << "Number of selected pairs: " << stat._nbCpDeg << endl;
+                cout << "Number of polynomials: " << height << endl;
                 cout << "Number of monomials: " << M_mons.size() << endl << endl;
             }
             
@@ -1036,7 +1048,7 @@ namespace F4
             {
                 timePreprocessingStart=clock();
             }
-            preprocessing(largeur, hauteur, nb_piv);
+            preprocessing(width, height, nbPiv);
             if(VERBOSE > 1)
             {
                 timePreprocessing +=(clock () - timePreprocessingStart);
@@ -1046,44 +1058,44 @@ namespace F4
             if (VERBOSE > 0)
             {
                 cout << "Preprocessing of M: " << endl;
-                cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl << endl;
+                cout << "Height: " << height << ", Width :" << width << ", Number of pivots: " << nbPiv << endl << endl;
             }
             
-            Mat=Matrix<Element>(hauteur, largeur);
-            tab_mon = new int[largeur];
-            tau = new int[largeur];
-            sigma = new int[largeur];
-            start_tail = new int[hauteur];
-            end_col = new int[largeur];
+            mat=Matrix<Element>(height, width);
+            tabMon = new int[width];
+            tau = new int[width];
+            sigma = new int[width];
+            startTail = new int[height];
+            endCol = new int[width];
             
             /* Time spent in transform */
             if(VERBOSE > 1)
             {
                 timeTransformStart = clock();
             }
-            sparse = transform (Mat, tab_mon, nb_piv, tau, sigma, start_tail, end_col);
+            sparse = transform (mat, tabMon, nbPiv, tau, sigma, startTail, endCol);
             if(VERBOSE > 1)
             {
                 timeTransform +=(clock () - timeTransformStart);
             }
             
             //filename=to_string(step)+"before-echelonize.pgm";
-            //printMatrix(Mat, tab_mon, sigma, filename);
+            //printMatrix(mat, tabMon, sigma, filename);
             
             if (VERBOSE > 0)
             {
                 cout << "Convert M into a matrix: " << endl;
-                cout << "Matrix size: " << hauteur << "x" << largeur << endl;
+                cout << "Matrix size: " << height << "x" << width << endl;
                 cout << "Matrix density: " << sparse << endl;
                 cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
             }
 
-            /* Triangularisation of Mat */
-            Mat.setInfo(nb_piv, tau, sigma, start_tail, end_col);
-            hauteur_reelle=Mat.echelonize();
+            /* Triangularisation of mat */
+            mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
+            heightReal=mat.echelonize();
             
             //filename=to_string(step)+"after-echelonize.pgm";
-            //printMatrix(Mat, tab_mon, sigma, filename);
+            //printMatrix(mat, tabMon, sigma, filename);
             
             if (VERBOSE > 0)
             {
@@ -1092,42 +1104,43 @@ namespace F4
             }
             if (VERBOSE > 1)
             {
-                time_purgeCP = 0;
-                time_addCP = 0;
-                time_majBasis = 0;
-                //start_majBasis = clock ();
+                stat._timePurgeCp = 0;
+                stat._timeAddCp = 0;
+                stat._timeMajBasis = 0;
             }
 
-            /* Rebuild M from Mat */
-            cmpt_newgen = 0;        /* count new generators */
-            cmpt_genpurg = 0;       /* count purged generators */
+            /* Rebuild M from mat */
+            /* Count new generators */
+            stat._cmptNewGen=0;
+            /* Count purged generators */
+            stat._cmptGenPurg=0;
             
             /* Time spent in postProcessing */
             if(VERBOSE > 1)
             {
                 timePostprocessingStart = clock();
             }
-            if(!postprocessing(Mat, tab_mon, sigma, tau, hauteur, largeur, hauteur_reelle, nb_piv, cmpt_genpurg, cmpt_newgen, time_purgeCP, time_addCP, time_majBasis))
+            if(!postprocessing(mat, tabMon, sigma, tau, height, width, heightReal, nbPiv, stat))
             {
                 cout << endl << endl << "GROEBNER BASIS : (1)" << endl;
                 cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << " ms " << endl << endl << endl;
                 
-                if(M_mons.size() != (size_t)largeur)
+                if(M_mons.size() != (size_t)width)
                 {
-                    cout << "*** Problem in width computation: size of M_mons = " << M_mons.size() << ", width = " << largeur << " ***" << endl;
+                    cout << "*** Problem in width computation: size of M_mons = " << M_mons.size() << ", width = " << width << " ***" << endl;
                 }
                 M_mons.reset();
-                if(M.size() != (size_t)hauteur) 
+                if(M.size() != (size_t)height) 
                 {
-                    cout << "*** Problem in height computation: size of M = " << M.size() << ", height = " << hauteur << " ***" << endl << endl;
+                    cout << "*** Problem in height computation: size of M = " << M.size() << ", height = " << height << " ***" << endl << endl;
                 }
                 M.reset();
  
-                delete[] tab_mon;
+                delete[] tabMon;
                 delete[] tau;
                 delete[] sigma;
-                delete[] start_tail;
-                delete[] end_col;
+                delete[] startTail;
+                delete[] endCol;
                 return 0;
             }
             if(VERBOSE > 1)
@@ -1137,16 +1150,16 @@ namespace F4
             
             if (VERBOSE > 0)
             {
-                cout << "Update of Gbasis and queue of pairs done in " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl;
+                cout << "Update of _basis and queue of pairs done in " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl;
                 if (VERBOSE > 1)
                 {
-                    cout << "--> " << time_purgeCP << " ms for purging of the pairs queue" << endl;
-                    cout << "--> " << time_addCP << " ms for updating CP " << endl;
-                    cout << "--> " << time_majBasis << " ms for updating Gbasis " << endl;
+                    cout << "--> " << (stat._timePurgeCp* 1000) / CLOCKS_PER_SEC << " ms for purging of the critical pairs queue" << endl;
+                    cout << "--> " << (stat._timeAddCp* 1000) / CLOCKS_PER_SEC << " ms for updating critical pairs " << endl;
+                    cout << "--> " << (stat._timeMajBasis* 1000) / CLOCKS_PER_SEC << " ms for updating groebner basis " << endl;
                 }
-                if (hauteur_reelle != hauteur)
+                if (heightReal != height)
                 {
-                    cout << "** " << hauteur - hauteur_reelle << " reductions to zero **" << endl << endl;
+                    cout << "** " << height - heightReal << " reductions to zero **" << endl << endl;
                 }
             }
             
@@ -1156,14 +1169,14 @@ namespace F4
             M.reset();
             timeClear+=(clock()-timeClearStart);
             
-            if (cmpt_newgen != (hauteur_reelle - nb_piv))
+            if (stat._cmptNewGen != (heightReal - nbPiv))
             {
                 cout << "*** erreur dans le comptage des nouveaux generateurs ***" << endl;
             }
 
             if (VERBOSE > 0)
             {
-                cout << "Basis length: " << NumGen << " (" << cmpt_newgen << " new gen and " << cmpt_genpurg << " purged) " << endl << endl;
+                cout << "Basis length: " << _numGen << " (" << stat._cmptNewGen << " new gen and " << stat._cmptGenPurg << " purged) " << endl << endl;
             }
                 
             if (VERBOSE > 0)
@@ -1172,11 +1185,11 @@ namespace F4
             }
             step++;
             
-            delete[] tab_mon;
+            delete[] tabMon;
             delete[] tau;
             delete[] sigma;
-            delete[] start_tail;
-            delete[] end_col;
+            delete[] startTail;
+            delete[] endCol;
         }
         /* End of critical pair loop */
         
@@ -1192,9 +1205,9 @@ namespace F4
             cout << "---> " << (((double)timePostprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for postprocessing" << endl;
             cout << "---> " << (((double)timeSimplify) * 1000) / CLOCKS_PER_SEC << "ms CPU used for simplify" << endl << endl << endl;
             
-            cout << "NumPol: " << NumPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
-            cout << "NumTot: " << NumTot << " GTotal size: " << GTotal.size() << " GUsed size: " << GUsed.size() << endl;
-            cout << "NumGen: " << NumGen << " Gbasis size: " << Gbasis.size() << endl << endl;
+            cout << "_numPol: " << _numPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
+            cout << "_numTot: " << _numTot << " _total size: " << _total.size() << " _used size: " << _used.size() << endl;
+            cout << "_numGen: " << _numGen << " _basis size: " << _basis.size() << endl << endl;
         }
         
         /* Reduced the basis */
@@ -1204,12 +1217,12 @@ namespace F4
             cout << "Reducing the basis..." << endl;
         }
 
-        largeur = 0;
-        hauteur = 0;
+        width = 0;
+        height = 0;
         
-        for (i = 0; i < NumGen; i++)
+        for (i = 0; i < _numGen; i++)
         {
-            index=GTotal[Gbasis[i]];
+            index=_total[_basis[i]];
             M.insert(index, (_taggedPolynomialArray[index]).getLM(), (_taggedPolynomialArray[index]).getNbTerm());
             
             itTermBeg=_taggedPolynomialArray[index].getPolynomialBegin();
@@ -1223,75 +1236,76 @@ namespace F4
                 M_mons.insert(itTermBeg->getNumMonomial(), false);
                 ++itTermBeg;
             }
-            hauteur++;
+            height++;
         }
         
         /* Preprocessing */
-        preprocessing(largeur, hauteur, nb_piv);
-        nb_piv = hauteur;
+        preprocessing(width, height, nbPiv);
+        nbPiv = height;
         
         /* Transform M into a matrix */
         if (VERBOSE > 0)
         {
             cout << "Preprocessing of M: " << endl;
-            cout << "Height: " << hauteur << ", Width :" << largeur << ", Number of pivots: " << nb_piv << endl << endl;
+            cout << "Height: " << height << ", Width :" << width << ", Number of pivots: " << nbPiv << endl << endl;
         }
             
-        Mat=Matrix<Element>(hauteur, largeur);
-        tab_mon = new int[largeur];
-        tau = new int[largeur];
-        sigma = new int[largeur];
-        start_tail = new int[hauteur];
-        end_col = new int[largeur];
+        mat=Matrix<Element>(height, width);
+        tabMon = new int[width];
+        tau = new int[width];
+        sigma = new int[width];
+        startTail = new int[height];
+        endCol = new int[width];
         
-        sparse = transform (Mat, tab_mon, nb_piv, tau, sigma, start_tail, end_col);
+        sparse = transform (mat, tabMon, nbPiv, tau, sigma, startTail, endCol);
         
         if (VERBOSE > 1)
         {
-            cout << "Matrix size: " << hauteur << "x" << largeur << endl;
+            cout << "Matrix size: " << height << "x" << width << endl;
             cout << "Matrix density: " << sparse << endl;
             cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl;
         }
 
-        /* Triangularisation of Mat */
-        Mat.setInfo(nb_piv, tau, sigma, start_tail, end_col);
-        hauteur_reelle=Mat.echelonize();
+        /* Triangularisation of mat */
+        mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
+        heightReal=mat.echelonize();
 
         /* Retrieve generators of the minimal basis */
         itPolBeg = M.findBiggest();
-        for (i = 0; i < nb_piv; i++)
+        for (i = 0; i < nbPiv; i++)
         {
-            num_lt = tab_mon[sigma[i]];
+            num_lt = tabMon[sigma[i]];
             if(itPolBeg->_numMonomial != num_lt)
             {
                 cout << "Wrong lt in postprocessing " << endl;
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(Mat.getRow(i), tab_mon, largeur, sigma[i], tau));
+                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(mat.getRow(i), tabMon, width, sigma[i], tau));
+                //buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), mat.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }
         }
-        if(M_mons.size() != (size_t)largeur)
+        if(M_mons.size() != (size_t)width)
         {
             cout << "*** Problem in width computation ***" << endl;
         }
         M_mons.reset();
-        if(M.size() != (size_t)hauteur) 
+        if(M.size() != (size_t)height) 
         {
             cout << "*** Problem in height computation ***" << endl << endl;
         }
         M.reset();
 
-        delete[] tab_mon;
+        delete[] tabMon;
         delete[] tau;
         delete[] sigma;
-        delete[] start_tail;
-        delete[] end_col;
+        delete[] startTail;
+        delete[] endCol;
         
-        cout << "Groebner basis: " << NumGen << " generators. Computed in " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
+        cout << "Groebner basis: " << _numGen << " generators. Computed in " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
 
-        return NumGen;
+        return _numGen;
     }
 
 }

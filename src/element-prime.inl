@@ -43,13 +43,13 @@ namespace F4
     
     template <typename baseType>
     void 
-    ElementPrime<baseType>::setModulo(unsigned int modulo)
+    ElementPrime<baseType>::setModulo(baseType modulo)
     {
         MODULO=modulo;
     }
     
     template <typename baseType>
-    unsigned int 
+    baseType 
     ElementPrime<baseType>::getModulo()
     {
         return MODULO;
@@ -59,9 +59,8 @@ namespace F4
     /* Constructor */
             
     template <typename baseType>
-    ElementPrime<baseType>::ElementPrime()
+    ElementPrime<baseType>::ElementPrime():_element(0)
     {
-        _element=0;
     }
     
     template <typename baseType>
@@ -113,12 +112,21 @@ namespace F4
     }
     
     template <typename baseType>
+    inline void
+    ElementPrime<baseType>::normalize ()
+    {
+        _element%=MODULO;
+    }
+    
+    template <typename baseType>
     ElementPrime<baseType> &
     ElementPrime<baseType>::addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult)
     {
         assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
         assert((element._element>-MODULO) || (element._element<MODULO));
         assert((_element>-MODULO) || (_element<MODULO));
+
+        //_element%=MODULO;
         _element+=(element._element*mult._element);
         _element%=MODULO;
         return * this;
@@ -142,13 +150,6 @@ namespace F4
         b = MODULO;
         b_x = 0;
         b_p = 1;
-
-    #ifdef COMPLEXITY
-        if (inv != 1)
-        {
-            cmpt_div++;
-        }
-    #endif
 
         while (a)
         {
@@ -327,6 +328,7 @@ namespace F4
     {
         assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
         assert((_element>-MODULO) || (_element<MODULO));
+        //_element%=MODULO;
         _element*=mult._element;
         _element%=MODULO;
         return * this;
@@ -336,6 +338,7 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator/=(ElementPrime<baseType> element)
     {
+        //_element%=MODULO;
         _element*=((element.inverse())._element);
         _element%=MODULO;
         return * this;

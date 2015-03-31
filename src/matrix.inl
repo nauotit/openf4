@@ -445,10 +445,20 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::multRow(int numRow, Element const & element, int start, int end)
+    Matrix<Element>::normalizeRow(Element * row, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
-        Element * row = getRow(numRow);
+        for(int i=start; i<end; ++i)
+        {
+            row[i].normalize();
+        }
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::multRow(Element * row, Element const & element, int start, int end)
+    {
+        assert((start >= 0) && (end <= _width));
         for(int i=start; i<end; ++i)
         {
             row[i]*=element;
@@ -457,11 +467,9 @@ namespace F4
     
     template <typename Element>
     inline void
-    Matrix<Element>::addMultRow(int numRow1, int numRow2, Element element, int start, int end)
+    Matrix<Element>::addMultRow(Element * row1, Element * row2, Element element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
-        Element * row1 = getRow(numRow1);
-        Element * row2 = getRow(numRow2);
         element.modulo();
         for(int i=start; i<end; ++i)
         {
@@ -471,7 +479,7 @@ namespace F4
     
     template <typename Element>
     void
-    Matrix<Element>::swapRow(int numRow1, int numRow2, int start, int end)
+    Matrix<Element>::swapRow(int numRow1, int numRow2)
     {
         assert((start >= 0) && (end <= _width));
         Element * tmp = _matrix[numRow1];
@@ -497,7 +505,7 @@ namespace F4
         clock_t start;
         double tmp_ech_g, tmp_ech_db, tmp_ech_dh;
         int ca = 0;
-        int i, l, l2, ll;               //,_endCol;
+        int i, l, l2, ll;
         i = 0;
         l = 0;
         Element piv, inv;
@@ -509,92 +517,106 @@ namespace F4
         }
 
     #define TRANCHE 64
-        /* echelonnage de la partie gauche de la matrice */
+    
+        /* Echelonize the left part of the matrix */
         start = clock ();
         for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)
         {
-            /* 1er tranche */
+            /* 1st slice */
             if (l < TRANCHE)
             {
-                /* partie triangulaire */
+                /* Triangular part */
                 for (ll = l; ll > 0; ll--)
                 {
-                    // TODO: multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
+                    /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                    //normalizeRow(_matrix[ll], ll, _width);
                     for (l2 = 0; l2 < ll; l2++)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
-                // TODO: multRow (1, _matrix[0], _width, 0);
+                /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                //normalizeRow(_matrix[0], 0, _width);
                 
-                /* partie rectangulaire basse (sous  _nbPiv) */
+                /* Low rectangular part (under  _nbPiv) */
                 for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                 {
                     for (ll = l; ll >= 0; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
             }
-            /* Autres tranches */
+            /* Other slices */
             else
             {
-                /* partie triangulaire de la tranche */
+                /* Triangular part */
                 for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    // TODO multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
+                    /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                    //normalizeRow(_matrix[ll], ll, _width);
                     for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
-                /* partie rectangulaire haute */
+                /* Hight rectangular part */
                 for (l2 = 0; l2 <= l - TRANCHE; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
-                /* partie rectangulaire basse (sous  _nbPiv) */
+                /* Low rectangular part (under  _nbPiv) */
                 for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _startTail[ll], _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
@@ -602,8 +624,8 @@ namespace F4
             }
         }
         tmp_ech_g = (((double)clock () - start) * 1000) / CLOCKS_PER_SEC;
-
-        /* echelonnage de la partie basse (droite) de la matrice */
+        
+        /* Echelonize the low right part of the matrix */
         start = clock ();
         ca = _nbPiv;
         l = _nbPiv;
@@ -611,9 +633,11 @@ namespace F4
         {
             for (; ca < _width; ca++)
             {
-                /* recherche d'un pivot dans la col ca */
+                /* Search a pivot in column ca */
                 for (i = l; i < _height; i++)
                 {
+                    /* Normalize in  [-MODULO/2, MODULO/2]. */
+                    //_matrix[i][ca].modulo();
                     if (!isZero(i,ca) )
                     {
                         break;
@@ -621,31 +645,31 @@ namespace F4
                 }
                 if (i < _height)
                 {
-                    /* pivot trouve dans la col ca */
+                    /* Pivot found in column ca */
                     break;          
                 }
             }
             if (ca == _width)
             {
-                /* toutes les lignes sous la l-ieme sont nulles */
+                /* All the rows under the l-th row are zeros */ 
                 for(l2=l; l2<_height; l2++)
                 {
                     delete[] _matrix[l2];
                 }
-                /* on oublie toutes les lignes nulles */
+                /* Forget all the zeros rows */
                 _height = l;
             }
             else
             {
-                /* echange avec la ligne de pivot */
-                swapRow(l,i,0, _width);
+                /* Swap with the row containing the pivot */
+                swapRow(l,i);
                 if (ca != l)
                 {
-                    /* echange de colonnes */
+                    /* Column swap */
                     ll = (_endCol[l] > _endCol[ca] ? _endCol[l] : _endCol[ca]);
                     swapCol(l,ca,0, ll);
                     swapCol(l, ca, _nbPiv, _height);
-                    /* on retient l'echange de colonnes */
+                    /* Carry the column swap over */
                     _tau[_sigma[l]] = ca;
                     _tau[_sigma[ca]] = l;
                     exc = _sigma[l];
@@ -655,18 +679,23 @@ namespace F4
                     _endCol[l] = _endCol[ca];
                     _endCol[ca] = exc;
                 }
-                piv = getElement(l,l);
+                piv = _matrix[l][l];
+                //piv.normalize();
                 inv = piv.inverse();
-                /* normalisation de toute la ligne */
-                multRow (l, inv, ca + 1, _width);      
-                setElement(l,l,1);
-                /* elimination de termes de la colonne sous le pivot */
+                
+                /* Normalize the row */
+                multRow (_matrix[l], inv, ca + 1, _width);      
+                _matrix[l][l].setOne();
+                
+                /* Suppress the elements under the pivot */
                 for (l2 = l + 1; l2 < _height; l2++)
                 {
+                    /* Normalize in  [-MODULO/2, MODULO/2]. */
+                    //_matrix[l2][l].modulo();
                     if (!isZero(l2,l) )
                     {
-                        addMultRow (l2, l, -getElement(l2,l), ca, _width);
-                        setElement(l2,l,0);
+                        addMultRow (_matrix[l2], _matrix[l], -_matrix[l2][l], ca, _width);
+                        _matrix[l2][l].setZero();
                     }
                 }
                 l++;
@@ -675,10 +704,10 @@ namespace F4
         }
         tmp_ech_db = (((double)clock () - start) * 1000) / CLOCKS_PER_SEC;
 
-        /*echelonnage de la partie haute (droite) de la matrice */
+        /* Echelonize the hight right part of the matrix */
         start = clock ();
 
-        /*Check endcol */
+        /* Check _endCol */
         for (l = _nbPiv; l < _height - 1; l++)
         {
             if (_endCol[l + 1] < _endCol[l])
@@ -693,35 +722,42 @@ namespace F4
         {
             if (l < (_nbPiv + TRANCHE))
             {
-                /* premiere tranche */
-                /* triangle */
+                /* 1st slice */
+                /* Triangular part */
                 for (ll = l; ll > _nbPiv; ll--)
                 {
-                    // TODO: multRow (1, _matrix[ll], _width, ll);
+                    /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                    //normalizeRow(_matrix[ll], ll, _width);
                     for (l2 = _nbPiv; l2 < ll; l2++)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
-                // TODO: multRow (1, _matrix[_nbPiv], _width, _nbPiv);
+                /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                //normalizeRow(_matrix[_nbPiv], _nbPiv, _width);
+                
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[_nbPiv];
-                /* rectangle au dessus */
+                /* Upper rectangular part */
                 for (l2 = 0; l2 < min_endcol; l2++)
                 {
                     for (ll = l; ll >= _nbPiv; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        //_matrix[l2][ll].modulo();
+                        if (!isZero(l2,ll) )
                         {
-                            addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                            setElement(l2,ll,0);
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -729,44 +765,53 @@ namespace F4
                 {
                     for (ll = l; _endCol[ll] > l2; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        //_matrix[l2][ll].modulo();
+                        if (!isZero(l2,ll))
                         {
-                            addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                            setElement(l2,ll,0);
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
             }
             else
             {
-                /* triangle */
+                /* Triangular part */
                 for (ll = l; ll > l - TRANCHE + 1; ll--)
                 {
-                    // TODO: multRow (1, _matrix[ll], _width, ll);       //normalisation de toute la ligne
+                    /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                    //normalizeRow(_matrix[ll], ll, _width);
                     for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
                 }
-                // TODO: multRow (1, _matrix[l - TRANCHE + 1], _width, l - TRANCHE + 1);
-                /* rectangle au dessus */
+                /* Normalize the row in  [-MODULO+1, MODULO-1]. */
+                //normalizeRow(_matrix[l - TRANCHE + 1], l - TRANCHE + 1, _width);
+                
+                /* Upper rectangular part */
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[l - TRANCHE + 1];
                 for (l2 = 0; l2 < min_endcol; l2++)
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        //_matrix[l2][ll].modulo();
+                        if (!isZero(l2,ll) )
                         {
-                            addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                            setElement(l2,ll,0);
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -774,10 +819,12 @@ namespace F4
                 {
                     for (ll = l; _endCol[ll] > l2; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        //_matrix[l2][ll].modulo();
+                        if (!isZero(l2,ll) )
                         {
-                            addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                            setElement(l2,ll,0);
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -785,12 +832,14 @@ namespace F4
                 {
                     for (ll = l; ll > l - TRANCHE; ll--)
                     {
-                        if ((!isZero(l2,ll) ))
+                        if (!isZero(l2,ll) )
                         {
-                            if ((!isZero(l2,ll) ))
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            //_matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
                             {
-                                addMultRow (l2, ll, -getElement(l2,ll), _height, _width);
-                                setElement(l2,ll,0);
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
@@ -798,13 +847,13 @@ namespace F4
             }
         }
         tmp_ech_dh = (((double)clock () - start) * 1000) / CLOCKS_PER_SEC;
-
-         ////TODO: 
+        
+        /* Normalize the matrix */
         //for (i = 0; i < _height; i++)
         //{
             //for (l = 0; l < _width; l++)
             //{
-                //_matrix[i][l] = modulo (_matrix[i][l]);
+                //_matrix[i][l].normalize();
             //}
         //}
 

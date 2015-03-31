@@ -48,13 +48,13 @@ namespace F4
              * \brief Set the static variable MODULO.
              * \param modulo: Characteristic of the base field.
              */
-            static void setModulo(unsigned int modulo);
+            static void setModulo(baseType modulo);
             
             /**
              * \brief Get the static variable MODULO.
              * \return Characteristic of the base field.
              */
-            static unsigned int getModulo();
+            static baseType getModulo();
             
             
             /* Constructor */
@@ -89,7 +89,13 @@ namespace F4
              * \post this is set in [-MODULO/2, MODULO/2].
              * \return this.
              */
-            ElementPrime<baseType> &  modulo ();
+            ElementPrime<baseType> & modulo ();
+            
+            /**
+             * \brief Set this in [-MODULO+1, MODULO-1].
+             * \post this is set in [-MODULO+1, MODULO-1].
+             */
+            void normalize();
             
             /**
              * \brief Set this+=(mult*element).

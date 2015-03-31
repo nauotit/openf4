@@ -215,32 +215,38 @@ namespace F4
             bool isZero(int row, int col) const;
             
             /**
+             * \brief Normalize a slice of the row-th row.
+             * \param row: Row to normalize.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
+            void normalizeRow(Element * row, int start, int end);
+            
+            /**
              * \brief Multiply a slice of the row-th row by element.
-             * \param numRow: Number of the row.
+             * \param row: Row of the matrix. 
              * \param element: Element used to multiply each element of the slice.
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void multRow(int numRow, Element const & element, int start, int end);
+            void multRow(Element * row, Element const & element, int start, int end);
             
              /**
              * \brief Multiply a slice of the row1-th row by element and add a slice of the row2-th row.
-             * \param numRow1: Number of the row. The one to modify.
-             * \param numRow2: Number of the row. 
+             * \param row1: Row of the matrix. The one to modify.
+             * \param row2: Row of the matrix. 
              * \param element: Element used to multiply each element of the slice.
              * \param start: Beginning of the slice.
              * \param end: End of the slice.
              */
-            void addMultRow(int numRow1, int numRow2, Element element, int start, int end);
+            void addMultRow(Element * row1, Element * row2, Element element, int start, int end);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
              * \param numRow1: Number of the row. 
              * \param numRow2: Number of the row. 
-             * \param start: Beginning of the slice.
-             * \param end: End of the slice.
              */
-            void swapRow(int numRow1, int numRow2, int start, int end);
+            void swapRow(int numRow1, int numRow2);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.

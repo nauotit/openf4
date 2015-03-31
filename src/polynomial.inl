@@ -31,14 +31,15 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Polynomial<Element>::Polynomial():_nbTerm(0)
+    Polynomial<Element>::Polynomial():_nbTerm(0), _polynomial(0)
     {
     }
     
     template <typename Element>
     Polynomial<Element>::Polynomial(string const s):_nbTerm(0)
     {
-        typename forward_list<Term<Element>>::const_iterator it=_polynomial.before_begin();
+        //typename forward_list<Term<Element>>::const_iterator it=_polynomial.before_begin();
+        NodePolynomial * it=_polynomial;
         string tmp;
         size_t pos1=0;
         size_t pos2=0;
@@ -59,7 +60,9 @@ namespace F4
             {
                 /* In case the first character is a sign */
                 term.setTerm(tmp);
-                it=_polynomial.insert_after(it, term);
+                //it=_polynomial.insert_after(it, term);
+                it->_term=term;
+                it=it->_next;
                 _nbTerm++;
             }
         }
@@ -91,7 +94,8 @@ namespace F4
     {
         if(!_polynomial.empty())
         {
-            typename forward_list<Term<Element>>::const_iterator it, it_tmp;
+            //typename forward_list<Term<Element>>::const_iterator it, it_tmp;
+            NodePolynomial * it;
             for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
             {
                 it_tmp=it;

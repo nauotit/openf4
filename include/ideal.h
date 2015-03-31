@@ -35,6 +35,22 @@
  */
 namespace F4
 {
+    
+    struct Stat
+    {
+        int _nbCp;
+        int _nbCpDeg;
+        int _cmptGenPurg;
+        int _cmptNewGen;
+        clock_t _timePurgeCp;
+        clock_t _timeAddCp;
+        clock_t _timeMajBasis;
+        
+        Stat():_nbCp(0), _nbCpDeg(0), _cmptGenPurg(0), _cmptNewGen(0), _timePurgeCp(0), _timeAddCp(0), _timeMajBasis(0)
+        {
+        }
+    };
+    
     /**
      * \class Ideal
      * Represent an ideal.
@@ -93,9 +109,9 @@ namespace F4
             void printTaggedPolynomialAvl() const;
             
             /**
-             * \brief Print Mat.
+             * \brief Print mat.
              */
-            void printMatrix (Matrix<Element> & Mat, int *tab_mon, int *sigma, string const & filename);
+            void printMatrix (Matrix<Element> & mat, int *tabMon, int *sigma, string const & filename);
             
             
             /* Algorithms */
@@ -112,60 +128,61 @@ namespace F4
              * \brief Update the set of critical pair and the current basis.
              * \param index: Index of a tagged polynomial in _taggedPolynomialArray.
              */
-            void update(int index, int & cmpt_genpurg, double &time_purgeCP, double & time_addCP, double & time_majBasis, bool purge);
+            void update(int index, bool purge, Stat & stat);
             
             /**
              * \brief Update M and M_mons with the critical pair p.
              * \param p: Critical pair.
              * \param h: Height of the F4 matrix.
-             * \param nb_piv: Number of pivots in the the F4 matrix.
+             * \param nbPiv: Number of pivots in the the F4 matrix.
              */
-            void appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nb_piv);
+            void appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nbPiv);
             
             /**
              * \brief Transform M and M_mons into an almost tringular matrix.
-             * \param Mat: Matrix to fill.
-             * \param tab_mon: Array of monomials involved in M.
-             * \param nb_piv: Number of pivots in the the F4 matrix.
-             * \param tau: tau[i]=column of the monomial tab_mon[i].
-             * \param sigma: sigma[i]=index in tab_mon of the column i monomial.
-             * \param start_tail: start_tail[i]=column of the first possibly non zero coefficient (in line i) after nb_piv if i < nb_piv. Otherwise start_tail[i]=0.
-             * \param end_col: end_col[i] = end of column i if i < nb_piv. Otherwise end_col[i]=end of column i without taking into account the lines under nb_piv.
-             * \return Percentage of non zero coefficients in Mat.
+             * \param mat: Matrix to fill.
+             * \param tabMon: Array of monomials involved in M.
+             * \param nbPiv: Number of pivots in the the F4 matrix.
+             * \param tau: tau[i]=column of the monomial tabMon[i].
+             * \param sigma: sigma[i]=index in tabMon of the column i monomial.
+             * \param startTail: startTail[i]=column of the first possibly non zero coefficient (in line i) after nbPiv if i < nbPiv. Otherwise startTail[i]=0.
+             * \param endCol: endCol[i] = end of column i if i < nbPiv. Otherwise endCol[i]=end of column i without taking into account the lines under nbPiv.
+             * \return Percentage of non zero coefficients in mat.
              */
-            double transform(Matrix<Element> & Mat, int *tab_mon, int nb_piv, int *tau, int *sigma, int *start_tail, int *end_col);
+            double transform(Matrix<Element> & mat, int *tabMon, int nbPiv, int *tau, int *sigma, int *startTail, int *endCol);
             
             /**
              * \brief Build a polynomial from a row of the F4 matrix.
-             * \param tab_mon: Array of monomials involved in M.
-             * \param largeur: End of the row.
+             * \param tabMon: Array of monomials involved in M.
+             * \param width: End of the row.
              * \param start: Beginning of the row.
-             * \param tau: tau[i]=column of the monomial tab_mon[i].
+             * \param tau: tau[i]=column of the monomial tabMon[i].
              */
-            Polynomial<Element> buildPolynomial (Element * row, int *tab_mon, int largeur, int start, int *tau);
+            Polynomial<Element> buildPolynomial (Element * row, int *tabMon, int width, int start, int *tau);
+            //void buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau);
             
             /**
              * \brief Add polynomials to M in order to reduced queue of current polynomials.
-             * \param largeur: Width of the F4 matrix (number of monomials).
+             * \param width: Width of the F4 matrix (number of monomials).
              * \param height: Height of the F4 matrix (number of polynomials).
-             * \param nb_piv: Number of pivots in the the F4 matrix.
+             * \param nbPiv: Number of pivots in the the F4 matrix.
              */
-            void preprocessing(int & largeur, int & hauteur, int & nb_piv);
+            void preprocessing(int & width, int & height, int & nbPiv);
             
             /**
-             * \brief Rebuild M from Mat, update the basis and the set of critical pairs.
-             * \param Mat: Matrix to fill.
-             * \param tab_mon: Array of monomials involved in M.
-             * \param sigma: sigma[i]=index in tab_mon of the column i monomial.
-             * \param tau: tau[i]=column of the monomial tab_mon[i].
-             * \param hauteur: Height of the matrix before echelonize.
-             * \param largeur: Width of the matrix before echelonize.
-             * \param hauteur_reelle: Height of the matrix after echelonize.
-             * \param nb_piv: Number of pivots in the the F4 matrix.
+             * \brief Rebuild M from mat, update the basis and the set of critical pairs.
+             * \param mat: Matrix to fill.
+             * \param tabMon: Array of monomials involved in M.
+             * \param sigma: sigma[i]=index in tabMon of the column i monomial.
+             * \param tau: tau[i]=column of the monomial tabMon[i].
+             * \param height: Height of the matrix before echelonize.
+             * \param width: Width of the matrix before echelonize.
+             * \param heightReal: Height of the matrix after echelonize.
+             * \param nbPiv: Number of pivots in the the F4 matrix.
              * \return false if the computation end with a trivial groebner basis (1).
              * \return true otherwise.
              */
-            bool postprocessing(Matrix<Element> & matrix, int * tab_mon, int * sigma, int * tau, int hauteur, int largeur, int hauteur_reelle, int nb_piv, int & cmpt_genpurg, int & cmpt_newgen, double & time_purgeCP, double & time_addCP, double & time_majBasis);
+            bool postprocessing(Matrix<Element> & matrix, int * tabMon, int * sigma, int * tau, int height, int width, int heightReal, int nbPiv, Stat & stat);
             
             
             /* F4 Algorithm */
@@ -181,21 +198,20 @@ namespace F4
         private:
             std::vector<Polynomial<Element>> _polynomialArray; /*!< Array of polynomials */
             int _nbVariable; /*!< Number of variables of the polynomial ring. */
-            int NumPol; /*!< TODO : suppress */
-            int NumTot; /*!< TODO : suppress */
-            int NumGen; /*!< TODO : suppress */
-            int nbCP; /*!< TODO : suppress */ // nbre de paires critiques en attente de traitement
-            std::vector<int> GTotal;
-            std::vector<int> GUsed;
-            std::vector<int> Gbasis;
+            int _numPol; /*!< Size of _taggedPolynomialArray */
+            int _numTot; /*!< Size of _total */
+            int _numGen; /*!< Size of _basis */
+            std::vector<int> _total;
+            std::vector<int> _used;
+            std::vector<int> _basis;
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
             MonomialArray _monomialArray; /*!< Array of monomials, endow with a tabulated product 2D array */
             AvlCriticalPair<Element> _criticalPairSet; /*!< Set of critical pairs */
-            AvlCriticalPair<Element> P0; /*!< Set of critical pairs for update */
-            AvlCriticalPair<Element> P1; /*!< Set of critical pairs for update */
-            AvlCriticalPair<Element> P2; /*!< Set of critical pairs for update */
-            AvlMonomial M_mons; /*!< Monomials used in M, decreasing order */
-            AvlPolynomial M; /*!< F4 Matrix = set of pair (tagged polynomial pointer,  index), decreasing order */ 
+            AvlCriticalPair<Element> _cpSet0; /*!< AVL of critical pairs for update */
+            AvlCriticalPair<Element> _cpSet1; /*!< AVL of critical pairs for update */
+            AvlCriticalPair<Element> _cpSet2; /*!< AVL of critical pairs for update */
+            AvlMonomial M_mons; /*!< Monomials used in M, AVL of pair (numMon, lt) decreasing order */
+            AvlPolynomial M; /*!< F4 Matrix = AVL of triple (tagged polynomial index, numLM, nbTerms), decreasing order */ 
             
             clock_t timeSimplify;
     };

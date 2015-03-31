@@ -33,6 +33,28 @@
 namespace F4
 {
     /**
+     * \struct NodePolynomial.
+     * Represent a node of the polynomial (single chained list).
+     */
+    template <typename Element>
+    struct NodePolynomial
+    {        
+        public:
+            
+            /* Constructor */
+            
+            /**
+             * \brief Constructor
+             */
+            NodePolynomial();
+            
+            /* Attributes */
+        
+            Term<Element> _term;
+            NodePolynomial* _next;
+    };
+    
+    /**
      * \class Polynomial
      * Represent a polynomial.
      */
@@ -203,7 +225,8 @@ namespace F4
             Polynomial & operator*=(Term<Element> const & term);
             
         private:
-            std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
+            //std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
+            NodePolynomial * _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
             int _nbTerm; /*!< Number of term of _polynomial */
     };
     

@@ -181,6 +181,12 @@ int main (int argc, char **argv)
     mat2.printMatrix(cout);
     cout << endl;
     
+    // Test void normalizeRow(int numRow, int start, int end);
+    cout << "________Test normalizeRow(int numRow, int start, int end)________" << endl;
+    mat2.normalizeRow(mat2.getRow(4), 0, mat2.getWidth());
+    mat2.normalizeRow(mat2.getRow(8), 10, mat2.getWidth());
+    cout << mat2 << endl;
+    
     // void multRow(unsigned numRow, Element element, unsigned start, unsigned end);
     cout << "________Test multRow(unsigned numRow, Element element, unsigned start, unsigned end)________" << endl;
     mat2.multRow(4, 10, 0, mat2.getWidth());
