@@ -31,15 +31,14 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Polynomial<Element>::Polynomial():_nbTerm(0), _polynomial(0)
+    Polynomial<Element>::Polynomial():_nbTerm(0)
     {
     }
     
     template <typename Element>
     Polynomial<Element>::Polynomial(string const s):_nbTerm(0)
     {
-        //typename forward_list<Term<Element>>::const_iterator it=_polynomial.before_begin();
-        NodePolynomial * it=_polynomial;
+        NodeList<Element> * it=_polynomial.getBegin();
         string tmp;
         size_t pos1=0;
         size_t pos2=0;
@@ -60,9 +59,7 @@ namespace F4
             {
                 /* In case the first character is a sign */
                 term.setTerm(tmp);
-                //it=_polynomial.insert_after(it, term);
-                it->_term=term;
-                it=it->_next;
+                it=_polynomial.insertAfter(it, term);
                 _nbTerm++;
             }
         }
@@ -86,6 +83,21 @@ namespace F4
     {
     }
     
+    template <typename Element>
+    void
+    Polynomial<Element>::clear()
+    {
+        _polynomial.clear();
+        _nbTerm=0;
+    }
+    
+    template<typename Element>
+    void
+    Polynomial<Element>::deleteAfter(NodeList<Element> * it)
+    {
+        _polynomial.deleteAfter(it);
+    }
+    
     /* Miscellaneous */
     
     template <typename Element>
@@ -94,21 +106,14 @@ namespace F4
     {
         if(!_polynomial.empty())
         {
-            //typename forward_list<Term<Element>>::const_iterator it, it_tmp;
-            NodePolynomial * it;
-            for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+            NodeList<Element> * it;
+            it=_polynomial.getBegin();
+            while(it->_next)
             {
-                it_tmp=it;
-                ++it_tmp;
-                if(it_tmp !=_polynomial.end())
-                {
-                    stream << "(" << *it << ") + ";
-                }
-                else
-                {
-                    stream << "(" << *it << ")";
-                }
+                stream << "(" << it->_term << ") + ";
+                it=it->_next;
             }
+            stream << "(" << it->_term << ")";
         }
     }
     
@@ -148,36 +153,30 @@ namespace F4
     Element
     Polynomial<Element>::getCoefficient(int numMon) const
     {
-        typename forward_list<Term<Element>>::const_iterator it;
-        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        NodeList<Element> * it = _polynomial.getBegin();
+        while(it)
         {
-            if((*it).getNumMonomial() == numMon)
+            if((it->_term).getNumMonomial() == numMon)
             {
-                return ((*it).getCoefficient());
+                return ((it->_term).getCoefficient());
             }
+            it=it->_next;
         }
         return 0;
     }
     
     template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    Polynomial<Element>::getPolynomialBegin() const
+    NodeList<Element> * 
+    Polynomial<Element>::getPolynomialBegin()
     {
-        return _polynomial.begin();
+        return _polynomial.getBegin();
     }
     
     template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    Polynomial<Element>::getPolynomialBeforeBegin() const
+    NodeList<Element> const * 
+    Polynomial<Element>::getPolynomialBeginConst() const
     {
-        return _polynomial.before_begin();
-    }
-    
-    template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    Polynomial<Element>::getPolynomialEnd() const
-    {
-        return _polynomial.end();
+        return _polynomial.getBegin();
     }
     
     template <typename Element>
@@ -186,15 +185,8 @@ namespace F4
     {
         if(!_polynomial.empty())
         {
-            _polynomial.pop_front();
+            _polynomial.popFront();
         }
-    }
-    
-    template <typename Element>
-    void
-    Polynomial<Element>::reset()
-    {
-        _polynomial.clear();
     }
     
     template <typename Element>
@@ -210,17 +202,16 @@ namespace F4
         {
             Element invCoef;
             invCoef = lc.inverse();
-            
-            typename forward_list<Term<Element>>::iterator it;
-            it= _polynomial.begin();
+            NodeList<Element> * it = _polynomial.getBegin();
             
             /* Modify the leading coefficient */
-            (*it).setCoefficient(1);
-            ++it;
-            for (; it != _polynomial.end(); ++it)
+            it->setCoefficient(1);
+            it=it->_next;
+            while(it)
             {
                 /* Modify the other coefficients */
-                (*it)*=invCoef;
+                it->setCoefficient(it->getCoefficient()*invCoef);
+                it=it->_next;
             }
         }
     }
@@ -233,11 +224,19 @@ namespace F4
     }
     
     template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    Polynomial<Element>::emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon)
+    NodeList<Element> *
+    Polynomial<Element>::emplaceAfter(NodeList<Element> * pos, Element coeff, int numMon)
     {
-        return _polynomial.emplace_after(pos, coeff, numMon);
         _nbTerm++;
+        return _polynomial.emplaceAfter(pos, coeff, numMon);
+    }
+    
+    template <typename Element>
+    NodeList<Element> *
+    Polynomial<Element>::emplaceOn(NodeList<Element> * pos, Element coeff, int numMon)
+    {
+        //_nbTerm++;
+        return _polynomial.emplaceOn(pos, coeff, numMon);
     }
     
     
@@ -257,9 +256,12 @@ namespace F4
     Polynomial<Element> & 
     Polynomial<Element>::operator=(Polynomial && polynomial)
     {
-        _polynomial=polynomial._polynomial;
-        _nbTerm=polynomial._nbTerm;
-        polynomial._nbTerm=0;
+        if(*this != polynomial)
+        {
+            _polynomial=polynomial._polynomial;
+            _nbTerm=polynomial._nbTerm;
+            polynomial._nbTerm=0;
+        }
         return * this;
     }
     
@@ -268,10 +270,11 @@ namespace F4
     Polynomial<Element>::operator*=(Monomial const & monomial)
     {
         int numMon=monomial.monomialToInt();
-        typename forward_list<Term<Element>>::iterator it;
-        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        NodeList<Element> * it=_polynomial.getBegin();
+        while(it)
         {
-            (*it).multNumMon(numMon);
+            (it->_term).multNumMon(numMon);
+            it=it->_next;
         }
         return *this;
     }
@@ -280,10 +283,11 @@ namespace F4
     Polynomial<Element> & 
     Polynomial<Element>::operator*=(Element element)
     {
-        typename forward_list<Term<Element>>::iterator it;
-        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        NodeList<Element> * it=_polynomial.getBegin();
+        while(it)
         {
-            (*it)*=element;
+            (it->_term)*=element;
+            it=it->_next;
         }
         return *this;
     }
@@ -292,10 +296,11 @@ namespace F4
     Polynomial<Element> & 
     Polynomial<Element>::operator*=(Term<Element> const & term)
     {
-        typename forward_list<Term<Element>>::iterator it;
-        for (it = _polynomial.begin(); it != _polynomial.end(); ++it)
+        NodeList<Element> * it=_polynomial.getBegin();
+        while(it)
         {
-            (*it)*=term;
+            (it->_term)*=term;
+            it=it->_next;
         }
         return *this;
     }

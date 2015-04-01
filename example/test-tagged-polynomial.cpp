@@ -111,14 +111,13 @@ int main (int argc, char **argv)
     cout << "________Test getSimplyrule(int index)________" << endl;
     cout << "simplyrule[2] of tp5: " << tp5.getSimplyrule(2) << endl << endl;
     
-    // Test typename forward_list<Term<Element>>::const_iterator getPolynomialBegin();
-    cout << "________Test getPolynomialBegin() and getPolynomialEnd()________" << endl;
-    typename forward_list<Term<eltType>>::const_iterator itbeg=tp4.getPolynomialBegin();
-    typename forward_list<Term<eltType>>::const_iterator itend=tp4.getPolynomialEnd();
-    while(itbeg != itend)
+    // Test NodeList<Element> * getPolynomialBegin();
+    cout << "________Test getPolynomialBegin()________" << endl;
+    NodeList<eltType> * itbeg=tp4.getPolynomialBegin();
+    while(itbeg)
     {
         cout << itbeg->getNumMonomial() << endl;
-        ++itbeg;
+        itbeg=itbeg->_next;
     }
     
     // Test void printTaggedPolynomial(std::ostream & stream = std::cout) const;

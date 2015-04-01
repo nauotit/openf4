@@ -56,6 +56,24 @@ namespace F4
              */
             NodeList(Element coefficient, int numMonomial);
             
+            /**
+             * \brief Constructor
+             */
+            NodeList(Term<Element> const & term);
+            
+            
+            /* Get / Set */
+            
+            Term<Element> const & getTerm() const; 
+            
+            int getNumMonomial() const;
+            
+            Element getCoefficient() const;
+            
+            void setCoefficient(Element element);
+            
+            void setNumMonomial(int numMonomial);
+            
             /* Attributes */
         
             Term<Element> _term;
@@ -78,6 +96,16 @@ namespace F4
              */
              SingleList();
              
+             /**
+             * \brief Copy constructor.
+             */
+             SingleList(SingleList const & toCopy);
+             
+             /**
+             * \brief Move constructor.
+             */
+             SingleList(SingleList && toCopy);
+             
              
              /* Destructor */
              
@@ -86,8 +114,38 @@ namespace F4
               */
              ~SingleList();
              
+             /**
+              * \brief Erase all the terms.
+              */
+             void clear();
+             
+             /**
+              * \brief Erase all the terms after it, set it->_next to 0.
+              * \param it: Pointer on a node.
+              */
+             void deleteAfter(NodeList<Element> * it);
+             
              
              /* Miscellaneous */
+             
+             /**
+              * \brief Return an iterator to the first element.
+              * \return Pointer on the first node.
+              */
+              NodeList<Element> * getBegin() const;
+             
+             /**
+              * \brief Test if the list is empty.
+              * \return true if the list is empty.
+              * \return false otherwise.
+              */
+              bool empty() const;
+              
+              /**
+              * \brief Get the first term of the list.
+              * \return First term of the list.
+              */
+              Term<Element> const & front() const;
              
              /**
               * \brief Construct a term in place at the beginning of the list.
@@ -107,9 +165,56 @@ namespace F4
               NodeList<Element> * emplaceAfter(NodeList<Element> * it, Element coefficient, int numMonomial);
               
               /**
-               * \brief Print the list.
-               */
-               void printList(ostream & stream) const;
+              * \brief Construct a term in place after the node pointed by it.
+              * \param it: Pointer on a node.
+              * \param coefficient: Coefficient of the term. 
+              * \param numMonomial: Number of the monomial of the term.
+              * \return Pointer on the created node.
+              */
+              NodeList<Element> * emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial);
+              
+              /**
+              * \brief Construct a term in place at the beginning of the list.
+              * \param term: Term to insert.
+              * \return Pointer on the created node.
+              */
+              NodeList<Element> * insertBegin(Term<Element> const & term);
+             
+             /**
+              * \brief Construct a term in place after the node pointed by it.
+              * \param it: Pointer on a node.
+              * \param term: Term to insert.
+              * \return Pointer on the created node.
+              */
+              NodeList<Element> * insertAfter(NodeList<Element> * it, Term<Element> const & term);
+              
+             /**
+              * \brief Print the list.
+              */
+              void printList(ostream & stream) const;
+               
+             /**
+              * \brief Remove the first element.
+              * \return Pointer on the new first node.
+              */
+              NodeList<Element> *  popFront();
+              
+              
+              /* Operator overload */
+              
+            /**
+             * \brief Overload the operator =.
+             * \param toCopy: List to copy.
+             * \return Reference on this.
+             */
+            SingleList & operator=(SingleList const & toCopy);
+            
+            /**
+             * \brief Overload the operator =.
+             * \param toCopy: List to move.
+             * \return Reference on this.
+             */
+            SingleList & operator=(SingleList && toCopy);
                
              
         private:
@@ -117,7 +222,12 @@ namespace F4
             NodeList<Element> * _list; /* Head of the list. */
     };
     
-    
+    /**
+     * \brief Overload the operator <<.
+     * \return ostream: Stream.
+     */
+    template <typename Element>
+    std::ostream & operator<<(std::ostream & stream, SingleList<Element> const & list);
 }
 
 #include "../src/single-list.inl"

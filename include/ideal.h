@@ -159,7 +159,7 @@ namespace F4
              * \param tau: tau[i]=column of the monomial tabMon[i].
              */
             Polynomial<Element> buildPolynomial (Element * row, int *tabMon, int width, int start, int *tau);
-            //void buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau);
+            void buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau);
             
             /**
              * \brief Add polynomials to M in order to reduced queue of current polynomials.

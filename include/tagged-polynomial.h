@@ -86,7 +86,13 @@ namespace F4
              * \brief Get the polynomial of this.
              * \return Polynomial of this.
              */
-            Polynomial<Element> const & getPolynomial() const;
+            Polynomial<Element> const & getPolynomialConst() const;
+            
+            /**
+             * \brief Get the polynomial of this.
+             * \return Polynomial of this.
+             */
+            Polynomial<Element> & getPolynomial();
             
             /**
              * \brief Set the polynomial of this, but do not modify the simplyrules.
@@ -137,16 +143,16 @@ namespace F4
             void setSimplyrule(int index, int numPol);
             
             /**
-            * \brief Get a constant iterator on the beginning of the polynomial.
-            * \return Constant iterator on the beginning of _polynomial._polynomial.
+            * \brief Get an iterator on the beginning of the polynomial.
+            * \return Iterator on the beginning of _polynomial._polynomial.
             */
-            typename forward_list<Term<Element>>::const_iterator getPolynomialBegin() const;
+            NodeList<Element> * getPolynomialBegin();
             
             /**
             * \brief Get a constant iterator on the beginning of the polynomial.
             * \return Constant iterator on the beginning of _polynomial._polynomial.
             */
-            typename forward_list<Term<Element>>::const_iterator getPolynomialEnd() const;
+            NodeList<Element> const * getPolynomialBeginConst() const;
             
             
             /* Miscellaneous */

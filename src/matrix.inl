@@ -481,7 +481,6 @@ namespace F4
     void
     Matrix<Element>::swapRow(int numRow1, int numRow2)
     {
-        assert((start >= 0) && (end <= _width));
         Element * tmp = _matrix[numRow1];
         _matrix[numRow1] = _matrix[numRow2];
         _matrix[numRow2] = tmp;

@@ -102,6 +102,18 @@ int main (int argc, char **argv)
     cout << "Polynomial row 1: " << cyclic6.buildPolynomial(Mat.getRow(1), tab_mon, 13, 0, tau) << endl;
     cout << "Polynomial row 2: " << cyclic6.buildPolynomial(Mat.getRow(2), tab_mon, 13, 0, tau) << endl << endl;
     
+    // Test void buildPolynomial (Polynomial<Element> & polynomial, Element * row, int *tab_mon, int largeur, int start, int *tau);
+    cout << "________Test buildPolynomial (Polynomial<Element> & polynomial, Element * row, int *tab_mon, int largeur, int start, int *tau)________" << endl;
+    
+    Polynomial<eltType> p1, p2, p3;
+    cyclic6.buildPolynomial(p1, Mat.getRow(0), tab_mon, 13, 0, tau);
+    cyclic6.buildPolynomial(p2, Mat.getRow(1), tab_mon, 13, 0, tau);
+    cyclic6.buildPolynomial(p3, Mat.getRow(2), tab_mon, 13, 0, tau);
+    cout << "p1 : " << p1 << endl;
+    cout << "p2 : " << p2 << endl;
+    cout << "p3 : " << p3 << endl << endl;
+    
+    
     delete[] Mat.getSigma();
     delete[] Mat.getTau();
     delete[] Mat.getStartTail();

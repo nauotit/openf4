@@ -24,36 +24,14 @@
 #ifndef F4_POLYNOMIAL_H
 #define F4_POLYNOMIAL_H
 
-#include <forward_list>
-#include "term.h"
+//#include <forward_list>
+#include "single-list.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */
 namespace F4
 {
-    /**
-     * \struct NodePolynomial.
-     * Represent a node of the polynomial (single chained list).
-     */
-    template <typename Element>
-    struct NodePolynomial
-    {        
-        public:
-            
-            /* Constructor */
-            
-            /**
-             * \brief Constructor
-             */
-            NodePolynomial();
-            
-            /* Attributes */
-        
-            Term<Element> _term;
-            NodePolynomial* _next;
-    };
-    
     /**
      * \class Polynomial
      * Represent a polynomial.
@@ -95,6 +73,17 @@ namespace F4
              * \brief Destructor.
              */
             ~Polynomial();
+            
+            /**
+             * \brief Delete all the terms.
+             */
+            void clear();
+            
+            /**
+              * \brief Erase all the term from it to the end of the polynomial.
+              * \param it: Pointer on a node.
+              */
+             void deleteAfter(NodeList<Element> * it);
             
             
             /* Miscellaneous */
@@ -138,32 +127,21 @@ namespace F4
             Element getCoefficient(int numMon) const;
             
             /**
+            * \brief Get an iterator on the beginning of the polynomial.
+            * \return Iterator on the beginning of _polynomial.
+            */
+            NodeList<Element> * getPolynomialBegin();
+            
+            /**
             * \brief Get a constant iterator on the beginning of the polynomial.
             * \return Constant iterator on the beginning of _polynomial.
             */
-            typename forward_list<Term<Element>>::const_iterator getPolynomialBegin() const;
-            
-            /**
-            * \brief Get a constant iterator before the beginning of the polynomial. 
-            * \return Constant iterator before the beginning of _polynomial.
-            */
-            typename forward_list<Term<Element>>::const_iterator getPolynomialBeforeBegin() const;
-            
-            /**
-            * \brief Get a constant iterator on the end of the polynomial.
-            * \return Constant iterator on the beginning of _polynomial.
-            */
-            typename forward_list<Term<Element>>::const_iterator getPolynomialEnd() const;
+            NodeList<Element> const * getPolynomialBeginConst() const;
             
             /**
             * \brief Delete the leading term of this.
             */
             void deleteLT(); 
-            
-            /**
-             * \brief Reset this.
-             */
-            void reset(); 
             
             /**
              * \brief Normalize this.
@@ -178,13 +156,22 @@ namespace F4
             bool isEmpty();
             
             /**
-             * \brief Add a term at the end of this. Beware to keep a correct order.
+             * \brief Add a term after pos. Beware to keep a correct order.
              * \param pos: iterator, term is contructed after the position specified by pos.
              * \param coeff: Coefficient of the new term.
              * \param numMon: Number of the monomial of the new term.
              * \return Iterator to the new term.
              */
-            typename forward_list<Term<Element>>::const_iterator emplaceAfter(typename forward_list<Term<Element>>::const_iterator pos, Element coeff, int numMon);
+            NodeList<Element> * emplaceAfter(NodeList<Element> * pos, Element coeff, int numMon);
+            
+            /**
+             * \brief Add a term after pos. Beware to keep a correct order.
+             * \param pos: iterator, term is contructed after the position specified by pos.
+             * \param coeff: Coefficient of the new term.
+             * \param numMon: Number of the monomial of the new term.
+             * \return Iterator to the new term.
+             */
+            NodeList<Element> * emplaceOn(NodeList<Element> * pos, Element coeff, int numMon);
             
             
             /* Internal operators */
@@ -225,8 +212,7 @@ namespace F4
             Polynomial & operator*=(Term<Element> const & term);
             
         private:
-            //std::forward_list<Term<Element>> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
-            NodePolynomial * _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
+            SingleList<Element> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
             int _nbTerm; /*!< Number of term of _polynomial */
     };
     

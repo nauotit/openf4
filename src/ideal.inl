@@ -140,9 +140,9 @@ namespace F4
             
             for(int i = 0; i < _numGen - 1 ; i++)
             {
-                file << _taggedPolynomialArray[_total[_basis[i]]].getPolynomial() << "," << endl;
+                file << _taggedPolynomialArray[_total[_basis[i]]].getPolynomialConst() << "," << endl;
             }
-            file << _taggedPolynomialArray[_total[_basis[_numGen - 1]]].getPolynomial() << "};" << endl;
+            file << _taggedPolynomialArray[_total[_basis[_numGen - 1]]].getPolynomialConst() << "};" << endl;
             file.close();
         }
         else
@@ -504,26 +504,25 @@ namespace F4
     void 
     Ideal<Element>::appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nbPiv)
     {
-        typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
+        NodeList<Element> const * itTerm;
         
         int u1p1=simplify(p.getU1(), p.getP1()); 
         
         if(M.insert(u1p1, (_taggedPolynomialArray[u1p1]).getLM(), (_taggedPolynomialArray[u1p1]).getNbTerm())!=1)
         {
             /* If u1p1 is not already in M we insert its monomials in M_Mons */
-            itTermBeg=_taggedPolynomialArray[u1p1].getPolynomialBegin();
-            itTermEnd=_taggedPolynomialArray[u1p1].getPolynomialEnd();
+            itTerm=_taggedPolynomialArray[u1p1].getPolynomialBeginConst();
 
-            if(M_mons.insert(itTermBeg->getNumMonomial(), true) != 1)
+            if(M_mons.insert(itTerm->getNumMonomial(), true) != 1)
             {
                 nbPiv++;
             }
-            ++itTermBeg;
-            while(itTermBeg!=itTermEnd)
+            itTerm=itTerm->_next;
+            while(itTerm)
             {
                 /* Insert the other monomials */
-                M_mons.insert(itTermBeg->getNumMonomial(), false);
-                ++itTermBeg;
+                M_mons.insert(itTerm->getNumMonomial(), false);
+                itTerm=itTerm->_next;
             }
             h++;
         }
@@ -533,17 +532,14 @@ namespace F4
         if(M.insert(u2p2, (_taggedPolynomialArray[u2p2]).getLM(), (_taggedPolynomialArray[u2p2]).getNbTerm())!=1)
         {
             /* If u2p2 is not already in M we insert its monomials in M_Mons */
-            itTermBeg=_taggedPolynomialArray[u2p2].getPolynomialBegin();
-            itTermEnd=_taggedPolynomialArray[u2p2].getPolynomialEnd();
-            
-            M_mons.insert(itTermBeg->getNumMonomial(), true);
-
-            ++itTermBeg;
-            while(itTermBeg!=itTermEnd)
+            itTerm=_taggedPolynomialArray[u2p2].getPolynomialBeginConst();
+            M_mons.insert(itTerm->getNumMonomial(), true);
+            itTerm=itTerm->_next;
+            while(itTerm)
             {
                 /* Insert the other monomials */
-                M_mons.insert(itTermBeg->getNumMonomial(), false);
-                ++itTermBeg;
+                M_mons.insert(itTerm->getNumMonomial(), false);
+                itTerm=itTerm->_next;
             }
             h++;
         }
@@ -562,7 +558,7 @@ namespace F4
         /* Iterators on M_mons, M, and polynomials */
         NodeAvlMonomial * itMonBeg = 0;
         NodeAvlPolynomial * itPolBeg = 0;
-        typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
+        NodeList<Element> const * itTerm;
         
         /* Temporary */
         int numMon;
@@ -604,31 +600,30 @@ namespace F4
 
         /* Fill the matrix with a triangular shape */
         itPolBeg=M.findBiggest();
-        itTermBeg=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialBegin();
-        itTermEnd=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialEnd();
+        itTerm=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialBeginConst();
             
         ih = 0;
         ib = nbPiv;
         
         /* Process first polynomial apart */
-        numMonLT=itTermBeg->getNumMonomial();
+        numMonLT=itTerm->getNumMonomial();
         j = c;
-        mat.setElement(0,tau[j], itTermBeg->getCoefficient());
+        mat.setElement(0,tau[j], itTerm->getCoefficient());
         nb++;
         j++;
-        ++itTermBeg;
-        while(itTermBeg != itTermEnd)
+        itTerm=itTerm->_next;
+        while(itTerm)
         {
             /* Search column */
-            numMon = itTermBeg->getNumMonomial();
+            numMon = itTerm->getNumMonomial();
             while ( numMon != tabMon[j])
             {
                 j++;
             }
-            mat.setElement(0, tau[j], itTermBeg->getCoefficient());
+            mat.setElement(0, tau[j], itTerm->getCoefficient());
             j++;
             nb++;
-            ++itTermBeg;
+            itTerm=itTerm->_next;
         }
         ih++;
         //on garde seulement le lt de pol, on met le reste dans POL_FL
@@ -643,30 +638,29 @@ namespace F4
         /* Process other polynomials */
         while(itPolBeg != 0)
         {
-            itTermBeg=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialBegin();
-            itTermEnd=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialEnd();
+            itTerm=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialBeginConst();
             
-            if(itTermBeg->getNumMonomial()==numMonLT)
+            if(itTerm->getNumMonomial()==numMonLT)
             {
                 /* Place the polynomial in the upper part of the matrix */
-                mat.setElement(ib, tau[c], itTermBeg->getCoefficient());
+                mat.setElement(ib, tau[c], itTerm->getCoefficient());
                 j = c;
                 nb++;
                 j++;
-                ++itTermBeg;
+                itTerm=itTerm->_next;
                 
-                while(itTermBeg!=itTermEnd)
+                while(itTerm)
                 {
                     /* Search column */
-                    numMon = itTermBeg->getNumMonomial() ;
+                    numMon = itTerm->getNumMonomial() ;
                     while(numMon != tabMon[j])
                     {
                         j++;
                     }
-                    mat.setElement(ib, tau[j], itTermBeg->getCoefficient());
+                    mat.setElement(ib, tau[j], itTerm->getCoefficient());
                     j++;
                     nb++;
-                    ++itTermBeg;
+                    itTerm=itTerm->_next;
                 }
                 ib++;
             }
@@ -674,7 +668,7 @@ namespace F4
             {
                 /* Place the polynomial in the lower part of the matrix */
                 endCol[tau[c]] = ib;
-                numMonLT = itTermBeg->getNumMonomial();
+                numMonLT = itTerm->getNumMonomial();
                 
                 while (numMonLT != tabMon[c])
                 {
@@ -683,22 +677,22 @@ namespace F4
                 
                 j = c;
                 
-                mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
+                mat.setElement(ih, tau[j], itTerm->getCoefficient());
                 nb++;
                 j++;
-                ++itTermBeg;
-                while(itTermBeg != itTermEnd)
+                itTerm=itTerm->_next;
+                while(itTerm)
                 {
                     /* Search column */
-                    numMon=itTermBeg->getNumMonomial();
+                    numMon=itTerm->getNumMonomial();
                     while (numMon != tabMon[j])
                     {
                         j++;
                     }
-                    mat.setElement(ih, tau[j], itTermBeg->getCoefficient());
+                    mat.setElement(ih, tau[j], itTerm->getCoefficient());
                     j++;
                     nb++;
-                    ++itTermBeg;
+                    itTerm=itTerm->_next;
                 }
                 ih++;
             }
@@ -722,7 +716,7 @@ namespace F4
     Ideal<Element>::buildPolynomial (Element * row, int *tabMon, int width, int start, int *tau)
     {
         Polynomial<Element> res;
-        typename forward_list<Term<Element>>::const_iterator pos=res.getPolynomialBeforeBegin();
+        NodeList<Element> * pos = res.getPolynomialBegin();
         
         for (int j = start; j < width; j++)
         {
@@ -738,24 +732,29 @@ namespace F4
         return res;
     }
     
-    //template <typename Element>
-    //void
-    //Ideal<Element>::buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau)
-    //{
-        //typename forward_list<Term<Element>>::const_iterator pos=res.getPolynomialBeforeBegin();
-        
-        //for (int j = start; j < width; j++)
-        //{
-            //if (!row[tau[j]].isZero())
-            //{
-                //pos=res.emplaceAfter(pos, row[tau[j]], tabMon[j]);
-            //}
-        //}
-        //if(res.isEmpty())
-        //{
-            //cout << "Row empty --> see echelonize" << endl;
-        //}
-    //}
+    template <typename Element>
+    void
+    Ideal<Element>::buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau)
+    {
+        //NodeList<Element> * tmp = 0;
+        res.clear();
+        NodeList<Element> * pos = res.getPolynomialBegin();
+        for (int j = start; j < width; j++)
+        {
+            if (!row[tau[j]].isZero())
+            {
+                //pos=res.emplaceOn(pos, row[tau[j]], tabMon[j]);
+                //tmp=pos;
+                //pos=pos->_next;
+                pos=res.emplaceAfter(pos, row[tau[j]], tabMon[j]);
+            }
+        }
+        //res.deleteAfter(tmp);
+        if(res.isEmpty())
+        {
+            cout << "Row empty --> see echelonize" << endl;
+        }
+    }
     
     template <typename Element>
     void
@@ -765,7 +764,7 @@ namespace F4
         int i;
         Monomial quotient;
         quotient.allocate();
-        typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
+        NodeList<Element> const * itTerm;
         NodeAvlMonomial * itmon;
         width = 0;
         
@@ -796,13 +795,12 @@ namespace F4
                     M.insert(indexPol, (_taggedPolynomialArray[indexPol]).getLM(), (_taggedPolynomialArray[indexPol]).getNbTerm());
                     height++;
                     /* Insert monomials of the new polynomial in M_mons */
-                    itTermBeg=_taggedPolynomialArray[indexPol].getPolynomialBegin();
-                    itTermEnd=_taggedPolynomialArray[indexPol].getPolynomialEnd();
-                    ++itTermBeg;
-                    while(itTermBeg!=itTermEnd)
+                    itTerm=_taggedPolynomialArray[indexPol].getPolynomialBeginConst();
+                    itTerm=itTerm->_next;
+                    while(itTerm)
                     {
-                        M_mons.insert(itTermBeg->getNumMonomial(), false);
-                        ++itTermBeg;
+                        M_mons.insert(itTerm->getNumMonomial(), false);
+                        itTerm=itTerm->_next;
                     }
                     break;
                 }
@@ -837,8 +835,8 @@ namespace F4
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(matrix.getRow(i), tabMon, width, sigma[i], tau));
-                //buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), matrix.getRow(i), tabMon, width, sigma[i], tau);
+                //_taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(matrix.getRow(i), tabMon, width, sigma[i], tau));
+                buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), matrix.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }
         }
@@ -883,7 +881,7 @@ namespace F4
     {
         /* Iterators */
         NodeAvlPolynomial * itPolBeg = 0;
-        typename forward_list<Term<Element>>::const_iterator itTermBeg, itTermEnd;
+        NodeList<Element> const * itTerm;
         NodeAvlCriticalPair<Element> * itcp1;
         
         /* F4 matrix */
@@ -1224,17 +1222,13 @@ namespace F4
         {
             index=_total[_basis[i]];
             M.insert(index, (_taggedPolynomialArray[index]).getLM(), (_taggedPolynomialArray[index]).getNbTerm());
-            
-            itTermBeg=_taggedPolynomialArray[index].getPolynomialBegin();
-            itTermEnd=_taggedPolynomialArray[index].getPolynomialEnd();
-            
-            M_mons.insert(itTermBeg->getNumMonomial(), true);
-            
-            ++itTermBeg;
-            while(itTermBeg!=itTermEnd)
+            itTerm=_taggedPolynomialArray[index].getPolynomialBeginConst();
+            M_mons.insert(itTerm->getNumMonomial(), true);
+            itTerm=itTerm->_next;
+            while(itTerm)
             {
-                M_mons.insert(itTermBeg->getNumMonomial(), false);
-                ++itTermBeg;
+                M_mons.insert(itTerm->getNumMonomial(), false);
+                itTerm=itTerm->_next;
             }
             height++;
         }
@@ -1281,8 +1275,8 @@ namespace F4
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                _taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(mat.getRow(i), tabMon, width, sigma[i], tau));
-                //buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), mat.getRow(i), tabMon, width, sigma[i], tau);
+                //_taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(mat.getRow(i), tabMon, width, sigma[i], tau));
+                buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), mat.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }
         }

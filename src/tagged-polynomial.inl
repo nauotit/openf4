@@ -101,7 +101,14 @@ namespace F4
     
     template <typename Element>
     Polynomial<Element> const & 
-    TaggedPolynomial<Element>::getPolynomial() const
+    TaggedPolynomial<Element>::getPolynomialConst() const
+    {
+        return _polynomial;
+    }
+    
+    template <typename Element>
+    Polynomial<Element> & 
+    TaggedPolynomial<Element>::getPolynomial()
     {
         return _polynomial;
     }
@@ -158,17 +165,17 @@ namespace F4
     }
     
     template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    TaggedPolynomial<Element>::getPolynomialBegin() const
+    NodeList<Element> *
+    TaggedPolynomial<Element>::getPolynomialBegin()
     {
         return _polynomial.getPolynomialBegin();
     }
     
     template <typename Element>
-    typename forward_list<Term<Element>>::const_iterator 
-    TaggedPolynomial<Element>::getPolynomialEnd() const
+    NodeList<Element> const *
+    TaggedPolynomial<Element>::getPolynomialBeginConst() const
     {
-        return _polynomial.getPolynomialEnd();
+        return _polynomial.getPolynomialBeginConst();
     }
     
     
@@ -241,12 +248,14 @@ namespace F4
     {
         int numMon=Monomial::varlistToInt(varlist);
         
-        typename forward_list<Term<Element>>::const_iterator pos, start;
-        pos=_polynomial.getPolynomialBeforeBegin();
-        
-        for (start=taggedPolynomial.getPolynomialBegin(); start!=taggedPolynomial.getPolynomialEnd() ; ++start)
+        NodeList<Element> * pos;
+        NodeList<Element> const * start;
+        pos=_polynomial.getPolynomialBegin();
+        start=taggedPolynomial.getPolynomialBeginConst();
+        while(start)
         {
             pos=_polynomial.emplaceAfter(pos, start->getCoefficient(), MONOMIAL_ARRAY->multNumMonomial(start->getNumMonomial(), numMon));
+            start=start->_next;
         }
     }
     
