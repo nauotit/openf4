@@ -29,6 +29,7 @@
 #include "avl-monomial.h"
 #include "avl-polynomial.h"
 #include "avl-critical-pair.h"
+#include "avl-pointer-critical-pair.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -207,11 +208,13 @@ namespace F4
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
             MonomialArray _monomialArray; /*!< Array of monomials, endow with a tabulated product 2D array */
             AvlCriticalPair<Element> _criticalPairSet; /*!< Set of critical pairs */
-            AvlCriticalPair<Element> _cpSet0; /*!< AVL of critical pairs for update */
-            AvlCriticalPair<Element> _cpSet1; /*!< AVL of critical pairs for update */
-            AvlCriticalPair<Element> _cpSet2; /*!< AVL of critical pairs for update */
+            AvlPointerCriticalPair<Element> _cpSet0; /*!< AVL of critical pairs for update */
+            AvlPointerCriticalPair<Element> _cpSet1; /*!< AVL of critical pairs for update */
+            AvlPointerCriticalPair<Element> _cpSet2; /*!< AVL of critical pairs for update */
             AvlMonomial M_mons; /*!< Monomials used in M, AVL of pair (numMon, lt) decreasing order */
             AvlPolynomial M; /*!< F4 Matrix = AVL of triple (tagged polynomial index, numLM, nbTerms), decreasing order */ 
+            
+            DynamicArray<CriticalPair<Element>> _cpArray;
             
             clock_t timeSimplify;
     };

@@ -135,11 +135,23 @@ namespace F4
               NodeList<Element> * getBegin() const;
              
              /**
+              * \brief Return an iterator before the first element.
+              * \return Pointer before the first node.
+              */
+              NodeList<Element> * getBeforeBegin();
+             
+             /**
               * \brief Test if the list is empty.
               * \return true if the list is empty.
               * \return false otherwise.
               */
               bool empty() const;
+              
+              /**
+              * \brief Get the number of terms.
+              * \return Number of terms.
+              */
+              int getNbTerms() const;
               
               /**
               * \brief Get the first term of the list.
@@ -219,7 +231,9 @@ namespace F4
              
         private:
             
-            NodeList<Element> * _list; /* Head of the list. */
+            NodeList<Element> * _list; /*!< Head of the list. */
+            NodeList<Element> * _beforeBegin; /*!< Before the head of the list. */
+            int _nbTerms; /*!< Number of terms of the list. */
     };
     
     /**

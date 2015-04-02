@@ -143,10 +143,10 @@ namespace F4
             NodeAvlMonomial const * findNextBiggest(NodeAvlMonomial const * node) const;
         
         private:
-            DynamicArray<NodeAvlMonomial> _array;
-            NodeAvlMonomial * _it;
-            NodeAvlMonomial * _root;
-            size_t _size;
+            DynamicArray<NodeAvlMonomial> _array; /*!< Dynamic array of NodeAvlMonomial. */
+            NodeAvlMonomial * _it; /*!< Iterator. */
+            NodeAvlMonomial * _root; /*!< Root of the AVL. */
+            size_t _size; /*!< Number of node in the AVL. */
             
             
     };

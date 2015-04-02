@@ -17,7 +17,7 @@
 #CXX=clang++
 CXX=g++-4.9
 #std=c++11 required by forward_list
-CFLAGS= -O3 -g -Wall -std=c++11 -DNDEBUG -Wno-strict-overflow
+CFLAGS= -O3 -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow 
 #CFLAGS= -O3 -g -Wall -std=c++11 -Wno-strict-overflow
 #CFLAGS= -g -Wall -std=c++11 
 #LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
@@ -116,6 +116,12 @@ obj/test-avl-critical-pair.o: example/test-avl-critical-pair.cpp
 bin/test-avl-critical-pair: obj/test-avl-critical-pair.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-avl-pointer-critical-pair.o: example/test-avl-pointer-critical-pair.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-avl-pointer-critical-pair: obj/test-avl-pointer-critical-pair.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 # Benchmark 
 obj/benchmark-int.o: benchmark/benchmark-int.cpp 
@@ -133,8 +139,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-ideal
-#  bin/test-monomial bin/test-term bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
+example: bin/test-ideal bin/test-avl-pointer-critical-pair
+# bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial bin/test-term bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
 
 benchmark: bin/benchmark-int bin/benchmark-semaev
 

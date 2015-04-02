@@ -31,7 +31,7 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree, deg1, deg2)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree, int deg1, int deg2): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree, deg1, deg2), _cpArray(1000, 20,1)
     {
         /* Share the monomial array. */
         Term<Element>::setMonomialArray(&_monomialArray);
@@ -292,10 +292,6 @@ namespace F4
         clock_t startMajBasis = 0;
         
         NodeAvlCriticalPair<Element> * itcp1 = _criticalPairSet.findSmallest();
-        NodeAvlCriticalPair<Element> * itcp2 = 0;
-        
-        CriticalPair<Element> cp1;
-        CriticalPair<Element> sp;
         
         /* Strict divisibility criteria to avoid the problem of "eliminate 2 critical pairs over 3" */
         if (VERBOSE > 1)
@@ -355,62 +351,67 @@ namespace F4
             stat._timePurgeCp += (clock () - startPurgeCp);
             startAddCp = clock ();
         }
+        
+        CriticalPair<Element> * cp1=0;
+        CriticalPair<Element> * it = _cpArray.getBegin();
 
         /* Computation of critical pairs */ 
         for (j = 0; j < _basis.size(); j++)
         {
-            if (!sp.setCriticalPair(index, _total[_basis[j]]))
+            if (!it->setCriticalPair(index, _total[_basis[j]]))
             {
-                //cout << "Insert int _cpSet0, sp = " << sp << endl;
-                _cpSet0.insert(sp);
+                _cpSet0.insert(it);
             }
             else
             {
-                //cout << "Insert int _cpSet1, sp = " << sp << endl;
-                _cpSet1.insert(sp);
+                _cpSet1.insert(it);
             }
+            it=_cpArray.getNext(it);
         }
         
-        itcp1=_cpSet1.findSmallest();
-        while(itcp1 != 0)
+        NodeAvlPointerCriticalPair<Element> * itpcp1;
+        NodeAvlPointerCriticalPair<Element> * itpcp2 = 0;
+        
+        itpcp1=_cpSet1.findSmallest();
+        while(itpcp1 != 0)
         {
-            cp1=itcp1->_cp;
-            itcp1=_cpSet1.findNextSmallest(itcp1);
+            cp1=(itpcp1->_cp);
+            itpcp1=_cpSet1.findNextSmallest(itpcp1);
             
             /* Test if cp1 verifies criteria 2 */
             divisorFound = false;
             
             /* Scan _cpSet0 */
-            itcp2=_cpSet0.findSmallest();
-            while (itcp2 != 0 && !divisorFound)
+            itpcp2=_cpSet0.findSmallest();
+            while (itpcp2 != 0 && !divisorFound)
             {
-                if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
+                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
                 {
                     divisorFound = true;
                 }
-                itcp2=_cpSet0.findNextSmallest(itcp2);
+                itpcp2=_cpSet0.findNextSmallest(itpcp2);
             }
             
             /* Scan _cpSet1 */
-            itcp2=itcp1;
-            while (itcp2 != 0 && !divisorFound)
+            itpcp2=itpcp1;
+            while (itpcp2 != 0 && !divisorFound)
             {
-                if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
+                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
                 {
                     divisorFound = true;
                 }
-                itcp2=_cpSet1.findNextSmallest(itcp2);
+                itpcp2=_cpSet1.findNextSmallest(itpcp2);
             }
             
             /* Scan _cpSet2 */
-            itcp2=_cpSet2.findSmallest();
-            while (itcp2 != 0 && !divisorFound)
+            itpcp2=_cpSet2.findSmallest();
+            while (itpcp2 != 0 && !divisorFound)
             {
-                if ((cp1.getLcm()).isDivisible(itcp2->_cp.getLcm()))
+                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
                 {
                     divisorFound = true;
                 }
-                itcp2=_cpSet2.findNextSmallest(itcp2);
+                itpcp2=_cpSet2.findNextSmallest(itpcp2);
             }
             if (!divisorFound)
             {
@@ -421,19 +422,23 @@ namespace F4
         _cpSet1.reset();
         
         /* CP <- CP U _cpSet2 */
-        itcp1=_cpSet2.findSmallest();
-        while(itcp1!=0)
+        itpcp1=_cpSet2.findSmallest();
+        while(itpcp1!=0)
         { 
             //_used[itcp1->getP1()]++;
             //_used[itcp1->getP2()]++;
-            _criticalPairSet.insert(itcp1->_cp);
-            itcp1=_cpSet2.findNextSmallest(itcp1);
+            _criticalPairSet.insert(*itpcp1->_cp);
+            itpcp1=_cpSet2.findNextSmallest(itpcp1);
             stat._nbCp++;
         }
         _cpSet2.reset();
         
         /* Free _cpSet0 */
         _cpSet0.reset();
+        
+        /* Reset the dynamic array of critical pair */
+        _cpArray.reset();
+        
         
         if (VERBOSE > 1)
         {
@@ -736,22 +741,18 @@ namespace F4
     void
     Ideal<Element>::buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau)
     {
-        //NodeList<Element> * tmp = 0;
-        res.clear();
-        NodeList<Element> * pos = res.getPolynomialBegin();
+        NodeList<Element> * pos = res.getPolynomialBeforeBegin();
         for (int j = start; j < width; j++)
         {
             if (!row[tau[j]].isZero())
             {
-                //pos=res.emplaceOn(pos, row[tau[j]], tabMon[j]);
-                //tmp=pos;
-                //pos=pos->_next;
-                pos=res.emplaceAfter(pos, row[tau[j]], tabMon[j]);
+                pos=res.emplaceOn(pos, row[tau[j]], tabMon[j]);
             }
         }
-        //res.deleteAfter(tmp);
+        res.deleteAfter(pos);
         if(res.isEmpty())
         {
+            cout << "before begin: " << res.getPolynomialBeforeBegin() << endl;
             cout << "Row empty --> see echelonize" << endl;
         }
     }
@@ -835,7 +836,6 @@ namespace F4
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                //_taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(matrix.getRow(i), tabMon, width, sigma[i], tau));
                 buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), matrix.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }
@@ -1275,7 +1275,6 @@ namespace F4
             }
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
-                //_taggedPolynomialArray[itPolBeg->_numPolynomial].setPolynomial(buildPolynomial(mat.getRow(i), tabMon, width, sigma[i], tau));
                 buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), mat.getRow(i), tabMon, width, sigma[i], tau);
                 itPolBeg=M.findNextBiggest(itPolBeg);
             }

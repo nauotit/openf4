@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=3;
+int F4::VERBOSE=0;
 
 int main (int argc, char **argv)
 {
@@ -105,7 +105,8 @@ int main (int argc, char **argv)
     // Test void buildPolynomial (Polynomial<Element> & polynomial, Element * row, int *tab_mon, int largeur, int start, int *tau);
     cout << "________Test buildPolynomial (Polynomial<Element> & polynomial, Element * row, int *tab_mon, int largeur, int start, int *tau)________" << endl;
     
-    Polynomial<eltType> p1, p2, p3;
+    Polynomial<eltType> p1("3*x1");
+    Polynomial<eltType> p2, p3;
     cyclic6.buildPolynomial(p1, Mat.getRow(0), tab_mon, 13, 0, tau);
     cyclic6.buildPolynomial(p2, Mat.getRow(1), tab_mon, 13, 0, tau);
     cyclic6.buildPolynomial(p3, Mat.getRow(2), tab_mon, 13, 0, tau);

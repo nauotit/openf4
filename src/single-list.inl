@@ -96,12 +96,12 @@ namespace F4
     /* Constructor */
     
     template<typename Element>
-    SingleList<Element>::SingleList():_list(0)
+    SingleList<Element>::SingleList():_list(0), _beforeBegin(0), _nbTerms(0)
     {
     }
     
     template<typename Element>
-    SingleList<Element>::SingleList(SingleList const & toCopy)
+    SingleList<Element>::SingleList(SingleList const & toCopy):_beforeBegin(0), _nbTerms(toCopy._nbTerms)
     {
         if(toCopy._list)
         {
@@ -124,10 +124,12 @@ namespace F4
     }
     
     template<typename Element>
-    SingleList<Element>::SingleList(SingleList && toCopy)
+    SingleList<Element>::SingleList(SingleList && toCopy): _nbTerms(toCopy._nbTerms)
     {
         _list=toCopy._list;
         toCopy._list=0;
+        _beforeBegin=toCopy._beforeBegin;
+        toCopy._beforeBegin=0;
     }
     
     
@@ -149,6 +151,12 @@ namespace F4
              delete _list;
              _list=0;
          }
+         if(_beforeBegin)
+         {
+             delete _beforeBegin;
+             _beforeBegin=0;
+         }
+         _nbTerms=0;
     }
     
     template<typename Element>
@@ -168,34 +176,40 @@ namespace F4
              delete _list;
              _list=0;
          }
+         if(_beforeBegin)
+         {
+             delete _beforeBegin;
+             _beforeBegin=0;
+         }
+         _nbTerms=0;
     }
     
     template<typename Element>
     void
     SingleList<Element>::deleteAfter(NodeList<Element> * it)
     {
-        if(it)
+        if(it && it->_next)
         {
              NodeList<Element> * node;
-             if(it->_next)
+             node=it->_next;
+             it->_next=0;
+             it=node->_next;
+             delete node;
+             node=0;
+             _nbTerms--;
+             if(it)
              {
-                 node=it->_next;
-                 it->_next=0;
-                 it=node->_next;
-                 delete node;
-                 node=0;
-                 if(it)
+                 while (it->_next)
                  {
-                     while (it->_next)
-                     {
-                         node=it;
-                         it=it->_next;
-                         delete node;
-                         node=0;
-                     }
-                     delete it;
-                     it=0;
+                     node=it;
+                     it=it->_next;
+                     delete node;
+                     node=0;
+                     _nbTerms--;
                  }
+                 delete it;
+                 it=0;
+                 _nbTerms--;
              }
          }
     }
@@ -211,10 +225,29 @@ namespace F4
     }
     
     template<typename Element>
+    NodeList<Element> * 
+    SingleList<Element>::getBeforeBegin()
+    {
+        if(!_beforeBegin)
+        {
+            _beforeBegin = new NodeList<Element>();
+            _beforeBegin->_next=_list;
+        }
+        return _beforeBegin;
+    }
+    
+    template<typename Element>
     bool 
     SingleList<Element>::empty() const
     {
         return _list==0;
+    }
+    
+    template<typename Element>
+    int 
+    SingleList<Element>::getNbTerms() const
+    {
+        return _nbTerms;
     }
     
     template<typename Element>
@@ -241,6 +274,7 @@ namespace F4
             _list = node;
             _list->_next=0;
         }
+        _nbTerms++;
         return _list;
     }
     
@@ -260,6 +294,7 @@ namespace F4
             _list = node;
             _list->_next=0;
         }
+        _nbTerms++;
         return node;
     }
     
@@ -267,16 +302,21 @@ namespace F4
     NodeList<Element> * 
     SingleList<Element>::emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial)
     {
-        if(it)
+        if(it->_next)
         {
-            it->setCoefficient(coefficient);
-            it->setNumMonomial(numMonomial);
+            it->_next->setCoefficient(coefficient);
+            it->_next->setNumMonomial(numMonomial);
         }
         else
         {
-            it = new NodeList<Element>(coefficient, numMonomial);
+            it->_next = new NodeList<Element>(coefficient, numMonomial);
+            if(!_list)
+            {
+                _list=_beforeBegin->_next;
+            }
+            _nbTerms++;
         }
-        return it;
+        return it->_next;
     }
     
     template<typename Element>
@@ -295,6 +335,7 @@ namespace F4
             _list = node;
             _list->_next=0;
         }
+        _nbTerms++;
         return _list;
     }
     
@@ -314,6 +355,7 @@ namespace F4
             _list = node;
             _list->_next=0;
         }
+        _nbTerms++;
         return node;
     }
     
@@ -323,6 +365,7 @@ namespace F4
     {
         if(_list)
         {
+            stream << "List of " << _nbTerms << " terms: " << endl;
             NodeList<Element> * node = _list;
             stream << node->_term << endl;
             while(node->_next)
@@ -342,6 +385,7 @@ namespace F4
             NodeList<Element> * front = _list;
             _list=_list->_next;
             delete front;
+            _nbTerms--;
         }
         return _list;
     }
@@ -405,6 +449,7 @@ namespace F4
             delete _list;
             _list=0;
         }
+        _nbTerms=toCopy._nbTerms;
         return * this;
     }
     
@@ -428,6 +473,13 @@ namespace F4
              }
             _list=toCopy._list;
             toCopy._list=0;
+            if(_beforeBegin)
+            {
+                delete _beforeBegin;
+            }
+            _beforeBegin=toCopy._beforeBegin;
+            toCopy._beforeBegin=0;
+            _nbTerms=toCopy._nbTerms;
         }
         return * this;
     }

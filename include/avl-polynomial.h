@@ -144,10 +144,10 @@ namespace F4
             NodeAvlPolynomial const * findNextBiggest(NodeAvlPolynomial const * node) const;
         
         private:
-            DynamicArray<NodeAvlPolynomial> _array;
-            NodeAvlPolynomial * _it;
-            NodeAvlPolynomial * _root;
-            size_t _size;
+            DynamicArray<NodeAvlPolynomial> _array; /*!< Dynamic array of NodeAvlPolynomial. */
+            NodeAvlPolynomial * _it; /*!< Iterator. */
+            NodeAvlPolynomial * _root; /*!< Root of the AVL. */
+            size_t _size; /*!< Number of node in the AVL. */
             
             
     };

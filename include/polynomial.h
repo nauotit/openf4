@@ -133,6 +133,12 @@ namespace F4
             NodeList<Element> * getPolynomialBegin();
             
             /**
+            * \brief Get an iterator before the beginning of the polynomial.
+            * \return Iterator before the beginning of _polynomial.
+            */
+            NodeList<Element> * getPolynomialBeforeBegin();
+            
+            /**
             * \brief Get a constant iterator on the beginning of the polynomial.
             * \return Constant iterator on the beginning of _polynomial.
             */
@@ -213,7 +219,6 @@ namespace F4
             
         private:
             SingleList<Element> _polynomial; /*!< Define a polynomial as a single chained list of Terms. */
-            int _nbTerm; /*!< Number of term of _polynomial */
     };
     
     

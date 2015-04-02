@@ -136,13 +136,12 @@ int main (int argc, char **argv)
     
     // Test NodeList<Element> * emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial);
     cout << "________Test emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial)________" << endl;
-    it=poly5.getBegin();
+    it=poly5.getBeforeBegin();
     it=poly5.emplaceOn(it, 100, 1000);
-    it=it->_next;
     it=poly5.emplaceOn(it, 200, 2000);
-    it=it->_next;
     it=poly5.emplaceOn(it, 300, 3000);
     cout << "poly5: " << poly5 << endl;
+    
     
     // Test void deleteAfter(NodeList<Element> * it);
     cout << "________Test deleteAfter(NodeList<Element> * it)________" << endl;

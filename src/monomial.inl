@@ -720,12 +720,14 @@ namespace F4
         {
             return false;
         }
-        bool test = true;
-        for (int i = 0; i < NB_VARIABLE && test; i++)
+        for (int i = 0; i < NB_VARIABLE; i++)
         {
-            test = test && (mon._varlist[i]) <= (_varlist[i]);
+            if((mon._varlist[i]) > (_varlist[i]))
+            {
+                return false;
+            }
         }
-        return test;
+        return true;
     }
     
     void Monomial::reset()

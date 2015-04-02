@@ -16,13 +16,13 @@
  */
 
   /**
-  * \file avl-critical-pair.h
-  * \brief Declaration of class AvlCriticalPair.
+  * \file avl-pointer-critical-pair.h
+  * \brief Declaration of class AvlPointerCriticalPair.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON 
   */
 
-#ifndef F4_AVL_CRITICAL_PAIR_H
-#define F4_AVL_CRITICAL_PAIR_H
+#ifndef F4_AVL_POINTER_CRITICAL_PAIR_H
+#define F4_AVL_POINTER_CRITICAL_PAIR_H
 
 #include <iostream>
 #include <cassert>
@@ -36,11 +36,11 @@
 namespace F4
 {
     /**
-     * \struct NodeAvlCriticalPair.
-     * Represent a NodeAvlCriticalPair of the AVL.
+     * \struct NodeAvlPointerCriticalPair.
+     * Represent a NodeAvlPointerCriticalPair of the AVL.
      */
     template<typename Element>
-    struct NodeAvlCriticalPair
+    struct NodeAvlPointerCriticalPair
     {        
         public:
             
@@ -49,31 +49,31 @@ namespace F4
             /**
              * \brief Constructor
              */
-            NodeAvlCriticalPair();
+            NodeAvlPointerCriticalPair();
             
             /* Attributes */
         
-            CriticalPair<Element> _cp;
+            CriticalPair<Element> * _cp;
             signed char _bf;
-            NodeAvlCriticalPair* _parent;
-            NodeAvlCriticalPair* _left;
-            NodeAvlCriticalPair* _right;
+            NodeAvlPointerCriticalPair* _parent;
+            NodeAvlPointerCriticalPair* _left;
+            NodeAvlPointerCriticalPair* _right;
     };
     
     /**
      * \brief Print the AVL of root p.
-     * \param p: Pointer on a NodeAvlCriticalPair of an AVL.
+     * \param p: Pointer on a NodeAvlPointerCriticalPair of an AVL.
      */
     template<typename Element>
-    void printNode(NodeAvlCriticalPair<Element> * p, int indent=0);
+    void printNode(NodeAvlPointerCriticalPair<Element> * p, int indent=0);
     
     
     /**
-     * \class AvlCriticalPair
-     * Represent an avl of critical pair.
+     * \class AvlPointerCriticalPair
+     * Represent an AVL of pointers on critical pairs.
      */
     template<typename Element>
-    class AvlCriticalPair
+    class AvlPointerCriticalPair
     {        
         public:
             
@@ -82,7 +82,7 @@ namespace F4
             /**
              * \brief Constructor
              */
-            AvlCriticalPair();
+            AvlPointerCriticalPair();
             
             
             /* Miscellaneous */
@@ -112,91 +112,79 @@ namespace F4
             bool isEmpty() const;
             
             /**
-             * \brief Test if the AVL is consistent.
+             * \brief Test the consistency of the AVL.
              */
             void testAVL();
             
             /* Insertion */
             
             /**
-             * \brief Insert the critical pair cp in the AVL.
-             * \param cp: Critical pair
-             * \param lt: true if numMon is a leading monomial, false otherwise.
-             * \return 0 if a new NodeAvlCriticalPair is created.
-             * \return 1 if cp already exist in the AVL.
+             * \brief Insert the critical pair pointer cp in the AVL.
+             * \param cp: Pointer on a critical pair.
+             * \return 0 if a new NodeAvlPointerCriticalPair is created.
+             * \return 1 if the node already exist.
              */
-            int insert(CriticalPair<Element> cp);
-            
-            
-            /* Deletion */
-            
-            /**
-             * \brief Delete the node pointed by node from the AVL.
-             * \pre node belongs to the avl, if node = 0, the AVL is clear.
-             * \param node: Pointer on a node.
-             * \return Pointer the deleted node.
-             */
-            NodeAvlCriticalPair<Element> * erase(NodeAvlCriticalPair<Element> * node);
+            int insert(CriticalPair<Element> * cp);
             
             
             /* Search */
             
             /**
-             * \brief Find the biggest NodeAvlCriticalPair of the AVL.
+             * \brief Find the biggest NodeAvlPointerCriticalPair of the AVL.
              * \return Pointer on the biggest node.
              */
-            NodeAvlCriticalPair<Element> * findBiggest ();
+            NodeAvlPointerCriticalPair<Element> * findBiggest ();
             
             /**
-             * \brief Find the biggest NodeAvlCriticalPair of the AVL.
+             * \brief Find the biggest NodeAvlPointerCriticalPair of the AVL.
              * \return Pointer on the biggest node.
              */
-            NodeAvlCriticalPair<Element> const * findBiggest () const;
+            NodeAvlPointerCriticalPair<Element> const * findBiggest () const;
             
             /**
-             * \brief Find the next biggest NodeAvlCriticalPair after node.
+             * \brief Find the next biggest NodeAvlPointerCriticalPair after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlCriticalPair after node.
+             * \return Pointer on the next biggest NodeAvlPointerCriticalPair after node.
              */
-            NodeAvlCriticalPair<Element> * findNextBiggest(NodeAvlCriticalPair<Element> * node);
+            NodeAvlPointerCriticalPair<Element> * findNextBiggest(NodeAvlPointerCriticalPair<Element> * node);
             
             /**
-             * \brief Find the next biggest NodeAvlCriticalPair after node.
+             * \brief Find the next biggest NodeAvlPointerCriticalPair after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlCriticalPair after node.
+             * \return Pointer on the next biggest NodeAvlPointerCriticalPair after node.
              */
-            NodeAvlCriticalPair<Element> const * findNextBiggest(NodeAvlCriticalPair<Element> const * node) const;
+            NodeAvlPointerCriticalPair<Element> const * findNextBiggest(NodeAvlPointerCriticalPair<Element> const * node) const;
             
             /**
-             * \brief Find the smallest NodeAvlCriticalPair of the AVL.
+             * \brief Find the smallest NodeAvlPointerCriticalPair of the AVL.
              * \return Pointer on the smallest node.
              */
-            NodeAvlCriticalPair<Element> * findSmallest ();
+            NodeAvlPointerCriticalPair<Element> * findSmallest ();
             
             /**
-             * \brief Find the smallest NodeAvlCriticalPair of the AVL.
+             * \brief Find the smallest NodeAvlPointerCriticalPair of the AVL.
              * \return Pointer on the smallest node.
              */
-            NodeAvlCriticalPair<Element> const * findSmallest () const;
+            NodeAvlPointerCriticalPair<Element> const * findSmallest () const;
             
             /**
-             * \brief Find the next smallest NodeAvlCriticalPair after node.
+             * \brief Find the next smallest NodeAvlPointerCriticalPair after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next smallest NodeAvlCriticalPair after node.
+             * \return Pointer on the next smallest NodeAvlPointerCriticalPair after node.
              */
-            NodeAvlCriticalPair<Element> * findNextSmallest(NodeAvlCriticalPair<Element> * node);
+            NodeAvlPointerCriticalPair<Element> * findNextSmallest(NodeAvlPointerCriticalPair<Element> * node);
             
             /**
-             * \brief Find the next smallest NodeAvlCriticalPair after node.
+             * \brief Find the next smallest NodeAvlPointerCriticalPair after node.
              * \param node: Pointer on a node.
-             * \return Pointer on the next smallest NodeAvlCriticalPair after node.
+             * \return Pointer on the next smallest NodeAvlPointerCriticalPair after node.
              */
-            NodeAvlCriticalPair<Element> const * findNextSmallest(NodeAvlCriticalPair<Element> const * node) const;
+            NodeAvlPointerCriticalPair<Element> const * findNextSmallest(NodeAvlPointerCriticalPair<Element> const * node) const;
         
         private:
-            DynamicArray<NodeAvlCriticalPair<Element>> _array; /*!< Dynamic array of NodeAvlCriticalPair. */
-            NodeAvlCriticalPair<Element> * _it; /*!< Iterator. */
-            NodeAvlCriticalPair<Element> * _root; /*!< Root of the AVL. */
+            DynamicArray<NodeAvlPointerCriticalPair<Element>> _array; /*!< Dynamic array of NodeAvlPointerCriticalPair. */
+            NodeAvlPointerCriticalPair<Element> * _it; /*!< Iterator. */
+            NodeAvlPointerCriticalPair<Element> * _root; /*!< Root of the AVL. */
             size_t _size; /*!< Number of node in the AVL. */
             
             
@@ -207,9 +195,9 @@ namespace F4
      * \return ostream: Stream.
      */
     template <typename Element>
-    std::ostream & operator<<(std::ostream & stream, AvlCriticalPair<Element> const & avlCriticalPair);
+    std::ostream & operator<<(std::ostream & stream, AvlPointerCriticalPair<Element> const & avlCriticalPair);
 }
 
-#include "../src/avl-critical-pair.inl"
+#include "../src/avl-pointer-critical-pair.inl"
 
-#endif // F4_AVL_CRITICAL_PAIR_H
+#endif // F4_AVL_POINTER_CRITICAL_PAIR_H

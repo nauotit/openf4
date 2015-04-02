@@ -31,12 +31,12 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Polynomial<Element>::Polynomial():_nbTerm(0)
+    Polynomial<Element>::Polynomial()
     {
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(string const s):_nbTerm(0)
+    Polynomial<Element>::Polynomial(string const s)
     {
         NodeList<Element> * it=_polynomial.getBegin();
         string tmp;
@@ -60,18 +60,17 @@ namespace F4
                 /* In case the first character is a sign */
                 term.setTerm(tmp);
                 it=_polynomial.insertAfter(it, term);
-                _nbTerm++;
             }
         }
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial), _nbTerm(polynomial._nbTerm)
+    Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial)
     {
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(Polynomial && polynomial): _polynomial(polynomial._polynomial), _nbTerm(polynomial._nbTerm)
+    Polynomial<Element>::Polynomial(Polynomial && polynomial): _polynomial(polynomial._polynomial)
     {
     }
     
@@ -88,7 +87,6 @@ namespace F4
     Polynomial<Element>::clear()
     {
         _polynomial.clear();
-        _nbTerm=0;
     }
     
     template<typename Element>
@@ -121,7 +119,7 @@ namespace F4
     int 
     Polynomial<Element>::getNbTerm() const
     {
-        return _nbTerm;
+        return _polynomial.getNbTerms();
     }
     
     template <typename Element>
@@ -170,6 +168,13 @@ namespace F4
     Polynomial<Element>::getPolynomialBegin()
     {
         return _polynomial.getBegin();
+    }
+    
+    template <typename Element>
+    NodeList<Element> * 
+    Polynomial<Element>::getPolynomialBeforeBegin()
+    {
+        return _polynomial.getBeforeBegin();
     }
     
     template <typename Element>
@@ -227,7 +232,6 @@ namespace F4
     NodeList<Element> *
     Polynomial<Element>::emplaceAfter(NodeList<Element> * pos, Element coeff, int numMon)
     {
-        _nbTerm++;
         return _polynomial.emplaceAfter(pos, coeff, numMon);
     }
     
@@ -235,7 +239,6 @@ namespace F4
     NodeList<Element> *
     Polynomial<Element>::emplaceOn(NodeList<Element> * pos, Element coeff, int numMon)
     {
-        //_nbTerm++;
         return _polynomial.emplaceOn(pos, coeff, numMon);
     }
     
@@ -248,7 +251,6 @@ namespace F4
     Polynomial<Element>::operator=(Polynomial const & polynomial)
     {
         _polynomial=polynomial._polynomial;
-        _nbTerm=polynomial._nbTerm;
         return * this;
     }
     
@@ -259,8 +261,6 @@ namespace F4
         if(*this != polynomial)
         {
             _polynomial=polynomial._polynomial;
-            _nbTerm=polynomial._nbTerm;
-            polynomial._nbTerm=0;
         }
         return * this;
     }
