@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file benchmark-int.cpp
- *  \example benchmark-int.cpp
- *  \brief Benchmark with integer type coefficients.
+ *  \file benchmark-long.cpp
+ *  \example benchmark-long.cpp
+ *  \brief Benchmark with integer long type coefficients.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -33,8 +33,8 @@ using namespace std;
 int F4::VERBOSE=0;
 
 // Init element-prime tools
-typedef ElementPrime<int> eltType;
-int modulo=65521;
+typedef ElementPrime<long> eltType;
+long modulo=4294967291LL;
 
 int cyclic6F4(bool magma)
 {
@@ -346,23 +346,23 @@ int katsura12F4(bool magma)
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                     BENCHMARK INT                     #" << endl;
+    cout << "#                     BENCHMARK LONG                     #" << endl;
     cout << "#########################################################" << endl << endl;
 
     // Time
     clock_t start;
     
     // Magma output
-    bool magma = true;
+    bool magma = false;
     
     // Number of generator
     int nbGen;
     
     // File
-    ofstream file("benchmark-int.txt");
+    ofstream file("benchmark-long.txt");
     if (file)
     {
-        file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
+        file << "Benchmark for ideal with integer long type coefficient." << endl << endl << endl;
     }
     
     start=clock();

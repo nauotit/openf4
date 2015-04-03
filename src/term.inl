@@ -149,7 +149,14 @@ namespace F4
         }
         catch(exception const & e)
         {
-            res=1;
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
         }
         _coefficient=res;
     }
@@ -165,7 +172,14 @@ namespace F4
         }
         catch(exception const & e)
         {
-            res=1;
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
         }
         _coefficient=res;
     }
@@ -181,7 +195,14 @@ namespace F4
         }
         catch(exception const & e)
         {
-            res=1;
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
         }
         _coefficient=res;
     }
@@ -197,7 +218,14 @@ namespace F4
         }
         catch(exception const & e)
         {
-            res=1;
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
         }
         _coefficient=res;
     }

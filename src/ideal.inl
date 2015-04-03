@@ -44,8 +44,6 @@ namespace F4
         _total.reserve(10000);
         _basis.reserve(1000);
         _used.reserve(10000);
-        
-        timeSimplify=0;
     }
     
     
@@ -156,11 +154,11 @@ namespace F4
     Ideal<Element>::printMonomialAvl() const
     {
         cout << endl << "------------------- Monomial AVL -------------------------" << endl;
-        NodeAvlMonomial const * itMonBeg = M_mons.findBiggest();
+        NodeAvlMonomial const * itMonBeg = _matMons.findBiggest();
         while(itMonBeg != 0)
         {
             cout << itMonBeg->_numMonomial << ", lt = " << itMonBeg->_lt << endl;
-            itMonBeg=M_mons.findNextBiggest(itMonBeg);
+            itMonBeg=_matMons.findNextBiggest(itMonBeg);
         }
         cout << endl << endl;
     }
@@ -171,11 +169,11 @@ namespace F4
     {
         cout << endl << "------------------- Tagged polynomial index AVL -------------------------" << endl;
         
-        NodeAvlPolynomial const * itPolBeg = M.findBiggest(); 
+        NodeAvlPolynomial const * itPolBeg = _matPols.findBiggest(); 
         while(itPolBeg != 0)
         {
             cout << "_numPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
-            itPolBeg=M.findNextBiggest(itPolBeg);
+            itPolBeg=_matPols.findNextBiggest(itPolBeg);
         }
     }
     
@@ -226,8 +224,6 @@ namespace F4
         //cout << numList << ": " << _taggedPolynomialArray[numList]  << endl;
         //cout << numList << " x " << u  << ": " << (_taggedPolynomialArray[numList] * Monomial(u)) << endl << endl;
         
-        clock_t start=clock();
-        
         int numList_prev = numList;
         int i, j, k;
         int const * varlistU = u.getVarlist();
@@ -270,11 +266,9 @@ namespace F4
         
         if (_taggedPolynomialArray[numList].isEmpty())
         {
-            // Product does not exist => we create it.
+            /* Product does not exist => we create it. */
             _taggedPolynomialArray[numList].setTaggedPolynomial(_taggedPolynomialArray[numList_prev], varlistTmp);
         }
-        
-        timeSimplify+=(clock()-start);
         
         //cout << "--------------- simplify output---------------------" << endl;
         //cout << numList << ": " << _taggedPolynomialArray[numList] << endl << endl;
@@ -513,12 +507,12 @@ namespace F4
         
         int u1p1=simplify(p.getU1(), p.getP1()); 
         
-        if(M.insert(u1p1, (_taggedPolynomialArray[u1p1]).getLM(), (_taggedPolynomialArray[u1p1]).getNbTerm())!=1)
+        if(_matPols.insert(u1p1, (_taggedPolynomialArray[u1p1]).getLM(), (_taggedPolynomialArray[u1p1]).getNbTerm())!=1)
         {
-            /* If u1p1 is not already in M we insert its monomials in M_Mons */
+            /* If u1p1 is not already in _matPols we insert its monomials in M_Mons */
             itTerm=_taggedPolynomialArray[u1p1].getPolynomialBeginConst();
 
-            if(M_mons.insert(itTerm->getNumMonomial(), true) != 1)
+            if(_matMons.insert(itTerm->getNumMonomial(), true) != 1)
             {
                 nbPiv++;
             }
@@ -526,7 +520,7 @@ namespace F4
             while(itTerm)
             {
                 /* Insert the other monomials */
-                M_mons.insert(itTerm->getNumMonomial(), false);
+                _matMons.insert(itTerm->getNumMonomial(), false);
                 itTerm=itTerm->_next;
             }
             h++;
@@ -534,16 +528,16 @@ namespace F4
         
         int u2p2=simplify(p.getU2(), p.getP2());
         
-        if(M.insert(u2p2, (_taggedPolynomialArray[u2p2]).getLM(), (_taggedPolynomialArray[u2p2]).getNbTerm())!=1)
+        if(_matPols.insert(u2p2, (_taggedPolynomialArray[u2p2]).getLM(), (_taggedPolynomialArray[u2p2]).getNbTerm())!=1)
         {
-            /* If u2p2 is not already in M we insert its monomials in M_Mons */
+            /* If u2p2 is not already in _matPols we insert its monomials in M_Mons */
             itTerm=_taggedPolynomialArray[u2p2].getPolynomialBeginConst();
-            M_mons.insert(itTerm->getNumMonomial(), true);
+            _matMons.insert(itTerm->getNumMonomial(), true);
             itTerm=itTerm->_next;
             while(itTerm)
             {
                 /* Insert the other monomials */
-                M_mons.insert(itTerm->getNumMonomial(), false);
+                _matMons.insert(itTerm->getNumMonomial(), false);
                 itTerm=itTerm->_next;
             }
             h++;
@@ -560,7 +554,7 @@ namespace F4
         int icur, ih, ib, j;
         int c = 0;                  /* Column of the last lt */
         
-        /* Iterators on M_mons, M, and polynomials */
+        /* Iterators on _matMons, _matPols, and polynomials */
         NodeAvlMonomial * itMonBeg = 0;
         NodeAvlPolynomial * itPolBeg = 0;
         NodeList<Element> const * itTerm;
@@ -574,8 +568,8 @@ namespace F4
         ib = nbPiv;
         icur = 0;
 
-        /* We take the biggest monomial of M_mons */
-        itMonBeg=M_mons.findBiggest();
+        /* We take the biggest monomial of _matMons */
+        itMonBeg=_matMons.findBiggest();
         do
         {
             if (itMonBeg->_lt == true)
@@ -594,17 +588,17 @@ namespace F4
             }
             tabMon[icur]=itMonBeg->_numMonomial;
             icur++;
-            itMonBeg=M_mons.findNextBiggest(itMonBeg);
+            itMonBeg=_matMons.findNextBiggest(itMonBeg);
         }
         while(itMonBeg != 0);
         if (icur != width)
         {
-            cout << "***pb depliage M_mons dans Transform***" << endl;
+            cout << "***pb depliage _matMons dans Transform***" << endl;
             cout << "icur = " << icur << ", width = " << width << endl;
         }
 
         /* Fill the matrix with a triangular shape */
-        itPolBeg=M.findBiggest();
+        itPolBeg=_matPols.findBiggest();
         itTerm=_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomialBeginConst();
             
         ih = 0;
@@ -638,7 +632,7 @@ namespace F4
             //Pol_FL = List[tmp_polEt->numList].poly->next;
             //List[tmp_polEt->numList].poly->next = NULL;
         //}
-        itPolBeg=M.findNextBiggest(itPolBeg);
+        itPolBeg=_matPols.findNextBiggest(itPolBeg);
         
         /* Process other polynomials */
         while(itPolBeg != 0)
@@ -701,7 +695,7 @@ namespace F4
                 }
                 ih++;
             }
-            itPolBeg=M.findNextBiggest(itPolBeg);
+            itPolBeg=_matPols.findNextBiggest(itPolBeg);
 
             ////lib du pol de la ligne
             //if (List[tmp_polEt->numList].poly->next != NULL)
@@ -769,12 +763,12 @@ namespace F4
         NodeAvlMonomial * itmon;
         width = 0;
         
-        /* Search the biggest monomial in M_mons which is not a leading monomial */
-        itmon=M_mons.findBiggest();
+        /* Search the biggest monomial in _matMons which is not a leading monomial */
+        itmon=_matMons.findBiggest();
         width++;
         while (itmon != 0 && itmon->_lt == true)
         {
-            itmon=M_mons.findNextBiggest(itmon);
+            itmon=_matMons.findNextBiggest(itmon);
             width++;
         }
         while(itmon != 0)
@@ -792,15 +786,15 @@ namespace F4
                     nbPiv++;
                     /* Test if the computation of this multiple is not already done */ 
                     indexPol=simplify(quotient, _total[_basis[i]]);
-                    /* Add the multiple in M */
-                    M.insert(indexPol, (_taggedPolynomialArray[indexPol]).getLM(), (_taggedPolynomialArray[indexPol]).getNbTerm());
+                    /* Add the multiple in _matPols */
+                    _matPols.insert(indexPol, (_taggedPolynomialArray[indexPol]).getLM(), (_taggedPolynomialArray[indexPol]).getNbTerm());
                     height++;
-                    /* Insert monomials of the new polynomial in M_mons */
+                    /* Insert monomials of the new polynomial in _matMons */
                     itTerm=_taggedPolynomialArray[indexPol].getPolynomialBeginConst();
                     itTerm=itTerm->_next;
                     while(itTerm)
                     {
-                        M_mons.insert(itTerm->getNumMonomial(), false);
+                        _matMons.insert(itTerm->getNumMonomial(), false);
                         itTerm=itTerm->_next;
                     }
                     break;
@@ -809,7 +803,7 @@ namespace F4
             /* End search */
             do
             {
-                itmon=M_mons.findNextBiggest(itmon);
+                itmon=_matMons.findNextBiggest(itmon);
                 width++;
             }
             while (itmon != 0 && itmon->_lt == true);
@@ -825,7 +819,7 @@ namespace F4
     Ideal<Element>::postprocessing(Matrix<Element> & matrix, int * tabMon, int * sigma, int * tau, int height, int width, int heightReal, int nbPiv, Stat & stat) 
     {
         /* Iterators */
-        NodeAvlPolynomial * itPolBeg = M.findBiggest();
+        NodeAvlPolynomial * itPolBeg = _matPols.findBiggest();
         int num_lt, i;
         for (i = 0; i < nbPiv; i++)
         {
@@ -837,7 +831,7 @@ namespace F4
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
                 buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), matrix.getRow(i), tabMon, width, sigma[i], tau);
-                itPolBeg=M.findNextBiggest(itPolBeg);
+                itPolBeg=_matPols.findNextBiggest(itPolBeg);
             }
         }
         for (i = nbPiv; i < heightReal; i++)
@@ -979,7 +973,7 @@ namespace F4
             {
                 start2 = clock ();
             }
-            M_mons.reset();
+            _matMons.reset();
             
             /* Construction of critical pairs with minimal degree */
             height = 0;
@@ -1035,13 +1029,13 @@ namespace F4
             
             if (VERBOSE > 0)
             {
-                cout << "Construction of M: " << endl;
+                cout << "Construction of _matPols: " << endl;
                 cout << "Number of selected pairs: " << stat._nbCpDeg << endl;
                 cout << "Number of polynomials: " << height << endl;
-                cout << "Number of monomials: " << M_mons.size() << endl << endl;
+                cout << "Number of monomials: " << _matMons.size() << endl << endl;
             }
             
-            /* Preprocessing of M */
+            /* Preprocessing of _matPols */
             if(VERBOSE > 1)
             {
                 timePreprocessingStart=clock();
@@ -1052,10 +1046,10 @@ namespace F4
                 timePreprocessing +=(clock () - timePreprocessingStart);
             }
         
-            /* Transform M into a matrix */
+            /* Transform _matPols into a matrix */
             if (VERBOSE > 0)
             {
-                cout << "Preprocessing of M: " << endl;
+                cout << "Preprocessing of _matPols: " << endl;
                 cout << "Height: " << height << ", Width :" << width << ", Number of pivots: " << nbPiv << endl << endl;
             }
             
@@ -1082,7 +1076,7 @@ namespace F4
             
             if (VERBOSE > 0)
             {
-                cout << "Convert M into a matrix: " << endl;
+                cout << "Convert _matPols into a matrix: " << endl;
                 cout << "Matrix size: " << height << "x" << width << endl;
                 cout << "Matrix density: " << sparse << endl;
                 cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
@@ -1107,7 +1101,7 @@ namespace F4
                 stat._timeMajBasis = 0;
             }
 
-            /* Rebuild M from mat */
+            /* Rebuild _matPols from mat */
             /* Count new generators */
             stat._cmptNewGen=0;
             /* Count purged generators */
@@ -1123,16 +1117,16 @@ namespace F4
                 cout << endl << endl << "GROEBNER BASIS : (1)" << endl;
                 cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << " ms " << endl << endl << endl;
                 
-                if(M_mons.size() != (size_t)width)
+                if(_matMons.size() != (size_t)width)
                 {
-                    cout << "*** Problem in width computation: size of M_mons = " << M_mons.size() << ", width = " << width << " ***" << endl;
+                    cout << "*** Problem in width computation: size of _matMons = " << _matMons.size() << ", width = " << width << " ***" << endl;
                 }
-                M_mons.reset();
-                if(M.size() != (size_t)height) 
+                _matMons.reset();
+                if(_matPols.size() != (size_t)height) 
                 {
-                    cout << "*** Problem in height computation: size of M = " << M.size() << ", height = " << height << " ***" << endl << endl;
+                    cout << "*** Problem in height computation: size of _matPols = " << _matPols.size() << ", height = " << height << " ***" << endl << endl;
                 }
-                M.reset();
+                _matPols.reset();
  
                 delete[] tabMon;
                 delete[] tau;
@@ -1163,8 +1157,8 @@ namespace F4
             
             /* Reset the AVL of monomials and tagged polynomials */
             timeClearStart=clock();
-            M_mons.reset();
-            M.reset();
+            _matMons.reset();
+            _matPols.reset();
             timeClear+=(clock()-timeClearStart);
             
             if (stat._cmptNewGen != (heightReal - nbPiv))
@@ -1201,7 +1195,6 @@ namespace F4
             cout << "---> " << (((double)timePreprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for preprocessing" << endl;
             cout << "---> " << (((double)timeTransform) * 1000) / CLOCKS_PER_SEC << "ms CPU used for transform" << endl;
             cout << "---> " << (((double)timePostprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for postprocessing" << endl;
-            cout << "---> " << (((double)timeSimplify) * 1000) / CLOCKS_PER_SEC << "ms CPU used for simplify" << endl << endl << endl;
             
             cout << "_numPol: " << _numPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
             cout << "_numTot: " << _numTot << " _total size: " << _total.size() << " _used size: " << _used.size() << endl;
@@ -1221,13 +1214,13 @@ namespace F4
         for (i = 0; i < _numGen; i++)
         {
             index=_total[_basis[i]];
-            M.insert(index, (_taggedPolynomialArray[index]).getLM(), (_taggedPolynomialArray[index]).getNbTerm());
+            _matPols.insert(index, (_taggedPolynomialArray[index]).getLM(), (_taggedPolynomialArray[index]).getNbTerm());
             itTerm=_taggedPolynomialArray[index].getPolynomialBeginConst();
-            M_mons.insert(itTerm->getNumMonomial(), true);
+            _matMons.insert(itTerm->getNumMonomial(), true);
             itTerm=itTerm->_next;
             while(itTerm)
             {
-                M_mons.insert(itTerm->getNumMonomial(), false);
+                _matMons.insert(itTerm->getNumMonomial(), false);
                 itTerm=itTerm->_next;
             }
             height++;
@@ -1237,10 +1230,10 @@ namespace F4
         preprocessing(width, height, nbPiv);
         nbPiv = height;
         
-        /* Transform M into a matrix */
+        /* Transform _matPols into a matrix */
         if (VERBOSE > 0)
         {
-            cout << "Preprocessing of M: " << endl;
+            cout << "Preprocessing of _matPols: " << endl;
             cout << "Height: " << height << ", Width :" << width << ", Number of pivots: " << nbPiv << endl << endl;
         }
             
@@ -1265,7 +1258,7 @@ namespace F4
         heightReal=mat.echelonize();
 
         /* Retrieve generators of the minimal basis */
-        itPolBeg = M.findBiggest();
+        itPolBeg = _matPols.findBiggest();
         for (i = 0; i < nbPiv; i++)
         {
             num_lt = tabMon[sigma[i]];
@@ -1276,19 +1269,19 @@ namespace F4
             while( (itPolBeg != 0) && (itPolBeg->_numMonomial==num_lt) )
             {
                 buildPolynomial(_taggedPolynomialArray[itPolBeg->_numPolynomial].getPolynomial(), mat.getRow(i), tabMon, width, sigma[i], tau);
-                itPolBeg=M.findNextBiggest(itPolBeg);
+                itPolBeg=_matPols.findNextBiggest(itPolBeg);
             }
         }
-        if(M_mons.size() != (size_t)width)
+        if(_matMons.size() != (size_t)width)
         {
             cout << "*** Problem in width computation ***" << endl;
         }
-        M_mons.reset();
-        if(M.size() != (size_t)height) 
+        _matMons.reset();
+        if(_matPols.size() != (size_t)height) 
         {
             cout << "*** Problem in height computation ***" << endl << endl;
         }
-        M.reset();
+        _matPols.reset();
 
         delete[] tabMon;
         delete[] tau;

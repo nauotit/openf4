@@ -24,7 +24,9 @@
 #ifndef F4_IDEAL_H
 #define F4_IDEAL_H
 
+/** \cond */
 #include <iostream>
+/** \endcond */
 #include "matrix.h"
 #include "avl-monomial.h"
 #include "avl-polynomial.h"
@@ -100,12 +102,12 @@ namespace F4
             void printReducedGroebnerBasis(string const filename, long modulo) const;
             
             /**
-             * \brief Print M_mons.
+             * \brief Print _matMons.
              */
             void printMonomialAvl() const;
             
             /**
-             * \brief Print M.
+             * \brief Print _matPols.
              */
             void printTaggedPolynomialAvl() const;
             
@@ -132,7 +134,7 @@ namespace F4
             void update(int index, bool purge, Stat & stat);
             
             /**
-             * \brief Update M and M_mons with the critical pair p.
+             * \brief Update _matPols and _matMons with the critical pair p.
              * \param p: Critical pair.
              * \param h: Height of the F4 matrix.
              * \param nbPiv: Number of pivots in the the F4 matrix.
@@ -140,9 +142,9 @@ namespace F4
             void appendMatrixF4 (CriticalPair<Element> & p, int & h, int & nbPiv);
             
             /**
-             * \brief Transform M and M_mons into an almost tringular matrix.
+             * \brief Transform _matPols and _matMons into an almost tringular matrix.
              * \param mat: Matrix to fill.
-             * \param tabMon: Array of monomials involved in M.
+             * \param tabMon: Array of monomials involved in _matPols.
              * \param nbPiv: Number of pivots in the the F4 matrix.
              * \param tau: tau[i]=column of the monomial tabMon[i].
              * \param sigma: sigma[i]=index in tabMon of the column i monomial.
@@ -154,7 +156,7 @@ namespace F4
             
             /**
              * \brief Build a polynomial from a row of the F4 matrix.
-             * \param tabMon: Array of monomials involved in M.
+             * \param tabMon: Array of monomials involved in _matPols.
              * \param width: End of the row.
              * \param start: Beginning of the row.
              * \param tau: tau[i]=column of the monomial tabMon[i].
@@ -163,7 +165,7 @@ namespace F4
             void buildPolynomial (Polynomial<Element> & res, Element * row, int *tabMon, int width, int start, int *tau);
             
             /**
-             * \brief Add polynomials to M in order to reduced queue of current polynomials.
+             * \brief Add polynomials to _matPols in order to reduced queue of current polynomials.
              * \param width: Width of the F4 matrix (number of monomials).
              * \param height: Height of the F4 matrix (number of polynomials).
              * \param nbPiv: Number of pivots in the the F4 matrix.
@@ -171,9 +173,9 @@ namespace F4
             void preprocessing(int & width, int & height, int & nbPiv);
             
             /**
-             * \brief Rebuild M from mat, update the basis and the set of critical pairs.
+             * \brief Rebuild _matPols from mat, update the basis and the set of critical pairs.
              * \param mat: Matrix to fill.
-             * \param tabMon: Array of monomials involved in M.
+             * \param tabMon: Array of monomials involved in _matPols.
              * \param sigma: sigma[i]=index in tabMon of the column i monomial.
              * \param tau: tau[i]=column of the monomial tabMon[i].
              * \param height: Height of the matrix before echelonize.
@@ -211,12 +213,9 @@ namespace F4
             AvlPointerCriticalPair<Element> _cpSet0; /*!< AVL of critical pairs for update */
             AvlPointerCriticalPair<Element> _cpSet1; /*!< AVL of critical pairs for update */
             AvlPointerCriticalPair<Element> _cpSet2; /*!< AVL of critical pairs for update */
-            AvlMonomial M_mons; /*!< Monomials used in M, AVL of pair (numMon, lt) decreasing order */
-            AvlPolynomial M; /*!< F4 Matrix = AVL of triple (tagged polynomial index, numLM, nbTerms), decreasing order */ 
-            
-            DynamicArray<CriticalPair<Element>> _cpArray;
-            
-            clock_t timeSimplify;
+            DynamicArray<CriticalPair<Element>> _cpArray; /*!< Dynamic array of critical pairs used in _cpSet0, _cpSet1 and _cpSet2. */
+            AvlMonomial _matMons; /*!< Monomials used in _matPols, AVL of pair (numMon, lt) decreasing order */
+            AvlPolynomial _matPols; /*!< F4 Matrix = AVL of triple (tagged polynomial index, numLM, nbTerms), decreasing order */ 
     };
 }
 

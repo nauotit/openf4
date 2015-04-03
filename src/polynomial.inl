@@ -258,10 +258,7 @@ namespace F4
     Polynomial<Element> & 
     Polynomial<Element>::operator=(Polynomial && polynomial)
     {
-        if(*this != polynomial)
-        {
-            _polynomial=polynomial._polynomial;
-        }
+        _polynomial=polynomial._polynomial;
         return * this;
     }
     

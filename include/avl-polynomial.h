@@ -24,9 +24,11 @@
 #ifndef F4_AVL_POLYNOMIAL_H
 #define F4_AVL_POLYNOMIAL_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
 #include <iomanip>
+/** \endcond */
 #include "dynamic-array.h"
 
 /** \namespace F4 
@@ -51,18 +53,18 @@ namespace F4
             
             /* Attributes */
         
-            int _numPolynomial;
-            int _numMonomial;
-            int _nbTerms;
-            signed char _bf;
-            NodeAvlPolynomial* _parent;
-            NodeAvlPolynomial* _left;
-            NodeAvlPolynomial* _right;
+            int _numPolynomial; /*!< Index of a tagged polynomial. */
+            int _numMonomial; /*!< Number of the leading monomial of the tagged polynomial. */
+            int _nbTerms; /*!< Number of terms of the tagged polynomial. */
+            signed char _bf; /*!< Balance factor. */
+            NodeAvlPolynomial* _parent; /*!< Pointer on the parent node. */
+            NodeAvlPolynomial* _left; /*!< Pointer on the left child node. */
+            NodeAvlPolynomial* _right; /*!< Pointer on the right child node. */
     };
     
     /**
      * \brief Print the AVL of root p.
-     * \param p: Pointer on a NodeAvlPolynomial of an AVL.
+     * \param p: Pointer on a node of the AVL.
      */
     void printNode(NodeAvlPolynomial * p, int indent=0);
     

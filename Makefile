@@ -130,6 +130,12 @@ obj/benchmark-int.o: benchmark/benchmark-int.cpp
 bin/benchmark-int: obj/benchmark-int.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/benchmark-long.o: benchmark/benchmark-long.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/benchmark-long: obj/benchmark-long.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 obj/benchmark-semaev.o: benchmark/benchmark-semaev.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -139,10 +145,9 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-ideal bin/test-avl-pointer-critical-pair
-# bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial bin/test-term bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
-
-benchmark: bin/benchmark-int bin/benchmark-semaev
+example: bin/test-ideal bin/test-avl-pointer-critical-pair bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
+# bin/test-term
+benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)
 
@@ -153,9 +158,9 @@ clean:
 	rm -f obj/*.o bin/* data/*.pgm
 
 # require the indent program (GNU indent)
-indent: 
-	indent -nbad -bap -nbc -bbo -bl -bli0 -bls -ncdb -nce -cp1 -ncs -di2 -ndj -nfc1 -nfca -hnl -i4 -ip4 -lp -pcs -nprs -psl -saf -sai -saw -nsc -nsob -nut src/*.inl
-	indent -nbad -bap -nbc -bbo -bl -bli0 -bls -ncdb -nce -cp1 -ncs -di2 -ndj -nfc1 -nfca -hnl -i4 -ip4 -lp -pcs -nprs -psl -saf -sai -saw -nsc -nsob -nut include/*.h
+#indent: 
+	#indent -nbad -bap -nbc -bbo -bl -bli0 -bls -ncdb -nce -cp1 -ncs -di2 -ndj -nfc1 -nfca -hnl -i4 -ip4 -lp -pcs -nprs -psl -saf -sai -saw -nsc -nsob -nut src/*.inl
+	#indent -nbad -bap -nbc -bbo -bl -bli0 -bls -ncdb -nce -cp1 -ncs -di2 -ndj -nfc1 -nfca -hnl -i4 -ip4 -lp -pcs -nprs -psl -saf -sai -saw -nsc -nsob -nut include/*.h
 # -nut: not use tab
 # -i4: indent to 4 spaces
 # -bli0: braces on the same column than if

@@ -24,10 +24,11 @@
 #ifndef F4_MONOMIAL_ARRAY_H
 #define F4_MONOMIAL_ARRAY_H
 
+/** \cond */
 #include <iostream>
 #include <string>
 #include <cassert>
-
+/** \endcond */
 #include "monomial.h"
 
 

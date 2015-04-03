@@ -24,8 +24,9 @@
 #ifndef F4_POLYNOMIAL_H
 #define F4_POLYNOMIAL_H
 
-//#include <forward_list>
+/** \cond */
 #include "single-list.h"
+/** \endcond */
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

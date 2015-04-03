@@ -87,7 +87,7 @@ namespace F4
         if(maxDegree>MAX_DEGREE)
         {
             double size = 0;
-            NB_MONOMIAL.reserve(maxDegree + 1);     
+            NB_MONOMIAL.reserve(10*maxDegree+1);     
             size += (maxDegree + 1) * sizeof (int *);
             if(MAX_DEGREE==0)
             {

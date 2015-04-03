@@ -24,11 +24,12 @@
 #ifndef F4_MONOMIAL_H
 #define F4_MONOMIAL_H
 
+/** \cond */
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cassert>
-
+/** \endcond */
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

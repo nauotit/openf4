@@ -187,25 +187,25 @@ int main (int argc, char **argv)
     mat2.normalizeRow(mat2.getRow(8), 10, mat2.getWidth());
     cout << mat2 << endl;
     
-    // void multRow(unsigned numRow, Element element, unsigned start, unsigned end);
-    cout << "________Test multRow(unsigned numRow, Element element, unsigned start, unsigned end)________" << endl;
-    mat2.multRow(4, 10, 0, mat2.getWidth());
-    mat2.multRow(8, 5, 10, mat2.getWidth());
+    // void multRow(Element * row, Element const & element, int start, int end);
+    cout << "________Test multRow(Element * row, Element const & element, int start, int end)________" << endl;
+    mat2.multRow(mat2.getRow(4), 10, 0, mat2.getWidth());
+    mat2.multRow(mat2.getRow(8), 5, 10, mat2.getWidth());
     cout << mat2 << endl;
     
-    // Test void addMultRow(unsigned numRow1, unsigned numRow2, Element element, unsigned start, unsigned end);
-    cout << "________Test addMultRow(unsigned numRow1, unsigned numRow2, Element element, unsigned start, unsigned end)________" << endl;
-    mat2.addMultRow(0, 1, 10, 0, mat2.getWidth());
-    mat2.addMultRow(9, 1, 5, 5, mat2.getWidth());
+    // Test addMultRow(Element * row1, Element * row2, Element element, int start, int end);
+    cout << "________Test addMultRow(Element * row1, Element * row2, Element element, int start, int end)________" << endl;
+    mat2.addMultRow(mat2.getRow(0), mat2.getRow(1), 10, 0, mat2.getWidth());
+    mat2.addMultRow(mat2.getRow(9), mat2.getRow(1), 5, 5, mat2.getWidth());
     cout << mat2 << endl;
     
-    // Test void swapRow(unsigned numRow1, unsigned numRow2, unsigned start, unsigned end);
-    cout << "________Test swapRow(unsigned numRow1, unsigned numRow2, unsigned start, unsigned end)________" << endl;
-    mat2.swapRow(1, 5, 0, mat2.getWidth());
+    // Test void swapRow(int numRow1, int numRow2);
+    cout << "________Test swapRow(int numRow1, int numRow2)________" << endl;
+    mat2.swapRow(1, 5);
     cout << mat2 << endl;
     
-    // Test void swapCol(unsigned numCol1, unsigned numCol2, unsigned start, unsigned end);
-    cout << "________Test swapCol(unsigned numCol1, unsigned numCol2, unsigned start, unsigned end)________" << endl;
+    // Test void swapCol(int numCol1, int numCol2, int start, int end);
+    cout << "________Test swapCol(int numCol1, int numCol2, int start, int end)________" << endl;
     mat2.swapCol(1, 10, 0, mat2.getHeight());
     cout << mat2 << endl;
     

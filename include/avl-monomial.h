@@ -24,9 +24,11 @@
 #ifndef F4_AVL_MONOMIAL_H
 #define F4_AVL_MONOMIAL_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
 #include <iomanip>
+/** \endcond */
 #include "dynamic-array.h"
 
 /** \namespace F4 
@@ -36,7 +38,7 @@ namespace F4
 {
     /**
      * \struct NodeAvlMonomial.
-     * Represent a NodeAvlMonomial of the AVL.
+     * Represent a node of the AVL of monomials.
      */
     struct NodeAvlMonomial
     {        
@@ -51,17 +53,17 @@ namespace F4
             
             /* Attributes */
         
-            int _numMonomial;
-            bool _lt;
-            signed char _bf;
-            NodeAvlMonomial* _parent;
-            NodeAvlMonomial* _left;
-            NodeAvlMonomial* _right;
+            int _numMonomial; /*!< Number of a monomial. */
+            bool _lt; /*!< True if the monomial is a leading term. */
+            signed char _bf; /*!< Balance factor. */
+            NodeAvlMonomial* _parent; /*!< Pointer on the parent node. */
+            NodeAvlMonomial* _left; /*!< Pointer on the left child node. */
+            NodeAvlMonomial* _right; /*!< Pointer on the right child node. */
     };
     
     /**
      * \brief Print the AVL of root p.
-     * \param p: Pointer on a NodeAvlMonomial of an AVL.
+     * \param p: Pointer on a node of the AVL.
      */
     void printNode(NodeAvlMonomial * p, int indent=0);
     

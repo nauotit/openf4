@@ -24,9 +24,11 @@
 #ifndef F4_AVL_CRITICAL_PAIR_H
 #define F4_AVL_CRITICAL_PAIR_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
 #include <iomanip>
+/** \endcond */
 #include "critical-pair.h"
 #include "dynamic-array.h"
 
@@ -37,7 +39,7 @@ namespace F4
 {
     /**
      * \struct NodeAvlCriticalPair.
-     * Represent a NodeAvlCriticalPair of the AVL.
+     * Represent a node of the AVL of critical pairs.
      */
     template<typename Element>
     struct NodeAvlCriticalPair
@@ -53,16 +55,16 @@ namespace F4
             
             /* Attributes */
         
-            CriticalPair<Element> _cp;
-            signed char _bf;
-            NodeAvlCriticalPair* _parent;
-            NodeAvlCriticalPair* _left;
-            NodeAvlCriticalPair* _right;
+            CriticalPair<Element> _cp; /*!< Critical pair. */
+            signed char _bf; /*!< Balance factor. */
+            NodeAvlCriticalPair* _parent; /*!< Pointer on the parent node. */
+            NodeAvlCriticalPair* _left; /*!< Pointer on the left child node. */
+            NodeAvlCriticalPair* _right; /*!< Pointer on the right child node. */
     };
     
     /**
      * \brief Print the AVL of root p.
-     * \param p: Pointer on a NodeAvlCriticalPair of an AVL.
+     * \param p: Pointer on a node of the AVL.
      */
     template<typename Element>
     void printNode(NodeAvlCriticalPair<Element> * p, int indent=0);

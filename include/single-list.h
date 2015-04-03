@@ -16,7 +16,7 @@
  */
 
   /**
-  * \file list.h
+  * \file single-list.h
   * \brief Declaration of class SingleList.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON 
   */
@@ -24,9 +24,10 @@
 #ifndef F4_SINGLE_LIST_H
 #define F4_SINGLE_LIST_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
-
+/** \endcond */
 #include "term.h"
 
 /** \namespace F4 

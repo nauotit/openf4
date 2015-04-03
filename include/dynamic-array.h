@@ -24,8 +24,10 @@
 #ifndef F4_DYNAMIC_ARRAY_H
 #define F4_DYNAMIC_ARRAY_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
+/** \endcond */
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

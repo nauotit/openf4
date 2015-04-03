@@ -24,9 +24,11 @@
 #ifndef F4_ELEMENT_PRIME_H
 #define F4_ELEMENT_PRIME_H
 
+/** \cond */
 #include <iostream>
 #include <string.h>
 #include <cassert>
+/** \endcond */
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

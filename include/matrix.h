@@ -24,13 +24,14 @@
 #ifndef F4_MATRIX_H
 #define F4_MATRIX_H
 
+/** \cond */
 #include <iostream>
 #include <cassert>
 #include <ctime>
 #include <string>
 #include <fstream>
 #include <sstream>
-
+/** \endcond */
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
