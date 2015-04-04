@@ -94,18 +94,12 @@ namespace F4
             ElementPrime<baseType> & modulo ();
             
             /**
-             * \brief Set this in [-MODULO+1, MODULO-1].
-             * \post this is set in [-MODULO+1, MODULO-1].
-             */
-            void normalize();
-            
-            /**
              * \brief Set this+=(mult*element).
              * \param element: Element of the prime field.
              * \param mult: Element of the prime field.
              * \pre mult is set in [-MODULO/2, MODULO/2].
-             * \pre element is set in [-MODULO+1, MODULO-1].
-             * \post this is set in [-MODULO+1, MODULO-1].
+             * \pre element is set in [-MODULO/2, MODULO/2].
+             * \post this is set in [-MAX, MAX].
              * \return this.
              */
             ElementPrime<baseType> & addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult);
@@ -189,7 +183,6 @@ namespace F4
              * \brief Overload the operator +=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
-             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator+=(ElementPrime const & element); 
@@ -198,7 +191,6 @@ namespace F4
              * \brief Overload the operator -=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
-             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator-=(ElementPrime const & element); 
@@ -208,7 +200,7 @@ namespace F4
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
              * \pre mult is set in [-MODULO/2, MODULO/2].
-             * \post this is set in [-MODULO+1, MODULO-1].
+             * \post this is set in [-MODULO/2, MODULO/2].
              * \return Reference on this.
              */
             ElementPrime & operator*=(ElementPrime const & mult); 
@@ -217,7 +209,6 @@ namespace F4
              * \brief Overload the operator /=.
              * \pre The static variable MODULO must be set beforehand.
              * \param element: Element of a prime field.
-             * \post this is set in [-MODULO+1, MODULO-1].
              * \return Reference on this.
              */
             ElementPrime & operator/=(ElementPrime element); 
@@ -225,7 +216,9 @@ namespace F4
         private:
             baseType _element; /*!< Represent an element of the field of characteristic MODULO */
             
-            static baseType MODULO; /*!< Characteristic of the base field */
+            static baseType MODULO; /*!< Characteristic of the base field. */
+            static baseType MAX; /*!< Maximum range for the baseType elements. */
+            //static baseType MULT; /*!< Integer part of MODULO/2 */
     };
     
     

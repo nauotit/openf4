@@ -145,8 +145,7 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-ideal bin/test-avl-pointer-critical-pair bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime
-# bin/test-term
+example: bin/test-ideal bin/test-avl-pointer-critical-pair bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime bin/test-term
 benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)

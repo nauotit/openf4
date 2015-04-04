@@ -38,6 +38,11 @@ namespace F4
     template <typename baseType>
     baseType ElementPrime<baseType>::MODULO=0;
     
+    template <typename baseType>
+    baseType ElementPrime<baseType>::MAX=0;
+    
+    //template <typename baseType>
+    //baseType ElementPrime<baseType>::MULT=0;
     
     /* Static methods */
     
@@ -46,6 +51,8 @@ namespace F4
     ElementPrime<baseType>::setModulo(baseType modulo)
     {
         MODULO=modulo;
+        //MULT=modulo/2;
+        MAX=((baseType)1<<(sizeof(baseType)*8-2));
     }
     
     template <typename baseType>
@@ -112,23 +119,24 @@ namespace F4
     }
     
     template <typename baseType>
-    inline void
-    ElementPrime<baseType>::normalize ()
-    {
-        _element%=MODULO;
-    }
-    
-    template <typename baseType>
     ElementPrime<baseType> &
     ElementPrime<baseType>::addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult)
     {
-        assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
-        assert((element._element>-MODULO) || (element._element<MODULO));
-        assert((_element>-MODULO) || (_element<MODULO));
-
-        //_element%=MODULO;
+        assert((mult._element>=-MODULO/2) && (mult._element<=MODULO/2));
+        assert((element._element>=-MODULO/2) && (element._element<=MODULO/2));
+        if(( _element<=-MAX) || (_element>=MAX))
+        {
+            _element%=MODULO;
+        }
+        //if(_element<=-MAX) 
+        //{
+            //_element+=(MODULO*MULT);
+        //}
+        //if(_element>=MAX)
+        //{
+            //_element-=(MODULO*MULT);
+        //}
         _element+=(element._element*mult._element);
-        _element%=MODULO;
         return * this;
     }
     
@@ -136,6 +144,7 @@ namespace F4
     ElementPrime<baseType> &
     ElementPrime<baseType>::inverse ()
     {
+        _element%=MODULO;
         baseType a, b, c, inv;
         baseType a_x, a_p, b_x, b_p, c_x, c_p;
         baseType l;
@@ -308,8 +317,12 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator+=(ElementPrime<baseType> const & element)
     {
+        assert((element._element>=-MAX) && (element._element<=MAX));
+        if(( _element<=-MAX) || (_element>=MAX))
+        {
+            _element%=MODULO;
+        }
         _element+=element._element;
-        _element%=MODULO;
         return * this;
     }
             
@@ -317,8 +330,12 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator-=(ElementPrime<baseType> const & element)
     {
+        assert((element._element>=-MAX) && (element._element<=MAX));
+        if(( _element<=-MAX) || (_element>=MAX))
+        {
+            _element%=MODULO;
+        }
         _element-=element._element;
-        _element%=MODULO;
         return * this;
     }
             
@@ -326,11 +343,10 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator*=(ElementPrime<baseType> const & mult)
     {
-        assert((mult._element>=-MODULO/2) || (mult._element<=MODULO/2));
-        assert((_element>-MODULO) || (_element<MODULO));
-        //_element%=MODULO;
-        _element*=mult._element;
+        assert((mult._element>=-MODULO/2) && (mult._element<=MODULO/2));
         _element%=MODULO;
+        _element*=mult._element;
+        modulo();
         return * this;
     }
             
@@ -338,9 +354,8 @@ namespace F4
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator/=(ElementPrime<baseType> element)
     {
-        //_element%=MODULO;
-        _element*=((element.inverse())._element);
         _element%=MODULO;
+        _element*=((element.inverse())._element);
         return * this;
     }
     

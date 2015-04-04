@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=0;
+int F4::VERBOSE=3;
 
 int main (int argc, char **argv)
 {
@@ -41,6 +41,9 @@ int main (int argc, char **argv)
     // Init element-prime tools
     typedef ElementPrime<long> eltType;
     eltType::setModulo(65521);
+    
+    cout << "size = " << ((int)1<<(sizeof(int)*8-2)) << endl;
+    cout << "size long = " << sizeof(int) << endl;
     
     // Init monomial tools
     Monomial::initMonomial(6,5);

@@ -353,7 +353,7 @@ int main (int argc, char **argv)
     clock_t start;
     
     // Magma output
-    bool magma = true;
+    bool magma = false;
     
     // Number of generator
     int nbGen;
