@@ -106,14 +106,17 @@ namespace F4
     inline ElementPrime<baseType> &
     ElementPrime<baseType>::modulo ()
     {
-        _element%=MODULO;
-        if (_element > MODULO / 2)
+        if((_element > MODULO / 2) || (_element < -MODULO / 2))
         {
-            _element -= MODULO;
-        }
-        if (_element < -MODULO / 2)
-        {
-            _element += MODULO;
+            _element%=MODULO;
+            if (_element > MODULO / 2)
+            {
+                _element -= MODULO;
+            }
+            if (_element < -MODULO / 2)
+            {
+                _element += MODULO;
+            }
         }
         return *this;
     }

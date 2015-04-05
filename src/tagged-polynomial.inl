@@ -213,13 +213,13 @@ namespace F4
         int cmp=Monomial::compareNumMonomial(_polynomial.getLM(), taggedPolynomial._polynomial.getLM());
         if (cmp == 0)
         {
-            if(_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm())
+            if(_polynomial.getNbTerm() - taggedPolynomial._polynomial.getNbTerm() > 0)
             {
-                return 1;
-            }
-            else if (taggedPolynomial._polynomial.getNbTerm() - _polynomial.getNbTerm())
-            {   
                 return -1;
+            }
+            else if (taggedPolynomial._polynomial.getNbTerm() - _polynomial.getNbTerm() > 0)
+            {   
+                return 1;
             }
         }
         return cmp;
@@ -244,7 +244,7 @@ namespace F4
     
     template <typename Element>
     void 
-    TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist)
+    TaggedPolynomial<Element>::setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, uint8_t const * varlist)
     {
         int numMon=Monomial::varlistToInt(varlist);
         

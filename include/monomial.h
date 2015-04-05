@@ -131,7 +131,16 @@ namespace F4
               * \param varlist: Array representing the degree of each variable of the monomial.
               * \return Number of the corresponding monomial.
               */
-             static int varlistToInt(int const * varlist);
+             static int varlistToInt(uint8_t const * varlist);
+             
+             /**
+              * \brief Compute the number of a monomial from its varlist and its degree.
+              * \pre NB_MONOMIAL must be set up to degree deg.
+              * \param varlist: Array representing the degree of each variable of the monomial.
+              * \param degree: Degree of the monomial.
+              * \return Number of the corresponding monomial.
+              */
+             static int varlistToInt(uint8_t const * varlist, int deg);
              
              /**
               * \brief Compute the number of a product of 2 monomials from their varlists.
@@ -139,7 +148,7 @@ namespace F4
               * \param varlist2: Array representing the degree of each variable of the second monomial.
               * \return Number of the corresponding monomial.
               */
-             static int varlistToInt(int const * varlist1, int const * varlist2);
+             static int varlistToInt(uint8_t const * varlist1, uint8_t const * varlist2);
              
              /**
               * \brief Initialise the static parameters of Monomial.
@@ -180,18 +189,18 @@ namespace F4
              * \brief Get the varlist of this.
              * \return Varlist of this.
              */
-            int * getVarlist() const;
+            uint8_t const * getVarlist() const;
             
             /**
              * \brief Get varlist[index].
              * \return varlist[index].
              */
-            int getVarlist(int index) const;
+            uint8_t getVarlist(int index) const;
             
              /**
              * \brief Set the varlist of this.
              */
-            void setVarlist(int * varlist);
+            void setVarlist(uint8_t * varlist);
             
             
             /* Miscellaneous */
@@ -211,7 +220,7 @@ namespace F4
              * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param varlist: Array representing the degree of each variable of the monomial.
              */
-            void setMonomial(int const * varlist);
+            void setMonomial(uint8_t const * varlist);
             
             /**
              * \brief Initialize this with s.
@@ -342,7 +351,7 @@ namespace F4
         
         private:
             int _deg;                /*!< Degree of the monomial */
-            int *_varlist;           /*!< Array representing the degree of each variable of the monomial */
+            uint8_t *_varlist;           /*!< Array representing the degree of each variable of the monomial */
             
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
             static std::string const * VARS; /*!< Array of NB_VARIABLE string representing the variable names. */

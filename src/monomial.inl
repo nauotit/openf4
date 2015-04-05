@@ -233,7 +233,7 @@ namespace F4
     }
     
     int 
-    Monomial::varlistToInt(int const * varlist)
+    Monomial::varlistToInt(uint8_t const * varlist)
     {
         /* Preconditions */
         assert(WEIGHT != 0);
@@ -251,7 +251,7 @@ namespace F4
         }
         if(deg > MAX_DEGREE)
         {
-            cout << "Monomial: monomialToInt, increase max degree" << endl;
+            cout << "Monomial: varlistToInt, increase max degree" << endl;
             setNbMonomial(deg);
         }
         assert(deg <= MAX_DEGREE);
@@ -272,7 +272,37 @@ namespace F4
     }
     
     int 
-    Monomial::varlistToInt(int const * varlist1, int const * varlist2)
+    Monomial::varlistToInt(uint8_t const * varlist, int deg)
+    {
+        /* Preconditions */
+        assert(WEIGHT != 0);
+        assert(NB_VARIABLE > 0);
+        
+        int i, res;
+        
+        if (deg == 0)
+        {
+            return 0;
+        }
+        assert(deg <= MAX_DEGREE);
+        /* skip monomials of degree < deg */
+        res = NB_MONOMIAL[deg - 1][NB_VARIABLE + 1];
+        /* Search the monomial position for the given degree */
+        /* tmp = degree after removing the degree of the last variables */
+        int tmp = deg - varlist[NB_VARIABLE - 1] * WEIGHT[NB_VARIABLE - 1];
+        for (i = NB_VARIABLE - 1; i > 0 && tmp > 0; i--)
+        {
+            if (tmp >= WEIGHT[i])
+            {
+                res += NB_MONOMIAL[tmp - WEIGHT[i]][i + 1];
+            }
+            tmp -= varlist[i - 1] * WEIGHT[i - 1];
+        }
+        return (res);
+    }
+    
+    int 
+    Monomial::varlistToInt(uint8_t const * varlist1, uint8_t const * varlist2)
     {
         /* Preconditions */
         assert(WEIGHT != 0);
@@ -280,7 +310,7 @@ namespace F4
         
         int i, res;
         int deg = 0;
-        int varlist[NB_VARIABLE];
+        uint8_t varlist[NB_VARIABLE];
         for(i=0; i<NB_VARIABLE; i++)
         {
             varlist[i]=varlist1[i]+varlist2[i];
@@ -398,13 +428,13 @@ namespace F4
         return _deg;
     }
     
-    int * 
+    uint8_t const * 
     Monomial::getVarlist() const
     {
         return _varlist;
     }
     
-    int 
+    uint8_t 
     Monomial::getVarlist(int index) const
     {
         assert(index<NB_VARIABLE);
@@ -413,7 +443,7 @@ namespace F4
     }
     
     void 
-    Monomial::setVarlist(int * varlist)
+    Monomial::setVarlist(uint8_t * varlist)
     {
         _varlist=varlist;
     }
@@ -424,7 +454,7 @@ namespace F4
     void 
     Monomial::allocate()
     {
-        _varlist=new int[NB_VARIABLE]();
+        _varlist=new uint8_t[NB_VARIABLE]();
         assert(_varlist != 0);
         _deg=0;
     }
@@ -438,7 +468,7 @@ namespace F4
     }
     
     void 
-    Monomial::setMonomial(int const * varlist)
+    Monomial::setMonomial(uint8_t const * varlist)
     {
         /* Preconditions */
         assert(NB_VARIABLE > 0);
@@ -472,18 +502,18 @@ namespace F4
                 pos+=VARS[i].size();
                 if(s[pos]=='^')
                 {
-                    _varlist[i]=stoi(s.substr(pos+1));
+                    _varlist[i]=(uint8_t)stoi(s.substr(pos+1));
                     _deg+=_varlist[i]*WEIGHT[i];
                 }
                 else
                 {
-                    _varlist[i]=1;
+                    _varlist[i]=(uint8_t)1;
                     _deg+=_varlist[i]*WEIGHT[i];
                 }
             }
             else
             {
-                _varlist[i]=0;
+                _varlist[i]=(uint8_t)0;
             }
         }
     }
@@ -658,11 +688,11 @@ namespace F4
         {
             if (VARS!=0 && VARS[i]!= "")
             {
-                stream << VARS[i] << "^" << (_varlist)[i];
+                stream << VARS[i] << "^" << (int)(_varlist)[i];
             }
             else
             {
-                stream << "x" << i << "^" << (_varlist)[i];
+                stream << "x" << i << "^" << (int)(_varlist)[i];
             }
             i++;
             for (; i < NB_VARIABLE; i++)
@@ -671,11 +701,11 @@ namespace F4
                 {
                     if (VARS != 0 && VARS[i]!= "")
                     {
-                        stream <<"*" << VARS[i] << "^" << (_varlist)[i];
+                        stream <<"*" << VARS[i] << "^" << (int)(_varlist)[i];
                     }
                     else
                     {
-                        stream << "*x" << i << "^" << (_varlist)[i];
+                        stream << "*x" << i << "^" << (int)(_varlist)[i];
                     }
                 }
             }
@@ -800,7 +830,7 @@ namespace F4
         
         int i, res;
         int deg = 0;
-        int varlist[Monomial::NB_VARIABLE];
+        uint8_t varlist[Monomial::NB_VARIABLE];
         for(i=0; i<Monomial::NB_VARIABLE; i++)
         {
             varlist[i]=mon1._varlist[i]+mon2._varlist[i];

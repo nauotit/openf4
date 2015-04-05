@@ -52,7 +52,7 @@ int main (int argc, char **argv)
             
     // Test void setMonomial(int const * varlist);
     cout << "________Test setMonomial(int const * varlist)________" << endl; 
-    int varlist1[11]={1,2,1,0,4,3,1,2,3,4,5};
+    uint8_t varlist1[11]={1,2,1,0,4,3,1,2,3,4,5};
     Monomial m2;
     m2.allocate();
     m2.setMonomial(varlist1);
@@ -91,16 +91,16 @@ int main (int argc, char **argv)
     // Test int * getVarlist() const;
     cout << "________Test getVarlist()________" << endl;
     cout << "varlist of m3: ";
-    int * varlist2=m3.getVarlist();
+    uint8_t const * varlist2=m3.getVarlist();
     for (int i = 0; i < Monomial::getNbVariable(); i++)
     {
-        cout << varlist2[i] << " ";
+        cout << (int)varlist2[i] << " ";
     }
     cout << endl << endl;
     
     // Test int getVarlist(int index) const;
     cout << "________Test getVarlist(int index)________" << endl;
-    cout << "varlist[2] of m3: " << m3.getVarlist(2) << endl << endl;
+    cout << "varlist[2] of m3: " << (int)m3.getVarlist(2) << endl << endl;
             
     // Test void setMonomial(int const * varlist);
     cout << "________Test setMonomial(int const * varlist)________" << endl;

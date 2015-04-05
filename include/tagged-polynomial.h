@@ -188,7 +188,7 @@ namespace F4
              * \param taggedPolynomial: TaggedPolynomial.
              * \param varlist: Array representing the degree of each variable of the monomial
              */
-            void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, int const * varlist);
+            void setTaggedPolynomial(TaggedPolynomial const & taggedPolynomial, uint8_t const * varlist);
             
             
             /* Internal operators */

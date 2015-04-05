@@ -88,14 +88,14 @@ namespace F4
         /* Get the varlist of LM(p1) and LM(p2) */
         
         Monomial const & ltP1=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p1).getLM());
-        int * varlistp1=ltP1.getVarlist();
+        uint8_t const * varlistp1=ltP1.getVarlist();
         
         Monomial const & ltP2=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p2).getLM());
-        int * varlistp2=ltP2.getVarlist();
+        uint8_t const * varlistp2=ltP2.getVarlist();
         
-        int varlistLcm[nbVars];
-        int varlistU1[nbVars];
-        int varlistU2[nbVars];
+        uint8_t varlistLcm[nbVars];
+        uint8_t varlistU1[nbVars];
+        uint8_t varlistU2[nbVars];
         
         /* Computation of _lcm, _u1 and _u2 */
         for (int i = 0; i < nbVars; i++)
@@ -197,14 +197,14 @@ namespace F4
         
         /* Get the varlist of LM(p1) and LM(p2) */
         Monomial const & ltP1=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p1).getLM());
-        int * varlistp1=ltP1.getVarlist();
+        uint8_t const * varlistp1=ltP1.getVarlist();
         
         Monomial const & ltP2=MONOMIAL_ARRAY->getNumMonomial(getTaggedPolynomialArray(p2).getLM());
-        int * varlistp2=ltP2.getVarlist();
+        uint8_t const * varlistp2=ltP2.getVarlist();
         
-        int varlistLcm[nbVars];
-        int varlistU1[nbVars];
-        int varlistU2[nbVars];
+        uint8_t varlistLcm[nbVars];
+        uint8_t varlistU1[nbVars];
+        uint8_t varlistU2[nbVars];
         
         /* Computation of _lcm, _u1 and _u2 */
         for (int i = 0; i < nbVars; i++)

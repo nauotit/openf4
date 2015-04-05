@@ -226,9 +226,9 @@ namespace F4
         
         int numList_prev = numList;
         int i, j, k;
-        int const * varlistU = u.getVarlist();
+        uint8_t const * varlistU = u.getVarlist();
         
-        int varlistTmp[_nbVariable];
+        uint8_t varlistTmp[_nbVariable];
         for(i=0; i<_nbVariable; i++)
         {
             varlistTmp[i]=varlistU[i];

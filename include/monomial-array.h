@@ -106,7 +106,7 @@ namespace F4
              * \param index: Index of a variable in varlist.
              * \return _monomialArray[numMon]._varlist[i].
              */
-             int getNumVarlist(int numMon, int index);
+             uint8_t getNumVarlist(int numMon, int index);
              
              /**
              * \brief Multiply two monomials, using _tabulatedProduct if possible. Prefer numMon1<numMon2.
@@ -139,7 +139,7 @@ namespace F4
             int _nbVariable;   /*!< Number of variables of the polynomial ring. */
             size_t _size; /*!< Size of _monomialArray */
             size_t _capacity; /*!< Capacity of _monomialArray */
-            int * _varlistArray[100]; /*!< 2D array of varlist */
+            uint8_t * _varlistArray[100]; /*!< 2D array of varlist */
             int _varlistIndex; /*!< Next available row index in _varlistArray */
             int _numMaxRow; /*!< Number of rows in _tabulatedProduct. */
             int _numMaxColumn; /*!< Number of columns in _tabulatedProduct. */

@@ -110,11 +110,11 @@ namespace F4
             assert(size<_capacity);
             if (VERBOSE>1)
             {
-                cout << "Monomial: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(int)))/1000000 << " Mo reserved for _monomialArray " << endl;
+                cout << "MonomialArray: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(uint8_t)))/1000000 << " Mo reserved for _monomialArray " << endl;
             }
-            _varlistArray[_varlistIndex]=new int[(size - _size)*_nbVariable];
+            _varlistArray[_varlistIndex]=new uint8_t[(size - _size)*_nbVariable];
             assert(_varlistArray[_varlistIndex] != 0);
-            int * ptr = _varlistArray[_varlistIndex];
+            uint8_t * ptr = _varlistArray[_varlistIndex];
             for(size_t i=_size; i<size; i++)
             {
                 _monomialArray[i].setVarlist(ptr);
@@ -133,42 +133,52 @@ namespace F4
         setMonomialArray();
         
         double size=0;
+        int i;
         _numMaxRow = Monomial::getNbMonomial(deg1, _nbVariable + 1);
         _numMaxColumn = Monomial::getNbMonomial(deg2, _nbVariable + 1);
         
-        if (VERBOSE > 2)
+        clock_t start = 0;
+        if (VERBOSE > 1)
         {
-            cout << "Monomial::setTabulatedProduct: _numMaxRow: " << _numMaxRow << endl;
-            cout << "Monomial::setTabulatedProduct: _numMaxColumn: " << _numMaxColumn << endl;
+            start = clock();
+            if (VERBOSE > 2)
+            {
+                cout << "Monomial::setTabulatedProduct: _numMaxRow: " << _numMaxRow << endl;
+                cout << "Monomial::setTabulatedProduct: _numMaxColumn: " << _numMaxColumn << endl;
+            }
         }
         
         _tabulatedProduct = new int*[_numMaxRow];
         assert(_tabulatedProduct!=0);
         size += _numMaxRow * sizeof (int *);
         
-        Monomial tmp1;
-        tmp1.allocate();
-        Monomial tmp2;
-        tmp2.allocate();
+        const uint8_t * varlist1;
+        const uint8_t * varlist2;
+        uint8_t varlist[_nbVariable];
+        int deg=0;
 
         for (int numMon1 = 0; numMon1 < _numMaxRow; numMon1++)
         {
-            tmp1=_monomialArray[numMon1];
+            varlist1=_monomialArray[numMon1].getVarlist();
             _tabulatedProduct[numMon1]=new int[_numMaxColumn];
             size += _numMaxColumn * sizeof (int);
             for (int numMon2 = 0; numMon2 < _numMaxColumn; numMon2++)
             {
-                tmp2.setMonomialMultiply(tmp1,_monomialArray[numMon2]);
-                _tabulatedProduct[numMon1][numMon2] = tmp2.monomialToInt();
+                varlist2=_monomialArray[numMon2].getVarlist();
+                deg=0;
+                for(i=0; i<_nbVariable; i++)
+                {
+                    varlist[i]=varlist1[i]+varlist2[i];
+                    deg+=varlist[i];
+                }
+                _tabulatedProduct[numMon1][numMon2] = Monomial::varlistToInt(varlist,deg);
             }
         }
         if (VERBOSE > 1)
         {
-            cout << "Monomial: products computed up to deg "<< deg1 <<" x " << deg2 <<endl; 
+            cout << "Monomial: products computed up to deg "<< deg1 <<" x " << deg2 << " in " << ((clock()-start)* 1000) / CLOCKS_PER_SEC << " ms" << endl; 
             cout << "Monomial: " << size/1000000 << "Mo allocated for _tabulatedProduct " << endl;
         }
-        tmp1.erase();
-        tmp2.erase();
     }
         
     void 
@@ -214,7 +224,7 @@ namespace F4
     }
 
     
-    int
+    uint8_t
     MonomialArray::getNumVarlist(int numMon, int index)
     {
         if(index>(int)_size)
