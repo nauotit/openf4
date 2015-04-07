@@ -122,6 +122,11 @@ obj/test-avl-pointer-critical-pair.o: example/test-avl-pointer-critical-pair.cpp
 bin/test-avl-pointer-critical-pair: obj/test-avl-pointer-critical-pair.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+obj/test-list-pointer-critical-pair.o: example/test-list-pointer-critical-pair.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-list-pointer-critical-pair: obj/test-list-pointer-critical-pair.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Benchmark 
 obj/benchmark-int.o: benchmark/benchmark-int.cpp 
@@ -145,7 +150,7 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-monomial bin/test-ideal bin/test-avl-pointer-critical-pair bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime bin/test-term
+example: bin/test-list-pointer-critical-pair bin/test-avl-pointer-critical-pair  bin/test-monomial bin/test-ideal  bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-critical-pair  bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-matrix bin/test-element-prime bin/test-term
 benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)

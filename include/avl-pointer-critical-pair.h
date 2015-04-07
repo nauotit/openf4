@@ -113,6 +113,8 @@ namespace F4
              */
             bool isEmpty() const;
             
+            NodeAvlPointerCriticalPair<Element> * getRoot();
+            
             /**
              * \brief Test the consistency of the AVL.
              */

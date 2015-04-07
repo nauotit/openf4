@@ -174,19 +174,19 @@ int main (int argc, char **argv)
         file << "Benchmark for semaev " << endl << endl << endl;
     }
     
-    start=clock();
-    nbGen=semaev16F4();
-    if (file)
-    {
-        file << "Semaev 16 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=semaev16F4();
+    //if (file)
+    //{
+        //file << "Semaev 16 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=clock();
-    nbGen=semaev31F4();
-    if (file)
-    {
-        file << "Semaev 31 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=semaev31F4();
+    //if (file)
+    //{
+        //file << "Semaev 31 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     start=clock();
     nbGen=semaev32F4();

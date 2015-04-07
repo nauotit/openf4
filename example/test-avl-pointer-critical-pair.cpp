@@ -135,11 +135,20 @@ int main (int argc, char **argv)
     tmp=avlCp1.findNextSmallest(tmp);
     cout << "Next smallest node: " << *tmp->_cp << endl;
     tmp=avlCp1.findNextSmallest(tmp);
+    cout << "Next smallest node: " << *tmp->_cp << endl;
+    tmp=avlCp1.findNextSmallest(tmp);
     cout << "Next smallest node: " << *tmp->_cp << endl << endl;
     
     // Test int size();
     cout << "________Test size()________" << endl;
     cout << "Size of avlCp1: " << avlCp1.size() << endl << endl;
+    
+    // Test NodeAvlPointerCriticalPair<Element> * getRoot();
+    cout << "________Test getRoot()________" << endl;
+    tmp=avlCp1.getRoot();
+    cout << "Root: " << *tmp->_cp << endl;
+    tmp=tmp->_left;
+    cout << "Left child: " << *tmp->_cp << endl << endl;
     
     // Test void reset();
     cout << "________Test reset()________" << endl;

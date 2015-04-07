@@ -150,12 +150,12 @@ namespace F4
             }
             else
             {
-                /* Polynomial found */
+                /* Critical pair found */
                 return 1;
             }
         }
 
-        /* Polynomial is not here, we create it */
+        /* Critical pair is not here, we create it */
         node = _it;
         _it=_array.getNext(_it);
         node->_cp=cp;
