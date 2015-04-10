@@ -87,7 +87,7 @@ namespace F4
              * \pre Static variables NB_VARIABLE and WEIGHT must be set beforehand.
              * \param maxDegree: Maximal degree (height) of NB_MONOMIAL.
              */
-             static void setNbMonomial(int maxDegree);
+             static void setNbMonomial(short maxDegree);
              
              /**
              * \brief Modify the dynamic 2D array NB_MONOMIAL.
@@ -140,7 +140,7 @@ namespace F4
               * \param degree: Degree of the monomial.
               * \return Number of the corresponding monomial.
               */
-             static int varlistToInt(uint8_t const * varlist, int deg);
+             static int varlistToInt(uint8_t const * varlist, short deg);
              
              /**
               * \brief Compute the number of a product of 2 monomials from their varlists.
@@ -155,7 +155,7 @@ namespace F4
               * \param nbVariable: Number of variables of the polynomial ring.
               * \param degree: Initialise NB_MONOMIAL up to degree "degree".
               */
-             static void initMonomial(int nbVariable, int degree);
+             static void initMonomial(int nbVariable, short degree);
              
              /**
               * \brief Free the space allocated by initMonomial.
@@ -183,7 +183,7 @@ namespace F4
              * \brief Get the degree of this.
              * \return Degree of this.
              */
-            int getDegree() const;
+            short getDegree() const;
             
             /**
              * \brief Get the varlist of this.
@@ -350,7 +350,7 @@ namespace F4
             Monomial & operator/=(Monomial const & mon); 
         
         private:
-            int _deg;                /*!< Degree of the monomial */
+            short _deg;                /*!< Degree of the monomial */
             uint8_t *_varlist;           /*!< Array representing the degree of each variable of the monomial */
             
             static int NB_VARIABLE;   /*!< Number of variables of the polynomial ring. */
@@ -361,7 +361,7 @@ namespace F4
              * NB_MONOMIAL[d][NB_VARIABLE+1] = Number of monomials of degree <= d.
              */
             static std::vector<int *> NB_MONOMIAL;
-            static int MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
+            static short MAX_DEGREE; /*!< Maximal degree (height) of NB_MONOMIAL. */
             
     };
     

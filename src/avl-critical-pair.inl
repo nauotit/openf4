@@ -434,8 +434,7 @@ namespace F4
     {
         if(!node)
         {
-            cout << " --------------> erase call with null ! " << endl << endl;
-            _root=0;
+            cout << "AvlCriticalPair::erase call with null ! " << endl << endl;
             return node;
         }
         
@@ -454,17 +453,18 @@ namespace F4
             ptmp = node->_cp;
             node->_cp = tmpnode->_cp;
             tmpnode->_cp = ptmp;
+            /* Keep trace of the next smallest node after the deleted node */
+            res=node;
         }
         else
         {
             tmpnode = node;
+            /* Keep trace of the next smallest node after the deleted node */
+            res=node->_parent;
         }
 
         node = tmpnode;
         tmpnode = node->_parent;
-        
-        /* Keep trace of the next smallest node after the deleted node */
-        res=tmpnode;
         
         if (tmpnode == 0)
         {

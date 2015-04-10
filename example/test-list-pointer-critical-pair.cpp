@@ -134,14 +134,6 @@ int main (int argc, char **argv)
     it->setCriticalPair(0,1);
     listCp1.insert(it);
     cout << listCp1 << endl;
-    //node = listCp1.getRoot();
-    //cout << "Root: " << *node->_cp << endl;
-    //node=listCp1.getNext(node);
-    //cout << "Next node: " << *node->_cp << endl;
-    //node=listCp1.getNext(node);
-    //cout << "Next node: " << *node->_cp << endl;
-    //node=listCp1.getNext(node);
-    //cout << "Next node: " << *node->_cp << endl << endl;
     
     
     return 0;

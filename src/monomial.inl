@@ -43,7 +43,7 @@ namespace F4
     
     vector<int *> Monomial::NB_MONOMIAL;
     
-    int Monomial::MAX_DEGREE = 0;
+    short Monomial::MAX_DEGREE = 0;
     
     
     /* Static methods */
@@ -78,7 +78,7 @@ namespace F4
         return WEIGHT;
     }
     
-    void Monomial::setNbMonomial(int maxDegree)
+    void Monomial::setNbMonomial(short maxDegree)
     {
         /* Preconditions */
         assert(WEIGHT != 0);
@@ -240,7 +240,7 @@ namespace F4
         assert(NB_VARIABLE > 0);
         
         int i, res;
-        int deg = 0;
+        short deg = 0;
         for(i=0; i<NB_VARIABLE; i++)
         {
             deg+=varlist[i]*WEIGHT[i];
@@ -272,7 +272,7 @@ namespace F4
     }
     
     int 
-    Monomial::varlistToInt(uint8_t const * varlist, int deg)
+    Monomial::varlistToInt(uint8_t const * varlist, short deg)
     {
         /* Preconditions */
         assert(WEIGHT != 0);
@@ -309,7 +309,7 @@ namespace F4
         assert(NB_VARIABLE > 0);
         
         int i, res;
-        int deg = 0;
+        short deg = 0;
         uint8_t varlist[NB_VARIABLE];
         for(i=0; i<NB_VARIABLE; i++)
         {
@@ -344,7 +344,7 @@ namespace F4
     }
     
     void 
-    Monomial::initMonomial(int nbVariable, int degree)
+    Monomial::initMonomial(int nbVariable, short degree)
     {
         if(nbVariable != NB_VARIABLE)
         {
@@ -422,7 +422,7 @@ namespace F4
     
     /* Get / Set */
             
-    int 
+    short 
     Monomial::getDegree() const
     {
         return _deg;
@@ -829,7 +829,7 @@ namespace F4
         assert(Monomial::NB_VARIABLE > 0);
         
         int i, res;
-        int deg = 0;
+        short deg = 0;
         uint8_t varlist[Monomial::NB_VARIABLE];
         for(i=0; i<Monomial::NB_VARIABLE; i++)
         {

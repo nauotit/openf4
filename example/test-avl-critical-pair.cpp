@@ -122,9 +122,11 @@ int main (int argc, char **argv)
     tmp=avlCp1.findNextSmallest(tmp);
     tmp=avlCp1.findNextSmallest(tmp);
     tmp=avlCp1.findNextSmallest(tmp);
+    cout << avlCp1 << endl << endl;
     cout << "Node to delete: " << tmp->_cp << endl;
+    cout << "next node : " << avlCp1.findNextSmallest(tmp)->_cp << endl;
     tmp=avlCp1.erase(tmp);
-    cout << "Deleted node: " << tmp->_cp << endl;
+    cout << "next node erase: " << tmp->_cp << endl;
     cout << avlCp1 << endl << endl;
     
     // Test int size();

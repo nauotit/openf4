@@ -155,7 +155,7 @@ namespace F4
         const uint8_t * varlist1;
         const uint8_t * varlist2;
         uint8_t varlist[_nbVariable];
-        int deg=0;
+        short deg=0;
 
         for (int numMon1 = 0; numMon1 < _numMaxRow; numMon1++)
         {

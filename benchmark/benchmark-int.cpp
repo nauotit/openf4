@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=0;
+int F4::VERBOSE=3;
 
 // Init element-prime tools
 typedef ElementPrime<int> eltType;
@@ -353,7 +353,7 @@ int main (int argc, char **argv)
     clock_t start;
     
     // Magma output
-    bool magma = true;
+    bool magma = false;
     
     // Number of generator
     int nbGen;
@@ -365,47 +365,47 @@ int main (int argc, char **argv)
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
     
-    start=clock();
-    nbGen=cyclic6F4(magma);
-    if (file)
-    {
-        file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=cyclic6F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=clock();
-    nbGen=cyclic7F4(magma);
-    if (file)
-    {
-        file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=cyclic7F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=clock();
-    nbGen=cyclic8F4(magma);
-    if (file)
-    {
-        file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=cyclic8F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=clock();
-    nbGen=katsura9F4(magma);
-    if (file)
-    {
-        file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=katsura9F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=clock();
-    nbGen=katsura10F4(magma);
-    if (file)
-    {
-        file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }  
+    //start=clock();
+    //nbGen=katsura10F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}  
     
-    start=clock();
-    nbGen=katsura11F4(magma);
-    if (file)
-    {
-        file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=clock();
+    //nbGen=katsura11F4(magma);
+    //if (file)
+    //{
+        //file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     start=clock();
     nbGen=katsura12F4(magma);

@@ -275,231 +275,6 @@ namespace F4
         return numList;
     }
     
-    //template <typename Element>
-    //void 
-    //Ideal<Element>::update(int index, bool purge, Stat & stat)
-    //{
-        //size_t j; 
-        //bool divisorFound, div, strct1, strct2;
-        //clock_t startPurgeCp = 0;
-        //clock_t startAddCp = 0;
-        //clock_t startMajBasis = 0;
-        
-        //NodeAvlCriticalPair<Element> * itcp1 = _criticalPairSet.findSmallest();
-        
-        ///* Strict divisibility criteria to avoid the problem of "eliminate 2 critical pairs over 3" */
-        //if (VERBOSE > 1)
-        //{
-            //startPurgeCp = clock ();
-        //}
-        //while(itcp1 != 0)
-        //{
-            //div = true;
-            //strct1 = false;
-            //strct2 = false;
-            
-            //Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP1()].getLM()];
-            //Monomial const & lt_g=_monomialArray[_taggedPolynomialArray[itcp1->_cp.getP2()].getLM()];
-            //Monomial const & lcm=itcp1->_cp.getLcm();
-            
-            //for (j = 0; j < (size_t)_nbVariable && div; j++)
-            //{
-                //if(_monomialArray.getNumVarlist(_taggedPolynomialArray[index].getLM(), j) < lcm.getVarlist(j) )
-                //{
-                    //if(lt_f.getVarlist(j) < lt_g.getVarlist(j))
-                    //{
-                        //strct1 = true;
-                    //}
-                    //else if (lt_f.getVarlist(j) > lt_g.getVarlist(j))
-                    //{
-                        //strct2 = true;
-                    //}
-                //}
-                //else
-                //{
-                    //if (_monomialArray.getNumVarlist(_taggedPolynomialArray[index].getLM(), j) > lcm.getVarlist(j) )
-                    //{
-                        //div=false;
-                    //}
-                //}
-            //}
-            
-            //if (div && strct1 && strct2)
-            //{
-                ////cout << "Critical pair deleted " << endl;
-                ///* Suppress the critical pair */
-                ////_used[itcp1->getP1()]--;
-                ////_used[itcp1->getP2()]--;
-                //stat._nbCp--;
-                //itcp1=_criticalPairSet.erase(itcp1);
-                
-            //}
-            //else
-            //{
-                //itcp1=_criticalPairSet.findNextSmallest(itcp1);
-            //}
-        //}
-        
-        //if (VERBOSE > 1)
-        //{
-            //stat._timePurgeCp += (clock () - startPurgeCp);
-            //startAddCp = clock ();
-        //}
-        
-        //CriticalPair<Element> * cp1=0;
-        //CriticalPair<Element> * it = _cpArray.getBegin();
-
-        ///* Computation of critical pairs */ 
-        //for (j = 0; j < _basis.size(); j++)
-        //{
-            //if (!it->setCriticalPair(index, _total[_basis[j]]))
-            //{
-                //_cpSet0.insert(it);
-            //}
-            //else
-            //{
-                //_cpSet1.insert(it);
-            //}
-            //it=_cpArray.getNext(it);
-        //}
-        
-        //NodeAvlPointerCriticalPair<Element> * itpcp1;
-        //NodeAvlPointerCriticalPair<Element> * itpcp2 = 0;
-        
-        //itpcp1=_cpSet1.findSmallest();
-        //while(itpcp1 != 0)
-        //{
-            //cp1=(itpcp1->_cp);
-            //itpcp1=_cpSet1.findNextSmallest(itpcp1);
-            
-            ///* Test if cp1 verifies criteria 2 */
-            //divisorFound = false;
-            
-            ///* Scan _cpSet0 */
-            //itpcp2=_cpSet0.findSmallest();
-            //while (itpcp2 != 0 && !divisorFound)
-            //{
-                //if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                //{
-                    //divisorFound = true;
-                //}
-                //itpcp2=_cpSet0.findNextSmallest(itpcp2);
-            //}
-            
-            ///* Scan _cpSet1 */
-            //itpcp2=itpcp1;
-            //while (itpcp2 != 0 && !divisorFound)
-            //{
-                //if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                //{
-                    //divisorFound = true;
-                //}
-                //itpcp2=_cpSet1.findNextSmallest(itpcp2);
-            //}
-            
-            ///* Scan _cpSet2 */
-            //itpcp2=_cpSet2.findSmallest();
-            //while (itpcp2 != 0 && !divisorFound)
-            //{
-                //if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                //{
-                    //divisorFound = true;
-                //}
-                //itpcp2=_cpSet2.findNextSmallest(itpcp2);
-            //}
-            //if (!divisorFound)
-            //{
-                ///* Add cp1 to _cpSet2 */
-                //_cpSet2.insert(cp1);
-            //}
-        //}
-        //_cpSet1.reset();
-        
-        ///* CP <- CP U _cpSet2 */
-        //itpcp1=_cpSet2.findSmallest();
-        //while(itpcp1!=0)
-        //{ 
-            ////_used[itcp1->getP1()]++;
-            ////_used[itcp1->getP2()]++;
-            //_criticalPairSet.insert(*itpcp1->_cp);
-            //itpcp1=_cpSet2.findNextSmallest(itpcp1);
-            //stat._nbCp++;
-        //}
-        //_cpSet2.reset();
-        
-        ///* Free _cpSet0 */
-        //_cpSet0.reset();
-        
-        ///* Reset the dynamic array of critical pair */
-        //_cpArray.reset();
-        
-        
-        //if (VERBOSE > 1)
-        //{
-            //stat._timeAddCp +=(clock () - startAddCp);
-            //startMajBasis = clock ();
-        //}
-        ///* End of critical pair computation */
-        
-        //if(purge)
-        //{
-            ///* Purge of generators */
-            //divisorFound = false;
-            //Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
-            //for (j = 0; j < _basis.size(); j++)
-            //{
-                //if (lt_f.isDivisible(_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()]))
-                //{
-                    //divisorFound = true;
-                    ////_used[index]--;
-                    //break;
-                //}
-            //}
-            //if (!divisorFound)
-            //{
-                ///* Add the polynomial in _basis */
-                //_basis.push_back(_numTot);
-                //_numGen++;
-                ///* purge of _basis by the new polynomial */
-                //for (j = 0; j < _basis.size()-1; j++)
-                //{
-                    //if (_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()].isDivisible(lt_f))
-                    //{ 
-                        ////_used[_total[_basis[j]]]--;
-                        //_basis.erase(_basis.begin()+j);
-                        //_numGen--;
-                        //stat._cmptGenPurg++;
-                        //j--;
-                    //}
-                //}
-            //}
-        //}
-        //else
-        //{
-            //Monomial const & lt_f=_monomialArray[_taggedPolynomialArray[index].getLM()];
-            ///* Add the polynomial in _basis */
-            //_basis.push_back(_numTot);
-            //_numGen++;
-            ///* Purge of _basis by the new polynomial */
-            //for (j = 0; j < _basis.size()-1; j++)
-            //{
-                //if (_monomialArray[_taggedPolynomialArray[_total[_basis[j]]].getLM()].isDivisible(lt_f))
-                //{ 
-                    ////_used[_total[_basis[j]]]--;
-                    //_basis.erase(_basis.begin()+j);
-                    //_numGen--;
-                    //stat._cmptGenPurg++;
-                    //j--;
-                //}
-            //}
-        //}
-        //if (VERBOSE > 1)
-        //{
-            //stat._timeMajBasis +=(clock () - startMajBasis);
-        //}
-    //}
-    
-    
     template <typename Element>
     void 
     Ideal<Element>::update(int index, bool purge, Stat & stat)
@@ -551,13 +326,11 @@ namespace F4
             
             if (div && strct1 && strct2)
             {
-                //cout << "Critical pair deleted " << endl;
                 /* Suppress the critical pair */
                 //_used[itcp1->getP1()]--;
                 //_used[itcp1->getP2()]--;
                 stat._nbCp--;
                 itcp1=_criticalPairSet.erase(itcp1);
-                
             }
             else
             {
@@ -575,9 +348,9 @@ namespace F4
         CriticalPair<Element> * it = _cpArray.getBegin();
 
         /* Computation of critical pairs */ 
-        for (j = 0; j < _basis.size(); j++)
+        for (j = _basis.size(); j > 0; j--)
         {
-            if (!it->setCriticalPair(index, _total[_basis[j]]))
+            if (!it->setCriticalPair(index, _total[_basis[j-1]]))
             {
                 _cpSet0.insert(it);
             }
@@ -587,29 +360,29 @@ namespace F4
             }
             it=_cpArray.getNext(it);
         }
+
         
-        NodeAvlPointerCriticalPair<Element> * itpcp1;
-        NodeAvlPointerCriticalPair<Element> * itpcp2 = 0;
-        NodeListPointerCriticalPair<Element> const * itpcp3 = 0;
+        NodeListPointerCriticalPair<Element> const * itpcp1;
+        NodeListPointerCriticalPair<Element> const * itpcp2 = 0;
         
-        itpcp1=_cpSet1.findSmallest();
+        itpcp1=_cpSet1.getRoot();
         while(itpcp1 != 0)
         {
             cp1=(itpcp1->_cp);
-            itpcp1=_cpSet1.findNextSmallest(itpcp1);
+            itpcp1=_cpSet1.getNext(itpcp1);
             
             /* Test if cp1 verifies criteria 2 */
             divisorFound = false;
             
             /* Scan _cpSet0 */
-            itpcp3=_cpSet0.getRoot();
-            while (itpcp3 != 0 && !divisorFound)
+            itpcp2=_cpSet0.getRoot();
+            while (itpcp2 != 0 && !divisorFound)
             {
-                if ((cp1->getLcm()).isDivisible(itpcp3->_cp->getLcm()))
+                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
                 {
                     divisorFound = true;
                 }
-                itpcp3=_cpSet0.getNext(itpcp3);
+                itpcp2=_cpSet0.getNext(itpcp2);
             }
             
             /* Scan _cpSet1 */
@@ -620,18 +393,18 @@ namespace F4
                 {
                     divisorFound = true;
                 }
-                itpcp2=_cpSet1.findNextSmallest(itpcp2);
+                itpcp2=_cpSet1.getNext(itpcp2);
             }
             
             /* Scan _cpSet2 */
-            itpcp3=_cpSet2.getRoot();
-            while (itpcp3 != 0 && !divisorFound)
+            itpcp2=_cpSet2.getRoot();
+            while (itpcp2 != 0 && !divisorFound)
             {
-                if ((cp1->getLcm()).isDivisible(itpcp3->_cp->getLcm()))
+                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
                 {
                     divisorFound = true;
                 }
-                itpcp3=_cpSet2.getNext(itpcp3);
+                itpcp2=_cpSet2.getNext(itpcp2);
             }
             if (!divisorFound)
             {
@@ -642,13 +415,13 @@ namespace F4
         _cpSet1.reset();
         
         /* CP <- CP U _cpSet2 */
-        itpcp3=_cpSet2.getRoot();
-        while(itpcp3!=0)
+        itpcp1=_cpSet2.getRoot();
+        while(itpcp1!=0)
         { 
             //_used[itcp1->getP1()]++;
             //_used[itcp1->getP2()]++;
-            _criticalPairSet.insert(*itpcp3->_cp);
-            itpcp3=_cpSet2.getNext(itpcp3);
+            _criticalPairSet.insert(*itpcp1->_cp);
+            itpcp1=_cpSet2.getNext(itpcp1);
             stat._nbCp++;
         }
         _cpSet2.reset();
@@ -1047,6 +820,7 @@ namespace F4
     {
         /* Iterators */
         NodeAvlPolynomial * itPolBeg = _matPols.findBiggest();
+        clock_t startMajBasis = clock();
         int num_lt, i;
         for (i = 0; i < nbPiv; i++)
         {
@@ -1061,9 +835,17 @@ namespace F4
                 itPolBeg=_matPols.findNextBiggest(itPolBeg);
             }
         }
+        if (VERBOSE > 1)
+        {
+            stat._timeMajBasis +=(clock () - startMajBasis);
+        }
         for (i = nbPiv; i < heightReal; i++)
         {
             /* Create new generators */
+            if (VERBOSE > 1)
+            {
+                startMajBasis = clock();
+            }
             num_lt = tabMon[sigma[i]];
             if (tabMon[sigma[i]] == 0)
             {
@@ -1081,6 +863,10 @@ namespace F4
             if (VERBOSE > 3)
             {
                 cout << endl << "_total[" << _numTot << "] = " << _taggedPolynomialArray[_numPol] << endl;
+            }
+            if (VERBOSE > 1)
+            {
+                stat._timeMajBasis +=(clock () - startMajBasis);
             }
             /* Add the new generator in the basis */
             _total.push_back(_numPol);
@@ -1150,7 +936,7 @@ namespace F4
 
         /* Statistic */
         Stat stat;
-        ofstream fileSize("matrix-size.txt");
+        //ofstream fileSize("matrix-size.txt");
         
         clock_t start = 0;
         clock_t start2 = 0;
@@ -1309,7 +1095,7 @@ namespace F4
                 cout << "Matrix density: " << sparse << endl;
                 cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
             }
-            fileSize << step << " " << height << " " << width << endl;
+            //fileSize << step << " " << height << " " << width << endl;
 
             /* Triangularisation of mat */
             mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
