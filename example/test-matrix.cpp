@@ -225,9 +225,9 @@ int main (int argc, char **argv)
     vector<Matrix<eltType>> matArray;
     string filename;
     string filename2;
-    for(int i=0; i<26; i++)
+    for(int i=0; i<38; i++)
     {
-        filename="../data/M_text_basic"+to_string(i+1)+".txt";
+        filename="../data/"+to_string(i+1)+"before-echelonize-cyclic8.txt";
         matArray.emplace_back(filename);
         //filename2="../data/M"+to_string(i)+"_text_basic.pgm";
         //matArray[i].printMatrix(filename2);

@@ -350,7 +350,8 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
 
     // Time
-    clock_t start;
+    chrono::steady_clock::time_point start;
+    typedef chrono::duration<int,milli> millisecs_t;
     
     // Magma output
     bool magma = false;
@@ -365,53 +366,53 @@ int main (int argc, char **argv)
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
     
-    //start=clock();
-    //nbGen=cyclic6F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 6 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic6F4(magma);
+    if (file)
+    {
+        file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=clock();
-    //nbGen=cyclic7F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 7 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic7F4(magma);
+    if (file)
+    {
+        file << "Cyclic 7 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=clock();
-    //nbGen=cyclic8F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 8 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic8F4(magma);
+    if (file)
+    {
+        file << "Cyclic 8 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=clock();
-    //nbGen=katsura9F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 9 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura9F4(magma);
+    if (file)
+    {
+        file << "Katsura 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=clock();
-    //nbGen=katsura10F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 10 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}  
+    start=chrono::steady_clock::now();
+    nbGen=katsura10F4(magma);
+    if (file)
+    {
+        file << "Katsura 10 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }  
     
-    //start=clock();
-    //nbGen=katsura11F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 11 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura11F4(magma);
+    if (file)
+    {
+        file << "Katsura 11 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    start=clock();
+    start=chrono::steady_clock::now();
     nbGen=katsura12F4(magma);
     if (file)
     {
-        file << "Katsura 12 : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+        file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
     return 0;

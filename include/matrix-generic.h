@@ -16,23 +16,23 @@
  */
 
   /**
-  * \file matrix.h
-  * \brief Declaration of class Matrix.
+  * \file matrix-generic.h
+  * \brief Declaration of class MatrixGeneric.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_MATRIX_H
-#define F4_MATRIX_H
+#ifndef F4_MATRIX_GENERIC_H
+#define F4_MATRIX_GENERIC_H
 
 /** \cond */
 #include <iostream>
 #include <cassert>
 #include <ctime>
-#include <chrono>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <omp.h>
+#include <givaro/modular-balanced.h>
+#include <fflas-ffpack/ffpack/ffpack.h>
 /** \endcond */
 
 /** \namespace F4 
@@ -41,11 +41,11 @@
 namespace F4
 {
     /**
-     * \class Matrix
-     * Represent a matrix.
+     * \class MatrixGeneric
+     * Represent a matrix under fflas-ffpack format.
      */
-    template <typename Element>
-    class Matrix
+    template <class Field>
+    class MatrixGeneric
     {
         public:
             
@@ -53,33 +53,36 @@ namespace F4
             
             /**
              * \brief Constructor
+             * \param f: Base field.
              */
-            Matrix();
+            MatrixGeneric(Field & f);
             
             /**
              * \brief Constructor
+             * \param f: Base field.
              * \param height: Height of _matrix.
              * \param width: Width of _matrix.
              */
-            Matrix(int height, int width);
+            MatrixGeneric(Field & f, int height, int width);
             
             /**
              * \brief Constructor
+             * \param f: Base field.
              * \param filename: Name of a matrix file.
              */
-            Matrix(std::string const & filename);
+            MatrixGeneric(Field & f, std::string const & filename);
             
             /**
              * \brief Copy constructor
-             * \param matrix: Matrix.
+             * \param matrix: MatrixGeneric.
              */
-            Matrix(Matrix const & matrix);
+            MatrixGeneric(MatrixGeneric const & matrix);
             
             /**
              * \brief Move constructor
-             * \param matrix: Matrix.
+             * \param matrix: MatrixGeneric.
              */
-            Matrix(Matrix && matrix);
+            MatrixGeneric(MatrixGeneric && matrix);
             
             
             /* Destructor */
@@ -87,48 +90,48 @@ namespace F4
             /**
              * \brief Destructor
              */
-            ~Matrix();
+            ~MatrixGeneric();
             
             
-            /* Get / Set */
+            ///* Get / Set */
             
-            /**
-             * \brief Modify matrix element.
-             * \param row: Row of the element.
-             * \param col: Column of the element.
-             * \return Reference on the element.
-             */
-            Element & operator() (int row, int col);
+            ///**
+             //* \brief Modify matrix element.
+             //* \param row: Row of the element.
+             //* \param col: Column of the element.
+             //* \return Reference on the element.
+             //*/
+            //Field::Element & operator() (int row, int col);
             
-            /**
-             * \brief Get matrix element.
-             * \param row: Row of the element.
-             * \param col: Column of the element.
-             * \return Element.
-             */
-            Element operator() (int row, int col) const;
+            ///**
+             //* \brief Get matrix element.
+             //* \param row: Row of the element.
+             //* \param col: Column of the element.
+             //* \return Element.
+             //*/
+            //Field::Element operator() (int row, int col) const;
             
-            /**
-             * \brief Get matrix element.
-             * \param row: Row of the element.
-             * \param col: Column of the element.
-             * \return Element.
-             */
-            Element getElement(int row, int col) const;
+            ///**
+             //* \brief Get matrix element.
+             //* \param row: Row of the element.
+             //* \param col: Column of the element.
+             //* \return Element.
+             //*/
+            //Field::Element getElement(int row, int col) const;
             
-            /**
-             * \brief Modify matrix element.
-             * \param row: Row of the element.
-             * \param col: Column of the element.
-             * \param element: Element.
-             */
-            void setElement (int row, int col, Element const & element);
+            ///**
+             //* \brief Modify matrix element.
+             //* \param row: Row of the element.
+             //* \param col: Column of the element.
+             //* \param element: Element.
+             //*/
+            //void setElement (int row, int col, Field::Element const & element);
             
-            /**
-             * \brief Get the row-th row of this.
-             * \param row: Index of the row.
-             */
-            Element * getRow (int row);
+            ///**
+             //* \brief Get the row-th row of this.
+             //* \param row: Index of the row.
+             //*/
+            //Field::Element * getRow (int row);
             
             /**
              * \brief Get the height of the matrix (number of rows).
@@ -209,11 +212,6 @@ namespace F4
             void printMatrix (std::string const & filename) const;
             
             /**
-             * \brief Print the matrix in a format readable by constructor.
-             */
-            void printMatrixTxt (std::string const & filename) const;
-            
-            /**
              * \brief Test if _matrix(row,col) is zero.
              * \param row: Row of the element.
              * \param col: Column of the element.
@@ -221,49 +219,6 @@ namespace F4
              * \return  false otherwise.
              */
             bool isZero(int row, int col) const;
-            
-            /**
-             * \brief Normalize a slice of the row-th row.
-             * \param row: Row to normalize.
-             * \param start: Beginning of the slice.
-             * \param end: End of the slice.
-             */
-            void normalizeRow(Element * row, int start, int end);
-            
-            /**
-             * \brief Multiply a slice of the row-th row by element.
-             * \param row: Row of the matrix. 
-             * \param element: Element used to multiply each element of the slice.
-             * \param start: Beginning of the slice.
-             * \param end: End of the slice.
-             */
-            void multRow(Element * row, Element const & element, int start, int end);
-            
-             /**
-             * \brief Multiply a slice of the row1-th row by element and add a slice of the row2-th row.
-             * \param row1: Row of the matrix. The one to modify.
-             * \param row2: Row of the matrix. 
-             * \param element: Element used to multiply each element of the slice.
-             * \param start: Beginning of the slice.
-             * \param end: End of the slice.
-             */
-            void addMultRow(Element * row1, Element * row2, Element element, int start, int end);
-            
-            /**
-             * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
-             * \param numRow1: Number of the row. 
-             * \param numRow2: Number of the row. 
-             */
-            void swapRow(int numRow1, int numRow2);
-            
-            /**
-             * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
-             * \param numCol1: Number of the column.
-             * \param numCol2: Number of the column. 
-             * \param start: Beginning of the slice.
-             * \param end: End of the slice.
-             */
-            void swapCol(int numCol1, int numCol2, int start, int end);
 
             /**
              * \brief Echelonize the matrix mat using the shape of the F4 matrix.
@@ -272,26 +227,31 @@ namespace F4
             int echelonize ();
             
             
-            /* Internal operator */
+            ///* Internal operator */
             
-            /**
-             * \brief Overload the operator =.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param matrix: Matrix to copy.
-             * \return Reference on this.
-             */
-            Matrix & operator=(Matrix const & matrix);
+            ///**
+             //* \brief Overload the operator =.
+             //* \pre The static variable MODULO must be set beforehand.
+             //* \param matrix: MatrixGeneric to copy.
+             //* \return Reference on this.
+             //*/
+            //MatrixGeneric & operator=(MatrixGeneric const & matrix);
             
-            /**
-             * \brief Overload the operator = (move assignment). Used when mon is unnamed (only copy the pointer).
-             * \pre The static variable MODULO must be set beforehand.
-             * \param matrix: Matrix to copy.
-             * \return Reference on this.
-             */
-            Matrix & operator=(Matrix && matrix);
+            ///**
+             //* \brief Overload the operator = (move assignment). Used when mon is unnamed (only copy the pointer).
+             //* \pre The static variable MODULO must be set beforehand.
+             //* \param matrix: MatrixGeneric to copy.
+             //* \return Reference on this.
+             //*/
+            //MatrixGeneric & operator=(MatrixGeneric && matrix);
             
         private:
-            Element ** _matrix; /*!< Macaulay matrix */
+            typename Field::Element * _matrix; /*!< Macaulay matrix */
+            typename Field::Element * _A; /*!< Upper left */
+            typename Field::Element * _B; /*!< Upper right */
+            typename Field::Element * _C; /*!< Lower left */
+            typename Field::Element * _D; /*!< Lower right */
+            Field _F; /*!< Base field */
             int _height; /*!< Height of _matrix. */
             int _width; /*!< Width of _matrix. */
             int _nbPiv; /*!< Number of pivots. */
@@ -309,9 +269,9 @@ namespace F4
      * \return ostream: Stream.
      */
     template <typename Element>
-    std::ostream & operator<<(std::ostream & stream, Matrix<Element> const & matrix);
+    std::ostream & operator<<(std::ostream & stream, MatrixGeneric<Element> const & matrix);
 }
 
-#include "../src/matrix.inl"
+#include "../src/matrix-generic.inl"
 
-#endif // F4_MATRIX_H
+#endif // F4_MATRIX_GENERIC_H

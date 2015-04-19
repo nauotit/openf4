@@ -938,9 +938,12 @@ namespace F4
         Stat stat;
         //ofstream fileSize("matrix-size.txt");
         
-        clock_t start = 0;
-        clock_t start2 = 0;
-        clock_t start1 = clock ();
+        chrono::steady_clock::time_point start, start1, start2;
+        typedef chrono::duration<int,milli> millisecs_t;
+        
+        //start = 0;
+        //start2 = 0;
+        start1 = chrono::steady_clock::now();
         
         clock_t timeClear = 0;
         clock_t timeClearStart = 0;
@@ -985,7 +988,7 @@ namespace F4
             
             if (VERBOSE > 1)
             {
-                start2 = clock ();
+                start2 = chrono::steady_clock::now();
             }
             _matMons.reset();
             
@@ -1015,7 +1018,7 @@ namespace F4
             if (VERBOSE > 1)
             {
                 /* Matrix construction time */
-                start = clock ();   
+                start = chrono::steady_clock::now();   
             }
 
             appendMatrixF4 (cp1, height, nbPiv);
@@ -1093,12 +1096,15 @@ namespace F4
                 cout << "Convert _matPols into a matrix: " << endl;
                 cout << "Matrix size: " << height << "x" << width << endl;
                 cout << "Matrix density: " << sparse << endl;
-                cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
+                cout << "Construction time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
             }
             //fileSize << step << " " << height << " " << width << endl;
 
             /* Triangularisation of mat */
             mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
+            //filename=to_string(step)+"before-echelonize-cyclic8.txt";
+            //mat.printMatrixTxt(filename);
+            
             heightReal=mat.echelonize();
             
             //filename=to_string(step)+"after-echelonize.pgm";
@@ -1107,7 +1113,7 @@ namespace F4
             if (VERBOSE > 0)
             {
                 /* Update time */
-                start = clock ();
+                start = chrono::steady_clock::now();
             }
             if (VERBOSE > 1)
             {
@@ -1130,7 +1136,7 @@ namespace F4
             if(!postprocessing(mat, tabMon, sigma, tau, height, width, heightReal, nbPiv, stat))
             {
                 cout << endl << endl << "GROEBNER BASIS : (1)" << endl;
-                cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << " ms " << endl << endl << endl;
+                cout << "---> " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << " ms " << endl << endl << endl;
                 
                 if(_matMons.size() != (size_t)width)
                 {
@@ -1157,7 +1163,7 @@ namespace F4
             
             if (VERBOSE > 0)
             {
-                cout << "Update of _basis and queue of pairs done in " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl;
+                cout << "Update of _basis and queue of pairs done in " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl;
                 if (VERBOSE > 1)
                 {
                     cout << "--> " << (stat._timePurgeCp* 1000) / CLOCKS_PER_SEC << " ms for purging of the critical pairs queue" << endl;
@@ -1188,7 +1194,7 @@ namespace F4
                 
             if (VERBOSE > 0)
             {
-                cout << "Total computation time of step " << step << ": " << (((double)clock () - start2) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl; 
+                cout << "Total computation time of step " << step << ": " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start2).count() << " ms" << endl << endl; 
             }
             step++;
             
@@ -1204,7 +1210,7 @@ namespace F4
         {
             cout << endl << "---------------------------------------" << endl;
             cout << "Time analysis: " << endl;
-            cout << "---> " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU global computation time" << endl;
+            cout << "---> " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << "ms CPU global computation time" << endl;
             cout << "---> " << (((double)timeClear) * 1000) / CLOCKS_PER_SEC << "ms CPU used for clear" << endl;
             cout << "---> " << (((double)timeAppendMatrixF4) * 1000) / CLOCKS_PER_SEC << "ms CPU used for appendMatrixF4" << endl;
             cout << "---> " << (((double)timePreprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for preprocessing" << endl;
@@ -1265,7 +1271,7 @@ namespace F4
         {
             cout << "Matrix size: " << height << "x" << width << endl;
             cout << "Matrix density: " << sparse << endl;
-            cout << "Construction time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl;
+            cout << "Construction time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl;
         }
 
         /* Triangularisation of mat */
@@ -1304,7 +1310,7 @@ namespace F4
         delete[] startTail;
         delete[] endCol;
         
-        cout << "Groebner basis: " << _numGen << " generators. Computed in " << (((double)clock () - start1) * 1000) / CLOCKS_PER_SEC << "ms CPU " << endl << endl << endl;
+        cout << "Groebner basis: " << _numGen << " generators. Computed in " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << "ms CPU " << endl << endl << endl;
 
         return _numGen;
     }
