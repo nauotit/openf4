@@ -41,9 +41,6 @@ namespace F4
     template <typename baseType>
     baseType ElementPrime<baseType>::MAX=0;
     
-    //template <typename baseType>
-    //baseType ElementPrime<baseType>::MULT=0;
-    
     /* Static methods */
     
     template <typename baseType>
@@ -51,7 +48,6 @@ namespace F4
     ElementPrime<baseType>::setModulo(baseType modulo)
     {
         MODULO=modulo;
-        //MULT=modulo/2;
         MAX=((baseType)1<<(sizeof(baseType)*8-2));
     }
     
@@ -131,14 +127,6 @@ namespace F4
         {
             _element%=MODULO;
         }
-        //if(_element<=-MAX) 
-        //{
-            //_element+=(MODULO*MULT);
-        //}
-        //if(_element>=MAX)
-        //{
-            //_element-=(MODULO*MULT);
-        //}
         _element+=(element._element*mult._element);
         return * this;
     }

@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <chrono>
 #include "../include/monomial-array.h"
 
 using namespace F4;
@@ -32,6 +33,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=4;
+int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 int main (int argc, char **argv)
 {
@@ -41,25 +43,26 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Time 
-    clock_t start;
+    chrono::steady_clock::time_point start;
+    typedef chrono::duration<int,milli> millisecs_t;
     
     // Test MonomialArray(int nbVariable);
     cout << "________Test MonomialArray(int nbVariable)________" << endl;
-    start=clock();
+    start=chrono::steady_clock::now();
     MonomialArray monArray1(8, 100000);
-    cout << "Time initialisation: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time initialisation: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
              
     // Test MonomialArray(int nbVariable, int degree);
     cout << "________Test MonomialArray(int nbVariable, int degree)________" << endl;
-    start=clock();
+    start=chrono::steady_clock::now();
     MonomialArray monArray2(8, 10000000, 20);
-    cout << "Time initialisation: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time initialisation: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
              
     // Test MonomialArray(int nbVariable, int degree, int numMaxLine, int numMaxColumn);
     cout << "________Test MonomialArray(int nbVariable, int degree, int numMaxLine, int numMaxColumn)________" << endl;
-    start=clock();
+    start=chrono::steady_clock::now();
     MonomialArray monArray3(8, 100000000, 20, 4, 11);
-    cout << "Time initialisation: " << ((double)(clock() - start))*1000/CLOCKS_PER_SEC << " ms" << endl << endl;
+    cout << "Time initialisation: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
     
     // Test Monomial & operator[](int index);
     cout << "________Test Monomial & operator[](int index)________" << endl;
@@ -75,8 +78,8 @@ int main (int argc, char **argv)
     Monomial m1;
     m1.allocate();
     m1.setMonomial(10000);
-    cout << "varlist[5] of " << m1 << ": " << monArray3.getNumVarlist(10000, 5) << endl; 
-    cout << "varlist[6] of " << m1 << ": " << monArray3.getNumVarlist(10000, 6) << endl << endl;
+    cout << "varlist[5] of " << m1 << ": " << (int)monArray3.getNumVarlist(10000, 5) << endl; 
+    cout << "varlist[6] of " << m1 << ": " << (int)monArray3.getNumVarlist(10000, 6) << endl << endl;
              
     // Test int multNumMonomial(int numMon1, int numMon2);
     cout << "________Test multNumMonomial(int numMon1, int numMon2)________" << endl;

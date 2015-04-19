@@ -31,6 +31,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=0;
+int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 typedef ElementPrime<int> eltType1;
 typedef ElementPrime<long> eltType2;
@@ -162,7 +163,8 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Time
-    clock_t start;
+    chrono::steady_clock::time_point start;
+    typedef chrono::duration<int,milli> millisecs_t;
     
     // Number of generator
     int nbGen;
@@ -174,25 +176,25 @@ int main (int argc, char **argv)
         file << "Benchmark for semaev " << endl << endl << endl;
     }
     
-    start=clock();
+    start=chrono::steady_clock::now();
     nbGen=semaev16F4();
     if (file)
     {
-        file << "Semaev 16 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+        file << "Semaev 16 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
-    start=clock();
+    start=chrono::steady_clock::now();
     nbGen=semaev31F4();
     if (file)
     {
-        file << "Semaev 31 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+        file << "Semaev 31 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
-    start=clock();
+    start=chrono::steady_clock::now();
     nbGen=semaev32F4();
     if (file)
     {
-        file << "Semaev 32 bits : " << (clock()-start)*1000/CLOCKS_PER_SEC << " ms                   (" << nbGen << " generators)" << endl << endl;
+        file << "Semaev 32 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
     return 0;

@@ -28,6 +28,8 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <omp.h>
+#include <chrono>
 /** \endcond */
 #include "monomial.h"
 

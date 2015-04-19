@@ -158,8 +158,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example:  bin/test-openmp
-#bin/test-fflas-ffpack bin/test-matrix bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-ideal bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-monomial-array bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-element-prime bin/test-term
+example: bin/test-matrix 
+# bin/test-openmp bin/test-monomial-array bin/test-fflas-ffpack bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-ideal bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-element-prime bin/test-term
 benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)

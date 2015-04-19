@@ -218,7 +218,6 @@ namespace F4
             
             static baseType MODULO; /*!< Characteristic of the base field. */
             static baseType MAX; /*!< Maximum range for the baseType elements. */
-            //static baseType MULT; /*!< Integer part of MODULO/2 */
     };
     
     

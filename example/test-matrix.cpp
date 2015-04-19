@@ -33,6 +33,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=2;
+int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 int main (int argc, char **argv)
 {
@@ -233,14 +234,16 @@ int main (int argc, char **argv)
         //matArray[i].printMatrix(filename2);
     }
     
-    clock_t start = clock();
+    chrono::steady_clock::time_point start=chrono::steady_clock::now();
+    typedef chrono::duration<int,milli> millisecs_t;
+    
     for(size_t i=0; i< matArray.size(); i++)
     {
         matArray[i].echelonize();
         //filename2="../data/M"+to_string(i)+"_text_echelonized.pgm";
         //matArray[i].printMatrix(filename2);
     }
-    cout << "time to echenonize " << matArray.size() << " matrix: " << ((double)(clock() - start))/CLOCKS_PER_SEC << " s" << endl << endl;
+    cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
     
     return 0;
 }

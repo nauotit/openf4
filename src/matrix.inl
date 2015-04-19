@@ -32,6 +32,8 @@ namespace F4
     
     extern int VERBOSE;
     
+    extern int NB_THREAD;
+    
     
     /* Constructor */
     
@@ -927,7 +929,6 @@ namespace F4
     
     
     #ifdef PARALLEL
-    #define NB_THREAD 2
     template <typename Element>
     int
     Matrix<Element>::echelonize ()
@@ -941,7 +942,10 @@ namespace F4
         l = 0;
         Element piv, inv;
         int exc;
+        
+        /* Thread parameters */
         omp_set_num_threads(NB_THREAD);
+        int chunk = 2;
 
         if (VERBOSE > 1)
         {
@@ -962,7 +966,7 @@ namespace F4
                 {
                     /* Normalize the row in  [-MODULO/2, MODULO/2]. */
                     normalizeRow(_matrix[ll], ll, _width);
-                    #pragma omp parallel for
+                    #pragma omp parallel for schedule(dynamic,chunk)
                     for (l2 = 0; l2 < ll; l2++)
                     {
                         if (!isZero(l2,ll) )
@@ -981,7 +985,7 @@ namespace F4
                 normalizeRow(_matrix[0], 0, _width);
                 
                 /* Low rectangular part (under  _nbPiv) */
-                #pragma omp parallel for private(ll)
+                #pragma omp parallel for private(ll) schedule(dynamic,chunk)
                 for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                 {
                     for (ll = l; ll >= 0; ll--)
@@ -1007,7 +1011,7 @@ namespace F4
                 {
                     /* Normalize the row in  [-MODULO/2, MODULO/2]. */
                     normalizeRow(_matrix[ll], ll, _width);
-                    #pragma omp parallel for
+                    #pragma omp parallel for schedule(dynamic,chunk)
                     for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
                     {
                         if (!isZero(l2,ll) )
@@ -1023,37 +1027,40 @@ namespace F4
                     }
                 }
                 /* Hight rectangular part */
-                #pragma omp parallel for private(ll)
-                for (l2 = 0; l2 <= l - TRANCHE; l2++)
+                #pragma omp parallel 
                 {
-                    for (ll = l; ll > l - TRANCHE; ll--)
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = 0; l2 <= l - TRANCHE; l2++)
                     {
-                        if (!isZero(l2,ll) )
+                        for (ll = l; ll > l - TRANCHE; ll--)
                         {
-                            /* Normalize in  [-MODULO/2, MODULO/2]. */
-                            _matrix[l2][ll].modulo();
                             if (!isZero(l2,ll) )
                             {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                    _matrix[l2][ll].setZero();
+                                }
                             }
                         }
                     }
-                }
-                /* Low rectangular part (under  _nbPiv) */
-                #pragma omp parallel for private(ll)
-                for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
-                {
-                    for (ll = l; ll > l - TRANCHE; ll--)
+                    /* Low rectangular part (under  _nbPiv) */
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
                     {
-                        if (!isZero(l2,ll) )
+                        for (ll = l; ll > l - TRANCHE; ll--)
                         {
-                            /* Normalize in  [-MODULO/2, MODULO/2]. */
-                            _matrix[l2][ll].modulo();
                             if (!isZero(l2,ll) )
                             {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                    _matrix[l2][ll].setZero();
+                                }
                             }
                         }
                     }
@@ -1124,7 +1131,7 @@ namespace F4
                 _matrix[l][l].setOne();
                 
                 /* Suppress the elements under the pivot */
-                #pragma omp parallel for
+                #pragma omp parallel for schedule(dynamic,chunk)
                 for (l2 = l + 1; l2 < _height; l2++)
                 {
                     /* Normalize in  [-MODULO/2, MODULO/2]. */
@@ -1165,7 +1172,7 @@ namespace F4
                 {
                     /* Normalize the row in  [-MODULO/2, MODULO/2]. */
                     normalizeRow(_matrix[ll], ll, _width);
-                    #pragma omp parallel for
+                    #pragma omp parallel for schedule(dynamic,chunk)
                     for (l2 = _nbPiv; l2 < ll; l2++)
                     {
                         if (!isZero(l2,ll) )
@@ -1186,31 +1193,34 @@ namespace F4
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[_nbPiv];
                 /* Upper rectangular part */
-                #pragma omp parallel for private(ll)
-                for (l2 = 0; l2 < min_endcol; l2++)
+                #pragma omp parallel
                 {
-                    for (ll = l; ll >= _nbPiv; ll--)
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = 0; l2 < min_endcol; l2++)
                     {
-                        /* Normalize in  [-MODULO/2, MODULO/2]. */
-                        _matrix[l2][ll].modulo();
-                        if (!isZero(l2,ll) )
+                        for (ll = l; ll >= _nbPiv; ll--)
                         {
-                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
+                            }
                         }
                     }
-                }
-                #pragma omp parallel for private(ll)
-                for (l2 = min_endcol; l2 < max_endcol; l2++)
-                {
-                    for (ll = l; _endCol[ll] > l2; ll--)
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = min_endcol; l2 < max_endcol; l2++)
                     {
-                        /* Normalize in  [-MODULO/2, MODULO/2]. */
-                        _matrix[l2][ll].modulo();
-                        if (!isZero(l2,ll))
+                        for (ll = l; _endCol[ll] > l2; ll--)
                         {
-                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll))
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
+                            }
                         }
                     }
                 }
@@ -1222,7 +1232,7 @@ namespace F4
                 {
                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
                     normalizeRow(_matrix[ll], ll, _width);
-                    #pragma omp parallel for
+                    #pragma omp parallel for schedule(dynamic,chunk)
                     for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
                     {
                         if (!isZero(l2,ll) )
@@ -1243,40 +1253,12 @@ namespace F4
                 /* Upper rectangular part */
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[l - TRANCHE + 1];
-                #pragma omp parallel for private(ll)
-                for (l2 = 0; l2 < min_endcol; l2++)
+                #pragma omp parallel
                 {
-                    for (ll = l; ll > l - TRANCHE; ll--)
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = 0; l2 < min_endcol; l2++)
                     {
-                        /* Normalize in  [-MODULO/2, MODULO/2]. */
-                        _matrix[l2][ll].modulo();
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                #pragma omp parallel for private(ll)
-                for (l2 = min_endcol; l2 < max_endcol; l2++)
-                {
-                    for (ll = l; _endCol[ll] > l2; ll--)
-                    {
-                        /* Normalize in  [-MODULO/2, MODULO/2]. */
-                        _matrix[l2][ll].modulo();
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                #pragma omp parallel for private(ll)
-                for (l2 = _nbPiv; l2 <= l - TRANCHE; l2++)
-                {
-                    for (ll = l; ll > l - TRANCHE; ll--)
-                    {
-                        if (!isZero(l2,ll) )
+                        for (ll = l; ll > l - TRANCHE; ll--)
                         {
                             /* Normalize in  [-MODULO/2, MODULO/2]. */
                             _matrix[l2][ll].modulo();
@@ -1287,13 +1269,44 @@ namespace F4
                             }
                         }
                     }
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = min_endcol; l2 < max_endcol; l2++)
+                    {
+                        for (ll = l; _endCol[ll] > l2; ll--)
+                        {
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
+                            }
+                        }
+                    }
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = _nbPiv; l2 <= l - TRANCHE; l2++)
+                    {
+                        for (ll = l; ll > l - TRANCHE; ll--)
+                        {
+                            if (!isZero(l2,ll) )
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
         tmp_ech_dh = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
         
         /* Normalize the matrix */
-        #pragma omp parallel for private(l)
+        #pragma omp parallel for private(l) schedule(dynamic,chunk)
         for (i = 0; i < _height; i++)
         {
             for (l = 0; l < _width; l++)

@@ -33,6 +33,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=2;
+int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 int main (int argc, char **argv)
 {

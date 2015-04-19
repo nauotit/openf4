@@ -32,6 +32,8 @@ namespace F4
     
     extern int VERBOSE;
     
+    extern int NB_THREAD;
+    
     
     /* Constructors */
     
@@ -137,10 +139,13 @@ namespace F4
         _numMaxRow = Monomial::getNbMonomial(deg1, _nbVariable + 1);
         _numMaxColumn = Monomial::getNbMonomial(deg2, _nbVariable + 1);
         
-        clock_t start = 0;
+        /* Time */
+        chrono::steady_clock::time_point start;
+        typedef chrono::duration<int,milli> millisecs_t;
+        
         if (VERBOSE > 1)
         {
-            start = clock();
+            start = chrono::steady_clock::now();
             if (VERBOSE > 2)
             {
                 cout << "Monomial::setTabulatedProduct: _numMaxRow: " << _numMaxRow << endl;
@@ -150,18 +155,19 @@ namespace F4
         
         _tabulatedProduct = new int*[_numMaxRow];
         assert(_tabulatedProduct!=0);
-        size += _numMaxRow * sizeof (int *);
+        size += (_numMaxRow * _numMaxColumn * sizeof (int));
         
         const uint8_t * varlist1;
         const uint8_t * varlist2;
         uint8_t varlist[_nbVariable];
         short deg=0;
-
+        
+        omp_set_num_threads(NB_THREAD);
+        #pragma omp parallel for private(varlist, varlist1, varlist2, i, deg)
         for (int numMon1 = 0; numMon1 < _numMaxRow; numMon1++)
         {
             varlist1=_monomialArray[numMon1].getVarlist();
             _tabulatedProduct[numMon1]=new int[_numMaxColumn];
-            size += _numMaxColumn * sizeof (int);
             for (int numMon2 = 0; numMon2 < _numMaxColumn; numMon2++)
             {
                 varlist2=_monomialArray[numMon2].getVarlist();
@@ -176,7 +182,7 @@ namespace F4
         }
         if (VERBOSE > 1)
         {
-            cout << "Monomial: products computed up to deg "<< deg1 <<" x " << deg2 << " in " << ((clock()-start)* 1000) / CLOCKS_PER_SEC << " ms" << endl; 
+            cout << "Monomial: products computed up to deg " << deg1 <<" x " << deg2 << " in " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl; 
             cout << "Monomial: " << size/1000000 << "Mo allocated for _tabulatedProduct " << endl;
         }
     }
