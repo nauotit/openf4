@@ -37,7 +37,7 @@ namespace F4
 {
     /**
      * \class ElementPrime
-     * Represent an element of a prime field.
+     * Represent an element of a prime field, this class is a POD (Plain Old Data) because of the alignement required in class Matrix.
      */
     template <typename baseType>
     class ElementPrime
@@ -58,30 +58,16 @@ namespace F4
              */
             static baseType getModulo();
             
-            
-            /* Constructor */
-            
             /**
-             * \brief Constructor.
-             * \pre The static variable MODULO must be set beforehand.
-             * \post this is set in [-MODULO/2, MODULO/2].
-             * \param element: baseType element.
+             * \brief Get the static variable MAX.
+             * \return Maximum range for the baseType elements.
              */
-            ElementPrime(baseType element);
-            
-            /**
-             * \brief Constructor.
-             * \pre The static variable MODULO must be set beforehand.
-             */
-            ElementPrime();
+            static baseType getMax();
             
             
-            /* Destructor */
+            /* No constructor because POD */
             
-             /**
-             * \brief Destructor.
-             */
-            ~ElementPrime();
+            /* No Destructor because POD */
             
             
             /* Miscellaneous */
@@ -89,9 +75,9 @@ namespace F4
             /**
              * \brief Set this in [-MODULO/2, MODULO/2].
              * \post this is set in [-MODULO/2, MODULO/2].
-             * \return this.
+             * \return Integer form of this.
              */
-            ElementPrime<baseType> & modulo ();
+            baseType modulo ();
             
             /**
              * \brief Set this+=(mult*element).
@@ -116,24 +102,6 @@ namespace F4
              * \brief Print the element.
              */
             void printElementPrime (std::ostream & stream) const;
-            
-            /**
-             * \brief Compare ElementPrime.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: ElementPrime.
-             * \return  true if this==element.
-             * \return  false if otherwise.
-             */
-            bool isEqual(ElementPrime const & element) const;
-            
-            /**
-             * \brief Compare ElementPrime.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: baseType.
-             * \return  true if this==element.
-             * \return  false if otherwise.
-             */
-            bool isEqual(baseType element) const;
             
             /**
              * \brief Test if this is nul.
@@ -168,32 +136,7 @@ namespace F4
              * \param element: Element of a prime field.
              * \return Reference on this.
              */
-            ElementPrime & operator=(ElementPrime const & element);
-            
-            /**
-             * \brief Overload the operator =.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: Element of a prime field.
-             * \post this is set in [-MODULO/2, MODULO/2].
-             * \return Reference on this.
-             */
             ElementPrime & operator=(baseType element);
-            
-            /**
-             * \brief Overload the operator +=.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: Element of a prime field.
-             * \return Reference on this.
-             */
-            ElementPrime & operator+=(ElementPrime const & element); 
-            
-            /**
-             * \brief Overload the operator -=.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: Element of a prime field.
-             * \return Reference on this.
-             */
-            ElementPrime & operator-=(ElementPrime const & element); 
             
             /**
              * \brief Overload the operator *=.
@@ -205,15 +148,9 @@ namespace F4
              */
             ElementPrime & operator*=(ElementPrime const & mult); 
             
-            /**
-             * \brief Overload the operator /=.
-             * \pre The static variable MODULO must be set beforehand.
-             * \param element: Element of a prime field.
-             * \return Reference on this.
-             */
-            ElementPrime & operator/=(ElementPrime element); 
             
-        private:
+            /* Public attribute because POD */
+            
             baseType _element; /*!< Represent an element of the field of characteristic MODULO */
             
             static baseType MODULO; /*!< Characteristic of the base field. */
@@ -238,64 +175,11 @@ namespace F4
     ElementPrime<baseType> operator * (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
     
     /**
-     * \brief Overload the operator /.
-     * \return element1 / element2.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator / (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    
-    /**
-     * \brief Overload the operator +.
-     * \return element1 + element2.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator + (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    
-    /**
-     * \brief Overload the operator -.
-     * \return element1 - element2.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator - (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    
-    /**
      * \brief Overload the operator -.
      * \return -element.
      */
     template <typename baseType>
     ElementPrime<baseType> operator - (ElementPrime<baseType> const & element);
-    
-    /**
-     * \brief Overload the operator ==.
-     * \return true if element1==element2.
-     * \return false otherwise.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator==(ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    
-    /**
-     * \brief Overload the operator ==.
-     * \return true if element1==element2.
-     * \return false otherwise.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator==(ElementPrime<baseType> const & element1, baseType element2);
-    
-    /**
-     * \brief Overload the operator !=.
-     * \return true if element1!=element2.
-     * \return false otherwise.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator!=(ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    
-    /**
-     * \brief Overload the operator !=.
-     * \return true if element1!=element2.
-     * \return false otherwise.
-     */
-    template <typename baseType>
-    ElementPrime<baseType> operator!=(ElementPrime<baseType> const & element1, baseType element2);
 }
 
 #include "../src/element-prime.inl"

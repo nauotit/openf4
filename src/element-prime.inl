@@ -41,6 +41,7 @@ namespace F4
     template <typename baseType>
     baseType ElementPrime<baseType>::MAX=0;
     
+    
     /* Static methods */
     
     template <typename baseType>
@@ -58,48 +59,18 @@ namespace F4
         return MODULO;
     }
     
-    
-    /* Constructor */
-            
     template <typename baseType>
-    ElementPrime<baseType>::ElementPrime():_element(0)
+    baseType 
+    ElementPrime<baseType>::getMax()
     {
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType>::ElementPrime(baseType element)
-    {
-        if ((element >= -MODULO / 2) && (element <= MODULO / 2))
-        {
-            _element=element;
-        }
-        else
-        {
-            _element=element%MODULO;
-            if (_element > MODULO / 2)
-            {
-                _element -= MODULO;
-            }
-            if (_element < -MODULO / 2)
-            {
-                _element += MODULO;
-            }
-        }
-    }
-    
-    
-    // Destructor
-    
-    template <typename baseType>
-    ElementPrime<baseType>::~ElementPrime()
-    {
+        return MAX;
     }
     
     
     /* Miscellaneous */
     
     template <typename baseType>
-    inline ElementPrime<baseType> &
+    inline baseType
     ElementPrime<baseType>::modulo ()
     {
         if((_element > MODULO / 2) || (_element < -MODULO / 2))
@@ -114,7 +85,7 @@ namespace F4
                 _element += MODULO;
             }
         }
-        return *this;
+        return _element;
     }
     
     template <typename baseType>
@@ -190,50 +161,6 @@ namespace F4
     {
         stream << _element;
     }
-    
-    template <typename baseType>
-    bool
-    ElementPrime<baseType>::isEqual(ElementPrime<baseType> const & element) const
-    {
-        assert( (_element < MODULO || _element > -MODULO) && (element._element < MODULO || element._element > -MODULO));
-        if(( (_element > 0) && (element._element > 0)) || ((_element < 0) && (element._element < 0)))
-        {
-            return (_element==element._element);
-        }
-        else
-        {
-            if((_element > 0) && (element._element < 0))
-            {
-                return (_element==(element._element+MODULO));
-            }
-            else
-            {
-                return ((_element+MODULO)==(element._element));
-            }
-        }
-    } 
-    
-    template <typename baseType>
-    bool
-    ElementPrime<baseType>::isEqual(baseType element) const
-    {
-        assert( (_element < MODULO || _element > -MODULO) && (element < MODULO || element > -MODULO));
-        if(( (_element > 0) && (element > 0)) || ((_element < 0) && (element < 0)))
-        {
-            return (_element==element);
-        }
-        else
-        {
-            if((_element > 0) && (element < 0))
-            {
-                return (_element==(element+MODULO));
-            }
-            else
-            {
-                return ((_element+MODULO)==(element));
-            }
-        }
-    }
             
     template <typename baseType>
     bool
@@ -272,61 +199,12 @@ namespace F4
     
     
     /* Operator overload */
-    
-    template <typename baseType>
-    ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator=(ElementPrime const & element)
-    {
-        _element=element._element;
-        return * this;
-    }
             
     template <typename baseType>
     ElementPrime<baseType> & 
     ElementPrime<baseType>::operator=(baseType element)
     {
-        if ((element >= -MODULO / 2) && (element <= MODULO / 2))
-        {
-            _element=element;
-        }
-        else
-        {
-            _element=element%MODULO;
-            if (_element > MODULO / 2)
-            {
-                _element -= MODULO;
-            }
-            if (_element < -MODULO / 2)
-            {
-                _element += MODULO;
-            }
-        }
-        return * this;
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator+=(ElementPrime<baseType> const & element)
-    {
-        assert((element._element>=-MAX) && (element._element<=MAX));
-        if(( _element<=-MAX) || (_element>=MAX))
-        {
-            _element%=MODULO;
-        }
-        _element+=element._element;
-        return * this;
-    }
-            
-    template <typename baseType>
-    ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator-=(ElementPrime<baseType> const & element)
-    {
-        assert((element._element>=-MAX) && (element._element<=MAX));
-        if(( _element<=-MAX) || (_element>=MAX))
-        {
-            _element%=MODULO;
-        }
-        _element-=element._element;
+        _element=element;
         return * this;
     }
             
@@ -338,15 +216,6 @@ namespace F4
         _element%=MODULO;
         _element*=mult._element;
         modulo();
-        return * this;
-    }
-            
-    template <typename baseType>
-    ElementPrime<baseType> & 
-    ElementPrime<baseType>::operator/=(ElementPrime<baseType> element)
-    {
-        _element%=MODULO;
-        _element*=((element.inverse())._element);
         return * this;
     }
     
@@ -362,68 +231,18 @@ namespace F4
     ElementPrime<baseType> 
     operator * (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
     {
-        ElementPrime<baseType> copy(element1);
+        ElementPrime<baseType> copy;
+        copy._element=element1._element;
         return (copy*=element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator / (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
-    {
-        ElementPrime<baseType> copy(element1);
-        return (copy/=element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator + (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
-    {
-        ElementPrime<baseType> copy(element1);
-        return (copy+=element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator - (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
-    {
-        ElementPrime<baseType> copy(element1);
-        return (copy-=element2);
     }
     
     template <typename baseType>
     ElementPrime<baseType> 
     operator - (ElementPrime<baseType> const & element)
     {
-        ElementPrime<baseType> copy(0);
-        return (copy-=element);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator==(ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
-    {
-        return element1.isEqual(element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator==(ElementPrime<baseType> const & element1, baseType element2)
-    {
-        return element1.isEqual(element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator!=(ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)
-    {
-        return !element1.isEqual(element2);
-    }
-    
-    template <typename baseType>
-    ElementPrime<baseType> 
-    operator!=(ElementPrime<baseType> const & element1, baseType element2)
-    {
-        return !element1.isEqual(element2);
+        ElementPrime<baseType> copy;
+        copy._element=-element._element;
+        return copy;
     }
 
 }

@@ -35,6 +35,11 @@
 #include <omp.h>
 /** \endcond */
 
+#define SSE2
+#ifdef SSE2
+#include <xmmintrin.h>
+#endif // SSE2
+
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */

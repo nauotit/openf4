@@ -31,7 +31,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=3;
-int F4::NB_THREAD=min(16, omp_get_num_procs());
+int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 int main (int argc, char **argv)
 {
@@ -40,11 +40,10 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Init element-prime tools
-    typedef ElementPrime<long> eltType;
+    typedef ElementPrime<int32_t> eltType;
     eltType::setModulo(65521);
     
     cout << "size = " << ((int)1<<(sizeof(int)*8-2)) << endl;
-    cout << "size long = " << sizeof(int) << endl;
     
     // Init monomial tools
     Monomial::initMonomial(6,5);
@@ -118,28 +117,10 @@ int main (int argc, char **argv)
     cout << "p2 : " << p2 << endl;
     cout << "p3 : " << p3 << endl << endl;
     
-    
     delete[] Mat.getSigma();
     delete[] Mat.getTau();
     delete[] Mat.getStartTail();
     delete[] Mat.getEndCol();
-    
-    // Test DEBUG *
-    TaggedPolynomial<eltType> tp(Polynomial<eltType>("1*x2^3*x4^1*x5^4 + 56886*x1^1*x2^1*x4^2*x5^4 + 9618*x2^2*x4^2*x5^4 + 9966*x1^1*x3^1*x4^2*x5^4 + 14561*x2^1*x3^1*x4^2*x5^4 + 53889*x3^2*x4^2*x5^4 + 35066*x1^1*x4^3*x5^4 + 44683*x2^1*x4^3*x5^4 + 18048*x3^1*x4^3*x5^4 + 35066*x4^4*x5^4 + 57861*x1^1*x2^1*x3^1*x5^5 + 45316*x2^2*x3^1*x5^5 + 45316*x2^1*x3^2*x5^5 + 27413*x1^1*x2^1*x4^1*x5^5 + 44736*x2^2*x4^1*x5^5 + 10568*x1^1*x3^1*x4^1*x5^5 + 63076*x2^1*x3^1*x4^1*x5^5 + 10568*x3^2*x4^1*x5^5 + 22305*x1^1*x4^2*x5^5 + 11119*x2^1*x4^2*x5^5 + 61073*x3^1*x4^2*x5^5 + 39103*x4^3*x5^5 + 27897*x1^1*x2^1*x5^6 + 20221*x2^2*x5^6 + 20221*x1^1*x3^1*x5^6 + 27897*x2^1*x3^1*x5^6 + 20221*x3^2*x5^6 + 49510*x1^1*x4^1*x5^6 + 48929*x2^1*x4^1*x5^6 + 34983*x3^1*x4^1*x5^6 + 54493*x4^2*x5^6 + 12545*x1^1*x5^7 + 32766*x2^1*x5^7 + 32766*x3^1*x5^7 + 4194*x4^1*x5^7 + 12545*x5^8 + 37336*x1^1*x2^1 + 21968*x2^2 + 51283*x1^1*x3^1 + 4573*x2^1*x3^1 + 2097*x3^2 + 48702*x1^1*x4^1 + 64395*x2^1*x4^1 + 44531*x3^1*x4^1 + 11756*x4^2 + 56737*x1^1*x5^1 + 2713*x2^1*x5^1 + 31641*x3^1*x5^1 + 31630*x4^1*x5^1 + 48100*x5^2"));
-    tp.setSimplyrule(2, 405);
-    tp.setSimplyrule(3, 400);
-    tp.setSimplyrule(4, 385);
-    cout << "tp: " << tp << endl << endl;
-    Monomial mon;
-    mon.allocate();
-    mon.setMonomial("x2^1");
-    cout << "mon: " << mon << endl << endl;
-    cout << "mon*tp: " << (tp*mon) << endl << endl;
-    
-    TaggedPolynomial<eltType> tpempty;
-    cout << "tpempty: " << tpempty << endl;
-    tpempty=tp*mon;
-    cout << "tpempty: " << tpempty << endl << endl;
     
     // Test void f4();
     cout << "________Test f4()________" << endl;
@@ -153,7 +134,6 @@ int main (int argc, char **argv)
     
     // Free monomial
     tmp1.erase();
-    mon.erase();
     
     return 0;
 }

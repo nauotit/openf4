@@ -65,20 +65,45 @@ namespace F4
             
             /* Get / Set */
             
+            /**
+             * \brief Get the term of the node.
+             * \return Term of the node.
+             */
             Term<Element> const & getTerm() const; 
             
+            /**
+             * \brief Get the number of the monomial of the term.
+             * \return Number of the monomial of the term.
+             */
             int getNumMonomial() const;
             
+            /**
+             * \brief Get the coefficient of the term.
+             * \return Coefficient of the term.
+             */
             Element getCoefficient() const;
             
+            /**
+             * \brief Set the coefficient of the term.
+             * \param element: Coefficient.
+             */
             void setCoefficient(Element element);
             
+            /**
+             * \brief Set the coefficient of the term to one.
+             */
+            void setCoefficientOne();
+            
+            /**
+             * \brief Set the number of the monomial of the term.
+             * \param numMonomial: Number of the monomial of the term.
+             */
             void setNumMonomial(int numMonomial);
             
             /* Attributes */
         
-            Term<Element> _term;
-            NodeList * _next;
+            Term<Element> _term; /*!< Term. */
+            NodeList * _next; /*!< Pointer on a NodeList. */
     };
     
     /**
@@ -166,7 +191,7 @@ namespace F4
               * \param numMonomial: Number of the monomial of the term.
               * \return Pointer on the created node.
               */
-              NodeList<Element> * emplaceBegin( Element coefficient, int numMonomial);
+              NodeList<Element> * emplaceBegin(Element coefficient, int numMonomial);
              
              /**
               * \brief Construct a term in place after the node pointed by it.

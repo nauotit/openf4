@@ -137,8 +137,10 @@ int main (int argc, char **argv)
     // Test  NodeList<Element> * emplaceAfter(NodeList<Element> const * pos, Element coeff, int numMon);
     cout << "________Test emplaceAfter(NodeList<Element> const * pos, Element coeff, int numMon)________" << endl;
     NodeList<eltType> * it;
+    eltType e;
     it=p4.getPolynomialBegin();
-    it=p4.emplaceAfter(it, eltType(100), 1000);
+    e=100;
+    it=p4.emplaceAfter(it, e, 1000);
     cout << "p4: " << p4 << endl << endl; 
             
     // Test Polynomial & operator=(Polynomial const & polynomial);
@@ -155,7 +157,8 @@ int main (int argc, char **argv)
             
     // Test Polynomial & operator*=(Element element);
     cout << "________Test operator*=(Element element)________" << endl;
-    p7*=eltType(-566);
+    e=-566;
+    p7*=e;
     cout << "p7: " << p7 << endl << endl;
             
     // Test Polynomial & operator*=(Term<Element> const & term);
@@ -175,11 +178,13 @@ int main (int argc, char **argv)
 
     // Test Polynomial & operator*(Element element, Polynomial const & polynomial);
     cout << "________Test operator*(Element element, Polynomial const & polynomial)________" << endl;
-    cout << "10 * p2 : " << (eltType(10)*p2) << endl << endl;
+    e=10;
+    cout << "10 * p2 : " << (e*p2) << endl << endl;
     
     // Test Polynomial & operator*(Polynomial const & polynomial, Element element);
     cout << "________Test operator*(Polynomial const & polynomial, Element element)________" << endl;
-    cout << "p2 * (-10) : " << (p2*eltType(-10)) << endl << endl;
+    e=-10;
+    cout << "p2 * (-10) : " << (p2*e) << endl << endl;
 
     // Test Polynomial & operator*(Term const & term, Polynomial const & polynomial);
     cout << "________Test operator*(Term const & term, Polynomial const & polynomial)________" << endl;

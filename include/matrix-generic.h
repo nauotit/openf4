@@ -28,6 +28,7 @@
 #include <iostream>
 #include <cassert>
 #include <ctime>
+#include <chrono>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -91,6 +92,11 @@ namespace F4
              * \brief Destructor
              */
             ~MatrixGeneric();
+            
+            /**
+             * \brief Delete _startTail, _endCol, _sigma, _tau.
+             */
+            void erase();
             
             
             ///* Get / Set */

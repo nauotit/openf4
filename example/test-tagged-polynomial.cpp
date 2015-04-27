@@ -172,7 +172,9 @@ int main (int argc, char **argv)
             
     // Test TaggedPolynomial & operator*=(Element element);
     cout << "________Test operator*=(Element element)________" << endl;
-    tp5*=eltType(10);
+    eltType e;
+    e = 10;
+    tp5*=e;
     cout << "tp5: " << tp5 << endl << endl;
             
     // Test TaggedPolynomial & operator*=(Term<Element> const & term);
@@ -221,11 +223,12 @@ int main (int argc, char **argv)
 
     // Test TaggedPolynomial<Element> operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial);
     cout << "________Test operator * (Element element, TaggedPolynomial<Element> const & taggedPolynomial)________" << endl;
-    cout << "-1000*tp2: " << (eltType(-1000)*tp2) << endl << endl;
+    e = -1000;
+    cout << "-1000*tp2: " << (e*tp2) << endl << endl;
     
     // Test TaggedPolynomial<Element> operator * (TaggedPolynomial<Element> const & taggedPolynomial, Element element);
     cout << "________Test operator * (TaggedPolynomial<Element> const & taggedPolynomial, Element element)________" << endl;
-    cout << "tp2 * (-1000): " << (tp2 *eltType(-1000)) << endl << endl;
+    cout << "tp2 * (-1000): " << (tp2 * e) << endl << endl;
 
     // Test TaggedPolynomial<Element> operator * (Term<Element> const & term, TaggedPolynomial<Element> const & taggedPolynomial);
     cout << "________Test operator * (Term<Element> const & term, TaggedPolynomial<Element> const & taggedPolynomial)________" << endl;

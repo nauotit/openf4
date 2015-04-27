@@ -78,9 +78,11 @@ int main (int argc, char **argv)
             
     // Test void setElement (unsigned row, unsigned col, Element const & element);
     cout << "________Test setElement (unsigned row, unsigned col, Element const & element)________" << endl;
+    eltType e0;
+    e0=20;
     for(int i=0; i<10; i++)
     {
-        mat2.setElement(i, 9-i, 20);
+        mat2.setElement(i, 9-i, e0);
     }
     cout << mat2 << endl;
     
@@ -190,14 +192,18 @@ int main (int argc, char **argv)
     
     // void multRow(Element * row, Element const & element, int start, int end);
     cout << "________Test multRow(Element * row, Element const & element, int start, int end)________" << endl;
-    mat2.multRow(mat2.getRow(4), 10, 0, mat2.getWidth());
-    mat2.multRow(mat2.getRow(8), 5, 10, mat2.getWidth());
+    eltType e1, e2;
+    e1=10;
+    e2=5;
+    mat2.multRow(mat2.getRow(4), e1, 0, mat2.getWidth());
+    mat2.multRow(mat2.getRow(8), e2, 10, mat2.getWidth());
     cout << mat2 << endl;
     
     // Test addMultRow(Element * row1, Element * row2, Element element, int start, int end);
     cout << "________Test addMultRow(Element * row1, Element * row2, Element element, int start, int end)________" << endl;
-    mat2.addMultRow(mat2.getRow(0), mat2.getRow(1), 10, 0, mat2.getWidth());
-    mat2.addMultRow(mat2.getRow(9), mat2.getRow(1), 5, 5, mat2.getWidth());
+    
+    mat2.addMultRow(mat2.getRow(0), mat2.getRow(1), e1, 0, mat2.getWidth());
+    mat2.addMultRow(mat2.getRow(9), mat2.getRow(1), e2, 5, mat2.getWidth());
     cout << mat2 << endl;
     
     // Test void swapRow(int numRow1, int numRow2);
@@ -215,14 +221,7 @@ int main (int argc, char **argv)
     mat3.echelonize();
     cout << mat3 << endl;
     
-    // Test int
-    cout << "________Test int________" << endl;
-    ElementPrime<int> e1(65520);
-    ElementPrime<int> e2(65537);
-    cout << "e1 = " << e1 << ", e2 = " << e2 << endl;
-    cout << "e1*e2 = " << e1*e2 << endl << endl;
-    
-    
+    // Cyclic 8
     vector<Matrix<eltType>> matArray;
     string filename;
     string filename2;
@@ -239,9 +238,46 @@ int main (int argc, char **argv)
     
     for(size_t i=0; i< matArray.size(); i++)
     {
+        cout << i << ": ";
         matArray[i].echelonize();
         //filename2="../data/M"+to_string(i)+"_text_echelonized.pgm";
         //matArray[i].printMatrix(filename2);
+    }
+    cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    matArray.clear();
+    
+    // Semaev 16
+    for(int i=0; i<29; i++)
+    {
+        filename="../data/"+to_string(i+1)+"before-echelonize-semaev.txt";
+        matArray.emplace_back(filename);
+    }
+    
+    start=chrono::steady_clock::now();
+    
+    for(size_t i=0; i< matArray.size(); i++)
+    {
+        cout << i << ": ";
+        matArray[i].echelonize();
+    }
+    cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    matArray.clear();
+    
+    // Katsura 12
+    for(int i=0; i<12; i++)
+    {
+        filename="../data/"+to_string(i+1)+"before-echelonize-katsura12.txt";
+        matArray.emplace_back(filename);
+    }
+    
+    start=chrono::steady_clock::now();
+    
+    for(size_t i=0; i< matArray.size(); i++)
+    {
+        cout << i << ": ";
+        matArray[i].echelonize();
     }
     cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
     

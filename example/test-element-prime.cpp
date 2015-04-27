@@ -53,10 +53,14 @@ int main (int argc, char **argv)
     
     // Test ElementPrime(baseType element);
     cout << "________Test ElementPrime(baseType element)________" << endl;
-    ElementPrime<baseType> elt1=100;
-    ElementPrime<baseType> elt2=1000;
-    ElementPrime<baseType> elt3=10000;
-    ElementPrime<baseType> elt4=100000;
+    ElementPrime<baseType> elt1;
+    ElementPrime<baseType> elt2;
+    ElementPrime<baseType> elt3;
+    ElementPrime<baseType> elt4;
+    elt1._element=100;
+    elt2._element=1000;
+    elt3._element=10000;
+    elt4._element=100000;
     cout << "elt1: " << elt1 << endl;
     cout << "elt2: " << elt2 << endl;
     cout << "elt3: " << elt3 << endl;
@@ -70,8 +74,10 @@ int main (int argc, char **argv)
     
     // Test void modulo ();
     cout << "________Test modulo ()________" << endl;
-    ElementPrime<baseType> e0(4);
-    e0*=elt3;
+    //ElementPrime<baseType> e0(4);
+    //e0*=elt3;
+    ElementPrime<baseType> e0;
+    e0._element=4;
     cout << "e0 = " << e0 << endl;
     e0.modulo();
     cout << "e0.modulo() = " << e0 << endl << endl;
@@ -87,33 +93,22 @@ int main (int argc, char **argv)
     cout << "inverse of elt2: " << elt2.inverse() << endl;
     cout << "inverse of elt3: " << elt3.inverse() << endl;
     cout << "inverse of elt4: " << elt4.inverse() << endl << endl;
-    
-    // Test ElementPrime & operator=(ElementPrime const & element);
-    cout << "________Test operator=(ElementPrime const & element)________" << endl;
-    elt1=elt2;
-    cout << "elt1: " << elt1 << endl << endl;
             
     // Test ElementPrime & operator=(baseType element);
     cout << "________Test operator=(baseType element)________" << endl;
     elt1=-1;
     cout << "elt1: " << elt1 << endl << endl;
             
-    // Test ElementPrime & operator+=(ElementPrime const & element); 
-    cout << "________Test operator+=(ElementPrime const & element)________" << endl;
-    elt1+=200;
-    cout << "elt1: " << elt1 << endl << endl;
-            
-    // Test ElementPrime & operator-=(ElementPrime const & element); 
-    cout << "________Test operator-=(ElementPrime const & element)________" << endl;
-    elt1-=2000;
-    cout << "elt1: " << elt1 << endl << endl;
-            
     // Test ElementPrime & operator*=(ElementPrime const & element); 
     cout << "________Test operator*=(ElementPrime const & element)________" << endl;
-    ElementPrime<baseType> elt5=elt1.inverse();
-    ElementPrime<baseType> elt6=elt2.inverse();
-    ElementPrime<baseType> elt7=elt3.inverse();
-    ElementPrime<baseType> elt8=elt4.inverse();
+    ElementPrime<baseType> elt5;
+    elt5=elt1.inverse();
+    ElementPrime<baseType> elt6;
+    elt6=elt2.inverse();
+    ElementPrime<baseType> elt7;
+    elt7=elt3.inverse();
+    ElementPrime<baseType> elt8;
+    elt8=elt4.inverse();
     elt5*=elt1;
     elt6*=elt2;
     elt7*=elt3;
@@ -128,7 +123,8 @@ int main (int argc, char **argv)
     {
         if(i!=ElementPrime<baseType>::getModulo())
         {
-            vec.push_back(ElementPrime<baseType>(i*1000));
+            elt5=i*1000;
+            vec.push_back(elt5);
         }
     }
     clock_t start = clock();
@@ -138,55 +134,27 @@ int main (int argc, char **argv)
     }
     cout << "time to inverse " << vec.size() << " elements: " << (clock() - start) << endl << endl;
     
-            
-    // Test ElementPrime & operator/=(ElementPrime element); 
-    cout << "________Test operator/=(ElementPrime element)________" << endl;
-    ElementPrime<baseType> elt9=elt1;
-    elt9/=1000;
-    cout << "elt1: " << elt1 << endl;
-    cout << "elt9: " << elt9 << endl << endl;
-    
     // Test ElementPrime<baseType> operator * (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
     cout << "________Test operator * (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)________" << endl;
-    cout << "elt9*1000: " << (elt9*ElementPrime<baseType>(1000)) << endl << endl; 
-    
-    // Test ElementPrime<baseType> operator / (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    cout << "________Test operator / (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)________" << endl;
-    cout << "elt1/1000: " << (elt1/ElementPrime<baseType>(1000)) << endl << endl;
-    
-    // Test ElementPrime<baseType> operator + (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    cout << "________Test operator + (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)________" << endl;
-    cout << "elt1+elt4: " << (elt1+elt4) << endl << endl;
-    
-    // Test ElementPrime<baseType> operator - (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2);
-    cout << "________Test operator - (ElementPrime<baseType> const & element1, ElementPrime<baseType> const & element2)________" << endl;
-    cout << "elt1-elt4: " << (elt1-elt4) << endl << endl;
+    cout << "elt9*1000: " << (elt1*elt2) << endl << endl; 
     
     // Test ElementPrime<baseType> operator - (ElementPrime<baseType> const & element);
     cout << "________Test operator - (ElementPrime<baseType> const & element)________" << endl;
     cout << "-elt4: " << (-elt4) << endl << endl;
-    
-    // Test bool isEqual(ElementPrime const & element) const;
-    cout << "________Test isEqual(ElementPrime const & element)________" << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(ElementPrime<baseType>(2000)) << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(ElementPrime<baseType>(1000 - 65537)) << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(ElementPrime<baseType>(1000)) << endl << endl;
-            
-    // Test bool isEqual(baseType element) const;
-    cout << "________Test isEqual(baseType element)________" << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(2000) << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(1000 - 65537) << endl;
-    cout << ElementPrime<baseType>(1000).isEqual(1000) << endl << endl;
             
     // Test bool isZero() const;
     cout << "________Test isZero()________" << endl;
-    cout << ElementPrime<baseType>(1000).isZero() << endl;
-    cout << ElementPrime<baseType>(0).isZero() << endl << endl;
+    elt1 = 1000;
+    cout << elt1.isZero() << endl;
+    elt1 = 0;
+    cout << elt1.isZero() << endl << endl;
     
     // Test bool isOne() const;
     cout << "________Test isOne()________" << endl;
-    cout << ElementPrime<baseType>(1000).isOne() << endl;
-    cout << ElementPrime<baseType>(1).isOne() << endl << endl;
+    elt1 = 1000;
+    cout << elt1.isOne() << endl;
+    elt1 = 1;
+    cout << elt1.isOne() << endl << endl;
     
     // Test void setZero();
     cout << "________Test setZero()________" << endl;
@@ -197,6 +165,9 @@ int main (int argc, char **argv)
     cout << "________Test setOne()________" << endl;
     elt4.setOne();
     cout << elt4 << endl << endl;
+    
+    // Test POD
+    cout << "Test if ElementPrime is POD: " << is_pod<ElementPrime<baseType>>::value << endl;
             
     return 0;
 }

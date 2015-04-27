@@ -24,14 +24,11 @@
  */
 
 #include <iostream>
-//#include "linbox/field/modular.h"
 #include <vector>
-//#include "linbox/field/givaro.h"
 #include "../include/term.h"
 
 using namespace F4;
 using namespace std;
-//using namespace LinBox;
 
 // Global variable
 int F4::VERBOSE=2;
@@ -50,11 +47,18 @@ int main (int argc, char **argv)
     Term<double>::setMonomialArray(&monArray);
     cout << endl;
     
+    // Init element-prime tools
+    typedef ElementPrime<int32_t> eltType1;
+    eltType1::setModulo(65521);
+    
+    typedef ElementPrime<int64_t> eltType2;
+    eltType1::setModulo(4294967291LL);
+    
     
     // Test Term()
     cout << "________Test Term()________" << endl;
-    Term<int> t1("-x3^2");
-    Term<double> t2("-x3^2");
+    Term<eltType1> t1("-x3^2");
+    Term<eltType2> t2("-x3^2");
     cout << "t1: " << t1 << endl;
     cout << "t2: " << t2 << endl << endl;
     
@@ -63,32 +67,36 @@ int main (int argc, char **argv)
     Monomial tmp1;
     tmp1.allocate();
     tmp1.setMonomial("x0^2*x1^3*x2^4");
-    Term<int> t3(123, tmp1);
+    eltType1 e1;
+    e1 = 123;
+    Term<eltType1> t3(e1, tmp1);
     tmp1.setMonomial("x0^2*x1^3*x2^4*x5");
-    Term<double> t4(123.456, tmp1);
+    eltType2 e2;
+    e2 = 123456;
+    Term<eltType2> t4(e2, tmp1);
     cout << "t3: " << t3 << endl;
     cout << "t4: " << t4 << endl << endl;
     
     // Test Term(Element coeff, int numMon);
     cout << "________Test Term(Element coeff, int numMon)________" << endl;
     tmp1.setMonomial("x0^2*x1^3*x2^4");
-    Term<int> t5(123, tmp1.monomialToInt());
+    Term<eltType1> t5(e1, tmp1.monomialToInt());
     tmp1.setMonomial("x0^2*x1^3*x2^4*x5");
-    Term<double> t6(123.456, tmp1.monomialToInt());
+    Term<eltType2> t6(e2, tmp1.monomialToInt());
     cout << "t5: " << t5 << endl;
     cout << "t6: " << t6 << endl << endl;
             
     // Test Term(std::string const s);
     cout << "________Test Term(std::string const s)________" << endl;
-    Term<int> t7("123*x0^2*x1^3*x2^4");
-    Term<double> t8("123.456*x0^2*x1^3*x2^4*x5");
+    Term<eltType1> t7("123*x0^2*x1^3*x2^4");
+    Term<eltType2> t8("123.456*x0^2*x1^3*x2^4*x5");
     cout << "t7: " << t7 << endl;
     cout << "t8: " << t8 << endl << endl;
             
     // Test Term(Term const & toCopy);
     cout << "________Test Term(Term const & toCopy)________" << endl;
-    Term<int> t9(t7);
-    Term<double> t10(t8);
+    Term<eltType1> t9(t7);
+    Term<eltType2> t10(t8);
     cout << "t9: " << t9 << endl;
     cout << "t10: " << t10 << endl << endl;
             
@@ -99,8 +107,10 @@ int main (int argc, char **argv)
             
     // Test void setCoefficient(Element coeff);
     cout << "________Test setCoefficient(Element coeff)________" << endl;
-    t9.setCoefficient(456);
-    t10.setCoefficient(456.789);
+    e1 = 456;
+    t9.setCoefficient(e1);
+    e2 = 456789;
+    t10.setCoefficient(e2);
     cout << "t9: " << t9 << endl;
     cout << "t10: " << t10 << endl << endl;
             
@@ -163,8 +173,10 @@ int main (int argc, char **argv)
     
     // Test Term & operator*=(Element element);
     cout << "________Test operator*=(Element element)________" << endl;
-    t9*=1000;
-    t10*=2000;
+    e1 = 1000;
+    t9*=e1;
+    e2 = 2000;
+    t10*=e2;
     cout << "t9 multiply by "<< 1000 << ": " << t9 << endl;
     cout << "t10 multiply by " << 2000 <<": " << t10 << endl << endl;
     
@@ -186,28 +198,6 @@ int main (int argc, char **argv)
     cout << "t9: " << t9 << endl;
     cout << "t7: " << t7 << endl;
     cout << "t9 * t7: "<< (t9 * t7) << endl << endl;
-    
-    //// Test Linbox compatibility :
-    //// Term with modular coefficient (prime finite field)
-    //cout << "________Test Term(Element coeff, int numMon) with Modular________" << endl;
-    //typedef Modular < double >FieldModular;
-    //FieldModular field1 (65537);
-    //typedef FieldModular::Element elt1;
-    //elt1 e1;
-    //field1.init(e1, 123456789);
-    //tmp1.setMonomial(123456);
-    //Term<elt1> t11(e1, tmp1);
-    //cout << "t12: " << t11 << endl << endl;
-    
-    //// Term with givaro coefficient (non prime finite field)
-    //cout << "________Test Term(Element coeff, int numMon) with GivaroGfq________" << endl;
-    //typedef GivaroGfq FieldGivaro;
-    //FieldGivaro field2(17, 5);
-    //typedef FieldGivaro::Element elt2;
-    //elt2 e2;
-    //field2.init(e2, 545);
-    //Term<elt2> t12(e2, tmp1);
-    //cout << "t12: " << t12 << endl << endl;
     
     // Free monomial
     tmp1.erase();

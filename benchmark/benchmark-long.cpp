@@ -34,8 +34,8 @@ int F4::VERBOSE=0;
 int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 // Init element-prime tools
-typedef ElementPrime<long> eltType;
-long modulo=4294967291LL;
+typedef ElementPrime<int64_t> eltType;
+int64_t modulo=4294967291LL;
 
 int cyclic6F4(bool magma)
 {
@@ -354,8 +354,11 @@ int main (int argc, char **argv)
     chrono::steady_clock::time_point start;
     typedef chrono::duration<int,milli> millisecs_t;
     
+    // Number of threads
+    cout << NB_THREAD << " threads used " << endl << endl;
+    
     // Magma output
-    bool magma = true;
+    bool magma = false;
     
     // Number of generator
     int nbGen;

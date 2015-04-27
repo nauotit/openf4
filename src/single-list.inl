@@ -38,7 +38,7 @@ namespace F4
     /* Constructor */
     
     template<typename Element>
-    NodeList<Element>::NodeList():_term(0,-1), _next(0)
+    NodeList<Element>::NodeList(): _next(0)
     {
     }
     
@@ -81,6 +81,13 @@ namespace F4
     NodeList<Element>::setCoefficient(Element element)
     {
         _term.setCoefficient(element);
+    }
+    
+    template<typename Element>
+    void 
+    NodeList<Element>::setCoefficientOne()
+    {
+        _term.setCoefficientOne();
     }
     
     template<typename Element>

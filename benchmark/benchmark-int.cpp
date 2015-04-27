@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=3;
+int F4::VERBOSE=0;
 int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 // Init element-prime tools
@@ -354,6 +354,9 @@ int main (int argc, char **argv)
     chrono::steady_clock::time_point start;
     typedef chrono::duration<int,milli> millisecs_t;
     
+    // Number of threads
+    cout << NB_THREAD << " threads used " << endl << endl;
+    
     // Magma output
     bool magma = false;
     
@@ -367,19 +370,19 @@ int main (int argc, char **argv)
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=cyclic6F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic6F4(magma);
+    if (file)
+    {
+        file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=cyclic7F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 7 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic7F4(magma);
+    if (file)
+    {
+        file << "Cyclic 7 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     start=chrono::steady_clock::now();
     nbGen=cyclic8F4(magma);
@@ -388,33 +391,33 @@ int main (int argc, char **argv)
         file << "Cyclic 8 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura9F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura9F4(magma);
+    if (file)
+    {
+        file << "Katsura 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura10F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 10 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}  
+    start=chrono::steady_clock::now();
+    nbGen=katsura10F4(magma);
+    if (file)
+    {
+        file << "Katsura 10 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }  
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura11F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 11 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura11F4(magma);
+    if (file)
+    {
+        file << "Katsura 11 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura12F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura12F4(magma);
+    if (file)
+    {
+        file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     return 0;
 }

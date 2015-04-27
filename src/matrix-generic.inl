@@ -24,6 +24,8 @@
 #ifndef F4_MATRIX_GENERIC_INL
 #define F4_MATRIX_GENERIC_INL
 
+//#define BLOCK
+
 using namespace std;
 
 namespace F4
@@ -35,11 +37,21 @@ namespace F4
     
     /* Constructor */
     
+    #ifndef BLOCK
     template <class Field>
-    MatrixGeneric<Field>::MatrixGeneric(Field & f):_matrix(0), _F(f), _height(0), _width(0), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    MatrixGeneric<Field>::MatrixGeneric(Field & f):_matrix(0), _A(0), _B(0), _C(0), _D(0), _F(f), _height(0), _width(0), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
     {
     }
+    #endif // BLOCK
     
+    #ifdef BLOCK
+    template <class Field>
+    MatrixGeneric<Field>::MatrixGeneric(Field & f):_matrix(0), _A(0), _B(0), _C(0), _D(0), _F(f), _height(0), _width(0), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+    }
+    #endif // BLOCK
+    
+    #ifndef BLOCK
     template <class Field>
     MatrixGeneric<Field>::MatrixGeneric(Field & f, int height, int width):_F(f), _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
     {
@@ -52,145 +64,148 @@ namespace F4
             }
         }
     }
+    #endif // BLOCK
     
-    //template <class Field>
-    //MatrixGeneric<Field>::MatrixGeneric(Field & f, string const & filename):_F(f)
-    //{
-        //ifstream file(filename);
-        //if(file)
-        //{
-            //size_t pos;
-            //int i=0;
-            //int row=0;
-            //string string1="Matrix of size:";
-            //string string2="Number of pivots:";
-            //string string3="*";
-            //string string4="sigma:";
-            //string string5="tau:";
-            //string string6="start_tail:";
-            //string string7="end_col:";
-            //string string8="matrix:";
-            //string tmp;
-            //string line;
+    #ifndef BLOCK
+    template <class Field>
+    MatrixGeneric<Field>::MatrixGeneric(Field & f, string const & filename):_F(f)
+    {
+        ifstream file(filename);
+        if(file)
+        {
+            size_t pos;
+            int i=0;
+            int row=0;
+            string string1="Matrix of size:";
+            string string2="Number of pivots:";
+            string string3="*";
+            string string4="sigma:";
+            string string5="tau:";
+            string string6="start_tail:";
+            string string7="end_col:";
+            string string8="matrix:";
+            string tmp;
+            string line;
             
-            //getline(file, line);
-            //if (line.find(string1)!=string::npos)
-            //{
-                ///* Get height */
-                //pos=string1.size();
-                //tmp=line.substr(pos);
-                //_height=stoul(tmp);
+            getline(file, line);
+            if (line.find(string1)!=string::npos)
+            {
+                /* Get height */
+                pos=string1.size();
+                tmp=line.substr(pos);
+                _height=stoul(tmp);
                 
-                ///* Get width */
-                //pos=line.find(string3, pos);
-                //tmp=line.substr(pos + string3.size());
-                //_width=stoul(tmp);
-                //cout << "height: " << _height << ", width: " << _width << endl;
-                //_matrix=FFLAS::fflas_new (_F,_height,_width);
-                //_sigma=new int[_width];
-                //_tau=new int[_width];
-                //_startTail=new int[_height];
-                //_endCol=new int[_width];
-            //}
-            //getline(file, line);
-            //if (line.find(string2)!=string::npos)
-            //{
-                ///* Get nbPiv */
-                //pos=string2.size();
-                //tmp=line.substr(pos);
-                //_nbPiv=stoul(tmp);
-                //cout << "nbPiv: " << _nbPiv << endl;
-            //}
-            //getline(file, line);
-            //if (line.find(string4)!=string::npos)
-            //{
-                ///* Skip one line */
-                //getline(file, line);
+                /* Get width */
+                pos=line.find(string3, pos);
+                tmp=line.substr(pos + string3.size());
+                _width=stoul(tmp);
+                cout << "height: " << _height << ", width: " << _width << endl;
+                _matrix=FFLAS::fflas_new (_F,_height,_width);
+                _sigma=new int[_width];
+                _tau=new int[_width];
+                _startTail=new int[_height];
+                _endCol=new int[_width];
+            }
+            getline(file, line);
+            if (line.find(string2)!=string::npos)
+            {
+                /* Get nbPiv */
+                pos=string2.size();
+                tmp=line.substr(pos);
+                _nbPiv=stoul(tmp);
+                cout << "nbPiv: " << _nbPiv << endl;
+            }
+            getline(file, line);
+            if (line.find(string4)!=string::npos)
+            {
+                /* Skip one line */
+                getline(file, line);
                 
-                ///* Get sigma */
-                //i = 0;
-                //stringstream ssin(line);
-                //while (ssin.good() && i < _width)
-                //{
-                    //ssin >> tmp;
-                    //_sigma[i]=stoi(tmp);
-                    //++i;
-                //}
-            //}
-            //getline(file, line);
-            //if (line.find(string5)!=string::npos)
-            //{
-                ///* Skip one line */
-                //getline(file, line);
+                /* Get sigma */
+                i = 0;
+                stringstream ssin(line);
+                while (ssin.good() && i < _width)
+                {
+                    ssin >> tmp;
+                    _sigma[i]=stoi(tmp);
+                    ++i;
+                }
+            }
+            getline(file, line);
+            if (line.find(string5)!=string::npos)
+            {
+                /* Skip one line */
+                getline(file, line);
                 
-                //// Get tau
-                //i = 0;
-                //stringstream ssin(line);
-                //while (ssin.good() && i < _width)
-                //{
-                    //ssin >> tmp;
-                    //_tau[i]=stoi(tmp);
-                    //++i;
-                //}
-            //}
-            //getline(file, line);
-            //if (line.find(string6)!=string::npos)
-            //{
-                //// skip one line
-                //getline(file, line);
+                // Get tau
+                i = 0;
+                stringstream ssin(line);
+                while (ssin.good() && i < _width)
+                {
+                    ssin >> tmp;
+                    _tau[i]=stoi(tmp);
+                    ++i;
+                }
+            }
+            getline(file, line);
+            if (line.find(string6)!=string::npos)
+            {
+                // skip one line
+                getline(file, line);
                 
-                //// Get startTail
-                //i = 0;
-                //stringstream ssin(line);
-                //while (ssin.good() && i < _height)
-                //{
-                    //ssin >> tmp;
-                    //_startTail[i]=stoi(tmp);
-                    //++i;
-                //}
-            //}
-            //getline(file, line);
-            //if (line.find(string7)!=string::npos)
-            //{
-                ///* Skip one line */
-                //getline(file, line);
+                // Get startTail
+                i = 0;
+                stringstream ssin(line);
+                while (ssin.good() && i < _height)
+                {
+                    ssin >> tmp;
+                    _startTail[i]=stoi(tmp);
+                    ++i;
+                }
+            }
+            getline(file, line);
+            if (line.find(string7)!=string::npos)
+            {
+                /* Skip one line */
+                getline(file, line);
                 
-                ///* Get endCol */
-                //i = 0;
-                //stringstream ssin(line);
-                //while (ssin.good() && i < _width)
-                //{
-                    //ssin >> tmp;
-                    //_endCol[i]=stoi(tmp);
-                    //++i;
-                //}
-            //}
-            //getline(file, line);
-            //if (line.find(string8)!=string::npos)
-            //{
-                ///* Get matrix */
-                //while(getline(file, line) && row <_height)
-                //{
-                    //i = 0;
-                    //stringstream ssin(line);
-                    //while (ssin.good() && i < _width)
-                    //{
-                        //ssin >> tmp;
-                        //_matrix[row*_width+i]=stoul(tmp);
-                        //++i;
-                    //}
-                    //row++;
-                //}
-            //}
-            //file.close();
-        //}
-        //else
-        //{
-            //cout << "MatrixGeneric::MatrixGeneric(string filename): Failed " << endl;
-        //}
-    //}
+                /* Get endCol */
+                i = 0;
+                stringstream ssin(line);
+                while (ssin.good() && i < _width)
+                {
+                    ssin >> tmp;
+                    _endCol[i]=stoi(tmp);
+                    ++i;
+                }
+            }
+            getline(file, line);
+            if (line.find(string8)!=string::npos)
+            {
+                /* Get matrix */
+                while(getline(file, line) && row <_height)
+                {
+                    i = 0;
+                    stringstream ssin(line);
+                    while (ssin.good() && i < _width)
+                    {
+                        ssin >> tmp;
+                        _matrix[row*_width+i]=stoul(tmp);
+                        ++i;
+                    }
+                    row++;
+                }
+            }
+            file.close();
+        }
+        else
+        {
+            cout << "MatrixGeneric::MatrixGeneric(string filename): Failed " << endl;
+        }
+    }
+    #endif // BLOCK
     
-    
+    #ifdef BLOCK
     template <class Field>
     MatrixGeneric<Field>::MatrixGeneric(Field & f, string const & filename):_matrix(0), _F(f)
     {
@@ -311,18 +326,18 @@ namespace F4
             if (line.find(string8)!=string::npos)
             {
                 /* Get matrix */
-                while(getline(file, line) && row <_nbPiv)
+                while(row <_nbPiv && getline(file, line))
                 {
                     i = 0;
                     j = 0;
                     stringstream ssin(line);
-                    while (ssin.good() && i < _nbPiv)
+                    while (i < _nbPiv && ssin.good())
                     {
                         ssin >> tmp;
                         _A[row*_nbPiv+i]=stoul(tmp);
                         ++i;
                     }
-                    while (ssin.good() && i < _width)
+                    while (i < _width && ssin.good())
                     {
                         ssin >> tmp;
                         _B[row*(_width-_nbPiv)+j]=stoul(tmp);
@@ -332,18 +347,18 @@ namespace F4
                     row++;
                 }
                 row=0;
-                while(getline(file, line) && row <(_height-_nbPiv))
+                while(row <(_height-_nbPiv) && getline(file, line))
                 {
                     i = 0;
                     j = 0;
                     stringstream ssin(line);
-                    while (ssin.good() && i < _nbPiv)
+                    while (i < _nbPiv && ssin.good())
                     {
                         ssin >> tmp;
                         _C[row*_nbPiv+i]=stoul(tmp);
                         ++i;
                     }
-                    while (ssin.good() && i < _width)
+                    while (i < _width && ssin.good())
                     {
                         ssin >> tmp;
                         _D[row*(_width-_nbPiv)+j]=stoul(tmp);
@@ -360,19 +375,28 @@ namespace F4
             cout << "MatrixGeneric::MatrixGeneric(string filename): Failed " << endl;
         }
     }
+    #endif // BLOCK
     
+    
+    #ifndef BLOCK
     template <class Field>
-    MatrixGeneric<Field>::MatrixGeneric(MatrixGeneric const & matrix): _F(matrix._F), _height(matrix._height), _width(matrix._width), _nbPiv(matrix._nbPiv), _tau(matrix._tau), _sigma(matrix._sigma), _startTail(matrix._startTail), _endCol(matrix._endCol)
+    MatrixGeneric<Field>::MatrixGeneric(MatrixGeneric const & matrix): _A(0), _B(0), _C(0), _D(0), _F(matrix._F), _height(matrix._height), _width(matrix._width), _nbPiv(matrix._nbPiv), _tau(matrix._tau), _sigma(matrix._sigma), _startTail(matrix._startTail), _endCol(matrix._endCol)
     {
-        //_matrix=FFLAS::fflas_new (_F,_height,_width);
-        //for(int i=0; i< _height; i++)
-        //{
-            //for(int j=0; j<_width; j++)
-            //{
-                //_matrix[i*_width+j]=matrix._matrix[i*_width+j];
-            //}
-        //}
-        _matrix=0;
+        _matrix=FFLAS::fflas_new (_F,_height,_width);
+        for(int i=0; i< _height; i++)
+        {
+            for(int j=0; j<_width; j++)
+            {
+                _matrix[i*_width+j]=matrix._matrix[i*_width+j];
+            }
+        }
+    }
+    #endif //BLOCK
+    
+    #ifdef BLOCK
+    template <class Field>
+    MatrixGeneric<Field>::MatrixGeneric(MatrixGeneric const & matrix): _matrix(0), _F(matrix._F), _height(matrix._height), _width(matrix._width), _nbPiv(matrix._nbPiv), _tau(matrix._tau), _sigma(matrix._sigma), _startTail(matrix._startTail), _endCol(matrix._endCol)
+    {
         _A=FFLAS::fflas_new (_F,_nbPiv,_nbPiv);
         for(int i=0; i< _nbPiv; i++)
         {
@@ -406,9 +430,11 @@ namespace F4
             }
         }
     }
-            
+    #endif //BLOCK
+    
+    #ifndef BLOCK
     template <class Field>
-    MatrixGeneric<Field>::MatrixGeneric(MatrixGeneric && matrix): _F(matrix._F)
+    MatrixGeneric<Field>::MatrixGeneric(MatrixGeneric && matrix): _A(0), _B(0), _C(0), _D(0), _F(matrix._F)
     {
         if(_matrix!=0)
         {
@@ -431,17 +457,28 @@ namespace F4
         _endCol=matrix._endCol;
         matrix._endCol=0;
     }
+    #endif //BLOCK
     
     
     /* Destructor */ 
     
+    #ifndef BLOCK
     template <class Field>
     MatrixGeneric<Field>::~MatrixGeneric()
     {
         if(_matrix!=0)
         {
             FFLAS::fflas_delete(_matrix);
+            _matrix=0;
         }
+    }
+    #endif // BLOCK
+    
+    
+    #ifdef BLOCK
+    template <class Field>
+    MatrixGeneric<Field>::~MatrixGeneric()
+    {
         if(_A!=0)
         {
             FFLAS::fflas_delete(_A);
@@ -461,6 +498,33 @@ namespace F4
         {
             FFLAS::fflas_delete(_D);
             _D=0;
+        }
+    }
+    #endif // BLOCK
+    
+    template <class Field>
+    void
+    MatrixGeneric<Field>::erase()
+    {
+        if(_startTail)
+        {
+            delete[] _startTail;
+            _startTail=0;
+        }
+        if(_endCol)
+        {
+            delete[] _endCol;
+            _endCol=0;
+        }
+        if(_sigma)
+        {
+            delete[] _sigma;
+            _sigma = 0;
+        }
+        if(_tau)
+        {
+            delete[] _tau;
+            _tau = 0;
         }
     }
     
@@ -618,44 +682,47 @@ namespace F4
         }
     }
     
-    //template <class Field>
-    //void
-    //MatrixGeneric<Field>::printMatrix (string const & filename) const
-    //{
-        //ofstream file(filename);
-        //if (file)
-        //{
-            //file << "P3" << endl << _width << " " << _height << endl << 1 << endl;
-            //int i, j;
-            //for (i = 0; i < _height; i++)
-            //{
-                //for (j = 0; j < _width; j++)
-                //{
-                    //if (!isZero(i,j))
-                    //{
-                        //file << " 0 0 0 ";
-                    //}
-                    //else
-                    //{
-                        //file << " 1 1 1 ";
-                    //}
-                //}
-                //file << endl;
-            //}
-            //file.close();
-        //}
-    //}
+    #ifndef BLOCK
+    template <class Field>
+    void
+    MatrixGeneric<Field>::printMatrix (string const & filename) const
+    {
+        ofstream file(filename);
+        if (file)
+        {
+            file << "P3" << endl << _width << " " << _height << endl << 1 << endl;
+            int i, j;
+            for (i = 0; i < _height; i++)
+            {
+                for (j = 0; j < _width; j++)
+                {
+                    if (!isZero(i,j))
+                    {
+                        file << " 0 0 0 ";
+                    }
+                    else
+                    {
+                        file << " 1 1 1 ";
+                    }
+                }
+                file << endl;
+            }
+            file.close();
+        }
+    }
+    #endif // BLOCK
     
+    #ifdef BLOCK
     template <class Field>
     void
     MatrixGeneric<Field>::printMatrix (string const & filename) const
     {
         string filename2="A-"+filename;
         ofstream file1(filename2);
+        int i, j;
         if (file1)
         {
             file1 << "P3" << endl << _nbPiv << " " << _nbPiv << endl << 1 << endl;
-            int i, j;
             for (i = 0; i < _nbPiv; i++)
             {
                 for (j = 0; j < _nbPiv; j++)
@@ -679,7 +746,6 @@ namespace F4
         if (file2)
         {
             file2 << "P3" << endl << _width-_nbPiv << " " << _nbPiv << endl << 1 << endl;
-            int i, j;
             for (i = 0; i < _nbPiv; i++)
             {
                 for (j = 0; j < _width-_nbPiv; j++)
@@ -703,7 +769,6 @@ namespace F4
         if (file3)
         {
             file3 << "P3" << endl << _nbPiv << " " << _height-_nbPiv << endl << 1 << endl;
-            int i, j;
             for (i = 0; i < _height-_nbPiv; i++)
             {
                 for (j = 0; j < _nbPiv; j++)
@@ -727,7 +792,6 @@ namespace F4
         if (file4)
         {
             file4 << "P3" << endl << _width-_nbPiv << " " << _height-_nbPiv << endl << 1 << endl;
-            int i, j;
             for (i = 0; i < _height-_nbPiv; i++)
             {
                 for (j = 0; j < _width-_nbPiv; j++)
@@ -746,56 +810,66 @@ namespace F4
             file4.close();
         }
     }
+    #endif // BLOCK
     
+    #ifndef BLOCK
     template <class Field>
     bool
     MatrixGeneric<Field>::isZero(int row, int col) const
     {
         return _F.isZero(_matrix[row*_width+col]); 
     }
+    #endif // BLOCK
     
-    //template <class Field>
-    //int
-    //MatrixGeneric<Field>::echelonize ()
-    //{
-        //clock_t start=clock();
-        //int j, rank;
-        //size_t *P = new size_t[_height];
-        //size_t *Q = new size_t[_width];
-        //for (j=0;j<_height;j++)
-        //{
-            //P[j]=0;
-        //}
-        //for (j=0;j<_width;j++)
-        //{
-            //Q[j]=0;
-        //}
-        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackTileRecursive);
-        //cout << "Echelonization time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
-        //delete[] P;
-        //delete[] Q;
-        //_height=rank;
-        //return rank;
-    //}
-    
+    #ifndef  BLOCK
     template <class Field>
     int
     MatrixGeneric<Field>::echelonize ()
     {
-        clock_t start=clock();
+        chrono::steady_clock::time_point start=chrono::steady_clock::now();
+        typedef chrono::duration<int,milli> millisecs_t;
+        int rank;
+        size_t *P = new size_t[_height]();
+        size_t *Q = new size_t[_width]();
+        rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackTileRecursive);
+        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackSlabRecursive);
+        cout << "Echelonization time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+        delete[] P;
+        delete[] Q;
+        _height=rank;
+        return rank;
+    }
+    #endif // BLOCK
+    
+    #ifdef BLOCK
+    template <class Field>
+    int
+    MatrixGeneric<Field>::echelonize ()
+    {
+        chrono::steady_clock::time_point start=chrono::steady_clock::now();
+        typedef chrono::duration<int,milli> millisecs_t;
         typename Field::Element one, minusOne;
+        size_t *P = new size_t[_height-_nbPiv]();
+        size_t *Q = new size_t[_width-_nbPiv]();
+        int rank;
         _F.init(one,1);
         _F.init(minusOne,-1);
         /* B = A^(-1) * B */
         FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasNonUnit, _nbPiv, _width-_nbPiv, one, _A, _nbPiv, _B, _width-_nbPiv);
         
         /* D = C * B - D */
-        //FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, (_height-_nbPiv), _nbPiv,(_width-_nbPiv), one, _C, _nbPiv, _B, _width-_nbPiv, minusOne, _D, _width-_nbPiv);
+        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, (_height-_nbPiv), (_width-_nbPiv), _nbPiv, one, _C, _nbPiv, _B, _width-_nbPiv, minusOne, _D, _width-_nbPiv);
         
-        cout << "Echelonization time: " << (((double)clock () - start) * 1000) / CLOCKS_PER_SEC << " ms" << endl << endl;
-        return 0;
+        /* D = Gauss(D) */
+        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q, false, FFPACK::FfpackTileRecursive);
+        rank = (int)FFPACK::ReducedRowEchelonForm (_F, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q, false, FFPACK::FfpackSlabRecursive);
+        
+        cout << "Echelonization time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+        delete[] P;
+        delete[] Q;
+        return rank+_nbPiv;
     }
-    
+    #endif //BLOCK
     
     ///* Operator overload */
     

@@ -160,7 +160,9 @@ namespace F4
             }
             it=it->_next;
         }
-        return 0;
+        Element e;
+        e=0;
+        return e;
     }
     
     template <typename Element>
@@ -210,7 +212,7 @@ namespace F4
             NodeList<Element> * it = _polynomial.getBegin();
             
             /* Modify the leading coefficient */
-            it->setCoefficient(1);
+            it->setCoefficientOne();
             it=it->_next;
             while(it)
             {

@@ -17,12 +17,11 @@
 #CXX=clang++
 CXX=g++-4.9
 #std=c++11 required by forward_list
-CFLAGS= -O3 -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp
-#CFLAGS= -O3 -g -Wall -std=c++11 -Wno-strict-overflow -fopenmp
-#CFLAGS= -g -Wall -std=c++11 -fopenmp
-LDFLAGS= -fopenmp -lcblas -latlas -llapack -lgivaro -lgmpxx -lgmp -lmpfr 
-#LDFLAGS= -lblas -llapack -lgivaro -lgmpxx -lgmp -lmpfr -llinbox
-#LDFLAGS= 
+CFLAGS= -O3 -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -mssse3
+#CFLAGS= -O3 -Wall -msse4 -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp 
+#CFLAGS= -g -Wall -std=c++11 -fopenmp -mssse3 
+LDFLAGS= -fopenmp -lcblas -latlas -lgivaro -lgmpxx -lgmp
+#LDFLAGS= -fopenmp
 
 EXEC = example benchmark
 
@@ -80,6 +79,14 @@ obj/test-matrix.o: example/test-matrix.cpp
 
 bin/test-matrix: obj/test-matrix.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+
+obj/test-matrix-base.o: example/test-matrix-base.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-matrix-base: obj/test-matrix-base.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 
 obj/test-element-prime.o: example/test-element-prime.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
@@ -158,8 +165,7 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-matrix 
-# bin/test-openmp bin/test-monomial-array bin/test-fflas-ffpack bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-ideal bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-element-prime bin/test-term
+example: bin/test-element-prime bin/test-matrix bin/test-ideal bin/test-matrix-base bin/test-matrix-base bin/test-openmp  bin/test-matrix-base bin/test-fflas-ffpack bin/test-monomial-array bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-term
 benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)

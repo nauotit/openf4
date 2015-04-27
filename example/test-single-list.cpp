@@ -57,24 +57,34 @@ int main (int argc, char **argv)
     
     // Test NodeList<Element> * emplaceBegin( Element coefficient, int numMonomial);
     cout << "________Test emplaceBegin( Element coefficient, int numMonomial)________" << endl;
-    NodeList<eltType> * it=poly1.emplaceBegin(1, 10);
-    it=poly1.emplaceBegin(2, 20);
-    it=poly1.emplaceBegin(3, 30);
-    it=poly1.emplaceBegin(4, 40);
-    it=poly1.emplaceBegin(5, 50);
+    eltType e;
+    e=1;
+    NodeList<eltType> * it=poly1.emplaceBegin(e, 10);
+    e=2; 
+    it=poly1.emplaceBegin(e, 20);
+    e=3;
+    it=poly1.emplaceBegin(e, 30);
+    e=4;
+    it=poly1.emplaceBegin(e, 40);
+    e=5;
+    it=poly1.emplaceBegin(e, 50);
     cout << poly1 << endl;
     
     // Test NodeList<Element> * emplaceAfter(NodeList<Element> * it, Element coefficient, int numMonomial);
     cout << "________Test emplaceAfter(NodeList<Element> * it, Element coefficient, int numMonomial)________" << endl;
-    it=poly1.emplaceAfter(it, 6, 60);
-    it=poly1.emplaceAfter(it, 7, 70);
+    e=6;
+    it=poly1.emplaceAfter(it, e, 60);
+    e=7;
+    it=poly1.emplaceAfter(it, e, 70);
     cout << poly1 << endl;
     while(it->_next)
     {
         it=it->_next;
     }
-    it=poly1.emplaceAfter(it, 8, 80);
-    it=poly1.emplaceAfter(it, 9, 90);
+    e=8;
+    it=poly1.emplaceAfter(it, e, 80);
+    e=9;
+    it=poly1.emplaceAfter(it, e, 90);
     
     // Test void printList(ostream & stream) const;
     cout << "________Test printList(ostream & stream)________" << endl;
@@ -106,10 +116,14 @@ int main (int argc, char **argv)
     cout << "________Test getBegin()________" << endl;
     SingleList<eltType> poly2;
     it=poly2.getBegin();
-    it=poly2.emplaceAfter(it, 1, 10);
-    it=poly2.emplaceAfter(it, 2, 20);
-    it=poly2.emplaceAfter(it, 3, 30);
-    it=poly2.emplaceAfter(it, 4, 40);
+    e=1;
+    it=poly2.emplaceAfter(it, e, 10);
+    e=2;
+    it=poly2.emplaceAfter(it, e, 20);
+    e=3;
+    it=poly2.emplaceAfter(it, e, 30);
+    e=4;
+    it=poly2.emplaceAfter(it, e, 40);
     cout << poly2 << endl;
     
     // Test bool empty();
@@ -138,9 +152,12 @@ int main (int argc, char **argv)
     // Test NodeList<Element> * emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial);
     cout << "________Test emplaceOn(NodeList<Element> * it, Element coefficient, int numMonomial)________" << endl;
     it=poly5.getBeforeBegin();
-    it=poly5.emplaceOn(it, 100, 1000);
-    it=poly5.emplaceOn(it, 200, 2000);
-    it=poly5.emplaceOn(it, 300, 3000);
+    e=100;
+    it=poly5.emplaceOn(it, e, 1000);
+    e=200;
+    it=poly5.emplaceOn(it, e, 2000);
+    e=300;
+    it=poly5.emplaceOn(it, e, 3000);
     cout << "poly5: " << poly5 << endl;
     
     

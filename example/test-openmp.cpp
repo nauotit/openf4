@@ -27,10 +27,15 @@
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include <chrono>
 #include <cstdlib>
 #include <omp.h>
+extern "C"
+{
+    #include <cblas.h>
+}
 
-#define NUM_THREADS 2
+#define NUM_THREADS 1
 
 using namespace std;
 
@@ -42,20 +47,39 @@ void addMul(int * a, int * b)
     }
 }
 
+//void addMul(float * a, const float * b)
+//{
+    ////for(int i=0; i<100000; i++)
+    ////{
+        ////a[i]+=((int)b[i]*1000);
+    ////}
+    //cblas_saxpy( (const int)100000, (const float)1000, b, (const int)1, a, (const int)1);
+//}
+
+void addMul(float * a, float * b)
+{
+    float *x = (float *)__builtin_assume_aligned(a, 16);
+    float *y = (float *)__builtin_assume_aligned(b, 16);
+    for(int i=0; i<100000; i++)
+    {
+        x[i]+=((int)y[i]*1000);
+    }
+}
+
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
     cout << "#                        TEST OPENMP                    #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    int a[100000];
-    int b[100000];
-    int c[100000];
-    int d[100000];
-    int e[100000];
-    int f[100000];
-    int g[100000];
-    int h[100000];
+    float a[100000];
+    float b[100000];
+    float c[100000];
+    float d[100000];
+    float e[100000];
+    float f[100000];
+    float g[100000];
+    float h[100000];
     
     int MODULO=65521;
     
@@ -93,7 +117,8 @@ int main (int argc, char **argv)
     
     omp_set_num_threads(NUM_THREADS);
     cout << a[10] << " " << b[100] << " " << c[1000] << " " << d[10000] << endl;
-    clock_t start=clock();
+    chrono::steady_clock::time_point start=chrono::steady_clock::now();
+    typedef chrono::duration<int,milli> millisecs_t;
     #pragma omp parallel
     #pragma omp single nowait
     for(int j=0; j<20000 ; j++)
@@ -111,7 +136,7 @@ int main (int argc, char **argv)
         addMul(g,h);
     }
     cout << a[10] << " " << b[100] << " " << c[1000] << " " << d[10000] << endl;
-    cout << "Time to add 2 array: " << ((double)(clock() - start))/CLOCKS_PER_SEC << " ms " << endl;
+    cout << "Time to add 2 array: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms " << endl;
     
     //cout << "before " << a[10] << " " << b[100] << endl;
     //addMul(a,b,mul);

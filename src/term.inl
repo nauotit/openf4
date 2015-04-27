@@ -45,18 +45,21 @@ namespace F4
     /* Constructor */ 
     
     template <typename Element>
-    Term<Element>::Term(): _coefficient(0), _numMonomial(-1)
+    Term<Element>::Term(): _numMonomial(-1)
     {
+        _coefficient=0;
     }
     
     template <typename Element>
-    Term<Element>::Term(Element coeff, Monomial const & mon): _coefficient(coeff), _numMonomial(mon.monomialToInt())
+    Term<Element>::Term(Element coeff, Monomial const & mon): _numMonomial(mon.monomialToInt())
     {
+        _coefficient=coeff._element;
     }
     
     template <typename Element>
-    Term<Element>::Term(Element coeff, int numMon): _coefficient(coeff), _numMonomial(numMon)
+    Term<Element>::Term(Element coeff, int numMon): _numMonomial(numMon)
     {
+        _coefficient=coeff._element;
     }
     
     template <typename Element>
@@ -72,8 +75,9 @@ namespace F4
     }
     
     template <typename Element>
-    Term<Element>::Term(Term const & toCopy): _coefficient(toCopy._coefficient), _numMonomial(toCopy._numMonomial)
+    Term<Element>::Term(Term const & toCopy): _numMonomial(toCopy._numMonomial)
     {
+        _coefficient=toCopy._coefficient._element;
     }
     
     
@@ -98,7 +102,14 @@ namespace F4
     void 
     Term<Element>::setCoefficient(Element coeff)
     {
-        _coefficient=coeff;
+        _coefficient._element=coeff._element;
+    }
+    
+    template <typename Element>
+    void 
+    Term<Element>::setCoefficientOne()
+    {
+        _coefficient._element=1;
     }
     
     template <typename Element>
@@ -192,6 +203,29 @@ namespace F4
         try
         { 
             res=stol(s);
+        }
+        catch(exception const & e)
+        {
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
+        }
+        _coefficient=res;
+    }
+    
+    template<>
+    void
+    Term<ElementPrime<long long>>::readCoefficient(std::string const s)
+    {
+        long res;
+        try
+        { 
+            res=stoll(s);
         }
         catch(exception const & e)
         {

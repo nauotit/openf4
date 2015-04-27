@@ -42,38 +42,26 @@ int main (int argc, char **argv)
     typedef Givaro::ModularBalanced<int> Field;
     Field F(65521);
     
-     //// Test Matrix();
-    //cout << "________Test Matrix()________" << endl;
-    //MatrixGeneric<Field> mat1(F);
-    //cout << mat1 << endl;
-    
-    //// Test Matrix(int height, int width);
-    //cout << "________Test Matrix(int height, int width);________" << endl;
-    //MatrixGeneric<Field> mat2(F,10,20);
-    //cout << mat2 << endl;
-    
     // Test Matrix(std::string filename)
     cout << "________Test Matrix(std::string filename)________" << endl;
-    MatrixGeneric<Field> mat3(F, "../data/9before-echelonize-cyclic8.txt");
-    string filename1="block-cyclic8.pgm";
-    mat3.printMatrix(filename1);
-    
-    //// Test Matrix(std::string filename)
-    //cout << "________Test Matrix(std::string filename)________" << endl;
-    //MatrixGeneric<Field> mat3(F, "../data/M_text_basic1.txt");
-    //cout << mat3 << endl;
-    //delete[] mat3.getSigma();
-    //delete[] mat3.getTau();
-    //delete[] mat3.getStartTail();
-    //delete[] mat3.getEndCol();
+    MatrixGeneric<Field> mat3(F, "../data/20before-echelonize-cyclic8.txt");
+    MatrixGeneric<Field> mat4(F, "../data/15before-echelonize-semaev.txt");
+    //string filename1="block-cyclic8.pgm";
+    //mat3.printMatrix(filename1);
 
     // Test int echelonize ();
     cout << "________Test echelonize()________" << endl;
     int rank = mat3.echelonize();
-    //cout << mat3 << endl;
     cout << "Rank = " << rank << endl << endl;
-    filename1="block-cyclic8-after-echelonize.pgm";
-    mat3.printMatrix(filename1);
+    rank = mat4.echelonize();
+    cout << "Rank = " << rank << endl << endl;
+    //filename1="block-cyclic8-after-echelonize.pgm";
+    //mat3.printMatrix(filename1);
+    mat3.erase();
+    mat4.erase();
+    
+    
+    //// Cyclic 8
     
     //vector<MatrixGeneric<Field>> matArray;
     //string filename;
@@ -86,7 +74,8 @@ int main (int argc, char **argv)
         ////matArray[i].printMatrix(filename2);
     //}
     
-    //clock_t start = clock();
+    //chrono::steady_clock::time_point start=chrono::steady_clock::now();
+    //typedef chrono::duration<int,milli> millisecs_t;
     //for(size_t i=0; i< matArray.size(); i++)
     //{
         //cout << i << ": ";
@@ -94,8 +83,36 @@ int main (int argc, char **argv)
         ////filename2="../data/M"+to_string(i)+"-after-echelonize-cyclic8.pgm";
         ////matArray[i].printMatrix(filename2);
     //}
-    //cout << "time to echenonize " << matArray.size() << " matrix: " << ((double)(clock() - start))/CLOCKS_PER_SEC << " s" << endl << endl;
+    //cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " s" << endl << endl;
     
+    //for(size_t i=0; i< matArray.size(); i++)
+    //{
+        //matArray[i].erase();
+    //}
+    //matArray.clear();
+    
+    
+    //// Semaev 16
+    
+    //for(int i=0; i<29; i++)
+    //{
+        //filename="../data/"+to_string(i+1)+"before-echelonize-semaev.txt";
+        //matArray.emplace_back(F, filename);
+    //}
+    
+    //start=chrono::steady_clock::now();
+    //for(size_t i=0; i< matArray.size(); i++)
+    //{
+        //cout << i << ": ";
+        //matArray[i].echelonize();
+    //}
+    //cout << "time to echenonize " << matArray.size() << " matrix: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " s" << endl << endl;
+    
+    //for(size_t i=0; i< matArray.size(); i++)
+    //{
+        //matArray[i].erase();
+    //}
+    //matArray.clear();
     
     return 0;
 }

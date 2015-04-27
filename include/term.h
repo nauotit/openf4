@@ -107,6 +107,12 @@ namespace F4
             void setCoefficient(Element coeff);
             
             /**
+             * \brief Set the coefficient of this to 1.
+             * \param Coefficient.
+             */
+            void setCoefficientOne();
+            
+            /**
              * \brief Get the number of the monomial of this.
              * \return numMonomial of this.
              */

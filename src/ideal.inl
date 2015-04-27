@@ -940,21 +940,15 @@ namespace F4
         
         chrono::steady_clock::time_point start, start1, start2;
         typedef chrono::duration<int,milli> millisecs_t;
-        
-        //start = 0;
-        //start2 = 0;
         start1 = chrono::steady_clock::now();
-        
-        clock_t timeClear = 0;
-        clock_t timeClearStart = 0;
-        clock_t timeAppendMatrixF4 = 0;
-        clock_t timeAppendMatrixF4Start = 0;
-        clock_t timePreprocessing = 0;
-        clock_t timePreprocessingStart = 0;
-        clock_t timeTransform = 0;
-        clock_t timeTransformStart = 0;
-        clock_t timePostprocessing = 0;
-        clock_t timePostprocessingStart = 0;
+        millisecs_t timeAppendMatrixF4 = millisecs_t::zero();
+        chrono::steady_clock::time_point timeAppendMatrixF4Start;
+        millisecs_t timePreprocessing = millisecs_t::zero();
+        chrono::steady_clock::time_point timePreprocessingStart;
+        millisecs_t timeTransform = millisecs_t::zero();
+        chrono::steady_clock::time_point timeTransformStart;
+        millisecs_t timePostprocessing = millisecs_t::zero();
+        chrono::steady_clock::time_point timePostprocessingStart;
         
         /*step 0 */
         for (size_t i = 0; i < _polynomialArray.size(); i++)
@@ -1000,7 +994,7 @@ namespace F4
             if(VERBOSE > 1)
             {
                 /* Time spent in appendMatrixF4 */
-                timeAppendMatrixF4Start=clock();
+                timeAppendMatrixF4Start=chrono::steady_clock::now();
             }
             
             /* Critical pair of minimal degree */
@@ -1041,7 +1035,7 @@ namespace F4
             }
             if(VERBOSE > 1)
             {
-                timeAppendMatrixF4 +=(clock () - timeAppendMatrixF4Start);
+                timeAppendMatrixF4 +=chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-timeAppendMatrixF4Start);
             }
             
             if (VERBOSE > 0)
@@ -1055,12 +1049,12 @@ namespace F4
             /* Preprocessing of _matPols */
             if(VERBOSE > 1)
             {
-                timePreprocessingStart=clock();
+                timePreprocessingStart=chrono::steady_clock::now();
             }
             preprocessing(width, height, nbPiv);
             if(VERBOSE > 1)
             {
-                timePreprocessing +=(clock () - timePreprocessingStart);
+                timePreprocessing += chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-timePreprocessingStart);
             }
         
             /* Transform _matPols into a matrix */
@@ -1080,12 +1074,12 @@ namespace F4
             /* Time spent in transform */
             if(VERBOSE > 1)
             {
-                timeTransformStart = clock();
+                timeTransformStart = chrono::steady_clock::now();
             }
             sparse = transform (mat, tabMon, nbPiv, tau, sigma, startTail, endCol);
             if(VERBOSE > 1)
             {
-                timeTransform +=(clock () - timeTransformStart);
+                timeTransform += chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-timeTransformStart);
             }
             
             //filename=to_string(step)+"before-echelonize.pgm";
@@ -1131,7 +1125,7 @@ namespace F4
             /* Time spent in postProcessing */
             if(VERBOSE > 1)
             {
-                timePostprocessingStart = clock();
+                timePostprocessingStart = chrono::steady_clock::now();
             }
             if(!postprocessing(mat, tabMon, sigma, tau, height, width, heightReal, nbPiv, stat))
             {
@@ -1158,7 +1152,7 @@ namespace F4
             }
             if(VERBOSE > 1)
             {
-                timePostprocessing+=(clock()-timePostprocessingStart);
+                timePostprocessing+=chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-timePostprocessingStart);
             }
             
             if (VERBOSE > 0)
@@ -1177,10 +1171,8 @@ namespace F4
             }
             
             /* Reset the AVL of monomials and tagged polynomials */
-            timeClearStart=clock();
             _matMons.reset();
             _matPols.reset();
-            timeClear+=(clock()-timeClearStart);
             
             if (stat._cmptNewGen != (heightReal - nbPiv))
             {
@@ -1211,11 +1203,10 @@ namespace F4
             cout << endl << "---------------------------------------" << endl;
             cout << "Time analysis: " << endl;
             cout << "---> " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << "ms CPU global computation time" << endl;
-            cout << "---> " << (((double)timeClear) * 1000) / CLOCKS_PER_SEC << "ms CPU used for clear" << endl;
-            cout << "---> " << (((double)timeAppendMatrixF4) * 1000) / CLOCKS_PER_SEC << "ms CPU used for appendMatrixF4" << endl;
-            cout << "---> " << (((double)timePreprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for preprocessing" << endl;
-            cout << "---> " << (((double)timeTransform) * 1000) / CLOCKS_PER_SEC << "ms CPU used for transform" << endl;
-            cout << "---> " << (((double)timePostprocessing) * 1000) / CLOCKS_PER_SEC << "ms CPU used for postprocessing" << endl;
+            cout << "---> " << timeAppendMatrixF4.count() << "ms CPU used for appendMatrixF4" << endl;
+            cout << "---> " << timePreprocessing.count() << "ms CPU used for preprocessing" << endl;
+            cout << "---> " << timeTransform.count() << "ms CPU used for transform" << endl;
+            cout << "---> " << timePostprocessing.count() << "ms CPU used for postprocessing" << endl;
             
             cout << "_numPol: " << _numPol << " _taggedPolynomialArray size: " << _taggedPolynomialArray.size() << endl;
             cout << "_numTot: " << _numTot << " _total size: " << _total.size() << " _used size: " << _used.size() << endl;
