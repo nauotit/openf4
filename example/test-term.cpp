@@ -41,19 +41,18 @@ int main (int argc, char **argv)
     cout << "#                       TEST TERM                       #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Init monomial tools:
-    MonomialArray monArray(6,10000000,10, 2, 10);
-    Term<int>::setMonomialArray(&monArray);
-    Term<double>::setMonomialArray(&monArray);
-    cout << endl;
-    
     // Init element-prime tools
     typedef ElementPrime<int32_t> eltType1;
     eltType1::setModulo(65521);
     
     typedef ElementPrime<int64_t> eltType2;
-    eltType1::setModulo(4294967291LL);
+    eltType2::setModulo(4294967291LL);
     
+    // Init monomial tools:
+    MonomialArray monArray(6,10000000,10, 2, 10);
+    Term<eltType1>::setMonomialArray(&monArray);
+    Term<eltType2>::setMonomialArray(&monArray);
+    cout << endl;
     
     // Test Term()
     cout << "________Test Term()________" << endl;
@@ -89,7 +88,7 @@ int main (int argc, char **argv)
     // Test Term(std::string const s);
     cout << "________Test Term(std::string const s)________" << endl;
     Term<eltType1> t7("123*x0^2*x1^3*x2^4");
-    Term<eltType2> t8("123.456*x0^2*x1^3*x2^4*x5");
+    Term<eltType2> t8("123456*x0^2*x1^3*x2^4*x5");
     cout << "t7: " << t7 << endl;
     cout << "t8: " << t8 << endl << endl;
             
@@ -131,7 +130,7 @@ int main (int argc, char **argv)
     // Test void setTerm(std::string const s);
     cout << "________Test setTerm(std::string const s)________" << endl;
     t9.setTerm("-123*x1*x2^2*x3^3*x4^4*x5^5");
-    t10.setTerm("-123.456*x1*x2^2*x3^3*x4^4*x5^5");
+    t10.setTerm("-123456*x1*x2^2*x3^3*x4^4*x5^5");
     cout << "t9: " << t9 << endl;
     cout << "t10: " << t10 << endl << endl;
             
@@ -146,7 +145,7 @@ int main (int argc, char **argv)
     cout << "________Test readCoefficient(std::string const s)________" << endl;
     t3.readCoefficient("-123*x1*x2^2*x3^3*x4^4*x5^5");
     cout << t3 << endl;
-    t4.readCoefficient("-123.456*x1*x2^2*x3^3*x4^4*x5^5");
+    t4.readCoefficient("-123456*x1*x2^2*x3^3*x4^4*x5^5");
     cout << t4 << endl << endl;
     
     // Test void multNumMon(int numMon);

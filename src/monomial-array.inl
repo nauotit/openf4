@@ -112,7 +112,7 @@ namespace F4
             assert(size<_capacity);
             if (VERBOSE>1)
             {
-                cout << "MonomialArray: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(uint8_t)))/1000000 << " Mo reserved for _monomialArray " << endl;
+                cout << "MonomialArray: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(uint8_t)))/1000000 << " Mo reserved for _monomialArray, varlistIndex = " << _varlistIndex << endl;
             }
             _varlistArray[_varlistIndex]=new uint8_t[(size - _size)*_nbVariable];
             assert(_varlistArray[_varlistIndex] != 0);

@@ -34,8 +34,8 @@ int F4::VERBOSE=0;
 int F4::NB_THREAD=min(16, omp_get_num_procs());
 
 // Init element-prime tools
-typedef ElementPrime<int32_t> eltType;
-int modulo=65521;
+typedef ElementPrime<int16_t> eltType;
+int modulo=251;
 
 int cyclic6F4(bool magma)
 {
@@ -347,7 +347,7 @@ int katsura12F4(bool magma)
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                     BENCHMARK INT                     #" << endl;
+    cout << "#                     BENCHMARK SHORT                     #" << endl;
     cout << "#########################################################" << endl << endl;
 
     // Time

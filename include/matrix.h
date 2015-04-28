@@ -35,10 +35,19 @@
 #include <omp.h>
 /** \endcond */
 
+#include "element-prime.h"
+
 #define SSE2
 #ifdef SSE2
 #include <xmmintrin.h>
 #endif // SSE2
+
+//#define SSE4
+#ifdef SSE4
+#define SSE2
+#include <xmmintrin.h>
+#include <smmintrin.h>
+#endif // SSE4
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

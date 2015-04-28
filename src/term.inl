@@ -151,7 +151,7 @@ namespace F4
     
     template<>
     void
-    Term<int>::readCoefficient(std::string const s)
+    Term<ElementPrime<int16_t>>::readCoefficient(std::string const s)
     {
         int res;
         try
@@ -174,7 +174,7 @@ namespace F4
     
     template<>
     void
-    Term<ElementPrime<int>>::readCoefficient(std::string const s)
+    Term<ElementPrime<int32_t>>::readCoefficient(std::string const s)
     {
         int res;
         try
@@ -197,58 +197,12 @@ namespace F4
     
     template<>
     void
-    Term<ElementPrime<long>>::readCoefficient(std::string const s)
+    Term<ElementPrime<int64_t>>::readCoefficient(std::string const s)
     {
         long res;
         try
         { 
             res=stol(s);
-        }
-        catch(exception const & e)
-        {
-            if(s[0]=='-')
-            {
-                res=-1;
-            }
-            else
-            {
-                res=1;
-            }
-        }
-        _coefficient=res;
-    }
-    
-    template<>
-    void
-    Term<ElementPrime<long long>>::readCoefficient(std::string const s)
-    {
-        long res;
-        try
-        { 
-            res=stoll(s);
-        }
-        catch(exception const & e)
-        {
-            if(s[0]=='-')
-            {
-                res=-1;
-            }
-            else
-            {
-                res=1;
-            }
-        }
-        _coefficient=res;
-    }
-    
-    template<>
-    void
-    Term<double>::readCoefficient(std::string const s)
-    {
-        double res;
-        try
-        { 
-            res=stod(s);
         }
         catch(exception const & e)
         {

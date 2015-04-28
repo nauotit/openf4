@@ -80,14 +80,6 @@ obj/test-matrix.o: example/test-matrix.cpp
 bin/test-matrix: obj/test-matrix.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-
-obj/test-matrix-base.o: example/test-matrix-base.cpp 
-	$(CXX) $(CFLAGS) -o $@ -c $<
-
-bin/test-matrix-base: obj/test-matrix-base.o 
-	$(CXX) -o $@ $^ $(LDFLAGS)
-
-
 obj/test-element-prime.o: example/test-element-prime.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -144,6 +136,12 @@ bin/test-openmp: obj/test-openmp.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Benchmark 
+obj/benchmark-short.o: benchmark/benchmark-short.cpp 
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/benchmark-short: obj/benchmark-short.o 
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 obj/benchmark-int.o: benchmark/benchmark-int.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -165,8 +163,8 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 
 # Intermediate rules
 
-example: bin/test-element-prime bin/test-matrix bin/test-ideal bin/test-matrix-base bin/test-matrix-base bin/test-openmp  bin/test-matrix-base bin/test-fflas-ffpack bin/test-monomial-array bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-term
-benchmark: bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
+example: bin/test-element-prime bin/test-matrix bin/test-ideal bin/test-openmp bin/test-fflas-ffpack bin/test-monomial-array bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-term
+benchmark: bin/benchmark-short bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
 
 all: $(EXEC)
 
