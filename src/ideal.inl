@@ -40,7 +40,7 @@ namespace F4
         /* Share the tagged polynomial array. */
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
         
-        _taggedPolynomialArray.reserve(40000);
+        _taggedPolynomialArray.reserve(50000);
         _total.reserve(10000);
         _basis.reserve(1000);
         _used.reserve(10000);

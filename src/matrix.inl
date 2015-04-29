@@ -563,8 +563,6 @@ namespace F4
         return sstr.str();
     }
     
-    
-    
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -587,15 +585,12 @@ namespace F4
             sselobound = _mm_setr_epi16 (-hibound,-hibound,-hibound,-hibound,-hibound,-hibound,-hibound,-hibound);
             ssereduct = _mm_setr_epi16 (reduct,reduct,reduct,reduct,reduct,reduct,reduct,reduct);
         }
+        
         int8_t mul=(int8_t)mult.modulo();
-
-        /* Version par groupe de 16 */
         __m128i ssemult = _mm_setzero_si128 ();
         __m128i *sserow2, *ssedst;
-
         sserow2 = reinterpret_cast<__m128i *>(row2);
         ssedst = reinterpret_cast<__m128i *>(row1);
-        
         /* ssemult = [mul,mul,mul,mul,mul,mul,mul,mul] */
         ssemult = _mm_setr_epi16(mul,mul,mul,mul,mul,mul,mul,mul);
 
@@ -664,7 +659,7 @@ namespace F4
         }
         int16_t mul=(int16_t)mult.modulo();
 
-        /* Version par groupe de 16 */
+        /* Version by group of 16 */
         __m128i ssemult = _mm_setzero_si128 ();
         __m128i *sserow2, *ssedst;
 
@@ -675,7 +670,6 @@ namespace F4
         ssemult = _mm_setr_epi16(mul,mul,mul,mul,mul,mul,mul,mul);
 
         for (i = (start / 16); i < (end + 15) / 16; i++)
-        //for (i = (start/16)*16; i < ( (end - start) + 15) / 16; i++)
         {
             __m128i ssein_0, ssein_1, sse0, sse1, sse2, sse3, sse4, sse5, sse6,sse7, sse8, sse9, sseA, sseB;
             
@@ -778,8 +772,143 @@ namespace F4
             ssedst[4 * i + 3] = _mm_add_epi32 (sse7, ssedst[4 * i + 3]);
         }
     }
+    #endif // SSE2
     
     #ifdef SSE4
+    template <>
+    inline void
+    Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
+    {
+        int i;
+        static int16_t hibound = 0;
+        static int16_t modulo = 0;
+        static int16_t reduct = 0;
+        static __m128i ssehibound;
+        static __m128i ssereduct;
+
+        if (modulo != ElementPrime<int16_t>::getModulo())
+        {
+            modulo = ElementPrime<int16_t>::getModulo();
+            reduct = modulo*(modulo / 2);
+            hibound = ElementPrime<int16_t>::getMax();
+            /* ssehibound = [hibound,hibound,hibound,hibound,hibound,hibound,hibound,hibound] */
+            ssehibound = _mm_setr_epi16 (hibound,hibound,hibound,hibound,hibound,hibound,hibound,hibound);
+            ssereduct = _mm_setr_epi16 (reduct,reduct,reduct,reduct,reduct,reduct,reduct,reduct);
+        }
+        int8_t mul=(int8_t)mult.modulo();
+
+        /* Version by group of 8 */
+        __m128i ssemult = _mm_setzero_si128 ();
+        __m128i *sserow2, *ssedst;
+
+        sserow2 = reinterpret_cast<__m128i *>(row2);
+        ssedst = reinterpret_cast<__m128i *>(row1);
+        
+        /* ssemult = [mul,mul,mul,mul,mul,mul,mul,mul] */
+        ssemult = _mm_setr_epi16(mul,mul,mul,mul,mul,mul,mul,mul);
+
+        for (i = (start / 8); i < (end + 7) / 8; i++)
+        {
+            __m128i sse0, sse1, sse2;
+            
+            /* Multiply row2 by mult */
+            
+            /* sse0 = ssemult * ssein_0 [15:0] */
+            sse0 = _mm_mullo_epi16 (ssemult, sserow2[i]);
+            
+            
+            /* Test if row1 > hibound or if row1 < -hibound  */
+            
+            /* sse1 = (ssedst[i] < 0) ? -ssedst[i] : ssedst[i] */
+            sse1 = _mm_sign_epi16 (ssedst[i], ssedst[i]);
+            
+            /* sse2 = (sse1 > ssehibound) ? 0xffff : 0x0 for the 8 integers */
+            sse2 = _mm_cmpgt_epi16 (sse1, ssehibound);
+            
+            /* sse2 = ssereduct^sse2 */
+            sse2 = _mm_and_si128 (ssereduct, sse2);
+            
+            /* sse1 = [sse1[0]-sse2[0], sse1[1]-sse2[1], sse1[2]-sse2[2], sse1[3]-sse2[3], sse1[4]-sse2[4], sse1[5]-sse2[5], sse1[6]-sse2[6], sse1[7]-sse2[7]] */
+            sse1 = _mm_sub_epi16 (sse1, sse2);
+            
+            /* sse1 = (ssedst[i] < 0) ? -sse1 : sse1 */
+            sse1 = _mm_sign_epi16 (sse1, ssedst[i]);
+            
+            
+            /* Add row1 with row2 * mult */
+
+            /* ssedst[i] = [sse0[0]+sse1[0], sse0[1]+sse1[1], sse0[2]+sse1[2], sse0[3]+sse1[3], sse0[4]+sse1[4], sse0[5]+sse1[5], sse0[6]+sse1[6], sse0[7]+sse1[7]] */
+            ssedst[i] = _mm_add_epi16 (sse0, sse1);
+        }
+    }
+
+    template <>
+    inline void
+    Matrix<ElementPrime<int32_t>>::addMultRow(ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> mult, int start, int end)
+    {
+        int i;
+        static int32_t hibound = 0;
+        static int32_t modulo = 0;
+        static int32_t reduct = 0;
+        static __m128i ssehibound;
+        static __m128i ssereduct;
+
+        if (modulo != ElementPrime<int32_t>::getModulo())
+        {
+            modulo = ElementPrime<int32_t>::getModulo();
+            reduct = modulo*(modulo / 2);
+            hibound = ElementPrime<int32_t>::getMax();
+            /* ssehibound = [hibound,hibound,hibound,hibound] */
+            ssehibound = _mm_setr_epi32 (hibound,hibound,hibound,hibound);
+            ssereduct = _mm_setr_epi32 (reduct,reduct,reduct,reduct);
+        }
+        int16_t mul=(int16_t)mult.modulo();
+
+        /* Version by group of 4 */
+        __m128i ssemult = _mm_setzero_si128 ();
+        __m128i *sserow2, *ssedst;
+
+        sserow2 = reinterpret_cast<__m128i *>(row2);
+        ssedst = reinterpret_cast<__m128i *>(row1);
+        
+        /* ssemult = [mul,mul,mul,mul] */
+        ssemult = _mm_setr_epi32(mul,mul,mul,mul);
+
+        for (i = (start / 4); i < (end + 3) / 4; i++)
+        {
+            __m128i sse0, sse1, sse2;
+            
+            /* Multiply row2 by mult */
+            
+            /* sse0 = ssemult * ssein_0 [31:0] */
+            sse0 = _mm_mullo_epi32 (ssemult, sserow2[i]);
+            
+            
+            /* Test if row1 > hibound or if row1 < -hibound  */
+            
+            /* sse1 = (ssedst[i] < 0) ? -ssedst[i] : ssedst[i] */
+            sse1 = _mm_sign_epi32 (ssedst[i], ssedst[i]);
+            
+            /* sse2 = (sse1 > ssehibound) ? 0xffff : 0x0 for the 4 integers */
+            sse2 = _mm_cmpgt_epi32 (sse1, ssehibound);
+            
+            /* sse2 = ssereduct^sse2 */
+            sse2 = _mm_and_si128 (ssereduct, sse2);
+            
+            /* sse1 = [sse1[0]-sse2[0], sse1[1]-sse2[1], sse1[2]-sse2[2], sse1[3]-sse2[3]] */
+            sse1 = _mm_sub_epi32 (sse1, sse2);
+            
+            /* sse1 = (ssedst[i] < 0) ? -sse1 : sse1 */
+            sse1 = _mm_sign_epi32 (sse1, ssedst[i]);
+            
+            
+            /* Add row1 with row2 * mult */
+
+            /* ssedst[i] = [sse0[0]+sse1[0], sse0[1]+sse1[1], sse0[2]+sse1[2], sse0[3]+sse1[3]] */
+            ssedst[i] = _mm_add_epi32 (sse0, sse1);
+        }
+    }
+    
     template <>
     inline void
     Matrix<ElementPrime<int64_t>>::addMultRow(ElementPrime<int64_t> * row1, ElementPrime<int64_t> * row2, ElementPrime<int64_t> mult, int start, int end)
@@ -804,7 +933,7 @@ namespace F4
         }
         int32_t mul=(int32_t)mult.modulo();
 
-        /* Version par groupe de 16 */
+        /* Version by group of 2 */
         __m128i ssemult = _mm_setzero_si128 ();
         __m128i *sserow2, *ssedst;
 
@@ -822,7 +951,6 @@ namespace F4
             
             /* sse0 = ssemult * sserow2[i] */
             sse0 = _mm_mul_epi32 (ssemult, sserow2[i]);
-            
             
             /* Test if row1 > hibound */
             
@@ -855,7 +983,6 @@ namespace F4
         }
     }
     #endif // SSE4
-    #endif // SSE2
     
     template <typename Element>
     void

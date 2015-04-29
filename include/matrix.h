@@ -44,7 +44,6 @@
 
 //#define SSE4
 #ifdef SSE4
-#define SSE2
 #include <xmmintrin.h>
 #include <smmintrin.h>
 #endif // SSE4

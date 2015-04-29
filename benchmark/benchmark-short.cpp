@@ -31,7 +31,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=0;
-int F4::NB_THREAD=min(16, omp_get_num_procs());
+int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 // Init element-prime tools
 typedef ElementPrime<int16_t> eltType;
@@ -364,7 +364,7 @@ int main (int argc, char **argv)
     int nbGen;
     
     // File
-    ofstream file("benchmark-int.txt");
+    ofstream file("benchmark-short.txt");
     if (file)
     {
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;

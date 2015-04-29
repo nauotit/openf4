@@ -31,7 +31,7 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=0;
-int F4::NB_THREAD=min(16, omp_get_num_procs());
+int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 typedef ElementPrime<int32_t> eltType1;
 typedef ElementPrime<int64_t> eltType2;
