@@ -37,16 +37,14 @@
 
 #include "element-prime.h"
 
-#define SSE2
-#ifdef SSE2
+#ifdef __SSE2__
 #include <xmmintrin.h>
-#endif // SSE2
+#endif // __SSE2__
 
-//#define SSE4
-#ifdef SSE4
+#ifdef __SSE4_1__
 #include <xmmintrin.h>
 #include <smmintrin.h>
-#endif // SSE4
+#endif // __SSE4_1__
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

@@ -540,7 +540,8 @@ namespace F4
         }
     }
     
-    #ifdef SSE2 
+    #ifdef __SSE2__ 
+    #ifndef __SSE4_1__
     template <typename T>
     string __m128i_toString(const __m128i var) 
     {
@@ -630,7 +631,7 @@ namespace F4
             
             /* Add row1 with row2 * mult */
 
-            /* ssedst[i] = [sse0[0]+row1[0], sse0[1]+row1[1], sse0[2]+row1[2], sse0[3]+row1[3], sse0[4]+row1[4], sse0[5]+row1[5], sse0[6]+row1[6], sse0[7]+row1[7]] */
+            /* ssedst[i] = [sse0[0]+ssedst[i][0], sse0[1]+ssedst[i][1], sse0[2]+ssedst[i][2], sse0[3]+ssedst[i][3], sse0[4]+ssedst[i][4], sse0[5]+ssedst[i][5], sse0[6]+ssedst[i][6], sse0[7]+ssedst[i][7]] */
             ssedst[i] = _mm_add_epi16 (sse0, ssedst[i]);
         }
     }
@@ -772,9 +773,10 @@ namespace F4
             ssedst[4 * i + 3] = _mm_add_epi32 (sse7, ssedst[4 * i + 3]);
         }
     }
-    #endif // SSE2
+    #endif // __SSE2__
+    #endif // __SSE4_1__
     
-    #ifdef SSE4
+    #ifdef __SSE4_1__
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -978,11 +980,11 @@ namespace F4
             
             /* Add row1 with row2 * mult */
 
-            /* ssedst[i] = [sse0[0]+row1[0], sse0[1]+row1[1]] */
+            /* ssedst[i] = [sse0[0]+ssedst[i][0], sse0[1]+ssedst[i][1]] */
             ssedst[i] = _mm_add_epi64 (sse0, ssedst[i]);
         }
     }
-    #endif // SSE4
+    #endif // __SSE4_1__
     
     template <typename Element>
     void

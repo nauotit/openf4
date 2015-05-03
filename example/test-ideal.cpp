@@ -128,8 +128,18 @@ int main (int argc, char **argv)
     cout << endl;
     
     // Test void printTaggedPolynomialArray();
+    cout << "________Test void printTaggedPolynomialArray()________" << endl;
     cout << "cyclic6: " << endl;
     cyclic6.printReducedGroebnerBasis("cyclic6", 65521);
+    cout << endl << endl;
+    
+    // Test std::vector<std::string> getReducedGroebnerBasis() const;
+    cout << "________Test std::vector<std::string> getReducedGroebnerBasis()________" << endl;
+    vector<string> basis=cyclic6.getReducedGroebnerBasis();
+    for(int i=0; i < basis.size(); i++)
+    {
+        cout << basis[i] << endl;
+    }
     cout << endl << endl;
     
     // Free monomial

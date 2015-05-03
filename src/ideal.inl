@@ -120,6 +120,22 @@ namespace F4
     }
     
     template <typename Element>
+    vector<string>
+    Ideal<Element>::getReducedGroebnerBasis() const
+    {
+        ostringstream stream;
+        vector<string> basis;
+        for(int i = 0; i < _numGen; i++)
+        {
+            stream << _taggedPolynomialArray[_total[_basis[i]]].getPolynomialConst();
+            basis.push_back(stream.str());
+            stream.str("");
+            stream.clear();
+        }
+        return basis;
+    }
+    
+    template <typename Element>
     void
     Ideal<Element>::printReducedGroebnerBasis(string const filename, long modulo) const
     {

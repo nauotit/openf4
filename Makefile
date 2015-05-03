@@ -17,9 +17,9 @@
 #CXX=clang++
 CXX=g++-4.9
 #std=c++11 required by forward_list
-CFLAGS= -O3 -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -mssse3
+#CFLAGS= -O3 -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -mssse3
 #CFLAGS= -O3 -Wall -msse4 -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp 
-#CFLAGS= -g -Wall -std=c++11 -fopenmp -mssse3 
+CFLAGS= -g -Wall -std=c++11 -fopenmp -mssse3 
 LDFLAGS= -fopenmp -lcblas -latlas -lgivaro -lgmpxx -lgmp
 #LDFLAGS= -fopenmp
 
@@ -122,7 +122,6 @@ obj/test-list-pointer-critical-pair.o: example/test-list-pointer-critical-pair.c
 bin/test-list-pointer-critical-pair: obj/test-list-pointer-critical-pair.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-
 obj/test-fflas-ffpack.o: example/test-fflas-ffpack.cpp 
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -134,6 +133,19 @@ obj/test-openmp.o: example/test-openmp.cpp
 
 bin/test-openmp: obj/test-openmp.o 
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+obj/test-libf4.o: example/test-libf4.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/test-libf4: obj/test-libf4.o 
+	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
+
+obj/check-libf4.o: example/check-libf4.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/check-libf4: obj/check-libf4.o 
+	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
+
 
 # Benchmark 
 obj/benchmark-short.o: benchmark/benchmark-short.cpp 
@@ -161,10 +173,21 @@ bin/benchmark-semaev: obj/benchmark-semaev.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 
+# Library
+
+obj/libf4.o: src/libf4.cpp 
+	$(CXX) $(CFLAGS) -fpic -o $@ -c $<
+
+lib/libf4.so: obj/libf4.o 
+	$(CXX) -shared -o $@ $^ $(LDFLAGS)
+
+
 # Intermediate rules
 
-example: bin/test-element-prime bin/test-matrix bin/test-ideal bin/test-openmp bin/test-fflas-ffpack bin/test-monomial-array bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-term
+example: bin/test-libf4 bin/test-element-prime bin/test-matrix bin/test-ideal bin/test-openmp bin/test-fflas-ffpack bin/test-monomial-array bin/test-avl-critical-pair bin/test-list-pointer-critical-pair bin/test-monomial bin/test-single-list bin/test-polynomial bin/test-tagged-polynomial bin/test-critical-pair bin/test-avl-polynomial bin/test-avl-monomial bin/test-dynamic-array bin/test-term
 benchmark: bin/benchmark-short bin/benchmark-int bin/benchmark-long bin/benchmark-semaev
+library: lib/libf4.so
+check: bin/check-libf4
 
 all: $(EXEC)
 
@@ -172,7 +195,7 @@ all: $(EXEC)
 .PHONY: clean distclean
 
 clean:
-	rm -f obj/*.o bin/* data/*.pgm
+	rm -f obj/*.o bin/* lib/* data/*.pgm
 
 # require the indent program (GNU indent)
 #indent: 

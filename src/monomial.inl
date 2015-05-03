@@ -209,8 +209,11 @@ namespace F4
     {
         for(vector<int*>::iterator it=NB_MONOMIAL.begin(); it != NB_MONOMIAL.end(); ++it)
         {
-            delete[] *it;
-            *it=0;
+            if(*it)
+            {
+                delete[] *it;
+                *it=0;
+            }
         }
         NB_MONOMIAL.clear();
     }

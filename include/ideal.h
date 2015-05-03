@@ -97,6 +97,11 @@ namespace F4
             void printReducedGroebnerBasis(bool printBasis=false) const;
             
             /**
+             * \brief Get the reduced Groebner basis as a vector of string.
+             */
+            std::vector<std::string> getReducedGroebnerBasis() const;
+            
+            /**
              * \brief Print the reduced Groebner basis in a file.
              */
             void printReducedGroebnerBasis(string const filename, long modulo) const;
