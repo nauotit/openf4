@@ -136,7 +136,7 @@ int main (int argc, char **argv)
     // Test std::vector<std::string> getReducedGroebnerBasis() const;
     cout << "________Test std::vector<std::string> getReducedGroebnerBasis()________" << endl;
     vector<string> basis=cyclic6.getReducedGroebnerBasis();
-    for(int i=0; i < basis.size(); i++)
+    for(size_t i=0; i < basis.size(); i++)
     {
         cout << basis[i] << endl;
     }

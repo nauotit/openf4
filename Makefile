@@ -146,6 +146,24 @@ obj/check-libf4.o: example/check-libf4.cpp
 bin/check-libf4: obj/check-libf4.o 
 	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
 
+obj/check-cyclic6-16bits.o: example/check-cyclic6-16bits.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/check-cyclic6-16bits: obj/check-cyclic6-16bits.o 
+	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
+
+obj/check-cyclic6-32bits.o: example/check-cyclic6-32bits.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/check-cyclic6-32bits: obj/check-cyclic6-32bits.o 
+	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
+
+obj/check-cyclic6-64bits.o: example/check-cyclic6-64bits.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+bin/check-cyclic6-64bits: obj/check-cyclic6-64bits.o 
+	$(CXX) -o $@ $^ $(LDFLAGS) -L lib -lf4
+
 
 # Benchmark 
 obj/benchmark-short.o: benchmark/benchmark-short.cpp 
