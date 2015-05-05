@@ -18,7 +18,7 @@
 /**
  *  \file benchmark-long.cpp
  *  \example benchmark-long.cpp
- *  \brief Benchmark with integer long type coefficients.
+ *  \brief Benchmark with integer 64 bits coefficients.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */

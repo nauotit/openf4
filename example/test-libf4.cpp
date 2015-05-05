@@ -55,7 +55,7 @@ int main (int argc, char **argv)
     polynomialArray.emplace_back("x0*x1*x2*x3*x4*x5-1");
     
     // Compute a reduce groebner basis
-    vector<string> basis = groebnerBasisF4(65521, 6, variableName, polynomialArray, 1, 0);
+    vector<string> basis = groebnerBasisF4(65521, 100000, 6, variableName, polynomialArray, 1, 0);
     cout << "basis[1]: " << basis[1] << endl;
     
     return 0;

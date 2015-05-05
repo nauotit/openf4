@@ -30,6 +30,7 @@
 #include <cassert>
 #include <omp.h>
 #include <chrono>
+#include <stdexcept>
 /** \endcond */
 #include "monomial.h"
 

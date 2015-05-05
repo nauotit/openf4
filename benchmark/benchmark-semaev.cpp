@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file benchmark-int.cpp
- *  \example benchmark-int.cpp
- *  \brief Benchmark with integer type coefficients.
+ *  \file benchmark-semaev.cpp
+ *  \example benchmark-semaev.cpp
+ *  \brief Benchmark for semaev polynomial system.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */

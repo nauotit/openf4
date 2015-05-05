@@ -18,7 +18,7 @@
 /**
  *  \file benchmark-int.cpp
  *  \example benchmark-int.cpp
- *  \brief Benchmark with integer type coefficients.
+ *  \brief Benchmark with integer 32 bits coefficients.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -159,6 +159,51 @@ int cyclic8F4(bool magma)
     if(magma)
     {
         cyclic8.printReducedGroebnerBasis("cyclic8", modulo);
+    }
+    
+    return nbGen;
+}
+
+int cyclic9F4(bool magma)
+{
+    
+    cout << "#########################################################" << endl;
+    cout << "#                         CYCLIC 9                      #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
+    
+    // Init monomial tools
+    Monomial::initMonomial(9,17);
+    
+    // Create polynomial array
+    vector<Polynomial<eltType>> polCyclic9;
+    
+    // Fill the polynomial array
+    polCyclic9.emplace_back("x0+x1+x2+x3+x4+x5+x6+x7+x8");
+    polCyclic9.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x5*x6+x6*x7+x0*x8+x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x4*x5*x6+x5*x6*x7+x0*x1*x8+x0*x7*x8+x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x3*x4*x5*x6+x4*x5*x6*x7+x0*x1*x2*x8+x0*x1*x7*x8+x0*x6*x7*x8+x5*x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x2*x3*x4*x5*x6+x3*x4*x5*x6*x7+x0*x1*x2*x3*x8+x0*x1*x2*x7*x8+x0*x1*x6*x7*x8+x0*x5*x6*x7*x8+x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5+x1*x2*x3*x4*x5*x6+x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x8+x0*x1*x2*x3*x7*x8+x0*x1*x2*x6*x7*x8+x0*x1*x5*x6*x7*x8+x0*x4*x5*x6*x7*x8+x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6+x1*x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x5*x8+x0*x1*x2*x3*x4*x7*x8+x0*x1*x2*x3*x6*x7*x8+x0*x1*x2*x5*x6*x7*x8+x0*x1*x4*x5*x6*x7*x8+x0*x3*x4*x5*x6*x7*x8+x2*x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x5*x6*x8+x0*x1*x2*x3*x4*x5*x7*x8+x0*x1*x2*x3*x4*x6*x7*x8+x0*x1*x2*x3*x5*x6*x7*x8+x0*x1*x2*x4*x5*x6*x7*x8+x0*x1*x3*x4*x5*x6*x7*x8+x0*x2*x3*x4*x5*x6*x7*x8+x1*x2*x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7*x8-1");
+
+    // Create cyclic9 ideal;
+    Ideal<eltType> cyclic9(polCyclic9, 9, 20000000, 17, 2, 16);
+    
+    // Compute a reduced groebner basis;
+    nbGen=cyclic9.f4();
+    
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        cyclic9.printReducedGroebnerBasis("cyclic9", modulo);
     }
     
     return nbGen;
@@ -389,6 +434,13 @@ int main (int argc, char **argv)
     if (file)
     {
         file << "Cyclic 8 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
+    
+    start=chrono::steady_clock::now();
+    nbGen=cyclic9F4(magma);
+    if (file)
+    {
+        file << "Cyclic 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
     start=chrono::steady_clock::now();

@@ -55,9 +55,9 @@ int main (int argc, char **argv)
     polynomialArray.emplace_back("x0*x1*x2*x3*x4*x5-1");
     
     // Compute a reduce groebner basis
-    vector<string> basisShort = groebnerBasisF4(251, 6, variableName, polynomialArray, 1, 0);
-    vector<string> basisInt = groebnerBasisF4(65521, 6, variableName, polynomialArray, 1, 0);
-    vector<string> basisLong = groebnerBasisF4(4294967291LL, 6, variableName, polynomialArray, 1, 0);
+    vector<string> basisShort = groebnerBasisF4(251, 100000, 6, variableName, polynomialArray, 1, 0);
+    vector<string> basisInt = groebnerBasisF4(65521, 100000, 6, variableName, polynomialArray, 1, 0);
+    vector<string> basisLong = groebnerBasisF4(4294967291LL, 100000, 6, variableName, polynomialArray, 1, 0);
     
     // Fill reference vectors
     vector<string> groebnerBasisCyclic6Short;

@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file benchmark-int.cpp
- *  \example benchmark-int.cpp
- *  \brief Benchmark with integer type coefficients.
+ *  \file benchmark-short.cpp
+ *  \example benchmark-short.cpp
+ *  \brief Benchmark with integer 16 bits coefficients.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */

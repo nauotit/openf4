@@ -1,7 +1,10 @@
-bin_PROGRAMS = test_monomial test_dynamic_array test_monomial_array test_term test_single_list test_polynomial test_tagged_polynomial
-bin_PROGRAMS += test_critical_pair test_list_pointer_critical_pair test_avl_critical_pair test_avl_monomial test_avl_polynomial
-bin_PROGRAMS += test_element_prime test_matrix test_ideal
-bin_PROGRAMS += check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits
+AM_CPPFLAGS= -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
+AM_LDFLAGS= -fopenmp
+
+noinst_PROGRAMS = test_monomial test_dynamic_array test_monomial_array test_term test_single_list test_polynomial test_tagged_polynomial
+noinst_PROGRAMS += test_critical_pair test_list_pointer_critical_pair test_avl_critical_pair test_avl_monomial test_avl_polynomial
+noinst_PROGRAMS += test_element_prime test_matrix test_ideal
+noinst_PROGRAMS += check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits
 #bin_PROGRAMS += test_libf4 test_openmp /test_fflas_ffpack 
 
 test_monomial_SOURCES = test-monomial.cpp
@@ -22,15 +25,19 @@ test_element_prime_SOURCES = test-element-prime.cpp
 test_matrix_SOURCES = test-matrix.cpp
 test_ideal_SOURCES = test-ideal.cpp
 
+
 check_cyclic6_16bits_SOURCES = check-cyclic6-16bits.cpp
+check_cyclic6_16bits_LDADD = $(top_builddir)/src/libf4.la 
+check_cyclic6_16bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
 check_cyclic6_32bits_SOURCES = check-cyclic6-32bits.cpp
+check_cyclic6_32bits_LDADD = $(top_builddir)/src/libf4.la
+check_cyclic6_32bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
 check_cyclic6_64bits_SOURCES = check-cyclic6-64bits.cpp
+check_cyclic6_64bits_LDADD = $(top_builddir)/src/libf4.la
+check_cyclic6_64bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
 
 #test_libf4_SOURCES = test-libf4.cpp
 #test_openmp_SOURCES = test-openmp.cpp
 #test_fflas_ffpack_SOURCES = test-fflas-ffpack.cpp
-
-AM_CPPFLAGS= -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-AM_LDFLAGS= -fopenmp -L$(top_builddir)/src -lf4 
 
 TESTS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits

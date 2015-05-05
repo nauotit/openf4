@@ -110,6 +110,11 @@ namespace F4
         if(size>_size)
         {
             assert(size<_capacity);
+            if(size>=_capacity)
+            {
+                //exit(-1);
+                throw out_of_range("Monomial array size insufficient");
+            }
             if (VERBOSE>1)
             {
                 cout << "MonomialArray: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(uint8_t)))/1000000 << " Mo reserved for _monomialArray, varlistIndex = " << _varlistIndex << endl;

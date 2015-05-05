@@ -1,8 +1,6 @@
-PACKAGE=f4
-VERSION=1.0.0
-CONTACT=titouan.coladon@gmail.com
-
 AC_INIT(f4, 1.0.0, titouan.coladon@gmail.com)
+AC_CONFIG_SRCDIR([src/libf4.cpp])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 AM_PROG_AR
 LT_INIT
