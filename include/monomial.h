@@ -168,6 +168,11 @@ namespace F4
              * \brief Constructor. Beware, varlist is not allocated.
              */
             Monomial();
+            
+            /**
+             * \brief Copy constructor.
+             */
+            Monomial(Monomial const & toCopy);
              
              /* Destructor */
             

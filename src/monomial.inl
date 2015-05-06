@@ -415,6 +415,10 @@ namespace F4
     {
     }
     
+    Monomial::Monomial(Monomial const & toCopy): _deg(toCopy._deg), _varlist(toCopy._varlist)
+    {
+    }
+    
     
     /* Destructor */
     

@@ -43,7 +43,7 @@ namespace F4
         Monomial::initMonomial(nbVariable, 0);
         
         /* Initialise _monomialArray */
-        _monomialArray = new Monomial[_capacity];
+        _monomialArray.resize(_capacity);
     }
              
     MonomialArray::MonomialArray(int nbVariable, int capacity, int degree):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
@@ -55,7 +55,7 @@ namespace F4
         Monomial::setNbMonomial(degree);
         
         /* Initialise _monomialArray */
-        _monomialArray = new Monomial[_capacity];
+        _monomialArray.resize(_capacity);
         
         /* Fill _monomialArray up to degree "degree" */
         setMonomialArray();
@@ -70,7 +70,7 @@ namespace F4
          Monomial::setNbMonomial(degree);
         
         /* Initialise _monomialArray */
-        _monomialArray = new Monomial[_capacity];
+        _monomialArray.resize(_capacity);
         
         /* Fill _monomialArray up to degree "degree" */
         setMonomialArray();
@@ -90,10 +90,6 @@ namespace F4
             _varlistArray[i]=0;
         }
         
-        /* Free the array */
-        delete[] _monomialArray;
-        _monomialArray=0;
-        
         /* Free _tabulatedProduct */
         freeTabulatedProduct();
         
@@ -112,8 +108,7 @@ namespace F4
             assert(size<_capacity);
             if(size>=_capacity)
             {
-                //exit(-1);
-                throw out_of_range("Monomial array size insufficient");
+                _monomialArray.resize(size);
             }
             if (VERBOSE>1)
             {

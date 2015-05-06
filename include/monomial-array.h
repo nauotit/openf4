@@ -137,7 +137,7 @@ namespace F4
              
         
         private:
-            Monomial *_monomialArray ; /*!< Array of monomial */
+            std::vector<Monomial> _monomialArray ; /*!< Array of monomial */
             int ** _tabulatedProduct; /*!< _tabulatedProduct[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
             int _nbVariable;   /*!< Number of variables of the polynomial ring. */
             size_t _size; /*!< Size of _monomialArray */
