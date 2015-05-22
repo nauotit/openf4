@@ -60,6 +60,10 @@ namespace F4
     
     void Monomial::setVariable(string const  * vars)
     {
+        if (VARS)
+        {
+            delete[] VARS;
+        }
         VARS=vars;
     }
     
@@ -70,6 +74,10 @@ namespace F4
     
     void Monomial::setWeight(int  * weight)
     {
+        if(WEIGHT)
+        {
+            delete[] WEIGHT;
+        }
         WEIGHT=weight;
     }
     
@@ -354,10 +362,12 @@ namespace F4
             if (VARS != 0)
             {
                 delete[] VARS;
+                VARS = 0;
             }
             if( WEIGHT != 0)
             {
                 delete[] WEIGHT;
+                WEIGHT = 0;
             }
             /* Set the number of variables */
             setNbVariable(nbVariable);

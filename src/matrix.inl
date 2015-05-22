@@ -1209,6 +1209,7 @@ namespace F4
         cout << "Time conversion 2: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
         delete[] P;
         delete[] Q;
+        FFLAS::fflas_delete(matrixRight);
         return _nbPiv+rank;
     }
     
@@ -1727,7 +1728,13 @@ namespace F4
         
         if((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK)
         {
-            _height=echelonizeRight(tmp_ech_db, tmp_ech_dh);
+            int rank=echelonizeRight(tmp_ech_db, tmp_ech_dh);
+            /* All the rows under the l-th row are zeros */ 
+            for(l2=rank; l2<_height; l2++)
+            {
+                delete[] _matrix[l2];
+            }
+            _height=rank;
         }
         else
         {

@@ -953,7 +953,7 @@ namespace F4
         /* Statistic */
         Stat stat;
         //ofstream fileSize("matrix-size.txt");
-        //ofstream fileDensity("matrix-density.txt");
+        //ofstream fileSizeD("size-D.txt");
         
         chrono::steady_clock::time_point start, start1, start2;
         typedef chrono::duration<int,milli> millisecs_t;
@@ -1110,7 +1110,7 @@ namespace F4
                 cout << "Construction time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
             }
             //fileSize << "Height: " << height << ", Width: " << width << ", Number of pivots: " << nbPiv << endl;
-            //fileDensity << step << " " << (height-nbPiv)*(width-nbPiv) << endl;
+            //fileSizeD << step << " " << (height-nbPiv)*(width-nbPiv) << endl;
 
             /* Triangularisation of mat */
             mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
