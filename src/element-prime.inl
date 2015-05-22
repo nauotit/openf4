@@ -52,6 +52,14 @@ namespace F4
         MAX=((baseType)1<<(sizeof(baseType)*8-2));
     }
     
+    template <>
+    void 
+    ElementPrime<double>::setModulo(double modulo)
+    {
+        MODULO=modulo;
+        MAX=((int64_t)1<<(sizeof(double)*8-2));
+    }
+    
     template <typename baseType>
     baseType 
     ElementPrime<baseType>::getModulo()
@@ -89,6 +97,32 @@ namespace F4
     }
     
     template <typename baseType>
+    inline baseType
+    ElementPrime<baseType>::getElement ()
+    {
+        return _element;
+    }
+    
+    template <>
+    inline double
+    ElementPrime<double>::modulo ()
+    {
+        if((_element > MODULO / 2) || (_element < -MODULO / 2))
+        {
+            _element=fmod(_element,MODULO);
+            if (_element > MODULO / 2)
+            {
+                _element -= MODULO;
+            }
+            if (_element < -MODULO / 2)
+            {
+                _element += MODULO;
+            }
+        }
+        return _element;
+    }
+    
+    template <typename baseType>
     ElementPrime<baseType> &
     ElementPrime<baseType>::addMult(ElementPrime<baseType> const & element, ElementPrime<baseType> const & mult)
     {
@@ -97,6 +131,20 @@ namespace F4
         if(( _element<=-MAX) || (_element>=MAX))
         {
             _element%=MODULO;
+        }
+        _element+=(element._element*mult._element);
+        return * this;
+    }
+    
+    template <>
+    ElementPrime<double> &
+    ElementPrime<double>::addMult(ElementPrime<double> const & element, ElementPrime<double> const & mult)
+    {
+        assert((mult._element>=-MODULO/2) && (mult._element<=MODULO/2));
+        assert((element._element>=-MODULO/2) && (element._element<=MODULO/2));
+        if(( _element<=-MAX) || (_element>=MAX))
+        {
+            _element=fmod(_element,MODULO);
         }
         _element+=(element._element*mult._element);
         return * this;
@@ -133,6 +181,59 @@ namespace F4
             else
             {
                 l = b / a;
+                c = b - l * a;
+                c_x = b_x - l * a_x;
+                c_p = b_p - l * a_p;
+            }
+            b = a;
+            b_x = a_x;
+            b_p = a_p;
+            a = c;
+            a_x = c_x;
+            a_p = c_p;
+        }
+
+        if (b != 1)
+        {
+            cerr << "Inverse impossible Mod(" << _element << ", " << MODULO << ") -> gcd = " << b << endl; 
+            exit (1);
+        }
+        _element=b_x;
+        modulo();
+        return *this;
+    }
+    
+    template <>
+    ElementPrime<double> &
+    ElementPrime<double>::inverse ()
+    {
+        _element=fmod(_element,MODULO);
+        double a, b, c, inv;
+        double a_x, a_p, b_x, b_p, c_x, c_p;
+        double l;
+        inv = _element;
+        if (inv < 0)
+        {
+            inv += MODULO;
+        }
+        a = inv;
+        a_x = 1;
+        a_p = 0;
+        b = MODULO;
+        b_x = 0;
+        b_p = 1;
+
+        while (a)
+        {
+            if (b < 2 * a)
+            {
+                c = b - a;
+                c_x = b_x - a_x;
+                c_p = b_p - a_p;
+            }
+            else
+            {
+                l = floor(b / a);
                 c = b - l * a;
                 c_x = b_x - l * a_x;
                 c_p = b_p - l * a_p;
@@ -214,6 +315,17 @@ namespace F4
     {
         assert((mult._element>=-MODULO/2) && (mult._element<=MODULO/2));
         _element%=MODULO;
+        _element*=mult._element;
+        modulo();
+        return * this;
+    }
+    
+    template <>
+    ElementPrime<double> & 
+    ElementPrime<double>::operator*=(ElementPrime<double> const & mult)
+    {
+        assert((mult._element>=-MODULO/2) && (mult._element<=MODULO/2));
+        _element=fmod(_element,MODULO);
         _element*=mult._element;
         modulo();
         return * this;

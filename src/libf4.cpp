@@ -40,13 +40,13 @@ typedef ElementPrime<int16_t> eltType1;
 typedef ElementPrime<int32_t> eltType2;
 typedef ElementPrime<int64_t> eltType3;
 
-vector<string> groebnerBasisF4(int64_t modulo, int sizeMonomialArray, int nbVariable, vector<string> variableName, vector<string> polynomialList, int nbThread, int verbose)
+vector<string> groebnerBasisF4(int64_t modulo, int degree, int nbVariable, vector<string> variableName, vector<string> polynomialList, int nbThread, int verbose)
 {
     F4::NB_THREAD = min(nbThread, omp_get_num_procs());
     F4::VERBOSE = verbose;
 
-    int degree = 11;
-    int tabulatedProductSize[2]={2,10};
+    int tabulatedProductSize[2]={2,max(degree-1, 0)};
+    int sizeMonomialArray = 100000;
     
     // Init monomial tools
     Monomial::initMonomial(nbVariable, degree);

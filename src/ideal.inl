@@ -137,7 +137,7 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printReducedGroebnerBasis(string const filename, long modulo) const
+    Ideal<Element>::printReducedGroebnerBasis(string const filename, int64_t modulo) const
     {
         ofstream file(filename);
         if (file)
@@ -953,6 +953,7 @@ namespace F4
         /* Statistic */
         Stat stat;
         //ofstream fileSize("matrix-size.txt");
+        //ofstream fileDensity("matrix-density.txt");
         
         chrono::steady_clock::time_point start, start1, start2;
         typedef chrono::duration<int,milli> millisecs_t;
@@ -996,7 +997,7 @@ namespace F4
             //cout << "_numTot: " << _numTot << " _total size: " << _total.size() << " _used size: " << _used.size() << endl;
             //cout << "_numGen: " << _numGen << " _basis size: " << _basis.size() << endl << endl;
             
-            if (VERBOSE > 1)
+            if (VERBOSE > 0)
             {
                 start2 = chrono::steady_clock::now();
             }
@@ -1108,13 +1109,11 @@ namespace F4
                 cout << "Matrix density: " << sparse << endl;
                 cout << "Construction time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
             }
-            //fileSize << step << " " << height << " " << width << endl;
+            //fileSize << "Height: " << height << ", Width: " << width << ", Number of pivots: " << nbPiv << endl;
+            //fileDensity << step << " " << (height-nbPiv)*(width-nbPiv) << endl;
 
             /* Triangularisation of mat */
             mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
-            //filename=to_string(step)+"before-echelonize-cyclic8.txt";
-            //mat.printMatrixTxt(filename);
-            
             heightReal=mat.echelonize();
             
             //filename=to_string(step)+"after-echelonize.pgm";

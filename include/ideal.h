@@ -69,6 +69,7 @@ namespace F4
              * \brief Constructor.
              * \param polynomialArray: Array of polynomials.
              * \param nbVariable: Number of variable of the polynomial ring.
+             * \param capacity: Initial size of _monomialArray.
              * \param degree: Initialise the monomial array up to monomial of degree "degree". 
              * \param deg1: Maximum degree of row tabulated monomials.
              * \param deg2: Maximum degree of column tabulated monomials.
@@ -104,7 +105,7 @@ namespace F4
             /**
              * \brief Print the reduced Groebner basis in a file.
              */
-            void printReducedGroebnerBasis(string const filename, long modulo) const;
+            void printReducedGroebnerBasis(string const filename, int64_t modulo) const;
             
             /**
              * \brief Print _matMons.
@@ -219,9 +220,9 @@ namespace F4
             int _numPol; /*!< Size of _taggedPolynomialArray */
             int _numTot; /*!< Size of _total */
             int _numGen; /*!< Size of _basis */
-            std::vector<int> _total;
+            std::vector<int> _total; /*!< Array of tagged polynomial index */
             std::vector<int> _used;
-            std::vector<int> _basis;
+            std::vector<int> _basis; /*!< Array of tagged polynomial index _total[_basis[i]] belongs to the basis */
             std::vector<TaggedPolynomial<Element>> _taggedPolynomialArray; /*!< Array of tagged polynomials */
             MonomialArray _monomialArray; /*!< Array of monomials, endow with a tabulated product 2D array */
             AvlCriticalPair<Element> _criticalPairSet; /*!< Set of critical pairs */

@@ -218,6 +218,29 @@ namespace F4
         _coefficient=res;
     }
     
+    template<>
+    void
+    Term<ElementPrime<double>>::readCoefficient(std::string const s)
+    {
+        long res;
+        try
+        { 
+            res=stol(s);
+        }
+        catch(exception const & e)
+        {
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
+        }
+        _coefficient=(double)res;
+    }
+    
     template <typename Element>
     void
     Term<Element>::printTerm (ostream & stream) const

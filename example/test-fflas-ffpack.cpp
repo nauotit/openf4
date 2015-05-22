@@ -39,15 +39,15 @@ int main (int argc, char **argv)
     cout << "#########################################################" << endl << endl;
     
     // Create a field
-    typedef Givaro::ModularBalanced<int> Field;
+    typedef Givaro::ModularBalanced<double> Field;
     Field F(65521);
     
     // Test Matrix(std::string filename)
     cout << "________Test Matrix(std::string filename)________" << endl;
     MatrixGeneric<Field> mat3(F, "../data/20before-echelonize-cyclic8.txt");
     MatrixGeneric<Field> mat4(F, "../data/15before-echelonize-semaev.txt");
-    //string filename1="block-cyclic8.pgm";
-    //mat3.printMatrix(filename1);
+    string filename1="block-cyclic8.pgm";
+    mat3.printMatrix(filename1);
 
     // Test int echelonize ();
     cout << "________Test echelonize()________" << endl;
@@ -55,8 +55,8 @@ int main (int argc, char **argv)
     cout << "Rank = " << rank << endl << endl;
     rank = mat4.echelonize();
     cout << "Rank = " << rank << endl << endl;
-    //filename1="block-cyclic8-after-echelonize.pgm";
-    //mat3.printMatrix(filename1);
+    filename1="block-cyclic8-after-echelonize.pgm";
+    mat3.printMatrix(filename1);
     mat3.erase();
     mat4.erase();
     

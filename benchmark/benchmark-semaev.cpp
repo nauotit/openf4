@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=0;
+int F4::VERBOSE=3;
 int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 typedef ElementPrime<int32_t> eltType1;
@@ -186,19 +186,19 @@ int main (int argc, char **argv)
         file << "Semaev 16 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     }
     
-    start=chrono::steady_clock::now();
-    nbGen=semaev31F4();
-    if (file)
-    {
-        file << "Semaev 31 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=chrono::steady_clock::now();
+    //nbGen=semaev31F4();
+    //if (file)
+    //{
+        //file << "Semaev 31 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=chrono::steady_clock::now();
-    nbGen=semaev32F4();
-    if (file)
-    {
-        file << "Semaev 32 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=chrono::steady_clock::now();
+    //nbGen=semaev32F4();
+    //if (file)
+    //{
+        //file << "Semaev 32 bits : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     return 0;
 }

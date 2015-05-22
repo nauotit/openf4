@@ -53,12 +53,14 @@ namespace F4
              /**
               * \brief Constructor.
               * \param nbVariable: Number of variable of the polynomial ring.
+              * \param capacity: Initial size of _monomialArray.
               */
              MonomialArray(int nbVariable, int capacity);
              
              /**
               * \brief Constructor.
               * \param nbVariable: Number of variable of the polynomial ring.
+              * \param capacity: Initial size of _monomialArray.
               * \param degree: Initialise the monomial array up to monomial of degree "degree". 
               */
              MonomialArray(int nbVariable, int capacity, int degree);
@@ -66,6 +68,7 @@ namespace F4
              /**
               * \brief Constructor.
               * \param nbVariable: Number of variable of the polynomial ring.
+              * \param capacity: Initial size of _monomialArray.
               * \param degree: Initialise the monomial array up to monomial of degree "degree". 
               * \param deg1: Maximum degree of row tabulated monomials.
               * \param deg2: Maximum degree of column tabulated monomials.
@@ -140,8 +143,7 @@ namespace F4
             std::vector<Monomial> _monomialArray ; /*!< Array of monomial */
             int ** _tabulatedProduct; /*!< _tabulatedProduct[i][j] = number of the product intToMonomial[i] * intToMonomial[j] */
             int _nbVariable;   /*!< Number of variables of the polynomial ring. */
-            size_t _size; /*!< Size of _monomialArray */
-            size_t _capacity; /*!< Capacity of _monomialArray */
+            size_t _size; /*!< Current size of _monomialArray */
             uint8_t * _varlistArray[100]; /*!< 2D array of varlist */
             int _varlistIndex; /*!< Next available row index in _varlistArray */
             int _numMaxRow; /*!< Number of rows in _tabulatedProduct. */

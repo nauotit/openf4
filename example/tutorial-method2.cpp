@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file test-libf4.cpp
- *  \example test-libf4.cpp
- *  \brief Library regression tests.
+ *  \file tutorial-method2.cpp
+ *  \example tutorial-method2.cpp
+ *  \brief Tutorial with f4 library use.
  *  \ingroup examples
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -33,20 +33,20 @@ using namespace std;
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                      TEST LIBF4                       #" << endl;
+    cout << "#               TUTORIAL WITH LIBRARY USE               #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Create polynomial array
+    // Create polynomial array.
     vector<string> polynomialArray;
     
-    // Create variable name array
+    // Create variable name array.
     vector<string> variableName;
     for(int i = 0; i < 6; i++)
     {
         variableName.push_back('x'+to_string(i));
     }
     
-    // Fill the polynomial array
+    // Fill the polynomial array.
     polynomialArray.emplace_back("x0+x1+x2+x3+x4+x5");
     polynomialArray.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
     polynomialArray.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
@@ -54,11 +54,14 @@ int main (int argc, char **argv)
     polynomialArray.emplace_back("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
     polynomialArray.emplace_back("x0*x1*x2*x3*x4*x5-1");
     
-    // Compute a reduce groebner basis
+    // Compute a reduce groebner basis.
     vector<string> basis = groebnerBasisF4(65521, 11, 6, variableName, polynomialArray, 1, 0);
-    cout << "basis[1]: " << basis[1] << endl;
     
-    return 0;
+    // Print the reduce groebner basis.
+    for(size_t i = 0; i < basis.size(); i++)
+    {
+        cout << basis[i] << endl;
+    }
 }
 
 

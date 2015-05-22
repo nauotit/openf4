@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string.h>
 #include <cassert>
+#include <cmath>
 /** \endcond */
 
 /** \namespace F4 
@@ -78,6 +79,12 @@ namespace F4
              * \return Integer form of this.
              */
             baseType modulo ();
+            
+            /**
+             * \brief Return this.
+             * \return Integer form of this.
+             */
+            baseType getElement ();
             
             /**
              * \brief Set this+=(mult*element).

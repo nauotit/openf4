@@ -34,6 +34,7 @@
 #include <sstream>
 #include <givaro/modular-balanced.h>
 #include <fflas-ffpack/ffpack/ffpack.h>
+#include <fflas-ffpack/utils/Matio.h>
 /** \endcond */
 
 /** \namespace F4 

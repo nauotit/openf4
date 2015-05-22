@@ -36,8 +36,12 @@ namespace F4
     }
     
     template <typename Element>
-    Polynomial<Element>::Polynomial(string const s)
+    Polynomial<Element>::Polynomial(string const str)
     {
+        string s = str;
+        /* Remove spaces */
+        s.erase(remove_if(s.begin(), s.end(), [](char x){return isspace(x);}), s.end());
+        
         NodeList<Element> * it=_polynomial.getBegin();
         string tmp;
         size_t pos1=0;

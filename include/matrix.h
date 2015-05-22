@@ -33,6 +33,8 @@
 #include <fstream>
 #include <sstream>
 #include <omp.h>
+#include <givaro/modular-balanced.h>
+#include <fflas-ffpack/ffpack/ffpack.h>
 /** \endcond */
 
 #include "element-prime.h"
@@ -277,7 +279,13 @@ namespace F4
             void swapCol(int numCol1, int numCol2, int start, int end);
 
             /**
-             * \brief Echelonize the matrix mat using the shape of the F4 matrix.
+             * \brief Echelonize the left slice of the matrix using FFLAS-FFPACK routines.
+             * \return Height of the echelonized matrix.
+             */
+            int echelonizeRight (chrono::duration<int,milli> & tmp_ech_db, chrono::duration<int,milli> & tmp_ech_dh);
+            
+            /**
+             * \brief Echelonize the matrix using the shape of the F4 matrix.
              * \return Height of the echelonized matrix.
              */
             int echelonize ();

@@ -499,6 +499,57 @@ namespace F4
         }
     }
     
+    //template <typename Element>
+    //void
+    //Matrix<Element>::printMatrixTxt (string const & filename) const
+    //{
+        //ofstream file(filename);
+        //if (file)
+        //{
+            //file << _height << endl << _width << endl;
+            
+            //for (int i = 0; i < _height; i++)
+            //{
+                //for (int j = 0; j < _width; j++)
+                //{
+                    //file << " " << _matrix[i][j] << " ";
+                //}
+                //file << endl;
+            //}
+            //file << endl;
+            //file.close();
+        //}
+    //}
+    
+    //template <typename Element>
+    //void
+    //Matrix<Element>::printMatrixTxt (string const & filename) const
+    //{
+        //ofstream file(filename);
+        //if (file)
+        //{
+            //file << "A=Matrix(GF(65521), [" ;
+            //for (int i = 0; i < _height; i++)
+            //{
+                //file << "[";
+                //for (int j = 0; j < _width; j++)
+                //{
+                    //if(j==_width-1)
+                    //{
+                        //file << _matrix[i][j];
+                    //}
+                    //else
+                    //{
+                        //file << _matrix[i][j] << ",";
+                    //}
+                //}
+                //file << "]," << endl;
+            //}
+            //file << "])" << endl;
+            //file.close();
+        //}
+    //}
+    
     template <typename Element>
     bool
     Matrix<Element>::isZero(int row, int col) const
@@ -540,7 +591,7 @@ namespace F4
         }
     }
     
-    #ifdef __SSE2__ 
+    #if defined(__SSE2__) && defined(__x86_64__)
     #ifndef __SSE4_1__
     template <typename T>
     string __m128i_toString(const __m128i var) 
@@ -773,10 +824,85 @@ namespace F4
             ssedst[4 * i + 3] = _mm_add_epi32 (sse7, ssedst[4 * i + 3]);
         }
     }
+    
+    template <>
+    inline void
+    Matrix<ElementPrime<double>>::addMultRow(ElementPrime<double> * row1, ElementPrime<double> * row2, ElementPrime<double> mult, int start, int end)
+    {
+        int i;
+        static double hibound = 0;
+        static double modulo = 0;
+        static double reduct = 0;
+        static __m128d ssehibound;
+        static __m128d sselobound;
+        static __m128d ssereduct;
+
+        if (modulo != ElementPrime<double>::getModulo())
+        {
+            modulo = ElementPrime<double>::getModulo();
+            reduct = modulo*((int)modulo / 2);
+            hibound = ElementPrime<double>::getMax();
+            /* ssehibound = [hibound,hibound] */
+            ssehibound = _mm_setr_pd (hibound,hibound);
+            sselobound = _mm_setr_pd (-hibound,-hibound);
+            ssereduct = _mm_setr_pd (reduct, reduct);
+        }
+        double mul=(double)mult.modulo();
+
+        /* Version by group of 2 */
+        __m128d ssemult =  _mm_setzero_pd ();
+        __m128d *sserow2, *ssedst;
+
+        sserow2 = reinterpret_cast<__m128d *>(row2);
+        ssedst = reinterpret_cast<__m128d *>(row1);
+        
+        /* ssemult = [mul,mul] */
+        ssemult = _mm_setr_pd(mul, mul);
+
+        for (i = (start / 2); i < (end + 1) / 2; i++)
+        {
+            __m128d sse0, sse1;
+            
+            /* Multiply row2 by mult */
+            
+            /* sse0 = ssemult * sserow2[i] */
+            sse0 = _mm_mul_pd (ssemult, sserow2[i]);
+            
+            /* Test if row1 > hibound */
+            
+            /* sse1 = (ssedst[i] > ssehibound) ? 0xffff : 0x0 for the 2 integers */
+            sse1 = _mm_cmpgt_pd (ssedst[i], ssehibound);
+            
+            /* sse1 = ssereduct^sse1 */
+            sse1 = _mm_and_pd (ssereduct, sse1);
+            
+            /* ssedst[i] = [ssedst[i][0]-sse1[0], ssedst[i][1]-sse1[1] */
+            ssedst[i] = _mm_sub_pd (ssedst[i], sse1);
+            
+            
+            /* Test if row1 < -hibound */
+            
+            /* sse1 = (sselobound > ssedst[i]) ? 0xffff : 0x0 for the 2 integers */
+            sse1 = _mm_cmpgt_pd (sselobound, ssedst[i]);
+            
+            /* sse1 = ssereduct^sse1 */
+            sse1 = _mm_and_pd (ssereduct, sse1);
+            
+            /*  ssedst[i] = [ssedst[i][0]+sse1[0], ssedst[i][1]+sse1[1] */
+            ssedst[i] = _mm_add_pd (ssedst[i], sse1);
+        
+            
+            /* Add row1 with row2 * mult */
+
+            /* ssedst[i] = [sse0[0]+ssedst[i][0], sse0[1]+ssedst[i][1]] */
+            ssedst[i] = _mm_add_pd (sse0, ssedst[i]);
+        }
+    }
+    
     #endif // __SSE2__
     #endif // __SSE4_1__
     
-    #ifdef __SSE4_1__
+    #if defined(__SSE4_1__) && defined(__x86_64__)
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -1006,8 +1132,90 @@ namespace F4
         }
     }
     
+    template <typename Element>
+    int
+    Matrix<Element>::echelonizeRight (chrono::duration<int,milli> & tmp_ech_db, chrono::duration<int,milli> & tmp_ech_dh)
+    {
+        chrono::steady_clock::time_point startc;
+        typedef chrono::duration<int,milli> millisecs_t;
+        typedef Givaro::ModularBalanced<double> Field;
+        Field F(Element::getModulo());
+        typename Field::Element * matrixRight = FFLAS::fflas_new (F,_height,_width-_nbPiv);
+        typename Field::Element one, minusOne;
+        size_t *P = new size_t[_height-_nbPiv]();
+        size_t *Q = new size_t[_width-_nbPiv]();
+        int ld=_width-_nbPiv;
+        F.init(one,1);
+        F.init(minusOne,-1);
+        
+        /* Convert left slice into FFLAS-FFPACK matrix */
+        startc=chrono::steady_clock::now();
+        for(int i=0; i<_height; i++)
+        {
+            for(int j=0; j<ld; j++)
+            {
+                F.init(matrixRight[i*ld+j], _matrix[i][_nbPiv+j].getElement());
+            }
+        }
+        cout << "Time conversion 1: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        
+        typename Field::Element * B=matrixRight;
+        typename Field::Element * D=matrixRight+_nbPiv*ld;
+        
+        startc=chrono::steady_clock::now();
+        /* PLUQ(D) */
+        int rank = (int)FFPACK::PLUQ (F, FFLAS::FflasUnit, (_height-_nbPiv), (_width-_nbPiv), D, ld, P, Q);
+        /* D2 = D1^(-1) * D2 */
+        FFLAS::ftrsm (F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasUnit, rank, (_width-_nbPiv)-rank, one, D, ld, D+rank, ld);
+        /* Suppress zero rows */
+        //FFLAS::fzero(F, (_height-_nbPiv)-rank, (_width-_nbPiv), D+rank*ld, ld);
+        /* Suppress L */
+        FFLAS::fidentity (F, rank, rank, D, ld);
+        /* B = B * Q^T */
+        FFPACK::applyP(F, FFLAS::FflasRight, FFLAS::FflasTrans, _nbPiv, 0, (_width-_nbPiv), B, ld, Q);
+        /* Carry the column swap over */
+        int exc=0;
+        for(int i=0; i<ld; i++)
+        {
+            int l = _nbPiv+i;
+            int ca = _nbPiv+Q[i];
+            _tau[_sigma[l]] = ca;
+            _tau[_sigma[ca]] = l;
+            exc = _sigma[l];
+            _sigma[l] = _sigma[ca];
+            _sigma[ca] = exc;
+            exc = _endCol[l];
+            _endCol[l] = _endCol[ca];
+            _endCol[ca] = exc;
+        }
+        
+        tmp_ech_db=chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc);
+        startc=chrono::steady_clock::now();
+        /* B2 = B2 - B1 * D2 */
+        FFLAS::fgemm(F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, _nbPiv, (_width-_nbPiv)-rank, rank, minusOne, B , ld, D+rank, ld, one, B+rank, ld);
+        /* B1 = 0 */
+        FFLAS::fzero(F, _nbPiv, rank, B, ld);
+        tmp_ech_dh=chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc);
+        
+        /* Convert the FFLAS-FFPACK matrix into integer matrix */
+        startc=chrono::steady_clock::now();
+        for(int i=0; i<_height; i++)
+        {
+            for(int j=0; j<ld; j++)
+            {
+                _matrix[i][_nbPiv+j] = (int32_t)matrixRight[i*ld+j];
+            }
+        }
+        cout << "Time conversion 2: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        delete[] P;
+        delete[] Q;
+        return _nbPiv+rank;
+    }
+    
     #define PARALLEL
+    #define FFLAS_FFPACK
     #ifndef PARALLEL
+    #ifndef FFLAS_FFPACK
     template <typename Element>
     int
     Matrix<Element>::echelonize ()
@@ -1372,10 +1580,419 @@ namespace F4
         }
         return _height;
     }
+    #endif // FFLAS_FFPACK
     #endif // PARALLEL
+    
+    #ifdef FFLAS_FFPACK
+    template <typename Element>
+    int
+    Matrix<Element>::echelonize ()
+    {
+        chrono::steady_clock::time_point start;
+        typedef chrono::duration<int,milli> millisecs_t;
+        millisecs_t tmp_ech_g, tmp_ech_db, tmp_ech_dh;
+        int i, l, l2, ll;
+        i = 0;
+        l = 0;
+        
+        /* Thread parameters */
+        omp_set_num_threads(NB_THREAD);
+        int chunk = 1;
+
+        if (VERBOSE > 1)
+        {
+            printf ("Echelonization time: ");
+        }
+
+    #define TRANCHE 64
+    
+        /* Echelonize the left part of the matrix */
+        start = chrono::steady_clock::now();
+        for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)
+        {
+            /* 1st slice */
+            if (l < TRANCHE)
+            {
+                /* Triangular part */
+                for (ll = l; ll > 0; ll--)
+                {
+                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                    normalizeRow(_matrix[ll], ll, _width);
+                    #pragma omp parallel for schedule(dynamic,chunk)
+                    for (l2 = 0; l2 < ll; l2++)
+                    {
+                        if (!isZero(l2,ll) )
+                        {
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
+                            }
+                        }
+                    }
+                }
+                /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                normalizeRow(_matrix[0], 0, _width);
+                
+                /* Low rectangular part (under  _nbPiv) */
+                #pragma omp parallel for private(ll) schedule(dynamic,chunk)
+                for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
+                {
+                    for (ll = l; ll >= 0; ll--)
+                    {
+                        if (!isZero(l2,ll) )
+                        {
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
+                            }
+                        }
+                    }
+                }
+            }
+            /* Other slices */
+            else
+            {
+                /* Triangular part */
+                for (ll = l; ll > l - TRANCHE; ll--)
+                {
+                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                    normalizeRow(_matrix[ll], ll, _width);
+                    #pragma omp parallel for schedule(dynamic,chunk)
+                    for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
+                    {
+                        if (!isZero(l2,ll) )
+                        {
+                            /* Normalize in  [-MODULO/2, MODULO/2]. */
+                            _matrix[l2][ll].modulo();
+                            if (!isZero(l2,ll) )
+                            {
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
+                            }
+                        }
+                    }
+                }
+                /* Hight rectangular part */
+                #pragma omp parallel 
+                {
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = 0; l2 <= l - TRANCHE; l2++)
+                    {
+                        for (ll = l; ll > l - TRANCHE; ll--)
+                        {
+                            if (!isZero(l2,ll) )
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
+                    /* Low rectangular part (under  _nbPiv) */
+                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                    for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
+                    {
+                        for (ll = l; ll > l - TRANCHE; ll--)
+                        {
+                            if (!isZero(l2,ll) )
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        tmp_ech_g = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
+        
+        /* Echelonize the right part of the matrix */
+        
+        #define SEUIL_FFLAS_FFPACK 1000000
+        
+        if((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK)
+        {
+            _height=echelonizeRight(tmp_ech_db, tmp_ech_dh);
+        }
+        else
+        {
+            int ca = 0;
+            int exc;
+            Element inv, piv;
+            
+            /* Echelonize the low right part of the matrix */
+            start = chrono::steady_clock::now();
+            ca = _nbPiv;
+            l = _nbPiv;
+            while (l < _height)
+            {
+                for (; ca < _width; ca++)
+                {
+                    /* Search a pivot in column ca */
+                    for (i = l; i < _height; i++)
+                    {
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        _matrix[i][ca].modulo();
+                        if (!isZero(i,ca) )
+                        {
+                            break;
+                        }
+                    }
+                    if (i < _height)
+                    {
+                        /* Pivot found in column ca */
+                        break;          
+                    }
+                }
+                if (ca == _width)
+                {
+                    /* All the rows under the l-th row are zeros */ 
+                    for(l2=l; l2<_height; l2++)
+                    {
+                        delete[] _matrix[l2];
+                    }
+                    /* Forget all the zeros rows */
+                    _height = l;
+                }
+                else
+                {
+                    /* Swap with the row containing the pivot */
+                    swapRow(l,i);
+                    if (ca != l)
+                    {
+                        /* Column swap */
+                        ll = (_endCol[l] > _endCol[ca] ? _endCol[l] : _endCol[ca]);
+                        swapCol(l,ca,0, ll);
+                        swapCol(l, ca, _nbPiv, _height);
+                        /* Carry the column swap over */
+                        _tau[_sigma[l]] = ca;
+                        _tau[_sigma[ca]] = l;
+                        exc = _sigma[l];
+                        _sigma[l] = _sigma[ca];
+                        _sigma[ca] = exc;
+                        exc = _endCol[l];
+                        _endCol[l] = _endCol[ca];
+                        _endCol[ca] = exc;
+                    }
+                    piv = _matrix[l][l];
+                    inv = piv.inverse();
+                    
+                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                    multRow (_matrix[l], inv, ca + 1, _width);      
+                    _matrix[l][l].setOne();
+                    
+                    /* Suppress the elements under the pivot */
+                    #pragma omp parallel for schedule(dynamic,chunk)
+                    for (l2 = l + 1; l2 < _height; l2++)
+                    {
+                        /* Normalize in  [-MODULO/2, MODULO/2]. */
+                        _matrix[l2][l].modulo();
+                        if (!isZero(l2,l) )
+                        {
+                            addMultRow (_matrix[l2], _matrix[l], -_matrix[l2][l], ca, _width);
+                            _matrix[l2][l].setZero();
+                        }
+                    }
+                    l++;
+                    ca++;
+                }
+            }
+            tmp_ech_db = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
+
+            /* Echelonize the hight right part of the matrix */
+            start = chrono::steady_clock::now();
+
+            /* Check _endCol */
+            for (l = _nbPiv; l < _height - 1; l++)
+            {
+                if (_endCol[l + 1] < _endCol[l])
+                {
+                    fprintf (stderr, "_endCol hypothesis voided: please report\n");
+                    exit (1);
+                }
+            }
+
+            int min_endcol, max_endcol;
+            for (l = _height - 1; l >= _nbPiv; l -= TRANCHE)
+            {
+                if (l < (_nbPiv + TRANCHE))
+                {
+                    /* 1st slice */
+                    /* Triangular part */
+                    for (ll = l; ll > _nbPiv; ll--)
+                    {
+                        /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                        normalizeRow(_matrix[ll], ll, _width);
+                        #pragma omp parallel for schedule(dynamic,chunk)
+                        for (l2 = _nbPiv; l2 < ll; l2++)
+                        {
+                            if (!isZero(l2,ll) )
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
+                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                    normalizeRow(_matrix[_nbPiv], _nbPiv, _width);
+                    
+                    max_endcol = _endCol[l];
+                    min_endcol = _endCol[_nbPiv];
+                    /* Upper rectangular part */
+                    #pragma omp parallel
+                    {
+                        #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                        for (l2 = 0; l2 < min_endcol; l2++)
+                        {
+                            for (ll = l; ll >= _nbPiv; ll--)
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                        #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                        for (l2 = min_endcol; l2 < max_endcol; l2++)
+                        {
+                            for (ll = l; _endCol[ll] > l2; ll--)
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll))
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    /* Triangular part */
+                    for (ll = l; ll > l - TRANCHE + 1; ll--)
+                    {
+                       /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                        normalizeRow(_matrix[ll], ll, _width);
+                        #pragma omp parallel for schedule(dynamic,chunk)
+                        for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
+                        {
+                            if (!isZero(l2,ll) )
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                    }
+                    /* Normalize the row in  [-MODULO/2, MODULO/2]. */
+                    normalizeRow(_matrix[l - TRANCHE + 1], l - TRANCHE + 1, _width);
+                    
+                    /* Upper rectangular part */
+                    max_endcol = _endCol[l];
+                    min_endcol = _endCol[l - TRANCHE + 1];
+                    #pragma omp parallel
+                    {
+                        #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                        for (l2 = 0; l2 < min_endcol; l2++)
+                        {
+                            for (ll = l; ll > l - TRANCHE; ll--)
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                        #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                        for (l2 = min_endcol; l2 < max_endcol; l2++)
+                        {
+                            for (ll = l; _endCol[ll] > l2; ll--)
+                            {
+                                /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                _matrix[l2][ll].modulo();
+                                if (!isZero(l2,ll) )
+                                {
+                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                    _matrix[l2][ll].setZero();
+                                }
+                            }
+                        }
+                        #pragma omp for private(ll) nowait schedule(dynamic,chunk)
+                        for (l2 = _nbPiv; l2 <= l - TRANCHE; l2++)
+                        {
+                            for (ll = l; ll > l - TRANCHE; ll--)
+                            {
+                                if (!isZero(l2,ll) )
+                                {
+                                    /* Normalize in  [-MODULO/2, MODULO/2]. */
+                                    _matrix[l2][ll].modulo();
+                                    if (!isZero(l2,ll) )
+                                    {
+                                        addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                        _matrix[l2][ll].setZero();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            tmp_ech_dh = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
+        }
+            
+        /* Normalize the matrix */
+        #pragma omp parallel for private(l) schedule(dynamic,chunk)
+        for (i = 0; i < _height; i++)
+        {
+            for (l = i; l < _width; l++)
+            {
+                _matrix[i][l].modulo();
+            }
+        }
+
+        if (VERBOSE > 1)
+        {
+            cout << tmp_ech_g.count() << " + " << tmp_ech_db.count() << " + " << tmp_ech_dh.count() << " = " << (tmp_ech_g + tmp_ech_db + tmp_ech_dh).count() << " ms" << endl << endl;
+        }
+        return _height;
+    }
+    #endif // FFLAS_FFPACK
     
     
     #ifdef PARALLEL
+    #ifndef FFLAS_FFPACK
     template <typename Element>
     int
     Matrix<Element>::echelonize ()
@@ -1768,6 +2385,7 @@ namespace F4
         }
         return _height;
     }
+    #endif // FFLAS_FFPACK
     #endif // PARALLEL
     
     

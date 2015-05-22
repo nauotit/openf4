@@ -30,7 +30,7 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=0;
+int F4::VERBOSE=1;
 int F4::NB_THREAD=min(1, omp_get_num_procs());
 
 // Init element-prime tools
@@ -415,19 +415,19 @@ int main (int argc, char **argv)
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
     
-    start=chrono::steady_clock::now();
-    nbGen=cyclic6F4(magma);
-    if (file)
-    {
-        file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=chrono::steady_clock::now();
+    //nbGen=cyclic6F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
-    start=chrono::steady_clock::now();
-    nbGen=cyclic7F4(magma);
-    if (file)
-    {
-        file << "Cyclic 7 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    }
+    //start=chrono::steady_clock::now();
+    //nbGen=cyclic7F4(magma);
+    //if (file)
+    //{
+        //file << "Cyclic 7 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     start=chrono::steady_clock::now();
     nbGen=cyclic8F4(magma);
@@ -471,7 +471,7 @@ int main (int argc, char **argv)
         //file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
     
-    //return 0;
+    return 0;
 }
 
 

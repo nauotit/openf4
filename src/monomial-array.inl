@@ -37,16 +37,16 @@ namespace F4
     
     /* Constructors */
     
-    MonomialArray::MonomialArray(int nbVariable, int capacity):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
+    MonomialArray::MonomialArray(int nbVariable, int capacity):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
         /* Initialise Monomial */
         Monomial::initMonomial(nbVariable, 0);
         
         /* Initialise _monomialArray */
-        _monomialArray.resize(_capacity);
+        _monomialArray.resize(capacity);
     }
              
-    MonomialArray::MonomialArray(int nbVariable, int capacity, int degree):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
+    MonomialArray::MonomialArray(int nbVariable, int capacity, int degree):_tabulatedProduct(0), _nbVariable(nbVariable), _size(0), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
         /* Initialise Monomial */
         Monomial::initMonomial(nbVariable, degree);
@@ -55,13 +55,13 @@ namespace F4
         Monomial::setNbMonomial(degree);
         
         /* Initialise _monomialArray */
-        _monomialArray.resize(_capacity);
+        _monomialArray.resize(capacity);
         
         /* Fill _monomialArray up to degree "degree" */
         setMonomialArray();
     }
              
-    MonomialArray::MonomialArray(int nbVariable, int capacity, int degree, int deg1, int deg2):_nbVariable(nbVariable), _size(0), _capacity(capacity), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
+    MonomialArray::MonomialArray(int nbVariable, int capacity, int degree, int deg1, int deg2):_nbVariable(nbVariable), _size(0), _varlistIndex(0), _numMaxRow(0), _numMaxColumn(0)
     {
         /* Initialise Monomial */
         Monomial::initMonomial(nbVariable, degree);
@@ -70,7 +70,7 @@ namespace F4
          Monomial::setNbMonomial(degree);
         
         /* Initialise _monomialArray */
-        _monomialArray.resize(_capacity);
+        _monomialArray.resize(capacity);
         
         /* Fill _monomialArray up to degree "degree" */
         setMonomialArray();
@@ -105,11 +105,7 @@ namespace F4
         size_t size=Monomial::getNbMonomial();
         if(size>_size)
         {
-            assert(size<_capacity);
-            if(size>=_capacity)
-            {
-                _monomialArray.resize(size);
-            }
+            _monomialArray.resize(size);
             if (VERBOSE>1)
             {
                 cout << "MonomialArray: " << (size - _size) << " new monomials, " << ((double)(size - _size) * (sizeof(Monomial) + _nbVariable*sizeof(uint8_t)))/1000000 << " Mo reserved for _monomialArray, varlistIndex = " << _varlistIndex << endl;

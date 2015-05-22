@@ -25,8 +25,10 @@
 #define F4_POLYNOMIAL_H
 
 /** \cond */
-#include "single-list.h"
+#include <algorithm>
+#include <cctype>
 /** \endcond */
+#include "single-list.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

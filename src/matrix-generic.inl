@@ -60,7 +60,7 @@ namespace F4
         {
             for(int j=0; j<_width; j++)
             {
-                _matrix[i*_width+j]=_F.zero; 
+                _F.init(_matrix[i*_width+j],_F.zero); 
             }
         }
     }
@@ -190,7 +190,7 @@ namespace F4
                     while (ssin.good() && i < _width)
                     {
                         ssin >> tmp;
-                        _matrix[row*_width+i]=stoul(tmp);
+                        _F.init(_matrix[row*_width+i],stol(tmp));
                         ++i;
                     }
                     row++;
@@ -334,13 +334,13 @@ namespace F4
                     while (i < _nbPiv && ssin.good())
                     {
                         ssin >> tmp;
-                        _A[row*_nbPiv+i]=stoul(tmp);
+                        _F.init(_A[row*_nbPiv+i],stol(tmp));
                         ++i;
                     }
                     while (i < _width && ssin.good())
                     {
                         ssin >> tmp;
-                        _B[row*(_width-_nbPiv)+j]=stoul(tmp);
+                        _F.init(_B[row*(_width-_nbPiv)+j],stol(tmp));
                         ++i;
                         ++j;
                     }
@@ -355,13 +355,13 @@ namespace F4
                     while (i < _nbPiv && ssin.good())
                     {
                         ssin >> tmp;
-                        _C[row*_nbPiv+i]=stoul(tmp);
+                        _F.init(_C[row*_nbPiv+i],stol(tmp));
                         ++i;
                     }
                     while (i < _width && ssin.good())
                     {
                         ssin >> tmp;
-                        _D[row*(_width-_nbPiv)+j]=stoul(tmp);
+                        _F.init(_D[row*(_width-_nbPiv)+j],stol(tmp));
                         ++i;
                         ++j;
                     }
@@ -387,7 +387,7 @@ namespace F4
         {
             for(int j=0; j<_width; j++)
             {
-                _matrix[i*_width+j]=matrix._matrix[i*_width+j];
+                _F.init(_matrix[i*_width+j],matrix._matrix[i*_width+j]);
             }
         }
     }
@@ -402,7 +402,7 @@ namespace F4
         {
             for(int j=0; j<_nbPiv; j++)
             {
-                _A[i*_nbPiv+j]=matrix._A[i*_nbPiv+j];
+                _F.init(_A[i*_nbPiv+j],matrix._A[i*_nbPiv+j]);
             }
         }
         _B=FFLAS::fflas_new (_F,_nbPiv,_width-_nbPiv);
@@ -410,7 +410,7 @@ namespace F4
         {
             for(int j=0; j<_width-_nbPiv; j++)
             {
-                _B[i*(_width-_nbPiv)+j]=matrix._B[i*(_width-_nbPiv)+j];
+                _F.init(_B[i*(_width-_nbPiv)+j],matrix._B[i*(_width-_nbPiv)+j]);
             }
         }
         _C=FFLAS::fflas_new (_F,_height-_nbPiv,_nbPiv);
@@ -418,7 +418,7 @@ namespace F4
         {
             for(int j=0; j<_nbPiv; j++)
             {
-                _C[i*_nbPiv+j]=matrix._C[i*_nbPiv+j];
+                _F.init(_C[i*_nbPiv+j],matrix._C[i*_nbPiv+j]);
             }
         }
         _D=FFLAS::fflas_new (_F,_height-_nbPiv,_width-_nbPiv);
@@ -426,7 +426,7 @@ namespace F4
         {
             for(int j=0; j<_width-_nbPiv; j++)
             {
-                _D[i*(_width-_nbPiv)+j]=matrix._D[i*(_width-_nbPiv)+j];
+                _F.init(_D[i*(_width-_nbPiv)+j],matrix._D[i*(_width-_nbPiv)+j]);
             }
         }
     }
@@ -821,6 +821,28 @@ namespace F4
     }
     #endif // BLOCK
     
+    //#ifndef  BLOCK
+    //template <class Field>
+    //int
+    //MatrixGeneric<Field>::echelonize ()
+    //{
+        //chrono::steady_clock::time_point start=chrono::steady_clock::now();
+        //typedef chrono::duration<int,milli> millisecs_t;
+        //int rank;
+        //size_t *P = new size_t[_height]();
+        //size_t *Q = new size_t[_width]();
+        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackTileRecursive);
+        //cout << "Rank with echelon form: " << rank << endl;
+        ////rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackSlabRecursive);
+        //FFPACK::getReducedEchelonForm (_F, FFLAS::FflasUpper, _height , _width, rank, Q, _matrix, _width,  FFPACK::FfpackTileRecursive);
+        //cout << "Echelonization time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+        //delete[] P;
+        //delete[] Q;
+        //_height=rank;
+        //return rank;
+    //}
+    //#endif // BLOCK
+    
     #ifndef  BLOCK
     template <class Field>
     int
@@ -828,18 +850,62 @@ namespace F4
     {
         chrono::steady_clock::time_point start=chrono::steady_clock::now();
         typedef chrono::duration<int,milli> millisecs_t;
+        typename Field::Element one, minusOne;
+        size_t *P = new size_t[_height-_nbPiv]();
+        size_t *Q = new size_t[_width-_nbPiv]();
         int rank;
-        size_t *P = new size_t[_height]();
-        size_t *Q = new size_t[_width]();
-        rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackTileRecursive);
-        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, _height, _width, _matrix, _width, P, Q, false, FFPACK::FfpackSlabRecursive);
+        
+        typename Field::Element * A=_matrix;
+        typename Field::Element * B=_matrix+_nbPiv;
+        typename Field::Element * C=_matrix+_nbPiv*_width;
+        typename Field::Element * D=_matrix+_nbPiv*_width+_nbPiv;
+        
+        _F.init(one,1);
+        _F.init(minusOne,-1);
+        /* B = A^(-1) * B */
+        chrono::steady_clock::time_point startc=chrono::steady_clock::now();
+        FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasUnit, _nbPiv, _width-_nbPiv, one, A, _width, B, _width);
+        FFLAS::fidentity (_F, _nbPiv, _nbPiv, A, _width);
+        cout << "Time ftrsm: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        
+        /* D = D - C * B */
+        startc=chrono::steady_clock::now();
+        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, (_height-_nbPiv), (_width-_nbPiv), _nbPiv, minusOne, C, _width, B, _width, one, D, _width);
+        FFLAS::fzero(_F, (_height-_nbPiv), _nbPiv, C, _width);
+        cout << "Time fgemm: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        
+        /* D = Gauss(D) */
+        startc=chrono::steady_clock::now();
+        /* PLUQ(D) */
+        rank = (int)FFPACK::PLUQ (_F, FFLAS::FflasUnit, (_height-_nbPiv), (_width-_nbPiv), D, _width, P, Q);
+        /* D2 = D1^(-1) * D2 */
+        FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasUnit, rank, (_width-_nbPiv)-rank, _F.one, D, _width, D+rank, _width);
+        //rank = (int)FFPACK::ReducedRowEchelonForm (_F, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q, false, FFPACK::FfpackTileRecursive);
+        /* Suppress zero rows */
+        FFLAS::fzero(_F, (_height-_nbPiv)-rank, (_width-_nbPiv), D+rank*_width, _width);
+        /* Suppress L */
+        FFLAS::fidentity (_F, rank, rank, D, _width);
+        /* B = B * Q^T */
+        FFPACK::applyP(_F, FFLAS::FflasRight, FFLAS::FflasTrans, (_width-_nbPiv), 0, (_width-_nbPiv), B, _width, Q);
+        
+        cout << "Time bottom right slice: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        startc=chrono::steady_clock::now();
+        /* B2 = B2 - B1 * D2 */
+        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, _nbPiv, (_width-_nbPiv)-rank, rank, minusOne, B , _width, D+rank, _width, one, B+rank, _width);
+        /* B1 = 0 */
+        FFLAS::fzero(_F, _nbPiv, rank, B, _width);
+        cout << "Time top right slice: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-startc).count() << " ms" << endl;
+        
+        
         cout << "Echelonization time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
         delete[] P;
         delete[] Q;
-        _height=rank;
-        return rank;
+        _height=rank+_nbPiv;
+        return _height;
     }
     #endif // BLOCK
+    
+    
     
     #ifdef BLOCK
     template <class Field>
@@ -855,19 +921,64 @@ namespace F4
         _F.init(one,1);
         _F.init(minusOne,-1);
         /* B = A^(-1) * B */
-        FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasNonUnit, _nbPiv, _width-_nbPiv, one, _A, _nbPiv, _B, _width-_nbPiv);
+        clock_t startc=clock();
+        FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasUnit, _nbPiv, _width-_nbPiv, one, _A, _nbPiv, _B, _width-_nbPiv);
+        FFLAS::fidentity (_F, _nbPiv, _nbPiv, _A, _nbPiv);
+        cout << "Time ftrsm: " << (clock() - startc)*1000/CLOCKS_PER_SEC << endl;
         
-        /* D = C * B - D */
-        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, (_height-_nbPiv), (_width-_nbPiv), _nbPiv, one, _C, _nbPiv, _B, _width-_nbPiv, minusOne, _D, _width-_nbPiv);
+        /* D = D - C * B */
+        startc=clock();
+        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, (_height-_nbPiv), (_width-_nbPiv), _nbPiv, minusOne, _C, _nbPiv, _B, _width-_nbPiv, one, _D, _width-_nbPiv);
+        FFLAS::fzero(_F, (_height-_nbPiv), _nbPiv, _C, _nbPiv);
+        cout << "Time fgemm: " << (clock() - startc)*1000/CLOCKS_PER_SEC << endl;
+        
+        // DEBUG write D into a file
+        ofstream spluq("Cyclic8-D.debug");
+        if(spluq)
+        {
+            spluq << _height-_nbPiv << endl << _width-_nbPiv << endl;
+            for (int i=0; i< _height-_nbPiv; i++)
+            {
+                for(int j=0; j<_width-_nbPiv; j++)
+                {
+                    spluq << " " << _D[i*(_width-_nbPiv)+j] << " "; 
+                }
+                spluq << endl;
+            }
+        }
+        else
+        {
+            cout << "Error printing _D " << endl;
+        }
         
         /* D = Gauss(D) */
+        startc=clock();
+        /* PLUQ(D) */
+        rank = (int)FFPACK::PLUQ (_F, FFLAS::FflasUnit, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q);
+        /* D2 = D1^(-1) * D2 */
+        FFLAS::ftrsm (_F, FFLAS::FflasLeft, FFLAS::FflasUpper, FFLAS::FflasNoTrans, FFLAS::FflasUnit, rank, (_width-_nbPiv)-rank, _F.one, _D, (_width-_nbPiv), _D+rank, (_width-_nbPiv));
         //rank = (int)FFPACK::ReducedRowEchelonForm (_F, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q, false, FFPACK::FfpackTileRecursive);
-        rank = (int)FFPACK::ReducedRowEchelonForm (_F, (_height-_nbPiv), (_width-_nbPiv), _D, (_width-_nbPiv), P, Q, false, FFPACK::FfpackSlabRecursive);
+        /* Suppress zero rows */
+        FFLAS::fzero(_F, (_height-_nbPiv)-rank, (_width-_nbPiv), _D+rank*(_width-_nbPiv), (_width-_nbPiv));
+        /* Suppress L */
+        FFLAS::fidentity (_F, rank, rank, _D, (_width-_nbPiv));
+        /* B = B * Q^T */
+        FFPACK::applyP(_F, FFLAS::FflasRight, FFLAS::FflasTrans, (_width-_nbPiv), 0, (_width-_nbPiv), _B, (_width-_nbPiv), Q);
+        
+        cout << "Time bottom right slice: " << (clock() - startc)*1000/CLOCKS_PER_SEC << endl;
+        startc=clock();
+        /* B2 = B2 - B1 * D2 */
+        FFLAS::fgemm(_F, FFLAS::FflasNoTrans, FFLAS::FflasNoTrans, _nbPiv, (_width-_nbPiv)-rank, rank, minusOne, _B , _width-_nbPiv, _D+rank, _width-_nbPiv, one, _B+rank, _width-_nbPiv);
+        /* B1 = 0 */
+        FFLAS::fzero(_F, _nbPiv, rank, _B, (_width-_nbPiv));
+        cout << "Time top right slice: " << (clock() - startc)*1000/CLOCKS_PER_SEC << endl;
+        
         
         cout << "Echelonization time: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
         delete[] P;
         delete[] Q;
-        return rank+_nbPiv;
+        _height=rank+_nbPiv;
+        return _height;
     }
     #endif //BLOCK
     

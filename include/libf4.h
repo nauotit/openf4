@@ -31,13 +31,13 @@
 /**
  * \brief Compute a reduced groebner basis of the ideal defined by the list of polynomials polynomialList.
  * \param modulo: Characteristic of the base field.
- * \param sizeMonomialArray: Size of the monomial array.
+ * \param degree: Initial degree. Allow to speed up the computation if you have an idea of the maximum monomial degree used.
  * \param nbVariable: Number of variable of the polynomial ring.
  * \param polynomialList: List of polynomials under text format.
  * \param nbThread: Number of threads to use.
  * \param verbose: Verbosity level.
  * \return Reduced groebner basis under text format.
  */
-std::vector<std::string> groebnerBasisF4(int64_t modulo, int sizeMonomialArray, int nbVariable, std::vector<std::string> variableName, std::vector<std::string> polynomialList, int nbThread, int verbose);
+std::vector<std::string> groebnerBasisF4(int64_t modulo, int degree, int nbVariable, std::vector<std::string> variableName, std::vector<std::string> polynomialList, int nbThread, int verbose);
 
 #endif // F4_LIBF4_H
