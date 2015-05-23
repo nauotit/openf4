@@ -35,6 +35,7 @@
 #include <omp.h>
 #include <givaro/modular-balanced.h>
 #include <fflas-ffpack/ffpack/ffpack.h>
+#include <fflas-ffpack/fflas/fflas.h>
 /** \endcond */
 
 #include "element-prime.h"
@@ -47,6 +48,9 @@
 #include <xmmintrin.h>
 #include <smmintrin.h>
 #endif // __SSE4_1__
+
+#define PARALLEL
+#define FFLAS_FFPACK 
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -289,6 +293,12 @@ namespace F4
              * \return Height of the echelonized matrix.
              */
             int echelonize ();
+            
+            /**
+             * \brief Specialisation of echelonize for ElementPrime Type, use lazy arithmetic.
+             * \return Height of the echelonized matrix.
+             */
+            int echelonizePrime ();
             
             
             /* Internal operator */
