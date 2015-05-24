@@ -921,7 +921,7 @@ namespace F4
         int d;
         int num_lt;
         
-        if(VERBOSE > 3)
+        if(VERBOSE > 0)
         {
             cout << "Number of equations: " << _polynomialArray.size() << endl;
             for(typename vector<Polynomial<Element>>::const_iterator it=_polynomialArray.begin(); it != _polynomialArray.end(); ++it)
@@ -1099,8 +1099,8 @@ namespace F4
                 timeTransform += chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-timeTransformStart);
             }
             
-            //filename=to_string(step)+"before-echelonize.pgm";
-            //printMatrix(mat, tabMon, sigma, filename);
+            filename=to_string(step)+"before-echelonize.pgm";
+            printMatrix(mat, tabMon, sigma, filename);
             
             if (VERBOSE > 0)
             {
@@ -1116,8 +1116,8 @@ namespace F4
             mat.setInfo(nbPiv, tau, sigma, startTail, endCol);
             heightReal=mat.echelonize();
             
-            //filename=to_string(step)+"after-echelonize.pgm";
-            //printMatrix(mat, tabMon, sigma, filename);
+            filename=to_string(step)+"after-echelonize.pgm";
+            printMatrix(mat, tabMon, sigma, filename);
             
             if (VERBOSE > 0)
             {

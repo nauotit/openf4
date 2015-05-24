@@ -109,7 +109,7 @@ namespace F4
     void 
     Term<Element>::setCoefficientOne()
     {
-        _coefficient._element=1;
+        _coefficient.setOne();
     }
     
     template <typename Element>
@@ -239,6 +239,29 @@ namespace F4
             }
         }
         _coefficient=(double)res;
+    }
+    
+    template<>
+    void
+    Term<ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>>::readCoefficient(std::string const s)
+    {
+        long res;
+        try
+        { 
+            res=stol(s);
+        }
+        catch(exception const & e)
+        {
+            if(s[0]=='-')
+            {
+                res=-1;
+            }
+            else
+            {
+                res=1;
+            }
+        }
+        _coefficient=(int)res;
     }
     
     template <typename Element>

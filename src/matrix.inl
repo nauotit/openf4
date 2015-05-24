@@ -53,6 +53,20 @@ namespace F4
         }
     }
     
+    template <>
+    Matrix<ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+        _matrix=new ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>> *[_height];
+        for(int i=0; i< _height; i++)
+        {
+            _matrix[i]=new ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>[_width];
+            for(int j=0; j<_width; j++)
+            {
+                _matrix[i][j].setZero();
+            }
+        }
+    }
+    
     template <typename Element>
     Matrix<Element>::Matrix(string const & filename)
     {
@@ -181,7 +195,7 @@ namespace F4
                     while (ssin.good() && i < _width)
                     {
                         ssin >> tmp;
-                        getRow(row)[i]=stoul(tmp);
+                        getRow(row)[i]=stol(tmp);
                         ++i;
                     }
                     row++;
@@ -584,7 +598,7 @@ namespace F4
     Matrix<Element>::addMultRow(Element * row1, Element * row2, Element element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
-        element.modulo();
+        //element.modulo();
         for(int i=start; i<end; ++i)
         {
             row1[i].addMult(row2[i], element);

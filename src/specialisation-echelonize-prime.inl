@@ -28,6 +28,8 @@ using namespace std;
 
 namespace F4
 {
+    /* echelonize specialisation for ElementPrime */
+    
     template <>
     int
     Matrix<ElementPrime<int16_t>>::echelonize ()
@@ -47,6 +49,115 @@ namespace F4
     Matrix<ElementPrime<int64_t>>::echelonize ()
     {
         return echelonizePrime();
+    }
+    
+    /* normalizeRow specialisation for ElementPrime */
+    
+    template <>
+    void
+    Matrix<ElementPrime<int16_t>>::normalizeRow(ElementPrime<int16_t> * row, int start, int end)
+    {
+        normalizeRowPrime(row, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int32_t>>::normalizeRow (ElementPrime<int32_t> * row, int start, int end)
+    {
+        normalizeRowPrime(row, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int64_t>>::normalizeRow (ElementPrime<int64_t> * row, int start, int end)
+    {
+        normalizeRowPrime(row, start, end);
+    }
+    
+    /* multRow specialisation for ElementPrime */
+    
+    template <>
+    void
+    Matrix<ElementPrime<int16_t>>::multRow(ElementPrime<int16_t> * row, ElementPrime<int16_t> const & element, int start, int end)
+    {
+        multRowPrime(row, element, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int32_t>>::multRow (ElementPrime<int32_t> * row, ElementPrime<int32_t> const & element, int start, int end)
+    {
+        multRowPrime(row, element, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int64_t>>::multRow (ElementPrime<int64_t> * row, ElementPrime<int64_t> const & element, int start, int end)
+    {
+        multRowPrime(row, element, start, end);
+    }
+    
+    /* addMultRow specialisation for ElementPrime */
+    
+    #ifndef __SSE4_1__
+    #ifndef __SSE2__
+    template <>
+    void
+    Matrix<ElementPrime<int16_t>>::addMultRow (ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> element, int start, int end)
+    {
+        addMultRowPrime(row1, row2, element, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int32_t>>::addMultRow (ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> element, int start, int end)
+    {
+        addMultRowPrime(row1, row2, element, start, end);
+    }
+    
+    template <>
+    void
+    Matrix<ElementPrime<int64_t>>::addMultRow (ElementPrime<int64_t> * row1, ElementPrime<int64_t> * row2, ElementPrime<int64_t> element, int start, int end)
+    {
+        addMultRowPrime(row1, row2, element, start, end);
+    }
+    #endif
+    #endif
+    
+    /* Definition of normalizeRowPrime, multRowPrime, addMultRowPrime, echelonizePrime */
+    
+    template <typename Element>
+    void
+    Matrix<Element>::normalizeRowPrime(Element * row, int start, int end)
+    {
+        assert((start >= 0) && (end <= _width));
+        for(int i=start; i<end; ++i)
+        {
+            row[i].modulo();
+        }
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::multRowPrime(Element * row, Element const & element, int start, int end)
+    {
+        assert((start >= 0) && (end <= _width));
+        for(int i=start; i<end; ++i)
+        {
+            row[i]*=element;
+        }
+    }
+    
+    template <typename Element>
+    inline void
+    Matrix<Element>::addMultRowPrime(Element * row1, Element * row2, Element element, int start, int end)
+    {
+        assert((start >= 0) && (end <= _width));
+        element.modulo();
+        for(int i=start; i<end; ++i)
+        {
+            row1[i].addMult(row2[i], element);
+        }
     }
     
     #ifndef PARALLEL

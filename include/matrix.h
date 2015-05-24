@@ -39,6 +39,7 @@
 /** \endcond */
 
 #include "element-prime.h"
+#include "element-zech-prime.h"
 
 #ifdef __SSE2__
 #include <xmmintrin.h>
@@ -49,8 +50,8 @@
 #include <smmintrin.h>
 #endif // __SSE4_1__
 
-#define PARALLEL
-#define FFLAS_FFPACK 
+//#define PARALLEL
+//#define FFLAS_FFPACK 
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -246,6 +247,7 @@ namespace F4
              * \param end: End of the slice.
              */
             void normalizeRow(Element * row, int start, int end);
+            void normalizeRowPrime(Element * row, int start, int end);
             
             /**
              * \brief Multiply a slice of the row-th row by element.
@@ -255,6 +257,7 @@ namespace F4
              * \param end: End of the slice.
              */
             void multRow(Element * row, Element const & element, int start, int end);
+            void multRowPrime(Element * row, Element const & element, int start, int end);
             
              /**
              * \brief Multiply a slice of the row1-th row by element and add a slice of the row2-th row.
@@ -265,6 +268,7 @@ namespace F4
              * \param end: End of the slice.
              */
             void addMultRow(Element * row1, Element * row2, Element element, int start, int end);
+            void addMultRowPrime(Element * row1, Element * row2, Element element, int start, int end);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
