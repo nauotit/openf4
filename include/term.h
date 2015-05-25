@@ -26,7 +26,7 @@
 
 #include "monomial-array.h"
 #include "element-prime.h"
-#include "element-zech-prime.h"
+#include "element-givaro.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

@@ -243,7 +243,7 @@ namespace F4
     
     template<>
     void
-    Term<ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>>::readCoefficient(std::string const s)
+    Term<ElementGivaro<Givaro::Modular<Givaro::Log16>>>::readCoefficient(std::string const s)
     {
         long res;
         try
@@ -262,6 +262,63 @@ namespace F4
             }
         }
         _coefficient=(int)res;
+    }
+    
+    template<>
+    void
+    Term<ElementGivaro<Givaro::Modular<Givaro::Integer>>>::readCoefficient(std::string const s)
+    {
+        /* 2^63 has 19 digits */
+        string tmp;
+        size_t pos1=s.find(Monomial::getVariable()[0]);
+        size_t pos2=0;
+        for (int i = 1; i < Monomial::getNbVariable(); ++i)
+        {
+            pos2=s.find(Monomial::getVariable()[i]);
+            if(pos2 != string::npos)
+            {
+                pos1=min(pos1, pos2);
+            }
+        }
+        if(pos1==0 && s.find(Monomial::getVariable()[0])!=0)
+        {
+            /* Constant coefficient */
+            tmp=s;
+        }
+        else if(s[pos1-1]=='*')
+        {
+            /* remove '*' */
+            tmp=s.substr(0, pos1-1);
+        }
+        else
+        {
+            tmp=s.substr(0, pos1);
+        }
+        
+        if(tmp.size() > 20)
+        {
+            _coefficient=tmp;
+        }
+        else
+        {
+            long res;
+            try
+            { 
+                res=stol(tmp);
+            }
+            catch(exception const & e)
+            {
+                if(s[0]=='-')
+                {
+                    res=-1;
+                }
+                else
+                {
+                    res=1;
+                }
+            }
+            _coefficient=to_string(res);
+        }
     }
     
     template <typename Element>

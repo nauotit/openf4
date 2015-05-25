@@ -31,13 +31,13 @@ using namespace std;
 
 // Global variable
 int F4::VERBOSE=1;
-int F4::NB_THREAD=min(1, omp_get_num_procs());
+int F4::NB_THREAD=min(2, omp_get_num_procs());
 
-// Init element-zech-prime tools
-typedef Givaro::Modular<Givaro::Log16, Givaro::Log16> Field;
-int modulo=8209;
+// Init element-givaro tools
+typedef Givaro::Modular<Givaro::Integer> Field;
+Givaro::Integer modulo(Givaro::Integer("115792089237316195423570985008687907853269984665640564039457584007913129640233"));
 Field F(modulo);
-typedef ElementZechPrime<Field> eltType;
+typedef ElementGivaro<Field> eltType;
 
 int cyclic6F4(bool magma)
 {
@@ -394,7 +394,7 @@ int katsura12F4(bool magma)
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                     BENCHMARK ZECH                    #" << endl;
+    cout << "#                     BENCHMARK GMP                     #" << endl;
     cout << "#########################################################" << endl << endl;
 
     // Time

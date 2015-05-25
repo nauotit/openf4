@@ -16,16 +16,16 @@
  */
 
 /**
- *  \file test-element-zech-prime.cpp
- *  \example test-element-zech-prime.cpp
- *  \brief ElementZechPrime regression tests.
+ *  \file test-element-givaro.cpp
+ *  \example test-element-givaro.cpp
+ *  \brief ElementGivaro regression tests.
  *  \ingroup examples
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
 
 #include <iostream>
 #include <vector>
-#include "../include/element-zech-prime.h"
+#include "../include/element-givaro.h"
 
 using namespace F4;
 using namespace std;
@@ -37,39 +37,44 @@ int main (int argc, char **argv)
 {
     cout << endl;
     cout << "#########################################################" << endl;
-    cout << "#              TEST ELEMENT ZECH PRIME                  #" << endl;
+    cout << "#                  TEST ELEMENT GIVARO                  #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    typedef Givaro::Modular<Givaro::Log16, Givaro::Log16> Field;
-    int modulo=8209;
+    // Init element-givaro tools
+    //typedef Givaro::Modular<Givaro::Log16> Field;
+    //int modulo=8209;
+
+    typedef Givaro::Modular<Givaro::Integer> Field;
+    Givaro::Integer modulo(Givaro::Integer("115792089237316195423570985008687907853269984665640564039457584007913129640233"));
+
     Field F(modulo);
-    typedef ElementZechPrime<Field> eltType;
+    typedef ElementGivaro<Field> eltType;
     eltType::setField(F);
     
-    // Test ElementZechPrime & operator=(int element);
+    // Test ElementGivaro & operator=(int element);
     cout << "________Test operator=(int element)________" << endl;
     eltType e1;
     e1=123;
     cout << "e1 = " << e1 << endl << endl;
     
-    // Test ElementZechPrime & operator=(typename Field::Element element);
+    // Test ElementGivaro & operator=(typename Field::Element element);
     cout << "________Test operator=(typename Field::Element element)________" << endl;
     eltType e2;
     e2=e1._element;
     cout << "e2 = " << e2 << endl << endl;
     
-    // Test ElementZechPrime & operator*=(ElementZechPrime const & mult);
-    cout << "________Test operator*=(ElementZechPrime const & mult)________" << endl; 
+    // Test ElementGivaro & operator*=(ElementGivaro const & mult);
+    cout << "________Test operator*=(ElementGivaro const & mult)________" << endl; 
     e2*=e1;
     cout << "e2 = " << e2 << endl << endl;
     
-    // Test ElementZechPrime & operator-=(ElementZechPrime const & element);
-    cout << "________Test operator-=(ElementZechPrime const & element)________" << endl;
+    // Test ElementGivaro & operator-=(ElementGivaro const & element);
+    cout << "________Test operator-=(ElementGivaro const & element)________" << endl;
     e2-=e1;
     cout << "e2 = " << e2 << endl << endl;
     
-    // Test ElementZechPrime<Field> & addMult(ElementZechPrime<Field> const & element, ElementZechPrime<Field> const & mult);
-    cout << "________Test addMult(ElementZechPrime<Field> const & element, ElementZechPrime<Field> const & mult)________" << endl;
+    // Test ElementGivaro<Field> & addMult(ElementGivaro<Field> const & element, ElementGivaro<Field> const & mult);
+    cout << "________Test addMult(ElementGivaro<Field> const & element, ElementGivaro<Field> const & mult)________" << endl;
     eltType e3;
     e1=10;
     e2=20;
@@ -77,7 +82,7 @@ int main (int argc, char **argv)
     e3.addMult(e1,e2);
     cout << "e3 = " << e3 << endl << endl;
     
-    // Test ElementZechPrime<Field> & inverse();
+    // Test ElementGivaro<Field> & inverse();
     cout << "________Test inverse()________" << endl;
     e3.inverse();
     cout << "e3 = " << e3 << endl << endl;
@@ -106,12 +111,12 @@ int main (int argc, char **argv)
     e3.setOne();
     cout << "e3==1: " << e3.isOne() << endl << endl;
     
-    // Test operator * (ElementZechPrime<Field> const & element1, ElementZechPrime<Field> const & element2);
-    cout << "________Test operator * (ElementZechPrime<Field> const & element1, ElementZechPrime<Field> const & element2)________" << endl;
+    // Test operator * (ElementGivaro<Field> const & element1, ElementGivaro<Field> const & element2);
+    cout << "________Test operator * (ElementGivaro<Field> const & element1, ElementGivaro<Field> const & element2)________" << endl;
     cout << "e1 *e2 = " << (e1*e2) << endl << endl;
     
-    // Test operator - (ElementZechPrime<Field> const & element);
-    cout << "________Test operator - (ElementZechPrime<Field> const & element)________" << endl;
+    // Test operator - (ElementGivaro<Field> const & element);
+    cout << "________Test operator - (ElementGivaro<Field> const & element)________" << endl;
     cout << "-e3 = " << (-e3) << endl << endl;
     
     return 0;

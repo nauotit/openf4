@@ -16,8 +16,8 @@
  */
 
   /**
-  * \file element-zech-prime.h
-  * \brief Declaration of class ElementZechPrime.
+  * \file element-givaro.h
+  * \brief Declaration of class ElementGivaro.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
@@ -30,6 +30,7 @@
 #include <cassert>
 #include <cmath>
 #include "givaro/modular-log16.h"
+#include "givaro/modular-integer.h"
 /** \endcond */
 
 /** \namespace F4 
@@ -38,11 +39,11 @@
 namespace F4
 {
     /**
-     * \class ElementZechPrime
+     * \class ElementGivaro
      * Represent an element of a prime field with zech logarithm tables, this class is a POD (Plain Old Data) because of the alignement required in class Matrix.
      */
     template <class Field>
-    class ElementZechPrime
+    class ElementGivaro
     {
         public:
             
@@ -68,14 +69,14 @@ namespace F4
              * \param mult: Element of the prime field.
              * \return this.
              */
-            ElementZechPrime<Field> & addMult(ElementZechPrime<Field> const & element, ElementZechPrime<Field> const & mult);
+            ElementGivaro<Field> & addMult(ElementGivaro<Field> const & element, ElementGivaro<Field> const & mult);
             
             /**
              * \brief Inverse this according to the base field.
              * \pre The static variable F must be set beforehand.
              * \return this.
              */
-            ElementZechPrime<Field> & inverse();
+            ElementGivaro<Field> & inverse();
             
             /**
              * \brief Print the element.
@@ -115,7 +116,7 @@ namespace F4
              * \param element: Element of a prime field.
              * \return Reference on this.
              */
-            ElementZechPrime & operator=(typename Field::Element element);
+            ElementGivaro & operator=(typename Field::Element element);
             
             /**
              * \brief Overload the operator =.
@@ -123,7 +124,7 @@ namespace F4
              * \param element: Integer representing  an element of a prime field.
              * \return Reference on this.
              */
-            ElementZechPrime & operator=(int element);
+            ElementGivaro & operator=(int element);
             
             /**
              * \brief Overload the operator =.
@@ -131,7 +132,15 @@ namespace F4
              * \param element: Integer representing  an element of a prime field.
              * \return Reference on this.
              */
-            ElementZechPrime & operator=(long element);
+            ElementGivaro & operator=(long element);
+            
+            /**
+             * \brief Overload the operator =.
+             * \pre The static variable F must be set beforehand.
+             * \param element: Big integer (gmp) under string representation.
+             * \return Reference on this.
+             */
+            ElementGivaro & operator=(std::string element);
             
             /**
              * \brief Overload the operator *=.
@@ -139,7 +148,7 @@ namespace F4
              * \param element: Element of a prime field.
              * \return Reference on this.
              */
-            ElementZechPrime & operator*=(ElementZechPrime const & mult); 
+            ElementGivaro & operator*=(ElementGivaro const & mult); 
             
             /**
              * \brief Overload the operator -.
@@ -148,7 +157,7 @@ namespace F4
              * \post This is set to -element. 
              * \return Reference on this.
              */
-            ElementZechPrime & operator-=(ElementZechPrime const & element);
+            ElementGivaro & operator-=(ElementGivaro const & element);
             
             
             /* Public attribute because POD */
@@ -166,23 +175,23 @@ namespace F4
      * \return ostream: Stream.
      */
     template <class Field>
-    std::ostream & operator<<(std::ostream & stream, ElementZechPrime<Field> const & element);
+    std::ostream & operator<<(std::ostream & stream, ElementGivaro<Field> const & element);
     
     /**
      * \brief Overload the operator *.
      * \return element1 * element2.
      */
     template <class Field>
-    ElementZechPrime<Field> operator * (ElementZechPrime<Field> const & element1, ElementZechPrime<Field> const & element2);
+    ElementGivaro<Field> operator * (ElementGivaro<Field> const & element1, ElementGivaro<Field> const & element2);
     
     /**
      * \brief Overload the operator -.
      * \return -element.
      */
     template <class Field>
-    ElementZechPrime<Field> operator - (ElementZechPrime<Field> const & element);
+    ElementGivaro<Field> operator - (ElementGivaro<Field> const & element);
 }
 
-#include "../src/element-zech-prime.inl"
+#include "../src/element-givaro.inl"
 
 #endif // F4_ELEMENT_ZECH_PRIME_H

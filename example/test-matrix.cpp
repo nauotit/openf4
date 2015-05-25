@@ -27,7 +27,7 @@
 #include <vector>
 #include "../include/matrix.h"
 #include "../include/element-prime.h"
-#include "../include/element-zech-prime.h"
+#include "../include/element-givaro.h"
 
 using namespace F4;
 using namespace std;
@@ -46,10 +46,10 @@ int main (int argc, char **argv)
     typedef ElementPrime<int> eltType;
     ElementPrime<int>::setModulo(65521);
     
-    //typedef Givaro::Modular<Givaro::Log16, Givaro::Log16> Field;
+    //typedef Givaro::Modular<Givaro::Log16> Field;
     //int modulo=8209;
     //Field F(modulo);
-    //typedef ElementZechPrime<Field> eltType;
+    //typedef ElementGivaro<Field> eltType;
     //eltType::setField(F);
     
     // Test Matrix();

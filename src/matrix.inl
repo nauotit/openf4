@@ -54,12 +54,26 @@ namespace F4
     }
     
     template <>
-    Matrix<ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    Matrix<ElementGivaro<Givaro::Modular<Givaro::Log16>>>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
     {
-        _matrix=new ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>> *[_height];
+        _matrix=new ElementGivaro<Givaro::Modular<Givaro::Log16>> *[_height];
         for(int i=0; i< _height; i++)
         {
-            _matrix[i]=new ElementZechPrime<Givaro::Modular<Givaro::Log16, Givaro::Log16>>[_width];
+            _matrix[i]=new ElementGivaro<Givaro::Modular<Givaro::Log16>>[_width];
+            for(int j=0; j<_width; j++)
+            {
+                _matrix[i][j].setZero();
+            }
+        }
+    }
+    
+    template <>
+    Matrix<ElementGivaro<Givaro::Modular<Givaro::Integer>>>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+        _matrix=new ElementGivaro<Givaro::Modular<Givaro::Integer>> *[_height];
+        for(int i=0; i< _height; i++)
+        {
+            _matrix[i]=new ElementGivaro<Givaro::Modular<Givaro::Integer>>[_width];
             for(int j=0; j<_width; j++)
             {
                 _matrix[i][j].setZero();
@@ -661,11 +675,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -677,11 +688,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -696,11 +704,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -711,11 +716,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -726,11 +728,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -838,11 +837,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -882,11 +878,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -923,11 +916,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -985,11 +975,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -1002,11 +989,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -1022,11 +1006,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -1040,11 +1021,8 @@ namespace F4
                         {
                             if (!isZero(l2,ll) )
                             {
-                                if (!isZero(l2,ll) )
-                                {
-                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                    _matrix[l2][ll].setZero();
-                                }
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
@@ -1056,11 +1034,8 @@ namespace F4
                         {
                             if (!isZero(l2,ll) )
                             {
-                                if (!isZero(l2,ll) )
-                                {
-                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
-                                    _matrix[l2][ll].setZero();
-                                }
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _startTail[ll], _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }
@@ -1171,11 +1146,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -1221,11 +1193,8 @@ namespace F4
                     {
                         if (!isZero(l2,ll) )
                         {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
+                            addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                            _matrix[l2][ll].setZero();
                         }
                     }
                 }
@@ -1267,11 +1236,8 @@ namespace F4
                         {
                             if (!isZero(l2,ll) )
                             {
-                                if (!isZero(l2,ll) )
-                                {
-                                    addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
-                                    _matrix[l2][ll].setZero();
-                                }
+                                addMultRow (_matrix[l2], _matrix[ll], -_matrix[l2][ll], _height, _width);
+                                _matrix[l2][ll].setZero();
                             }
                         }
                     }

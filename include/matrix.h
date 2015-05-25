@@ -39,7 +39,7 @@
 /** \endcond */
 
 #include "element-prime.h"
-#include "element-zech-prime.h"
+#include "element-givaro.h"
 
 #ifdef __SSE2__
 #include <xmmintrin.h>
@@ -50,8 +50,8 @@
 #include <smmintrin.h>
 #endif // __SSE4_1__
 
-//#define PARALLEL
-//#define FFLAS_FFPACK 
+#define PARALLEL
+#define FFLAS_FFPACK 
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

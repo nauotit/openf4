@@ -16,8 +16,8 @@
  */
 
   /**
-  * \file element-zech-prime.inl
-  * \brief Definition of ElementZechPrime methods.
+  * \file element-givaro.inl
+  * \brief Definition of ElementGivaro methods.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
@@ -36,14 +36,14 @@ namespace F4
     /* Static variables */
     
     template <class Field>
-    Field ElementZechPrime<Field>::F;
+    Field ElementGivaro<Field>::F;
     
     
     /* Static methods */
     
     template <class Field>
     void 
-    ElementZechPrime<Field>::setField(Field & field)
+    ElementGivaro<Field>::setField(Field & field)
     {
         F=field;
     }
@@ -52,16 +52,16 @@ namespace F4
     /* Miscellaneous */
     
     template <class Field>
-    ElementZechPrime<Field> &
-    ElementZechPrime<Field>::addMult(ElementZechPrime<Field> const & element, ElementZechPrime<Field> const & mult)
+    ElementGivaro<Field> &
+    ElementGivaro<Field>::addMult(ElementGivaro<Field> const & element, ElementGivaro<Field> const & mult)
     {
         _element=F.axpyin (_element, element._element, mult._element);
         return * this;
     }
     
     template <class Field>
-    ElementZechPrime<Field> &
-    ElementZechPrime<Field>::inverse ()
+    ElementGivaro<Field> &
+    ElementGivaro<Field>::inverse ()
     {
         _element=F.invin(_element);
         return *this;
@@ -69,35 +69,35 @@ namespace F4
 
     template <class Field>
     void
-    ElementZechPrime<Field>::printElementPrime (std::ostream & stream) const
+    ElementGivaro<Field>::printElementPrime (std::ostream & stream) const
     {
         F.write(stream,_element);
     }
             
     template <class Field>
     bool
-    ElementZechPrime<Field>::isZero() const
+    ElementGivaro<Field>::isZero() const
     {
         return F.isZero(_element);
     }
     
     template <class Field>
     bool
-    ElementZechPrime<Field>::isOne() const
+    ElementGivaro<Field>::isOne() const
     {
         return F.isOne(_element);
     }
     
     template <class Field>
     void 
-    ElementZechPrime<Field>::setZero()
+    ElementGivaro<Field>::setZero()
     {
         F.assign(_element,F.zero);
     }
     
     template <class Field>
     void 
-    ElementZechPrime<Field>::setOne()
+    ElementGivaro<Field>::setOne()
     {
         F.assign(_element,F.one);
     }
@@ -106,45 +106,49 @@ namespace F4
     /* Operator overload */
             
     template <class Field>
-    ElementZechPrime<Field> & 
-    ElementZechPrime<Field>::operator=(typename Field::Element element)
+    ElementGivaro<Field> & 
+    ElementGivaro<Field>::operator=(typename Field::Element element)
     {
-        //cout << "Enter assign Zech" << endl;
         _element=F.assign(_element,element);
         return * this;
     }
     
     template <class Field>
-    ElementZechPrime<Field> & 
-    ElementZechPrime<Field>::operator=(int element)
+    ElementGivaro<Field> & 
+    ElementGivaro<Field>::operator=(int element)
     {
-        //cout << "Enter init Zech" << endl;
-        //cout << "F.characteristic(): " << F.characteristic() << endl;
         _element=F.init(_element,(long)element);
         return * this;
     }
     
     template <class Field>
-    ElementZechPrime<Field> & 
-    ElementZechPrime<Field>::operator=(long element)
+    ElementGivaro<Field> & 
+    ElementGivaro<Field>::operator=(long element)
     {
-        //cout << "Enter init Zech" << endl;
-        //cout << "F.characteristic(): " << F.characteristic() << endl;
         _element=F.init(_element,element);
+        return * this;
+    }
+    
+    /* For Integer (gmp) */
+    template <class Field>
+    ElementGivaro<Field> & 
+    ElementGivaro<Field>::operator=(string element)
+    {
+        _element=F.init(_element,Givaro::Integer(element.c_str()));
         return * this;
     }
             
     template <class Field>
-    ElementZechPrime<Field> & 
-    ElementZechPrime<Field>::operator*=(ElementZechPrime<Field> const & mult)
+    ElementGivaro<Field> & 
+    ElementGivaro<Field>::operator*=(ElementGivaro<Field> const & mult)
     {
         _element=F.mulin(_element,mult._element);
         return * this;
     }
     
     template <class Field>
-    ElementZechPrime<Field> &
-    ElementZechPrime<Field>::operator -= (ElementZechPrime<Field> const & element)
+    ElementGivaro<Field> &
+    ElementGivaro<Field>::operator -= (ElementGivaro<Field> const & element)
     {
         _element=F.neg(_element,element._element);
         return * this;
@@ -152,26 +156,26 @@ namespace F4
     
     template <class Field>
     ostream & 
-    operator<<(ostream & stream, ElementZechPrime<Field> const & element)
+    operator<<(ostream & stream, ElementGivaro<Field> const & element)
     {
         element.printElementPrime(stream);
         return stream;
     }
     
     template <class Field>
-    ElementZechPrime<Field> 
-    operator * (ElementZechPrime<Field> const & element1, ElementZechPrime<Field> const & element2)
+    ElementGivaro<Field> 
+    operator * (ElementGivaro<Field> const & element1, ElementGivaro<Field> const & element2)
     {
-        ElementZechPrime<Field> copy;
+        ElementGivaro<Field> copy;
         copy=element1._element;
         return (copy*=element2);
     }
     
     template <class Field>
-    ElementZechPrime<Field> 
-    operator - (ElementZechPrime<Field> const & element)
+    ElementGivaro<Field> 
+    operator - (ElementGivaro<Field> const & element)
     {
-        ElementZechPrime<Field> copy;
+        ElementGivaro<Field> copy;
         copy-=element;
         return copy;
     }
