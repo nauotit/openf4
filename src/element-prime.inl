@@ -96,13 +96,6 @@ namespace F4
         return _element;
     }
     
-    template <typename baseType>
-    inline baseType
-    ElementPrime<baseType>::getElement ()
-    {
-        return _element;
-    }
-    
     template <>
     inline double
     ElementPrime<double>::modulo ()
@@ -119,6 +112,13 @@ namespace F4
                 _element += MODULO;
             }
         }
+        return _element;
+    }
+    
+    template <typename baseType>
+    inline baseType
+    ElementPrime<baseType>::getElement ()
+    {
         return _element;
     }
     

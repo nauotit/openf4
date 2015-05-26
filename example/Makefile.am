@@ -7,7 +7,7 @@ AM_LDFLAGS= -fopenmp
 #noinst_PROGRAMS += test_element_prime test_matrix test_ideal
 noinst_PROGRAMS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits
 noinst_PROGRAMS += tutorial_method2 tutorial_method3 test_zech
-bin_PROGRAMS = test_fflas_ffpack test_pluq test_matrix test_element_givaro
+bin_PROGRAMS = test_fflas_ffpack test_pluq test_matrix test_element_givaro test_element_gf2_extension
 #test_libf4 test_openmp
 
 #test_monomial_SOURCES = test-monomial.cpp
@@ -25,6 +25,7 @@ bin_PROGRAMS = test_fflas_ffpack test_pluq test_matrix test_element_givaro
 #test_avl_polynomial_SOURCES = test-avl-polynomial.cpp
 
 #test_element_prime_SOURCES = test-element-prime.cpp
+test_element_gf2_extension_SOURCES = test-element-gf2-extension.cpp
 test_element_givaro_SOURCES = test-element-givaro.cpp
 test_element_givaro_LDFLAGS = -lgivaro -lcblas -latlas -lgmp -lgmpxx -fopenmp
 test_matrix_SOURCES = test-matrix.cpp
