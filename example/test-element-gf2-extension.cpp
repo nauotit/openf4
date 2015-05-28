@@ -40,15 +40,17 @@ int main (int argc, char **argv)
     cout << "#                TEST ELEMENT GF2 EXTENSION             #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    typedef int32_t baseType;
+    typedef uint32_t baseType;
     
     // Test static void setModulo(baseType modulo);
     /* Modulo = t^8+t^4+t^3+t+1 */
     cout << "________Test setModulo(baseType modulo)________" << endl;
-    ElementGF2Extension<baseType>::setModulo(0x11B);
+    ElementGF2Extension<baseType>::setModulo(0x80000009);
     ElementGF2Extension<baseType> e1;
     e1=ElementGF2Extension<baseType>::getModulo();
-    cout << "Modulo =" << e1 << endl << endl;
+    cout << "Modulo =" << e1 << endl;
+    e1=ElementGF2Extension<baseType>::getMask();
+    cout << "Mask =" << e1 << endl << endl;
     
     // Test static void setModulo(std::string modulo);
     cout << "________Test setModulo(std::string modulo)________" << endl;
@@ -100,6 +102,22 @@ int main (int argc, char **argv)
     e2=string("a^4+a+1");
     e1=string("a^2");
     e2.addMult(e3, e1);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
+    cout << "e2 = " << e2 << endl << endl;
+    e2.addMult(e3, e2);
     cout << "e2 = " << e2 << endl << endl;
     
     // Test ElementGF2Extension<baseType> & addMultBase2(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult);

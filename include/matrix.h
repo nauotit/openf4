@@ -39,6 +39,7 @@
 /** \endcond */
 
 #include "element-prime.h"
+#include "element-gf2-extension.h"
 #include "element-givaro.h"
 
 #ifdef __SSE2__
@@ -248,6 +249,7 @@ namespace F4
              */
             void normalizeRow(Element * row, int start, int end);
             void normalizeRowPrime(Element * row, int start, int end);
+            void normalizeRowGF2Extension(Element * row, int start, int end);
             
             /**
              * \brief Multiply a slice of the row-th row by element.
@@ -258,6 +260,7 @@ namespace F4
              */
             void multRow(Element * row, Element const & element, int start, int end);
             void multRowPrime(Element * row, Element const & element, int start, int end);
+            void multRowGF2Extension(Element * row, Element const & element, int start, int end);
             
              /**
              * \brief Multiply a slice of the row1-th row by element and add a slice of the row2-th row.
@@ -269,6 +272,7 @@ namespace F4
              */
             void addMultRow(Element * row1, Element * row2, Element element, int start, int end);
             void addMultRowPrime(Element * row1, Element * row2, Element element, int start, int end);
+            void addMultRowGF2Extension(Element * row1, Element * row2, Element element, int start, int end);
             
             /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
@@ -303,6 +307,12 @@ namespace F4
              * \return Height of the echelonized matrix.
              */
             int echelonizePrime ();
+            
+            /**
+             * \brief Specialisation of echelonize for ElementGF2Extension Type.
+             * \return Height of the echelonized matrix.
+             */
+            int echelonizeGF2Extension ();
             
             
             /* Internal operator */

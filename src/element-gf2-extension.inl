@@ -60,14 +60,22 @@ namespace F4
     {
         MODULO=modulo;
         /* Maximum power of 2 lower than MODULO */
-        int a=1;
-        MASK = MODULO | (MODULO >> a);
-        while(a!=sizeof(baseType)*4)
+        if(MODULO & (baseType)1<<(sizeof(baseType)*8-1))
         {
-            a<<=1;
-            MASK = MASK | (MASK >> a);
+            /* 2^31 for 32 bits integer and 2^63 for 64 bits integer */
+            MASK=(baseType)1<<(sizeof(baseType)*8-1);
         }
-        MASK=((MASK+1) >> 1); 
+        else
+        {
+            size_t a=1;
+            MASK = MODULO | (MODULO >> a);
+            while(a<sizeof(baseType)*4)
+            {
+                a<<=1;
+                MASK = MASK | (MASK >> a);
+            }
+            MASK=((MASK+1) >> 1); 
+        }
     }
     
     template <typename baseType>
@@ -216,7 +224,7 @@ namespace F4
     ElementGF2Extension<baseType> &
     ElementGF2Extension<baseType>::addMult(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        _element^=(element._element*mult._element);
+        addMultBase16(element, mult);
         return * this;
     }
     
@@ -268,8 +276,8 @@ namespace F4
             a=mult.getElement();
             for(size_t i=0; i<sizeof(baseType)*4; i++)
             {
-                amul[sizeof(baseType)*i]=0;
-                amul[sizeof(baseType)*i+1]=a;
+                amul[4*i]=0;
+                amul[4*i+1]=a;
                 a <<= 1;
                 if(a & MASK)
                 {
@@ -277,7 +285,7 @@ namespace F4
                 }
                 for(int j=0; j<2; j++)
                 {
-                    amul[sizeof(baseType)*i+j+2]=a^amul[sizeof(baseType)*i+j];
+                    amul[4*i+j+2]=a^amul[4*i+j];
                 }
                 a <<= 1;
                 if(a & MASK)
@@ -469,11 +477,12 @@ namespace F4
             exit(-1);
         }
         baseType a,b,ca,cb,sh_a,sh_ca,tmp;
-        ca = 1;
-        cb = 0;
+        ca = (baseType)1;
+        cb = (baseType)0;
+        
         a = _element;
         b = MODULO;
-
+        
         while (a) 
         {
             while (b>=a) 
@@ -704,8 +713,8 @@ namespace F4
             a=mult.getElement();
             for(size_t i=0; i<sizeof(baseType)*4; i++)
             {
-                amul[sizeof(baseType)*i]=0;
-                amul[sizeof(baseType)*i+1]=a;
+                amul[4*i]=0;
+                amul[4*i+1]=a;
                 a <<= 1;
                 if(a & MASK)
                 {
@@ -713,7 +722,7 @@ namespace F4
                 }
                 for(int j=0; j<2; j++)
                 {
-                    amul[sizeof(baseType)*i+j+2]=a^amul[sizeof(baseType)*i+j];
+                    amul[4*i+j+2]=a^amul[4*i+j];
                 }
                 a <<= 1;
                 if(a & MASK)

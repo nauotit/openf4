@@ -220,6 +220,165 @@ namespace F4
     
     template<>
     void
+    Term<ElementGF2Extension<uint16_t>>::readCoefficient(std::string const s)
+    { 
+        /* Detect the beginning of the monomial */
+        string tmp;
+        size_t pos1=s.find(Monomial::getVariable()[0]);
+        size_t pos2=0;
+        for (int i = 1; i < Monomial::getNbVariable(); ++i)
+        {
+            pos2=s.find(Monomial::getVariable()[i]);
+            if(pos2 != string::npos)
+            {
+                pos1=min(pos1, pos2);
+            }
+        }
+        /* Term with coefficient only */
+        if(pos1==string::npos)
+        {
+            tmp=s;
+        }
+        /* Term with coefficient and monomial */
+        else if(s[pos1-1]=='*')
+        {
+            /* remove '*' */
+            tmp=s.substr(0, pos1-1);
+        }
+        else
+        {
+            tmp=s.substr(0, pos1);
+        }
+        
+        /* Here tmp is either the empty string, a sign, a sign and a number or a number */
+        if(tmp.empty())
+        {
+            tmp=string("1");
+        }
+        if(tmp.size()==1)
+        {
+            /* In case tmp is just a sign */
+            tmp=string("1");
+        }
+        /* remove brackets */
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), ')'), tmp.end());
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), '('), tmp.end());
+        if(tmp[0]=='+' || tmp[0]=='-')
+        {
+            /* remove sign */
+            tmp=tmp.substr(1);
+        }
+        _coefficient=tmp;
+    }
+    
+    template<>
+    void
+    Term<ElementGF2Extension<uint32_t>>::readCoefficient(std::string const s)
+    { 
+        /* Detect the beginning of the monomial */
+        string tmp;
+        size_t pos1=s.find(Monomial::getVariable()[0]);
+        size_t pos2=0;
+        for (int i = 1; i < Monomial::getNbVariable(); ++i)
+        {
+            pos2=s.find(Monomial::getVariable()[i]);
+            if(pos2 != string::npos)
+            {
+                pos1=min(pos1, pos2);
+            }
+        }
+        /* Term with coefficient only */
+        if(pos1==string::npos)
+        {
+            tmp=s;
+        }
+        /* Term with coefficient and monomial */
+        else if(s[pos1-1]=='*')
+        {
+            /* remove '*' */
+            tmp=s.substr(0, pos1-1);
+        }
+        else
+        {
+            tmp=s.substr(0, pos1);
+        }
+        
+        /* Here tmp is either the empty string, a sign, a sign and a number or a number */
+        if(tmp.empty())
+        {
+            tmp=string("1");
+        }
+        if(tmp.size()==1)
+        {
+            /* In case tmp is just a sign */
+            tmp=string("1");
+        }
+        /* remove brackets */
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), ')'), tmp.end());
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), '('), tmp.end());
+        if(tmp[0]=='+' || tmp[0]=='-')
+        {
+            /* remove sign */
+            tmp=tmp.substr(1);
+        }
+        _coefficient=tmp;
+    }
+    
+    template<>
+    void
+    Term<ElementGF2Extension<uint64_t>>::readCoefficient(std::string const s)
+    { 
+        /* Detect the beginning of the monomial */
+        string tmp;
+        size_t pos1=s.find(Monomial::getVariable()[0]);
+        size_t pos2=0;
+        for (int i = 1; i < Monomial::getNbVariable(); ++i)
+        {
+            pos2=s.find(Monomial::getVariable()[i]);
+            if(pos2 != string::npos)
+            {
+                pos1=min(pos1, pos2);
+            }
+        }
+        /* Term with coefficient only */
+        if(pos1==string::npos)
+        {
+            tmp=s;
+        }
+        /* Term with coefficient and monomial */
+        else if(s[pos1-1]=='*')
+        {
+            /* remove '*' */
+            tmp=s.substr(0, pos1-1);
+        }
+        else
+        {
+            tmp=s.substr(0, pos1);
+        }
+        
+        /* Here tmp is either the empty string, a sign, a sign and a number or a number */
+        if(tmp.empty())
+        {
+            tmp=string("1");
+        }
+        if(tmp.size()==1)
+        {
+            /* In case tmp is just a sign */
+            tmp=string("1");
+        }
+        /* remove brackets */
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), ')'), tmp.end());
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), '('), tmp.end());
+        if(tmp[0]=='+' || tmp[0]=='-')
+        {
+            /* remove sign */
+            tmp=tmp.substr(1);
+        }
+        _coefficient=tmp;
+    }
+    
+    template<>
+    void
     Term<ElementPrime<double>>::readCoefficient(std::string const s)
     {
         long res;
@@ -268,7 +427,7 @@ namespace F4
     void
     Term<ElementGivaro<Givaro::Modular<Givaro::Integer>>>::readCoefficient(std::string const s)
     {
-        /* 2^63 has 19 digits */
+        /* Detect the beginning of the monomial */
         string tmp;
         size_t pos1=s.find(Monomial::getVariable()[0]);
         size_t pos2=0;
@@ -280,45 +439,41 @@ namespace F4
                 pos1=min(pos1, pos2);
             }
         }
-        if(pos1==0 && s.find(Monomial::getVariable()[0])!=0)
+        /* Term with coefficient only */
+        if(pos1==string::npos)
         {
-            /* Constant coefficient */
             tmp=s;
         }
+        /* Term with coefficient and monomial */
         else if(s[pos1-1]=='*')
         {
             /* remove '*' */
             tmp=s.substr(0, pos1-1);
+            cout << "tmp: " << tmp << endl;
         }
         else
         {
             tmp=s.substr(0, pos1);
         }
         
-        if(tmp.size() > 20)
+        /* Here tmp is either the empty string, a sign, a sign and a number or a number */
+        if(tmp.empty())
         {
-            _coefficient=tmp;
+            tmp=string("1");
         }
-        else
+        if(tmp.size()==1)
         {
-            long res;
-            try
-            { 
-                res=stol(tmp);
-            }
-            catch(exception const & e)
+            /* In case tmp is just a sign */
+            if(tmp[0]=='-')
             {
-                if(s[0]=='-')
-                {
-                    res=-1;
-                }
-                else
-                {
-                    res=1;
-                }
+                tmp=string("-1");
             }
-            _coefficient=to_string(res);
+            else
+            {
+                tmp=string("1");
+            }
         }
+        _coefficient=tmp;
     }
     
     template <typename Element>

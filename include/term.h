@@ -26,6 +26,7 @@
 
 #include "monomial-array.h"
 #include "element-prime.h"
+#include "element-gf2-extension.h"
 #include "element-givaro.h"
 
 /** \namespace F4 

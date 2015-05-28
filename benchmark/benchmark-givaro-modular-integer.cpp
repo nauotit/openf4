@@ -142,7 +142,7 @@ int cyclic8F4(bool magma)
     vector<Polynomial<eltType>> polCyclic8;
     
     // Fill the polynomial array
-    polCyclic8.emplace_back("x0+x1+x2+x3+x4+x5+x6+x7");
+    polCyclic8.emplace_back("x0+x1+122222*x2+x3+x4+x5+x6+x7");
     polCyclic8.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x5*x6+x0*x7+x6*x7");
     polCyclic8.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x4*x5*x6+x0*x1*x7+x0*x6*x7+x5*x6*x7");
     polCyclic8.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x3*x4*x5*x6+x0*x1*x2*x7+x0*x1*x6*x7+x0*x5*x6*x7+x4*x5*x6*x7");
