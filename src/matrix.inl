@@ -1322,12 +1322,13 @@ namespace F4
         return stream;
     }
 }
-#include "specialisation-simd.inl"
+#include "specialisation-simd-prime.inl"
 #ifndef FFLAS_FFPACK
     #include "specialisation-echelonize-prime.inl"
 #else
     #include "specialisation-echelonize-fflas-ffpack.inl"
 #endif //FFLAS_FFPACK
+#include "specialisation-simd-gf2-extension.inl"
 #include "specialisation-echelonize-gf2-extension.inl"
 
 #endif // F4_MATRIX_INL

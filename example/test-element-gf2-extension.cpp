@@ -75,6 +75,10 @@ int main (int argc, char **argv)
     e1=ElementGF2Extension<baseType>::getMask();
     cout << "Mask =" << e1 << endl << endl;
     
+    // Test static baseType getMaskBit();
+    cout << "________Test getMaskBit()________" << endl;
+    cout << "Mask bit =" << ElementGF2Extension<baseType>::getMaskBit() << endl << endl;
+    
     // Test ElementGF2Extension & operator=(baseType element);
     cout << "________Test operator=(baseType element)________" << endl;
     ElementGF2Extension<baseType> e2;

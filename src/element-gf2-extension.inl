@@ -42,6 +42,9 @@ namespace F4
     baseType ElementGF2Extension<baseType>::MASK=0;
     
     template <typename baseType>
+    baseType ElementGF2Extension<baseType>::MASK_BIT=0;
+    
+    template <typename baseType>
     string ElementGF2Extension<baseType>::VARIABLE_NAME=string("t");
     
     
@@ -59,23 +62,18 @@ namespace F4
     ElementGF2Extension<baseType>::setModulo(baseType modulo)
     {
         MODULO=modulo;
-        /* Maximum power of 2 lower than MODULO */
-        if(MODULO & (baseType)1<<(sizeof(baseType)*8-1))
+        /* Bit of MASK */
+        for(int j = sizeof(baseType)*8-1; j > 0; j--)
         {
-            /* 2^31 for 32 bits integer and 2^63 for 64 bits integer */
-            MASK=(baseType)1<<(sizeof(baseType)*8-1);
-        }
-        else
-        {
-            size_t a=1;
-            MASK = MODULO | (MODULO >> a);
-            while(a<sizeof(baseType)*4)
+            if(MODULO & ((baseType)1 << j))
             {
-                a<<=1;
-                MASK = MASK | (MASK >> a);
+                /* pow = degree extension */
+                MASK_BIT=j;
+                break;
             }
-            MASK=((MASK+1) >> 1); 
         }
+        /* Maximum power of 2 lower than MODULO */
+        MASK=(baseType)1 << MASK_BIT;
     }
     
     template <typename baseType>
@@ -115,7 +113,7 @@ namespace F4
                     if(tmp==VARIABLE_NAME)
                     {
                         /* Implicit coeff = 1 */
-                        MODULO^=(1<<1);
+                        MODULO^=((baseType)1<<1);
                     }
                     else
                     {
@@ -123,7 +121,7 @@ namespace F4
                         coeff%=2;
                         if(coeff==1)
                         {
-                            MODULO^=(1<<1);
+                            MODULO^=((baseType)1<<1);
                         }
                     }
                 }
@@ -137,7 +135,7 @@ namespace F4
                     if(tmp==VARIABLE_NAME)
                     {
                         /* Implicit coeff = 1 */
-                        MODULO^=(1<<deg);
+                        MODULO^=((baseType)1<<deg);
                     }
                     else
                     {
@@ -147,7 +145,7 @@ namespace F4
                         coeff%=2;
                         if(coeff==1)
                         {
-                            MODULO^=(1<<deg);
+                            MODULO^=((baseType)1<<deg);
                         }
                     }
                 }
@@ -155,14 +153,20 @@ namespace F4
             /* We skip + or - */
             pos1=pos2+1; 
         }
-        int a=1;
-        MASK = MODULO | (MODULO >> a);
-        while(a!=sizeof(baseType)*4)
+        /* Bit of MASK */
+        for(int j = sizeof(baseType)*8-1; j > 0; j--)
         {
-            a<<=1;
-            MASK = MASK | (MASK >> a);
+            if(MODULO & ((baseType)1 << j))
+            {
+                /* pow = degree extension */
+                MASK_BIT=j;
+                break;
+            }
         }
-        MASK=((MASK+1) >> 1); 
+        /* Maximum power of 2 lower than MODULO */
+        MASK=(baseType)1 << MASK_BIT;
+        
+        //cout << "Modulo: " << MODULO << ", MASK_BIT: " << MASK_BIT << ", MASK: " << MASK << endl;
     }
     
     template <typename baseType>
@@ -179,6 +183,13 @@ namespace F4
         return MASK;
     }
     
+    template <typename baseType>
+    baseType 
+    ElementGF2Extension<baseType>::getMaskBit()
+    {
+        return MASK_BIT;
+    }
+    
     
     /* Miscellaneous */
     
@@ -186,27 +197,13 @@ namespace F4
     template <typename baseType>
     inline baseType
     ElementGF2Extension<baseType>::modulo ()
-    {
-        static int pow = 0;
-        if(pow==0)
-        {
-            for(int j = sizeof(baseType)*8-1; j > 0; j--)
-            {
-                if(MASK & ((baseType)1 << j))
-                {
-                    pow=j;
-                    cout << "Degree extension: " << pow << endl;
-                    break;
-                }
-            }
-        }
-        
+    {        
         int i = sizeof(baseType)*8-1;
         while(_element >= MASK && i >= 0)
         {
             if(_element & ((baseType)1 << i))
             {
-                _element ^= (MODULO << (i-pow));
+                _element ^= (MODULO << (i-MASK_BIT));
             }
             i--;
         }
@@ -224,7 +221,7 @@ namespace F4
     ElementGF2Extension<baseType> &
     ElementGF2Extension<baseType>::addMult(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        addMultBase16(element, mult);
+        addMultBase4(element, mult);
         return * this;
     }
     
@@ -911,7 +908,7 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::operator*=(ElementGF2Extension<baseType> const & mult)
     {
-        multBase2(mult);
+        multBase4(mult);
         return * this;
     }
     

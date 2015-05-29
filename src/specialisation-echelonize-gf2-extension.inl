@@ -156,7 +156,191 @@ namespace F4
         }
     }
     
-    #ifndef PARALLEL
+    template <typename Element>
+    void
+    Matrix<Element>::doubleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element mult1, Element mult2, Element * vec, int start, int end)
+    {
+        addMultRowGF2Extension(dest1, vec, mult1, start, end);
+        addMultRowGF2Extension(dest2, vec, mult2, start, end);
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::tripleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element mult1, Element mult2, Element mult3, Element * vec, int start, int end)
+    {
+        addMultRowGF2Extension(dest1, vec, mult1, start, end);
+        addMultRowGF2Extension(dest2, vec, mult2, start, end);
+        addMultRowGF2Extension(dest3, vec, mult3, start, end);
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::quadAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element mult1, Element mult2, Element mult3, Element mult4, Element * vec, int start, int end)
+    {
+        addMultRowGF2Extension(dest1, vec, mult1, start, end);
+        addMultRowGF2Extension(dest2, vec, mult2, start, end);
+        addMultRowGF2Extension(dest3, vec, mult3, start, end);
+        addMultRowGF2Extension(dest4, vec, mult4, start, end);
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::octAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element * dest5, Element * dest6, Element * dest7, Element * dest8, Element mult1, Element mult2, Element mult3, Element mult4, Element mult5, Element mult6, Element mult7, Element mult8, Element * vec, int start, int end)
+    {
+        addMultRowGF2Extension(dest1, vec, mult1, start, end);
+        addMultRowGF2Extension(dest2, vec, mult2, start, end);
+        addMultRowGF2Extension(dest3, vec, mult3, start, end);
+        addMultRowGF2Extension(dest4, vec, mult4, start, end);
+        addMultRowGF2Extension(dest5, vec, mult5, start, end);
+        addMultRowGF2Extension(dest6, vec, mult6, start, end);
+        addMultRowGF2Extension(dest7, vec, mult7, start, end);
+        addMultRowGF2Extension(dest8, vec, mult8, start, end);
+    }
+    
+    template <typename Element>
+    void
+    Matrix<Element>::groupAddMultRowGF2Extension(int ll, int dec, int startL2, int endL2, int start,int end)
+    {
+        int l2,stcount,stl1=0,stl2=0,stl3=0,stl4=0,stl5=0,stl6=0,stl7=0;
+        stcount=0;
+        
+        for(l2=startL2;l2<endL2;l2++) 
+        {
+            if (!_matrix[l2][ll+dec].isZero()) 
+            {
+                if (stcount==7) 
+                {
+                    octAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl4],_matrix[stl5],_matrix[stl6],_matrix[stl7],_matrix[l2],
+                                _matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[stl4][ll+dec],
+                                _matrix[stl5][ll+dec],_matrix[stl6][ll+dec],_matrix[stl7][ll+dec],_matrix[l2][ll+dec],
+                                _matrix[ll],start, end);
+                    _matrix[l2][ll+dec]=0;
+                    _matrix[stl1][ll+dec]=0;
+                    _matrix[stl2][ll+dec]=0;
+                    _matrix[stl3][ll+dec]=0;
+                    _matrix[stl4][ll+dec]=0;
+                    _matrix[stl5][ll+dec]=0;
+                    _matrix[stl6][ll+dec]=0;
+                    _matrix[stl7][ll+dec]=0;
+                    stcount=0;
+                }
+                else 
+                {
+                    stcount++;
+                    if (stcount==1) stl1=l2;
+                    if (stcount==2) stl2=l2;
+                    if (stcount==3) stl3=l2;
+                    if (stcount==4) stl4=l2;
+                    if (stcount==5) stl5=l2;
+                    if (stcount==6) stl6=l2;
+                    if (stcount==7) stl7=l2;
+                }
+            }
+        }
+        if (stcount==7)     
+        {
+            quadAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl4],
+                          _matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[stl4][ll+dec],
+                          _matrix[ll],start, end);
+            tripleAddMultRowGF2Extension(_matrix[stl5],_matrix[stl6],_matrix[stl7],_matrix[stl5][ll+dec],_matrix[stl6][ll+dec],_matrix[stl7][ll+dec],_matrix[ll],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+            _matrix[stl3][ll+dec]=0;
+            _matrix[stl4][ll+dec]=0;
+            _matrix[stl5][ll+dec]=0;
+            _matrix[stl6][ll+dec]=0;
+            _matrix[stl7][ll+dec]=0;
+        }
+        else if (stcount==6) 
+        {
+            quadAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl4],
+                          _matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[stl4][ll+dec],
+                          _matrix[ll],start, end);
+            doubleAddMultRowGF2Extension(_matrix[stl5],_matrix[stl6],_matrix[stl5][ll+dec],_matrix[stl6][ll+dec],_matrix[ll],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+            _matrix[stl3][ll+dec]=0;
+            _matrix[stl4][ll+dec]=0;
+            _matrix[stl5][ll+dec]=0;
+            _matrix[stl6][ll+dec]=0;
+        }
+        else if (stcount==5) 
+        {
+            quadAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl4],
+                          _matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[stl4][ll+dec],
+                          _matrix[ll],start, end);
+            addMultRowGF2Extension(_matrix[stl5],_matrix[ll],_matrix[stl5][ll+dec],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+            _matrix[stl3][ll+dec]=0;
+            _matrix[stl4][ll+dec]=0;
+            _matrix[stl5][ll+dec]=0;
+        }
+        else if (stcount==4) 
+        {
+            quadAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl4],
+                          _matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[stl4][ll+dec],
+                          _matrix[ll],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+            _matrix[stl3][ll+dec]=0;
+            _matrix[stl4][ll+dec]=0;
+        }
+        else if (stcount==3) 
+        {
+            tripleAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl3],_matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[stl3][ll+dec],_matrix[ll],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+            _matrix[stl3][ll+dec]=0;
+        }
+        else if (stcount==2) 
+        {
+            doubleAddMultRowGF2Extension(_matrix[stl1],_matrix[stl2],_matrix[stl1][ll+dec],_matrix[stl2][ll+dec],_matrix[ll],start, end);
+            _matrix[stl1][ll+dec]=0;
+            _matrix[stl2][ll+dec]=0;
+        }
+        else if (stcount==1) 
+        {
+            addMultRowGF2Extension(_matrix[stl1],_matrix[ll],_matrix[stl1][ll+dec],start, end);
+            _matrix[stl1][ll+dec]=0;
+        }
+    }
+    
+    #ifdef __SSE4_1__
+    /* We can only set 2 uint64_t in one __m128i vector */
+    template <>
+    void
+    Matrix<ElementGF2Extension<uint64_t>>::groupAddMultRowGF2Extension(int ll, int dec, int startL2, int endL2, int start,int end)
+    {
+        int l2,stcount,stl1=0;
+
+        stcount=0;
+        for(l2=startL2;l2<endL2;l2++) 
+        {
+            if (!_matrix[l2][ll+dec].isZero()) 
+            {
+                if (stcount==1) 
+                {
+                    doubleAddMultRowGF2Extension(_matrix[stl1],_matrix[l2],_matrix[stl1][ll+dec],_matrix[l2][ll+dec],_matrix[ll],start, end);
+                    _matrix[l2][ll+dec]=0;
+                    _matrix[stl1][ll+dec]=0;
+                    stcount=0;
+                }
+                else 
+                {
+                    stcount++;
+                    if (stcount==1) stl1=l2;
+                }
+            }
+        }
+        if (stcount==1) 
+        {
+            addMultRowGF2Extension(_matrix[stl1],_matrix[ll],_matrix[stl1][ll+dec],start, end);
+            _matrix[stl1][ll+dec]=0;
+        }
+    }
+    #endif // __SSE4_1__
+    
     template <typename Element>
     int
     Matrix<Element>::echelonizeGF2Extension ()
@@ -188,67 +372,33 @@ namespace F4
                 /* Triangular part */
                 for (ll = l; ll > 0; ll--)
                 {
-                    for (l2 = 0; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, 0, ll, _startTail[ll], _width);
                 }
                 
                 /* Low rectangular part (under  _nbPiv) */
-                for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
+                for (ll = l; ll >= 0; ll--)
                 {
-                    for (ll = l; ll >= 0; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, _nbPiv, _endCol[l], _startTail[ll], _width);
                 }
             }
+            
             /* Other slices */
             else
             {
                 /* Triangular part */
                 for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, l - TRANCHE + 1, ll, _startTail[ll], _width);
                 }
                 /* Hight rectangular part */
-                for (l2 = 0; l2 <= l - TRANCHE; l2++)
+                for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    for (ll = l; ll > l - TRANCHE; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, 0, l - TRANCHE + 1, _startTail[ll], _width);
                 }
                 /* Low rectangular part (under  _nbPiv) */
-                for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
+                for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    for (ll = l; ll > l - TRANCHE; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, _nbPiv, _endCol[l], _startTail[ll], _width);
                 }
             }
         }
@@ -314,14 +464,7 @@ namespace F4
                 _matrix[l][l].setOne();
                 
                 /* Suppress the elements under the pivot */
-                for (l2 = l + 1; l2 < _height; l2++)
-                {
-                    if (!isZero(l2,l) )
-                    {
-                        addMultRow (_matrix[l2], _matrix[l], _matrix[l2][l], ca, _width);
-                        _matrix[l2][l].setZero();
-                    }
-                }
+                groupAddMultRowGF2Extension(l, 0, l+1, _height, ca, _width);
                 l++;
                 ca++;
             }
@@ -350,40 +493,19 @@ namespace F4
                 /* Triangular part */
                 for (ll = l; ll > _nbPiv; ll--)
                 {
-                    for (l2 = _nbPiv; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, _nbPiv, ll, _height, _width);
                 }
                 
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[_nbPiv];
                 /* Upper rectangular part */
-                for (l2 = 0; l2 < min_endcol; l2++)
+                for (ll = l; ll >= _nbPiv; ll--)
                 {
-                    for (ll = l; ll >= _nbPiv; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, 0, min_endcol, _height, _width);
                 }
-                for (l2 = min_endcol; l2 < max_endcol; l2++)
+                for (ll = l; _endCol[ll] > _nbPiv; ll--) 
                 {
-                    for (ll = l; _endCol[ll] > l2; ll--)
-                    {
-                        if (!isZero(l2,ll))
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, min_endcol, max_endcol, _height, _width);
                 }
             }
             else
@@ -391,372 +513,22 @@ namespace F4
                 /* Triangular part */
                 for (ll = l; ll > l - TRANCHE + 1; ll--)
                 {
-                    for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, l - TRANCHE + 1, ll, _height, _width);
                 }
-
-                
                 /* Upper rectangular part */
                 max_endcol = _endCol[l];
                 min_endcol = _endCol[l - TRANCHE + 1];
-                for (l2 = 0; l2 < min_endcol; l2++)
-                {
-                    for (ll = l; ll > l - TRANCHE; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                for (l2 = min_endcol; l2 < max_endcol; l2++)
-                {
-                    for (ll = l; _endCol[ll] > l2; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                for (l2 = _nbPiv; l2 <= l - TRANCHE; l2++)
-                {
-                    for (ll = l; ll > l - TRANCHE; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-            }
-        }
-        tmp_ech_dh = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
-
-        if (VERBOSE > 1)
-        {
-            cout << tmp_ech_g.count() << " + " << tmp_ech_db.count() << " + " << tmp_ech_dh.count() << " = " << (tmp_ech_g + tmp_ech_db + tmp_ech_dh).count() << " ms" << endl << endl;
-        }
-        return _height;
-    }
-    #endif // PARALLEL
-    
-    #ifdef PARALLEL
-    template <typename Element>
-    int
-    Matrix<Element>::echelonizeGF2Extension ()
-    {
-        chrono::steady_clock::time_point start;
-        typedef chrono::duration<int,milli> millisecs_t;
-        millisecs_t tmp_ech_g, tmp_ech_db, tmp_ech_dh;
-        int ca = 0;
-        int i, l, l2, ll;
-        i = 0;
-        l = 0;
-        Element piv, inv;
-        int exc;
-        
-        /* Thread parameters */
-        omp_set_num_threads(NB_THREAD);
-        int chunk = 1;
-
-        if (VERBOSE > 1)
-        {
-            printf ("Echelonization time: ");
-        }
-
-    #define TRANCHE 64
-    
-        /* Echelonize the left part of the matrix */
-        start = chrono::steady_clock::now();
-        for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)
-        {
-            /* 1st slice */
-            if (l < TRANCHE)
-            {
-                /* Triangular part */
-                for (ll = l; ll > 0; ll--)
-                {
-                    #pragma omp parallel for schedule(dynamic,chunk)
-                    for (l2 = 0; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                
-                /* Low rectangular part (under  _nbPiv) */
-                #pragma omp parallel for private(ll) schedule(dynamic,chunk)
-                for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
-                {
-                    for (ll = l; ll >= 0; ll--)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-            }
-            /* Other slices */
-            else
-            {
-                /* Triangular part */
                 for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    #pragma omp parallel for schedule(dynamic,chunk)
-                    for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, 0, min_endcol, _height, _width);
                 }
-                /* Hight rectangular part */
-                #pragma omp parallel 
+                for (ll = l; _endCol[ll] > l-TRANCHE; ll--)
                 {
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = 0; l2 <= l - TRANCHE; l2++)
-                    {
-                        for (ll = l; ll > l - TRANCHE; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
-                    /* Low rectangular part (under  _nbPiv) */
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = _nbPiv; l2 < _endCol[l]; l2++)
-                    {
-                        for (ll = l; ll > l - TRANCHE; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _startTail[ll], _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, min_endcol, max_endcol, _height, _width);
                 }
-            }
-        }
-        tmp_ech_g = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
-        
-        /* Echelonize the low right part of the matrix */
-        start = chrono::steady_clock::now();
-        ca = _nbPiv;
-        l = _nbPiv;
-        while (l < _height)
-        {
-            for (; ca < _width; ca++)
-            {
-                /* Search a pivot in column ca */
-                for (i = l; i < _height; i++)
+                for (ll = l; ll > l - TRANCHE; ll--)
                 {
-                    if (!isZero(i,ca) )
-                    {
-                        break;
-                    }
-                }
-                if (i < _height)
-                {
-                    /* Pivot found in column ca */
-                    break;          
-                }
-            }
-            if (ca == _width)
-            {
-                /* All the rows under the l-th row are zeros */ 
-                for(l2=l; l2<_height; l2++)
-                {
-                    delete[] _matrix[l2];
-                }
-                /* Forget all the zeros rows */
-                _height = l;
-            }
-            else
-            {
-                /* Swap with the row containing the pivot */
-                swapRow(l,i);
-                if (ca != l)
-                {
-                    /* Column swap */
-                    ll = (_endCol[l] > _endCol[ca] ? _endCol[l] : _endCol[ca]);
-                    swapCol(l,ca,0, ll);
-                    swapCol(l, ca, _nbPiv, _height);
-                    /* Carry the column swap over */
-                    _tau[_sigma[l]] = ca;
-                    _tau[_sigma[ca]] = l;
-                    exc = _sigma[l];
-                    _sigma[l] = _sigma[ca];
-                    _sigma[ca] = exc;
-                    exc = _endCol[l];
-                    _endCol[l] = _endCol[ca];
-                    _endCol[ca] = exc;
-                }
-                piv = _matrix[l][l];
-                inv = piv.inverse();
-                
-                /* Normalize the row in  [-MODULO/2, MODULO/2]. */
-                multRow (_matrix[l], inv, ca + 1, _width);      
-                _matrix[l][l].setOne();
-                
-                /* Suppress the elements under the pivot */
-                #pragma omp parallel for schedule(dynamic,chunk)
-                for (l2 = l + 1; l2 < _height; l2++)
-                {
-                    if (!isZero(l2,l) )
-                    {
-                        addMultRow (_matrix[l2], _matrix[l], _matrix[l2][l], ca, _width);
-                        _matrix[l2][l].setZero();
-                    }
-                }
-                l++;
-                ca++;
-            }
-        }
-        tmp_ech_db = chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start);
-
-        /* Echelonize the hight right part of the matrix */
-        start = chrono::steady_clock::now();
-
-        /* Check _endCol */
-        for (l = _nbPiv; l < _height - 1; l++)
-        {
-            if (_endCol[l + 1] < _endCol[l])
-            {
-                fprintf (stderr, "_endCol hypothesis voided: please report\n");
-                exit (1);
-            }
-        }
-
-        int min_endcol, max_endcol;
-        for (l = _height - 1; l >= _nbPiv; l -= TRANCHE)
-        {
-            if (l < (_nbPiv + TRANCHE))
-            {
-                /* 1st slice */
-                /* Triangular part */
-                for (ll = l; ll > _nbPiv; ll--)
-                {
-                    #pragma omp parallel for schedule(dynamic,chunk)
-                    for (l2 = _nbPiv; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-                
-                max_endcol = _endCol[l];
-                min_endcol = _endCol[_nbPiv];
-                /* Upper rectangular part */
-                #pragma omp parallel
-                {
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = 0; l2 < min_endcol; l2++)
-                    {
-                        for (ll = l; ll >= _nbPiv; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = min_endcol; l2 < max_endcol; l2++)
-                    {
-                        for (ll = l; _endCol[ll] > l2; ll--)
-                        {
-                            if (!isZero(l2,ll))
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                /* Triangular part */
-                for (ll = l; ll > l - TRANCHE + 1; ll--)
-                {
-                    #pragma omp parallel for schedule(dynamic,chunk)
-                    for (l2 = l - TRANCHE + 1; l2 < ll; l2++)
-                    {
-                        if (!isZero(l2,ll) )
-                        {
-                            addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                            _matrix[l2][ll].setZero();
-                        }
-                    }
-                }
-
-                
-                /* Upper rectangular part */
-                max_endcol = _endCol[l];
-                min_endcol = _endCol[l - TRANCHE + 1];
-                #pragma omp parallel
-                {
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = 0; l2 < min_endcol; l2++)
-                    {
-                        for (ll = l; ll > l - TRANCHE; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = min_endcol; l2 < max_endcol; l2++)
-                    {
-                        for (ll = l; _endCol[ll] > l2; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
-                    #pragma omp for private(ll) nowait schedule(dynamic,chunk)
-                    for (l2 = _nbPiv; l2 <= l - TRANCHE; l2++)
-                    {
-                        for (ll = l; ll > l - TRANCHE; ll--)
-                        {
-                            if (!isZero(l2,ll) )
-                            {
-                                addMultRow (_matrix[l2], _matrix[ll], _matrix[l2][ll], _height, _width);
-                                _matrix[l2][ll].setZero();
-                            }
-                        }
-                    }
+                    groupAddMultRowGF2Extension(ll, 0, _nbPiv, l - TRANCHE + 1 , _height, _width);
                 }
             }
         }
@@ -768,7 +540,6 @@ namespace F4
         }
         return _height;
     }
-    #endif // PARALLEL
 }
 
 #endif // F4_SPECIALISATION_ECHELONIZE_GF2_EXTENSION_INL

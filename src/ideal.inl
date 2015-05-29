@@ -142,7 +142,7 @@ namespace F4
         ofstream file(filename);
         if (file)
         {
-            file << "FF:=FiniteField(" << modulo << ");" << endl;
+            file << "FF:=FiniteField(" << (uint64_t)modulo << ");" << endl;
             file << "P<";
             for(int i=0; i< _nbVariable - 1; i++)
             {
@@ -934,8 +934,8 @@ namespace F4
         /* For convertion under matrix for */
         int *tabMon;               /* Monomial array */
         int nbPiv;                 /* We set the pivots in the upper part of mat, after nbPiv, polynomials can be some new generators */
-        int *tau;                   /* sigma(tau(i))=tau(sigma(i))=i */
-        int *sigma;                 /* To get mat under triangular shape, we permute some columns */
+        int *tau;                  /* sigma(tau(i))=tau(sigma(i))=i */
+        int *sigma;                /* To get mat under triangular shape, we permute some columns */
         int *startTail;            /* startTail[i] = min{j>=nbPiv : sigma[i]<sigma[j]} */
         int *endCol;               
 

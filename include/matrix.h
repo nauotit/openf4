@@ -275,6 +275,22 @@ namespace F4
             void addMultRowGF2Extension(Element * row1, Element * row2, Element element, int start, int end);
             
             /**
+             * \brief dest1 += mult1 * vec, dest2 += mult2 * vec.
+             * \param dest1: Row of the matrix to modify.
+             * \param dest2: Row of the matrix to modify.
+             * \param mult1: Element used to multiply each element of the slice.
+             * \param mult2: Element used to multiply each element of the slice.
+             * \param vec: Row of the matrix to add.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
+            void doubleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element mult1, Element mult2, Element * vec, int start, int end);
+            void tripleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element mult1, Element mult2, Element mult3, Element * vec, int start, int end);
+            void quadAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element mult1, Element mult2, Element mult3, Element mult4, Element * vec, int start, int end);
+            void octAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element * dest5, Element * dest6, Element * dest7, Element * dest8, Element mult1, Element mult2, Element mult3, Element mult4, Element mult5, Element mult6, Element mult7, Element mult8, Element * vec, int start, int end);
+            void groupAddMultRowGF2Extension(int ll, int dec, int startL2, int endL2, int start, int end);
+            
+            /**
              * \brief Swap a slice of the row1-th row with a slice of the row2-th row.
              * \param numRow1: Number of the row. 
              * \param numRow2: Number of the row. 

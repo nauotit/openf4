@@ -16,20 +16,19 @@
  */
 
   /**
-  * \file specialisation-simd.inl
-  * \brief Specialisation of addMultRow method with vectorisation.
+  * \file specialisation-simd-prime.inl
+  * \brief Specialisation of addMultRow method with vectorisation for ElementPrime type.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_SPECIALISATION_SIMD_INL
-#define F4_SPECIALISATION_SIMD_INL
+#ifndef F4_SPECIALISATION_SIMD_PRIME_INL
+#define F4_SPECIALISATION_SIMD_PRIME_INL
     
 using namespace std;
 
 namespace F4
 {
     #if defined(__SSE2__) && defined(__x86_64__)
-    #ifndef __SSE4_1__
     template <typename T>
     string __m128i_toString(const __m128i var) 
     {
@@ -52,6 +51,7 @@ namespace F4
         return sstr.str();
     }
     
+    #ifndef __SSE4_1__
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -550,4 +550,4 @@ namespace F4
     #endif // __SSE4_1__
 }
 
-#endif //F4_SPECIALISATION_SIMD_INL
+#endif //F4_SPECIALISATION_SIMD_PRIME_INL

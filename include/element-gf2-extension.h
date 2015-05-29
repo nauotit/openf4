@@ -78,6 +78,12 @@ namespace F4
              */
             static baseType getMask();
             
+            /**
+             * \brief Get the static variable MASK_BIT.
+             * \return Number j such that MASK = 1 << j.
+             */
+            static baseType getMaskBit();
+            
             
             /* No constructor because POD */
             
@@ -265,6 +271,7 @@ namespace F4
             baseType _element; /*!< Represent an element of the field GF2[t]/MODULO */
             
             static baseType MODULO; /*!< Irreducible polynomial used to construct GF(2^n). MODULO is under bits representation (ex: 0x10011001 = t^7+t^4+t^3+1). */
+            static baseType MASK_BIT; /*!< MASK = 1 << MASK_BIT */
             static baseType MASK; /*!< Power of 2 used to test if MODULO must be applied */
             static std::string VARIABLE_NAME; /*!< Letter (or string) used to define a polynomial in GF2, default is 't'. */
     };
