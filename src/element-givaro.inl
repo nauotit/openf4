@@ -38,8 +38,18 @@ namespace F4
     template <class Field>
     Field ElementGivaro<Field>::F;
     
+    template <class Field>
+    string ElementGivaro<Field>::VARIABLE_NAME=string("t");
+    
     
     /* Static methods */
+    
+    template <class Field>
+    void 
+    ElementGivaro<Field>::setVariableName(string var)
+    {
+        VARIABLE_NAME=var;
+    }
     
     template <class Field>
     void 
@@ -69,8 +79,16 @@ namespace F4
 
     template <class Field>
     void
-    ElementGivaro<Field>::printElementPrime (std::ostream & stream) const
+    ElementGivaro<Field>::printElementGivaro (std::ostream & stream) const
     {
+        F.write(stream,_element);
+    }
+    
+    template <>
+    void
+    ElementGivaro<Givaro::GFqDom<long>>::printElementGivaro (std::ostream & stream) const
+    {
+        //Givaro::Poly1FactorDom<Givaro::GFqDom<long>, Givaro::Dense> FD(F,Givaro::Indeter(VARIABLE_NAME));
         F.write(stream,_element);
     }
             
@@ -113,21 +131,21 @@ namespace F4
         return * this;
     }
     
-    template <class Field>
-    ElementGivaro<Field> & 
-    ElementGivaro<Field>::operator=(int element)
-    {
-        _element=F.init(_element,(long)element);
-        return * this;
-    }
+    //template <class Field>
+    //ElementGivaro<Field> & 
+    //ElementGivaro<Field>::operator=(int32_t element)
+    //{
+        //_element=F.init(_element,(long)element);
+        //return * this;
+    //}
     
-    template <class Field>
-    ElementGivaro<Field> & 
-    ElementGivaro<Field>::operator=(long element)
-    {
-        _element=F.init(_element,element);
-        return * this;
-    }
+    //template <class Field>
+    //ElementGivaro<Field> & 
+    //ElementGivaro<Field>::operator=(int64_t element)
+    //{
+        //_element=F.init(_element,element);
+        //return * this;
+    //}
     
     /* For Integer (gmp) */
     template <class Field>
@@ -135,6 +153,167 @@ namespace F4
     ElementGivaro<Field>::operator=(string element)
     {
         _element=F.init(_element,Givaro::Integer(element.c_str()));
+        return * this;
+    }
+    
+    /* For Givaro GFq */
+    template <>
+    ElementGivaro<Givaro::GFqDom<long>> & 
+    ElementGivaro<Givaro::GFqDom<long>>::operator=(string element)
+    {
+        typedef Givaro::GFqDom<long> Field; 
+        typedef Givaro::Poly1FactorDom<Field, Givaro::Dense> Polynomials; 
+        Field Zp(F.characteristic(),1 );
+        Polynomials PZp(Zp, Givaro::Indeter(VARIABLE_NAME));
+        Polynomials::Element P; 
+        Field::Element e; 
+        bool firstTerm = true;
+        bool neg = false;
+        
+        //cout << "Element Givaro gfq: " << element << endl; 
+        
+        /* Remove spaces */
+        element.erase(remove_if(element.begin(), element.end(), [](char x){return isspace(x);}), element.end());
+        _element=0;
+        string tmp;
+        int64_t coeff=0;
+        int deg;
+        size_t pos1=0;
+        size_t pos2=0;
+        size_t pos3=0;
+        while(pos2 != string::npos)
+        {
+            if(element[pos1]=='-')
+            {
+                neg = true;
+                pos1++;
+            }
+            pos2= min(element.find('+', pos1), element.find('-', pos1));
+            tmp=element.substr(pos1, (pos2-pos1));
+            
+            if(tmp.find(VARIABLE_NAME)==string::npos)
+            {
+                /* Constant */
+                if(neg)
+                {
+                    coeff=-stol(tmp);
+                }
+                else
+                {
+                    coeff=stol(tmp);
+                }
+                if(firstTerm)
+                {
+                    //cout << "First term: coeff = " << coeff << ", degree = " << 0 << endl;
+                    PZp.init(P, Givaro::Degree(0), coeff);
+                    firstTerm=false;
+                }
+                else
+                {
+                    //cout << "Term: coeff = " << coeff << ", degree = " << 0 << endl;
+                    PZp.addin(P, Zp.init(e,coeff));
+                }
+            }
+            else
+            {
+                /* Not constant */
+                if((pos3=tmp.find('^'))==string::npos)
+                {
+                    /* Power = 1 */
+                    if(tmp==VARIABLE_NAME)
+                    {
+                        /* Implicit coeff = 1 */
+                        if(firstTerm)
+                        {
+                            //cout << "First term: coeff = " << 1 << ", degree = " << 1 << endl;
+                            PZp.init(P, Givaro::Degree(1), 1);
+                            firstTerm=false;
+                        }
+                        else
+                        {
+                            //cout << "Term: coeff = " << 1 << ", degree = " << 1 << endl;
+                            Zp.assign(P[1], Zp.init(e,1));
+                        }
+                    }
+                    else
+                    {
+                        if(neg)
+                        {
+                            coeff=-stol(tmp);
+                        }
+                        else
+                        {
+                            coeff=stol(tmp);
+                        }
+                        if(firstTerm)
+                        {
+                            //cout << "First term: coeff = " << coeff << ", degree = " << 1 << endl;
+                            PZp.init(P, Givaro::Degree(1), coeff);
+                            firstTerm=false;
+                        }
+                        else
+                        {
+                            //cout << "Term: coeff = " << coeff << ", degree = " << 1 << endl;
+                            Zp.assign(P[1], Zp.init(e,coeff));
+                        }
+                    }
+                }
+                else
+                {
+                    /* Power != 1 */
+                    deg=stoi(tmp.substr(pos3+1));
+                    
+                    /* Skip ^ */
+                    tmp=tmp.substr(0, pos3);
+                    if(tmp==VARIABLE_NAME)
+                    {
+                        /* Implicit coeff = 1 */                        
+                        if(firstTerm)
+                        {
+                            //cout << "First term: coeff = " << 1 << ", degree = " << deg << endl;
+                            PZp.init(P, Givaro::Degree(deg), 1);
+                            firstTerm=false;
+                        }
+                        else
+                        {
+                            //cout << "Term: coeff = " << 1 << ", degree = " << deg << endl;
+                            Zp.assign(P[deg], Zp.init(e,1));
+                        }
+                    }
+                    else
+                    {
+                        /* Skip t^ */
+                        tmp=tmp.substr(0, pos3-1);
+                        if(neg)
+                        {
+                            coeff=-stol(tmp);
+                        }
+                        else
+                        {
+                            coeff=stol(tmp);
+                        }
+                        if(firstTerm)
+                        {
+                            //cout << "First term: coeff = " << coeff << ", degree = " << deg << endl;
+                            PZp.init(P, Givaro::Degree(deg), coeff);
+                            firstTerm=false;
+                        }
+                        else
+                        {
+                            //cout << "Term: coeff = " << coeff << ", degree = " << deg << endl;
+                            Zp.assign(P[deg], Zp.init(e,coeff));
+                        }
+                    }
+                }
+            }
+            /* We skip + or - */
+            pos1=pos2+1; 
+        }
+        
+        //cout << "Element Givaro gfq stream: "; 
+        //cout << "P: " << P << endl;
+        
+        F.init(_element ,P);
         return * this;
     }
             
@@ -158,7 +337,7 @@ namespace F4
     ostream & 
     operator<<(ostream & stream, ElementGivaro<Field> const & element)
     {
-        element.printElementPrime(stream);
+        element.printElementGivaro(stream);
         return stream;
     }
     

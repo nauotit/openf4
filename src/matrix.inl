@@ -81,6 +81,20 @@ namespace F4
         }
     }
     
+    template <>
+    Matrix<ElementGivaro<Givaro::GFqDom<long>>>::Matrix(int height, int width): _height(height), _width(width), _nbPiv(0), _tau(0), _sigma(0), _startTail(0), _endCol(0)
+    {
+        _matrix=new ElementGivaro<Givaro::GFqDom<long>> *[_height];
+        for(int i=0; i< _height; i++)
+        {
+            _matrix[i]=new ElementGivaro<Givaro::GFqDom<long>>[_width];
+            for(int j=0; j<_width; j++)
+            {
+                _matrix[i][j].setZero();
+            }
+        }
+    }
+    
     template <typename Element>
     Matrix<Element>::Matrix(string const & filename)
     {
@@ -1328,6 +1342,7 @@ namespace F4
 #else
     #include "specialisation-echelonize-fflas-ffpack.inl"
 #endif //FFLAS_FFPACK
+#include "specialisation-echelonize-gf2.inl"
 #include "specialisation-simd-gf2-extension.inl"
 #include "specialisation-echelonize-gf2-extension.inl"
 

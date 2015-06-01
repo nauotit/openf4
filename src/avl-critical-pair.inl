@@ -40,7 +40,7 @@ namespace F4
     } 
     
     template<typename Element>
-    AvlCriticalPair<Element>::AvlCriticalPair(): _array(1000, 100, 1), _it(_array.getBegin()), _root(0), _size(0)
+    AvlCriticalPair<Element>::AvlCriticalPair(): _array(1000, 1000, 1), _it(_array.getBegin()), _root(0), _size(0)
     {
     }
     

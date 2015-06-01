@@ -16,9 +16,9 @@
  */
 
 /**
- *  \file benchmark-givaro-modular-integer.cpp
- *  \example benchmark-givaro-modular-integer.cpp
- *  \brief Benchmark with integer coefficients using GMP (through Givaro) representation.
+ *  \file benchmark-givaro-gfq.cpp
+ *  \example benchmark-givaro-gfq.cpp
+ *  \brief Benchmark with polynomial coefficients using Givaro representation.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -30,14 +30,16 @@ using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=1;
+int F4::VERBOSE=0;
 int F4::NB_THREAD=min(2, omp_get_num_procs());
 
 // Init element-givaro tools
-typedef Givaro::Modular<Givaro::Integer> Field;
-Givaro::Integer modulo(Givaro::Integer("115792089237316195423570985008687907853269984665640564039457584007913129640233"));
-Field F(modulo);
+typedef Givaro::GFqDom<long> Field;
+Field::Residu_t modulo=19;
+unsigned long expo = 5;
+Field F(modulo, expo);
 typedef ElementGivaro<Field> eltType;
+
 
 int cyclic6F4(bool magma)
 {
@@ -58,12 +60,12 @@ int cyclic6F4(bool magma)
     vector<Polynomial<eltType>> polCyclic6;
     
     // Fill the polynomial array
-    polCyclic6.emplace_back("x0+x1+x2+x3+x4+x5");
-    polCyclic6.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
-    polCyclic6.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
-    polCyclic6.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
-    polCyclic6.emplace_back("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
-    polCyclic6.emplace_back("x0*x1*x2*x3*x4*x5-1");
+    polCyclic6.emplace_back("(t^3+t)*x0+(t^3+t)*x1+(t^3+t)*x2+(t^3+t)*x3+(t^3+t)*x4+(t^3+t)*x5");
+    polCyclic6.emplace_back("(t^3+t)*x0*x1+(t^3+t)*x1*x2+(t^3+t)*x2*x3+(t^3+t)*x3*x4+(t^3+t)*x0*x5+(t^3+t)*x4*x5");
+    polCyclic6.emplace_back("(t^3+t)*x0*x1*x2+(t^3+t)*x1*x2*x3+(t^3+t)*x2*x3*x4+(t^3+t)*x0*x1*x5+(t^3+t)*x0*x4*x5+(t^3+t)*x3*x4*x5");
+    polCyclic6.emplace_back("(t^3+t)*x0*x1*x2*x3+(t^3+t)*x1*x2*x3*x4+(t^3+t)*x0*x1*x2*x5+(t^3+t)*x0*x1*x4*x5+(t^3+t)*x0*x3*x4*x5+(t^3+t)*x2*x3*x4*x5");
+    polCyclic6.emplace_back("(t^3+t)*x0*x1*x2*x3*x4+(t^3+t)*x0*x1*x2*x3*x5+(t^3+t)*x0*x1*x2*x4*x5+(t^3+t)*x0*x1*x3*x4*x5+(t^3+t)*x0*x2*x3*x4*x5+(t^3+t)*x1*x2*x3*x4*x5");
+    polCyclic6.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5-1");
 
     // Create cyclic6 ideal;
     Ideal<eltType> cyclic6(polCyclic6, 6, 100000, 11, 2, 10);
@@ -76,6 +78,8 @@ int cyclic6F4(bool magma)
     {
         cyclic6.printReducedGroebnerBasis("cyclic6", modulo);
     }
+    
+    cyclic6.printReducedGroebnerBasis(true);
     
     return nbGen;
 }
@@ -99,13 +103,13 @@ int cyclic7F4(bool magma)
     vector<Polynomial<eltType>> polCyclic7;
     
     // Fill the polynomial array
-    polCyclic7.emplace_back("x0+x1+x2+x3+x4+x5+x6");
-    polCyclic7.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x0*x6+x5*x6");
-    polCyclic7.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x0*x1*x6+x0*x5*x6+x4*x5*x6");
-    polCyclic7.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x0*x1*x2*x6+x0*x1*x5*x6+x0*x4*x5*x6+x3*x4*x5*x6");
-    polCyclic7.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x0*x1*x2*x3*x6+x0*x1*x2*x5*x6+x0*x1*x4*x5*x6+x0*x3*x4*x5*x6+x2*x3*x4*x5*x6");
-    polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5+x0*x1*x2*x3*x4*x6+x0*x1*x2*x3*x5*x6+x0*x1*x2*x4*x5*x6+x0*x1*x3*x4*x5*x6+x0*x2*x3*x4*x5*x6+x1*x2*x3*x4*x5*x6");
-    polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5*x6-1");
+    polCyclic7.emplace_back("(t^3+t)*x0+(t^3+t)*x1+(t^3+t)*x2+(t^3+t)*x3+(t^3+t)*x4+(t^3+t)*x5+(t^3+t)*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1+(t^3+t)*x1*x2+(t^3+t)*x2*x3+(t^3+t)*x3*x4+(t^3+t)*x4*x5+(t^3+t)*x0*x6+(t^3+t)*x5*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1*x2+(t^3+t)*x1*x2*x3+(t^3+t)*x2*x3*x4+(t^3+t)*x3*x4*x5+(t^3+t)*x0*x1*x6+(t^3+t)*x0*x5*x6+(t^3+t)*x4*x5*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1*x2*x3+(t^3+t)*x1*x2*x3*x4+(t^3+t)*x2*x3*x4*x5+(t^3+t)*x0*x1*x2*x6+(t^3+t)*x0*x1*x5*x6+(t^3+t)*x0*x4*x5*x6+(t^3+t)*x3*x4*x5*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1*x2*x3*x4+(t^3+t)*x1*x2*x3*x4*x5+(t^3+t)*x0*x1*x2*x3*x6+(t^3+t)*x0*x1*x2*x5*x6+(t^3+t)*x0*x1*x4*x5*x6+(t^3+t)*x0*x3*x4*x5*x6+(t^3+t)*x2*x3*x4*x5*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5+(t^3+t)*x0*x1*x2*x3*x4*x6+(t^3+t)*x0*x1*x2*x3*x5*x6+(t^3+t)*x0*x1*x2*x4*x5*x6+(t^3+t)*x0*x1*x3*x4*x5*x6+(t^3+t)*x0*x2*x3*x4*x5*x6+(t^3+t)*x1*x2*x3*x4*x5*x6");
+    polCyclic7.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6-1");
 
     // Create cyclic7 ideal;
     Ideal<eltType> cyclic7(polCyclic7, 7 , 1000000, 13, 2, 12);
@@ -142,14 +146,14 @@ int cyclic8F4(bool magma)
     vector<Polynomial<eltType>> polCyclic8;
     
     // Fill the polynomial array
-    polCyclic8.emplace_back("x0+x1+x2+x3+x4+x5+x6+x7");
-    polCyclic8.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x5*x6+x0*x7+x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x4*x5*x6+x0*x1*x7+x0*x6*x7+x5*x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x3*x4*x5*x6+x0*x1*x2*x7+x0*x1*x6*x7+x0*x5*x6*x7+x4*x5*x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x2*x3*x4*x5*x6+x0*x1*x2*x3*x7+x0*x1*x2*x6*x7+x0*x1*x5*x6*x7+x0*x4*x5*x6*x7+x3*x4*x5*x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2*x3*x4*x5+x1*x2*x3*x4*x5*x6+x0*x1*x2*x3*x4*x7+x0*x1*x2*x3*x6*x7+x0*x1*x2*x5*x6*x7+x0*x1*x4*x5*x6*x7+x0*x3*x4*x5*x6*x7+x2*x3*x4*x5*x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2*x3*x4*x5*x6+x0*x1*x2*x3*x4*x5*x7+x0*x1*x2*x3*x4*x6*x7+x0*x1*x2*x3*x5*x6*x7+x0*x1*x2*x4*x5*x6*x7+x0*x1*x3*x4*x5*x6*x7+x0*x2*x3*x4*x5*x6*x7+x1*x2*x3*x4*x5*x6*x7");
-    polCyclic8.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7-1");
+    polCyclic8.emplace_back("(t^3+t)*x0+(t^3+t)*x1+(t^3+t)*x2+(t^3+t)*x3+(t^3+t)*x4+(t^3+t)*x5+(t^3+t)*x6+(t^3+t)*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1+(t^3+t)*x1*x2+(t^3+t)*x2*x3+(t^3+t)*x3*x4+(t^3+t)*x4*x5+(t^3+t)*x5*x6+(t^3+t)*x0*x7+(t^3+t)*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2+(t^3+t)*x1*x2*x3+(t^3+t)*x2*x3*x4+(t^3+t)*x3*x4*x5+(t^3+t)*x4*x5*x6+(t^3+t)*x0*x1*x7+(t^3+t)*x0*x6*x7+(t^3+t)*x5*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2*x3+(t^3+t)*x1*x2*x3*x4+(t^3+t)*x2*x3*x4*x5+(t^3+t)*x3*x4*x5*x6+(t^3+t)*x0*x1*x2*x7+(t^3+t)*x0*x1*x6*x7+(t^3+t)*x0*x5*x6*x7+(t^3+t)*x4*x5*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2*x3*x4+(t^3+t)*x1*x2*x3*x4*x5+(t^3+t)*x2*x3*x4*x5*x6+(t^3+t)*x0*x1*x2*x3*x7+(t^3+t)*x0*x1*x2*x6*x7+(t^3+t)*x0*x1*x5*x6*x7+(t^3+t)*x0*x4*x5*x6*x7+(t^3+t)*x3*x4*x5*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5+(t^3+t)*x1*x2*x3*x4*x5*x6+(t^3+t)*x0*x1*x2*x3*x4*x7+(t^3+t)*x0*x1*x2*x3*x6*x7+(t^3+t)*x0*x1*x2*x5*x6*x7+(t^3+t)*x0*x1*x4*x5*x6*x7+(t^3+t)*x0*x3*x4*x5*x6*x7+(t^3+t)*x2*x3*x4*x5*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6+(t^3+t)*x0*x1*x2*x3*x4*x5*x7+(t^3+t)*x0*x1*x2*x3*x4*x6*x7+(t^3+t)*x0*x1*x2*x3*x5*x6*x7+(t^3+t)*x0*x1*x2*x4*x5*x6*x7+(t^3+t)*x0*x1*x3*x4*x5*x6*x7+(t^3+t)*x0*x2*x3*x4*x5*x6*x7+(t^3+t)*x1*x2*x3*x4*x5*x6*x7");
+    polCyclic8.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6*x7-1");
 
     // Create cyclic8 ideal;
     Ideal<eltType> cyclic8(polCyclic8, 8, 1000000, 15, 2, 14);
@@ -186,15 +190,15 @@ int cyclic9F4(bool magma)
     vector<Polynomial<eltType>> polCyclic9;
     
     // Fill the polynomial array
-    polCyclic9.emplace_back("x0+x1+x2+x3+x4+x5+x6+x7+x8");
-    polCyclic9.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x4*x5+x5*x6+x6*x7+x0*x8+x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x3*x4*x5+x4*x5*x6+x5*x6*x7+x0*x1*x8+x0*x7*x8+x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x2*x3*x4*x5+x3*x4*x5*x6+x4*x5*x6*x7+x0*x1*x2*x8+x0*x1*x7*x8+x0*x6*x7*x8+x5*x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3*x4+x1*x2*x3*x4*x5+x2*x3*x4*x5*x6+x3*x4*x5*x6*x7+x0*x1*x2*x3*x8+x0*x1*x2*x7*x8+x0*x1*x6*x7*x8+x0*x5*x6*x7*x8+x4*x5*x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5+x1*x2*x3*x4*x5*x6+x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x8+x0*x1*x2*x3*x7*x8+x0*x1*x2*x6*x7*x8+x0*x1*x5*x6*x7*x8+x0*x4*x5*x6*x7*x8+x3*x4*x5*x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6+x1*x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x5*x8+x0*x1*x2*x3*x4*x7*x8+x0*x1*x2*x3*x6*x7*x8+x0*x1*x2*x5*x6*x7*x8+x0*x1*x4*x5*x6*x7*x8+x0*x3*x4*x5*x6*x7*x8+x2*x3*x4*x5*x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7+x0*x1*x2*x3*x4*x5*x6*x8+x0*x1*x2*x3*x4*x5*x7*x8+x0*x1*x2*x3*x4*x6*x7*x8+x0*x1*x2*x3*x5*x6*x7*x8+x0*x1*x2*x4*x5*x6*x7*x8+x0*x1*x3*x4*x5*x6*x7*x8+x0*x2*x3*x4*x5*x6*x7*x8+x1*x2*x3*x4*x5*x6*x7*x8");
-    polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7*x8-1");
+    polCyclic9.emplace_back("(t^3+t)*x0+(t^3+t)*x1+(t^3+t)*x2+(t^3+t)*x3+(t^3+t)*x4+(t^3+t)*x5+(t^3+t)*x6+(t^3+t)*x7+(t^3+t)*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1+(t^3+t)*x1*x2+(t^3+t)*x2*x3+(t^3+t)*x3*x4+(t^3+t)*x4*x5+(t^3+t)*x5*x6+(t^3+t)*x6*x7+(t^3+t)*x0*x8+(t^3+t)*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2+(t^3+t)*x1*x2*x3+(t^3+t)*x2*x3*x4+(t^3+t)*x3*x4*x5+(t^3+t)*x4*x5*x6+(t^3+t)*x5*x6*x7+(t^3+t)*x0*x1*x8+(t^3+t)*x0*x7*x8+(t^3+t)*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3+(t^3+t)*x1*x2*x3*x4+(t^3+t)*x2*x3*x4*x5+(t^3+t)*x3*x4*x5*x6+(t^3+t)*x4*x5*x6*x7+(t^3+t)*x0*x1*x2*x8+(t^3+t)*x0*x1*x7*x8+(t^3+t)*x0*x6*x7*x8+(t^3+t)*x5*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3*x4+(t^3+t)*x1*x2*x3*x4*x5+(t^3+t)*x2*x3*x4*x5*x6+(t^3+t)*x3*x4*x5*x6*x7+(t^3+t)*x0*x1*x2*x3*x8+(t^3+t)*x0*x1*x2*x7*x8+(t^3+t)*x0*x1*x6*x7*x8+(t^3+t)*x0*x5*x6*x7*x8+(t^3+t)*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5+(t^3+t)*x1*x2*x3*x4*x5*x6+(t^3+t)*x2*x3*x4*x5*x6*x7+(t^3+t)*x0*x1*x2*x3*x4*x8+(t^3+t)*x0*x1*x2*x3*x7*x8+(t^3+t)*x0*x1*x2*x6*x7*x8+(t^3+t)*x0*x1*x5*x6*x7*x8+(t^3+t)*x0*x4*x5*x6*x7*x8+(t^3+t)*x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6+(t^3+t)*x1*x2*x3*x4*x5*x6*x7+(t^3+t)*x0*x1*x2*x3*x4*x5*x8+(t^3+t)*x0*x1*x2*x3*x4*x7*x8+(t^3+t)*x0*x1*x2*x3*x6*x7*x8+(t^3+t)*x0*x1*x2*x5*x6*x7*x8+(t^3+t)*x0*x1*x4*x5*x6*x7*x8+(t^3+t)*x0*x3*x4*x5*x6*x7*x8+(t^3+t)*x2*x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6*x7+(t^3+t)*x0*x1*x2*x3*x4*x5*x6*x8+(t^3+t)*x0*x1*x2*x3*x4*x5*x7*x8+(t^3+t)*x0*x1*x2*x3*x4*x6*x7*x8+(t^3+t)*x0*x1*x2*x3*x5*x6*x7*x8+(t^3+t)*x0*x1*x2*x4*x5*x6*x7*x8+(t^3+t)*x0*x1*x3*x4*x5*x6*x7*x8+(t^3+t)*x0*x2*x3*x4*x5*x6*x7*x8+(t^3+t)*x1*x2*x3*x4*x5*x6*x7*x8");
+    polCyclic9.emplace_back("(t^3+t)*x0*x1*x2*x3*x4*x5*x6*x7*x8-1");
 
     // Create cyclic9 ideal;
     Ideal<eltType> cyclic9(polCyclic9, 9, 20000000, 17, 2, 16);
@@ -230,15 +234,15 @@ int katsura9F4(bool magma)
     vector<Polynomial<eltType>> polKatsura9;
     
     // Fill the polynomial array
-    polKatsura9.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8-1");
-    polKatsura9.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2-x0");
-    polKatsura9.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8-x1");
-    polKatsura9.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8-x2");
-    polKatsura9.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8-x3");
-    polKatsura9.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8-x4");
-    polKatsura9.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8-x5");
-    polKatsura9.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8-x6");
-    polKatsura9.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
+    polKatsura9.emplace_back("(t^3+t)*x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8-1");
+    polKatsura9.emplace_back("(t^3+t)*x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2-x0");
+    polKatsura9.emplace_back("(2*t^3+2*t)*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8-x1");
+    polKatsura9.emplace_back("(t^3+t)*x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8-x2");
+    polKatsura9.emplace_back("(2*t^3+2*t)*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8-x3");
+    polKatsura9.emplace_back("(t^3+t)*x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8-x4");
+    polKatsura9.emplace_back("(2*t^3+2*t)*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8-x5");
+    polKatsura9.emplace_back("(t^3+t)*x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8-x6");
+    polKatsura9.emplace_back("(2*t^3+2*t)*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
 
     // Create katsura9 ideal;
     Ideal<eltType> katsura9(polKatsura9, 9 ,1000000, 11, 2, 10);
@@ -274,16 +278,16 @@ int katsura10F4(bool magma)
     vector<Polynomial<eltType>> polKatsura10;
     
     // Fill the polynomial array
-    polKatsura10.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9-1");
-    polKatsura10.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2-x0");
-    polKatsura10.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9-x1");
-    polKatsura10.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9-x2");
-    polKatsura10.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9-x3");
-    polKatsura10.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9-x4");
-    polKatsura10.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9-x5");
-    polKatsura10.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9-x6");
-    polKatsura10.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9-x7");
-    polKatsura10.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
+    polKatsura10.emplace_back("(t^3+t)*x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9-1");
+    polKatsura10.emplace_back("(t^3+t)*x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2-x0");
+    polKatsura10.emplace_back("(2*t^3+2*t)*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9-x1");
+    polKatsura10.emplace_back("(t^3+t)*x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9-x2");
+    polKatsura10.emplace_back("(2*t^3+2*t)*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9-x3");
+    polKatsura10.emplace_back("(t^3+t)*x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9-x4");
+    polKatsura10.emplace_back("(2*t^3+2*t)*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9-x5");
+    polKatsura10.emplace_back("(t^3+t)*x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9-x6");
+    polKatsura10.emplace_back("(2*t^3+2*t)*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9-x7");
+    polKatsura10.emplace_back("(t^3+t)*x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
 
     // Create katsura10 ideal;
     Ideal<eltType> katsura10(polKatsura10, 10, 10000000, 12, 2, 11);
@@ -318,17 +322,17 @@ int katsura11F4(bool magma)
     vector<Polynomial<eltType>> polKatsura11;
     
     // Fill the polynomial array
-    polKatsura11.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10-1");
-    polKatsura11.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2-x0");
-    polKatsura11.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10-x1");
-    polKatsura11.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10-x2");
-    polKatsura11.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10-x3");
-    polKatsura11.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10-x4");
-    polKatsura11.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10-x5");
-    polKatsura11.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10-x6");
-    polKatsura11.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10-x7");
-    polKatsura11.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10-x8");
-    polKatsura11.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
+    polKatsura11.emplace_back("(t^3+t)*x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10-1");
+    polKatsura11.emplace_back("(t^3+t)*x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2-x0");
+    polKatsura11.emplace_back("(2*t^3+2*t)*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10-x1");
+    polKatsura11.emplace_back("(t^3+t)*x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10-x2");
+    polKatsura11.emplace_back("(2*t^3+2*t)*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10-x3");
+    polKatsura11.emplace_back("(t^3+t)*x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10-x4");
+    polKatsura11.emplace_back("(2*t^3+2*t)*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10-x5");
+    polKatsura11.emplace_back("(t^3+t)*x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10-x6");
+    polKatsura11.emplace_back("(2*t^3+2*t)*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10-x7");
+    polKatsura11.emplace_back("(t^3+t)*x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10-x8");
+    polKatsura11.emplace_back("(2*t^3+2*t)*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
 
     // Create katsura11 ideal;
     Ideal<eltType> katsura11(polKatsura11, 11, 10000000, 13, 2, 12);
@@ -363,18 +367,18 @@ int katsura12F4(bool magma)
     vector<Polynomial<eltType>> polKatsura12;
     
     // Fill the polynomial array
-    polKatsura12.emplace_back("x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10+2*x11-1");
-    polKatsura12.emplace_back("x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2+2*x11^2-x0");
-    polKatsura12.emplace_back("2*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10+2*x10*x11-x1");
-    polKatsura12.emplace_back("x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10+2*x9*x11-x2");
-    polKatsura12.emplace_back("2*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10+2*x8*x11-x3");
-    polKatsura12.emplace_back("x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10+2*x7*x11-x4");
-    polKatsura12.emplace_back("2*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10+2*x6*x11-x5");
-    polKatsura12.emplace_back("x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10+2*x5*x11-x6");
-    polKatsura12.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10+2*x4*x11-x7");
-    polKatsura12.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10+2*x3*x11-x8");
-    polKatsura12.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10+2*x2*x11-x9");
-    polKatsura12.emplace_back("x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
+    polKatsura12.emplace_back("(t^3+t)*x0+2*x1+2*x2+2*x3+2*x4+2*x5+2*x6+2*x7+2*x8+2*x9+2*x10+2*x11-1");
+    polKatsura12.emplace_back("(t^3+t)*x0^2+2*x1^2+2*x2^2+2*x3^2+2*x4^2+2*x5^2+2*x6^2+2*x7^2+2*x8^2+2*x9^2+2*x10^2+2*x11^2-x0");
+    polKatsura12.emplace_back("(2*t^3+2*t)*x0*x1+2*x1*x2+2*x2*x3+2*x3*x4+2*x4*x5+2*x5*x6+2*x6*x7+2*x7*x8+2*x8*x9+2*x9*x10+2*x10*x11-x1");
+    polKatsura12.emplace_back("(t^3+t)*x1^2+2*x0*x2+2*x1*x3+2*x2*x4+2*x3*x5+2*x4*x6+2*x5*x7+2*x6*x8+2*x7*x9+2*x8*x10+2*x9*x11-x2");
+    polKatsura12.emplace_back("(2*t^3+2*t)*x1*x2+2*x0*x3+2*x1*x4+2*x2*x5+2*x3*x6+2*x4*x7+2*x5*x8+2*x6*x9+2*x7*x10+2*x8*x11-x3");
+    polKatsura12.emplace_back("(t^3+t)*x2^2+2*x1*x3+2*x0*x4+2*x1*x5+2*x2*x6+2*x3*x7+2*x4*x8+2*x5*x9+2*x6*x10+2*x7*x11-x4");
+    polKatsura12.emplace_back("(2*t^3+2*t)*x2*x3+2*x1*x4+2*x0*x5+2*x1*x6+2*x2*x7+2*x3*x8+2*x4*x9+2*x5*x10+2*x6*x11-x5");
+    polKatsura12.emplace_back("(t^3+t)*x3^2+2*x2*x4+2*x1*x5+2*x0*x6+2*x1*x7+2*x2*x8+2*x3*x9+2*x4*x10+2*x5*x11-x6");
+    polKatsura12.emplace_back("(2*t^3+2*t)*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8+2*x2*x9+2*x3*x10+2*x4*x11-x7");
+    polKatsura12.emplace_back("(t^3+t)*x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9+2*x2*x10+2*x3*x11-x8");
+    polKatsura12.emplace_back("(2*t^3+2*t)*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10+2*x2*x11-x9");
+    polKatsura12.emplace_back("(t^3+t)*x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
 
     // Create katsura12 ideal;
     Ideal<eltType> katsura12(polKatsura12, 12, 20000000, 14, 2, 13);
@@ -394,7 +398,7 @@ int katsura12F4(bool magma)
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                     BENCHMARK GMP                     #" << endl;
+    cout << "#                 BENCHMARK GIVARO GFQ                  #" << endl;
     cout << "#########################################################" << endl << endl;
 
     // Time
@@ -411,18 +415,18 @@ int main (int argc, char **argv)
     int nbGen;
     
     // File
-    ofstream file("benchmark-int.txt");
+    ofstream file("benchmark-givaro-gfq.txt");
     if (file)
     {
-        file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
+        file << "Benchmark for ideal with givaro GFq type coefficient." << endl << endl << endl;
     }
     
-    //start=chrono::steady_clock::now();
-    //nbGen=cyclic6F4(magma);
-    //if (file)
-    //{
-        //file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=cyclic6F4(magma);
+    if (file)
+    {
+        file << "Cyclic 6 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     //start=chrono::steady_clock::now();
     //nbGen=cyclic7F4(magma);
@@ -445,12 +449,12 @@ int main (int argc, char **argv)
         //file << "Cyclic 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura9F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura9F4(magma);
+    if (file)
+    {
+        file << "Katsura 9 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     //start=chrono::steady_clock::now();
     //nbGen=katsura10F4(magma);

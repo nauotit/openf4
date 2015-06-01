@@ -16,8 +16,8 @@
  */
 
 /**
- *  \file benchmark-zech.cpp
- *  \example benchmark-zech.cpp
+ *  \file benchmark-givaro-modular-log16.cpp
+ *  \example benchmark-givaro-modular-log16.cpp
  *  \brief Benchmark with integer coefficients using Zech representation.
  *  \ingroup benchmark
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON

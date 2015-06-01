@@ -74,7 +74,7 @@ vector<string> groebnerBasisF4(int64_t modulo, int degree, int nbVariable, vecto
         // Create ideal;
         Ideal<eltType1> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
         
-        // Compute a reduced groebner basis;
+        // Compute a reduced groebner basis
         ideal.f4();
         
         // Return the reduced groebner basis
@@ -97,15 +97,15 @@ vector<string> groebnerBasisF4(int64_t modulo, int degree, int nbVariable, vecto
         // Create ideal;
         Ideal<eltType2> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
         
-        // Compute a reduced groebner basis;
+        // Compute a reduced groebner basis
         ideal.f4();
         
         // Return the reduced groebner basis
         return ideal.getReducedGroebnerBasis();
     }
-    else
+    else if (modulo <= 4294967291LL)
     {
-       // Init element-prime tools
+        // Init element-prime tools
         eltType3::setModulo(modulo);
         
         // Create polynomial array
@@ -120,12 +120,167 @@ vector<string> groebnerBasisF4(int64_t modulo, int degree, int nbVariable, vecto
         // Create ideal;
         Ideal<eltType3> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
         
+        // Compute a reduced groebner basis
+        ideal.f4();
+        
+        // Return the reduced groebner basis
+        return ideal.getReducedGroebnerBasis();
+    }
+    else
+    {
+        cout << "Use groebnerBasisGivaroIntegerF4 for modulo > 4294967291" << endl;
+        vector<string> resNul;
+        return resNul;
+    }
+}
+
+typedef ElementGF2Extension<uint16_t> eltType4;
+typedef ElementGF2Extension<uint32_t> eltType5;
+typedef ElementGF2Extension<uint64_t> eltType6;
+
+vector<string> groebnerBasisGF2ExtensionF4(string modulo, int degree, int nbVariable, vector<string> variableName, string polyVarName, vector<string> polynomialList, int nbThread, int verbose)
+{
+    F4::NB_THREAD = min(nbThread, omp_get_num_procs());
+    F4::VERBOSE = verbose;
+
+    int tabulatedProductSize[2]={2,max(degree-1, 0)};
+    int sizeMonomialArray = 100000;
+    
+    // Init monomial tools
+    Monomial::initMonomial(nbVariable, degree);
+    string * vars = new string[nbVariable];
+    for(int i = 0; i< nbVariable; i++)
+    {
+        vars[i]=variableName[i];
+    }
+    Monomial::setVariable(vars);
+    
+    /* Find the extension degree from modulo */
+    eltType6::setVariableName(polyVarName);
+    eltType6::setModulo(modulo);
+    int nbBitMask=eltType6::getMaskBit();
+    
+    if(nbBitMask < 16)
+    {
+        // Init element-prime tools
+        eltType4::setVariableName(polyVarName);
+        eltType4::setModulo(modulo);
+        
+        // Create polynomial array
+        vector<Polynomial<eltType4>> polynomialArray;
+        
+        // Fill the polynomial array
+        for(size_t i=0; i< polynomialList.size(); i++)
+        {
+            polynomialArray.emplace_back(polynomialList[i]);
+        }
+
+        // Create ideal;
+        Ideal<eltType4> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
+        
         // Compute a reduced groebner basis;
         ideal.f4();
         
         // Return the reduced groebner basis
         return ideal.getReducedGroebnerBasis();
     }
+    else if(nbBitMask < 32)
+    {
+        // Init element-prime tools
+        eltType5::setVariableName(polyVarName);
+        eltType5::setModulo(modulo);
+        
+        // Create polynomial array
+        vector<Polynomial<eltType5>> polynomialArray;
+        
+        // Fill the polynomial array
+        for(size_t i=0; i< polynomialList.size(); i++)
+        {
+            polynomialArray.emplace_back(polynomialList[i]);
+        }
+
+        // Create ideal;
+        Ideal<eltType5> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
+        
+        // Compute a reduced groebner basis
+        ideal.f4();
+        
+        // Return the reduced groebner basis
+        return ideal.getReducedGroebnerBasis();
+    }
+    else if(nbBitMask < 64)
+    {
+        // Init element-prime tools
+        //eltType6::setVariableName(polyVarName);
+        //eltType6::setModulo(modulo);
+
+        // Create polynomial array
+        vector<Polynomial<eltType6>> polynomialArray;
+
+        // Fill the polynomial array
+        for(size_t i=0; i< polynomialList.size(); i++)
+        {
+            polynomialArray.emplace_back(polynomialList[i]);
+        }
+
+        // Create ideal
+        Ideal<eltType6> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
+
+        // Compute a reduced groebner basis
+        ideal.f4();
+
+        // Return the reduced groebner basis
+        return ideal.getReducedGroebnerBasis();
+    }
+    else
+    {
+        cout << "Impossible for the moment to compute in GF(2^n) with n > 63" << endl;
+        vector<string> resNul;
+        return resNul;
+    }
+}
+
+vector<string> groebnerBasisGivaroIntegerF4(string modulo, int degree, int nbVariable, vector<string> variableName, vector<string> polynomialList, int nbThread, int verbose)
+{
+    F4::NB_THREAD = min(nbThread, omp_get_num_procs());
+    F4::VERBOSE = verbose;
+
+    int tabulatedProductSize[2]={2,max(degree-1, 0)};
+    int sizeMonomialArray = 100000;
+    
+    // Init monomial tools
+    Monomial::initMonomial(nbVariable, degree);
+    string * vars = new string[nbVariable];
+    for(int i = 0; i< nbVariable; i++)
+    {
+        vars[i]=variableName[i];
+    }
+    Monomial::setVariable(vars);
+    
+    // Init element-prime tools
+    typedef Givaro::Modular<Givaro::Integer> Field;
+    Givaro::Integer mod(Givaro::Integer(modulo.c_str()));
+    Field F(mod);
+    typedef ElementGivaro<Field> eltType;
+    eltType::setField(F);
+    
+    // Create polynomial array
+    vector<Polynomial<eltType>> polynomialArray;
+    
+    // Fill the polynomial array
+    for(size_t i=0; i< polynomialList.size(); i++)
+    {
+        polynomialArray.emplace_back(polynomialList[i]);
+    }
+
+    // Create ideal;
+    Ideal<eltType> ideal(polynomialArray, nbVariable, sizeMonomialArray, degree, tabulatedProductSize[0], tabulatedProductSize[1]);
+    
+    // Compute a reduced groebner basis
+    ideal.f4();
+    
+    // Return the reduced groebner basis
+    return ideal.getReducedGroebnerBasis();
 }
 
 #endif // F4_LIBF4_CPP

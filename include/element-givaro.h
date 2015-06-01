@@ -31,6 +31,7 @@
 #include <cmath>
 #include "givaro/modular-log16.h"
 #include "givaro/modular-integer.h"
+#include "givaro/gfq.h"
 /** \endcond */
 
 /** \namespace F4 
@@ -54,6 +55,12 @@ namespace F4
              * \param field: Givaro modular-log base field.
              */
             static void setField(Field & field);
+            
+            /**
+             * \brief Set the static variable VARIABLE_NAME.
+             * \param var: Letter (or string) used to define a polynomial in GFq, default is 't'.
+             */
+            static void setVariableName(std::string var);
             
             
             /* No constructor because POD */
@@ -81,7 +88,7 @@ namespace F4
             /**
              * \brief Print the element.
              */
-            void printElementPrime (std::ostream & stream) const;
+            void printElementGivaro (std::ostream & stream) const;
             
             /**
              * \brief Test if this is nul.
@@ -118,21 +125,21 @@ namespace F4
              */
             ElementGivaro & operator=(typename Field::Element element);
             
-            /**
-             * \brief Overload the operator =.
-             * \pre The static variable F must be set beforehand.
-             * \param element: Integer representing  an element of a prime field.
-             * \return Reference on this.
-             */
-            ElementGivaro & operator=(int element);
+            ///**
+             //* \brief Overload the operator =.
+             //* \pre The static variable F must be set beforehand.
+             //* \param element: Integer representing  an element of a prime field.
+             //* \return Reference on this.
+             //*/
+            //ElementGivaro & operator=(int32_t element);
             
-            /**
-             * \brief Overload the operator =.
-             * \pre The static variable F must be set beforehand.
-             * \param element: Integer representing  an element of a prime field.
-             * \return Reference on this.
-             */
-            ElementGivaro & operator=(long element);
+            ///**
+             //* \brief Overload the operator =.
+             //* \pre The static variable F must be set beforehand.
+             //* \param element: Integer representing  an element of a prime field.
+             //* \return Reference on this.
+             //*/
+            //ElementGivaro & operator=(int64_t element);
             
             /**
              * \brief Overload the operator =.
@@ -165,6 +172,7 @@ namespace F4
             typename Field::Element _element; /*!< Represent an element of the field of characteristic MODULO */
             
             static Field F; /*!< Base field. */
+            static std::string VARIABLE_NAME; /*!< Letter (or string) used to define a polynomial in GF2, default is 't'. */
     };
     
     

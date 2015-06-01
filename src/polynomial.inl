@@ -182,6 +182,44 @@ namespace F4
         }
     }
     
+    template <>
+    Polynomial<ElementGivaro<Givaro::GFqDom<long>>>::Polynomial(string const str)
+    {
+        string s = str;
+        /* Remove spaces */
+        s.erase(remove_if(s.begin(), s.end(), [](char x){return isspace(x);}), s.end());
+        
+        NodeList<ElementGivaro<Givaro::GFqDom<long>>> * it=_polynomial.getBegin();
+        string tmp;
+        size_t pos1=0;
+        size_t pos2=0;
+        while(pos2 != string::npos)
+        {
+            Term<ElementGivaro<Givaro::GFqDom<long>>> term;
+            pos2= min(s.find('(', pos1), min(s.find('+', pos1), s.find('-', pos1)));
+            /* In case there is a coefficient of the type (t^8+t^4+t^3+t+1) */
+            if(s[pos2]=='(')
+            {
+                pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+            }
+            tmp=s.substr(pos1, (pos2-pos1));
+            
+            if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
+            {
+                /* Add sign */
+                tmp=s[pos1-1]+tmp;
+            }
+            /* We skip + or - */
+            pos1=pos2+1; 
+            if(tmp != "")
+            {
+                /* In case the first character is a sign */
+                term.setTerm(tmp);
+                it=_polynomial.insertAfter(it, term);
+            }
+        }
+    }
+    
     template <typename Element>
     Polynomial<Element>::Polynomial(Polynomial const & polynomial): _polynomial(polynomial._polynomial)
     {

@@ -611,6 +611,7 @@ namespace F4
         {
             cout << "***pb depliage _matMons dans Transform***" << endl;
             cout << "icur = " << icur << ", width = " << width << endl;
+            cout << "Input polynomials must be set in the good order (with Leading Term at the beginning)" << width << endl;
         }
 
         /* Fill the matrix with a triangular shape */

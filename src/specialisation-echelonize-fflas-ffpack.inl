@@ -462,7 +462,8 @@ namespace F4
         
         #define SEUIL_FFLAS_FFPACK 1000000
         
-        if((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK)
+        /* FFLAS-FFPACK is not efficient for element larger than 2^23 */
+        if((Element::getModulo() < (1<<23)) && ((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK))
         {
             int rank=echelonizeRight(tmp_ech_db, tmp_ech_dh);
             /* All the rows under the l-th row are zeros */ 
@@ -860,7 +861,8 @@ namespace F4
         
         #define SEUIL_FFLAS_FFPACK 1000000
         
-        if((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK)
+        /* FFLAS-FFPACK is not efficient for element larger than 2^23 */
+        if((Element::getModulo() < (1<<23)) && ((_width-_nbPiv)*(_height-_nbPiv) > SEUIL_FFLAS_FFPACK))
         {
             int rank=echelonizeRight(tmp_ech_db, tmp_ech_dh);
             /* All the rows under the l-th row are zeros */ 

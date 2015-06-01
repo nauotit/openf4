@@ -220,6 +220,22 @@ namespace F4
     
     template<>
     void
+    Term<ElementGF2>::readCoefficient(std::string const s)
+    {
+        int res;
+        try
+        { 
+            res=stoi(s)%2;
+        }
+        catch(exception const & e)
+        {
+            res=1;
+        }
+        _coefficient=res;
+    }
+    
+    template<>
+    void
     Term<ElementGF2Extension<uint16_t>>::readCoefficient(std::string const s)
     { 
         /* Detect the beginning of the monomial */
@@ -449,7 +465,6 @@ namespace F4
         {
             /* remove '*' */
             tmp=s.substr(0, pos1-1);
-            cout << "tmp: " << tmp << endl;
         }
         else
         {
@@ -475,6 +490,73 @@ namespace F4
         }
         _coefficient=tmp;
     }
+    
+    template<>
+    void
+    Term<ElementGivaro<Givaro::GFqDom<long>>>::readCoefficient(std::string const s)
+    { 
+        /* Detect the beginning of the monomial */
+        string tmp;
+        size_t pos1=s.find(Monomial::getVariable()[0]);
+        size_t pos2=0;
+        for (int i = 1; i < Monomial::getNbVariable(); ++i)
+        {
+            pos2=s.find(Monomial::getVariable()[i]);
+            if(pos2 != string::npos)
+            {
+                pos1=min(pos1, pos2);
+            }
+        }
+        /* Term with coefficient only */
+        if(pos1==string::npos)
+        {
+            tmp=s;
+        }
+        /* Term with coefficient and monomial */
+        else if(s[pos1-1]=='*')
+        {
+            /* remove '*' */
+            tmp=s.substr(0, pos1-1);
+        }
+        else
+        {
+            tmp=s.substr(0, pos1);
+        }
+        
+        /* Here tmp is either the empty string, a sign, a sign and a number or a number */
+        if(tmp.empty())
+        {
+            tmp=string("(1)");
+        }
+        if(tmp.size()==1)
+        {
+            /* In case tmp is just a sign */
+            if(tmp=="-")
+            {
+                tmp=string("(-1)");
+            }
+            else
+            {
+                tmp=string("(1)");
+            }
+        }
+        /* remove brackets */
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), ')'), tmp.end());
+        tmp.erase(std::remove(tmp.begin(), tmp.end(), '('), tmp.end());
+        if(tmp[0]=='+')
+        {
+            /* remove sign */
+            tmp=tmp.substr(1);
+        }
+        if(tmp[0]=='-')
+        {
+            /* remove sign */
+            //tmp=tmp.substr(1);
+        }
+        
+        _coefficient=tmp;
+    }
+    
     
     template <typename Element>
     void

@@ -59,7 +59,7 @@ int main (int argc, char **argv)
     
     // Fill reference vectors
     vector<string> groebnerBasisCyclic6Int;
-    //for(size_t i = 0; i < basis.size(); i++)
+    //for(size_t i = 0; i < basisInt.size(); i++)
     //{
         //cout << "groebnerBasisCyclic6Int.push_back(\"" << basisInt[i] << "\");" << endl;
     //}

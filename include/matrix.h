@@ -39,6 +39,7 @@
 /** \endcond */
 
 #include "element-prime.h"
+#include "element-gf2.h"
 #include "element-gf2-extension.h"
 #include "element-givaro.h"
 
@@ -248,7 +249,21 @@ namespace F4
              * \param end: End of the slice.
              */
             void normalizeRow(Element * row, int start, int end);
+            
+            /**
+             * \brief Specialisation of normalizeRow for ElementPrime type.
+             * \param row: Row to normalize.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void normalizeRowPrime(Element * row, int start, int end);
+            
+            /**
+             * \brief Specialisation of normalizeRow for ElementGF2Extension type.
+             * \param row: Row to normalize.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void normalizeRowGF2Extension(Element * row, int start, int end);
             
             /**
@@ -259,7 +274,23 @@ namespace F4
              * \param end: End of the slice.
              */
             void multRow(Element * row, Element const & element, int start, int end);
+            
+            /**
+             * \brief Specialisation of multRow for ElementPrime type.
+             * \param row: Row of the matrix. 
+             * \param element: Element used to multiply each element of the slice.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void multRowPrime(Element * row, Element const & element, int start, int end);
+            
+            /**
+             * \brief Specialisation of multRow for ElementGF2Extension type.
+             * \param row: Row of the matrix. 
+             * \param element: Element used to multiply each element of the slice.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void multRowGF2Extension(Element * row, Element const & element, int start, int end);
             
              /**
@@ -271,7 +302,25 @@ namespace F4
              * \param end: End of the slice.
              */
             void addMultRow(Element * row1, Element * row2, Element element, int start, int end);
+            
+            /**
+             * \brief Specialisation of addMultRow for ElementPrime type.
+             * \param row1: Row of the matrix. The one to modify.
+             * \param row2: Row of the matrix. 
+             * \param element: Element used to multiply each element of the slice.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void addMultRowPrime(Element * row1, Element * row2, Element element, int start, int end);
+            
+            /**
+             * \brief Specialisation of addMultRow for ElementGF2Extension type.
+             * \param row1: Row of the matrix. The one to modify.
+             * \param row2: Row of the matrix. 
+             * \param element: Element used to multiply each element of the slice.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void addMultRowGF2Extension(Element * row1, Element * row2, Element element, int start, int end);
             
             /**
@@ -285,9 +334,70 @@ namespace F4
              * \param end: End of the slice.
              */
             void doubleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element mult1, Element mult2, Element * vec, int start, int end);
+            
+            /**
+             * \brief dest1 += mult1 * vec, dest2 += mult2 * vec, dest3 += mult3 * vec.
+             * \param dest1: Row of the matrix to modify.
+             * \param dest2: Row of the matrix to modify.
+             * \param dest3: Row of the matrix to modify.
+             * \param mult1: Element used to multiply each element of the slice.
+             * \param mult2: Element used to multiply each element of the slice.
+             * \param mult3: Element used to multiply each element of the slice.
+             * \param vec: Row of the matrix to add.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void tripleAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element mult1, Element mult2, Element mult3, Element * vec, int start, int end);
+            
+            /**
+             * \brief dest1 += mult1 * vec, dest2 += mult2 * vec, dest3 += mult3 * vec, dest4 += mult4 * vec.
+             * \param dest1: Row of the matrix to modify.
+             * \param dest2: Row of the matrix to modify.
+             * \param dest3: Row of the matrix to modify.
+             * \param dest4: Row of the matrix to modify.
+             * \param mult1: Element used to multiply each element of the slice.
+             * \param mult2: Element used to multiply each element of the slice.
+             * \param mult3: Element used to multiply each element of the slice.
+             * \param mult4: Element used to multiply each element of the slice.
+             * \param vec: Row of the matrix to add.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void quadAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element mult1, Element mult2, Element mult3, Element mult4, Element * vec, int start, int end);
+            
+            /**
+             * \brief dest1 += mult1 * vec, dest2 += mult2 * vec, dest3 += mult3 * vec, dest4 += mult4 * vec, dest5 += mult5 * vec, dest6 += mult6 * vec, dest7 += mult7 * vec, dest8 += mult8 * vec.
+             * \param dest1: Row of the matrix to modify.
+             * \param dest2: Row of the matrix to modify.
+             * \param dest3: Row of the matrix to modify.
+             * \param dest4: Row of the matrix to modify.
+             * \param dest5: Row of the matrix to modify.
+             * \param dest6: Row of the matrix to modify.
+             * \param dest7: Row of the matrix to modify.
+             * \param dest8: Row of the matrix to modify.
+             * \param mult1: Element used to multiply each element of the slice.
+             * \param mult2: Element used to multiply each element of the slice.
+             * \param mult3: Element used to multiply each element of the slice.
+             * \param mult4: Element used to multiply each element of the slice.
+             * \param mult5: Element used to multiply each element of the slice.
+             * \param mult6: Element used to multiply each element of the slice.
+             * \param mult7: Element used to multiply each element of the slice.
+             * \param mult8: Element used to multiply each element of the slice.
+             * \param vec: Row of the matrix to add.
+             * \param start: Beginning of the slice.
+             * \param end: End of the slice.
+             */
             void octAddMultRowGF2Extension(Element * dest1, Element * dest2, Element * dest3, Element * dest4, Element * dest5, Element * dest6, Element * dest7, Element * dest8, Element mult1, Element mult2, Element mult3, Element mult4, Element mult5, Element mult6, Element mult7, Element mult8, Element * vec, int start, int end);
+            
+            /**
+             * \brief Use octAddMultRowGF2Extension, quadAddMultRowGF2Extension, tripleAddMultRowGF2Extension, doubleAddMultRowGF2Extension and addMultRowGF2Extension to suppress elements in column ll+dec from row startL2 to row endL2 using multiple of row ll.
+             * \param ll: Pivot row.
+             * \param dec: Gap between ll and modified column. 
+             * \param startL2: First row to modify (set 0 in _matrix[startL2][ll+dec]).
+             * \param endL2: Last row to modify is endL2-1 (set 0 in _matrix[endL2-1][ll+dec]).
+             * \param start: Beginning of the slice to modify.
+             * \param end: End of the slice.
+             */
             void groupAddMultRowGF2Extension(int ll, int dec, int startL2, int endL2, int start, int end);
             
             /**
