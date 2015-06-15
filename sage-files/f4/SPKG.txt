@@ -1,0 +1,27 @@
+= f4 =
+
+== Description ==
+
+f4 is a c++ library for groebner basis computation over finite field using the F4 algorithm.
+
+== License ==
+
+ * GNU GPLv3
+
+== SPKG Maintainers ==
+
+* Titouan Coladon
+
+== Upstream Contact ==
+
+* titouan.coladon@gmail.com
+
+== Dependencies ==
+
+* openmp
+* givaro (optionnal)
+
+== Special Update/Build Instructions ==
+
+
+

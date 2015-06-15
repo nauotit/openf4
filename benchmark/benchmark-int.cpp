@@ -1,18 +1,20 @@
 /* 
- * Copyright (C) 2010 Antoine Joux and Vanessa Vitse 
-
- * This program is free software: you can redistribute it and/or modify
+ * Copyright (C) 2015 Antoine Joux, Vanessa Vitse and Titouan Coladon
+ * 
+ * This file is part of F4.
+ * 
+ * F4 is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * 
+ * F4 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with F4.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -24,14 +26,18 @@
  */
 
 #include <iostream>
-#include "../include/ideal.h"
+#include <f4.h>
 
 using namespace F4;
 using namespace std;
 
 // Global variable
-int F4::VERBOSE=1;
-int F4::NB_THREAD=min(2, omp_get_num_procs());
+int F4::VERBOSE=0;
+#ifdef USE_OPENMP
+int F4::NB_THREAD=min(8, omp_get_num_procs());
+#else
+int F4::NB_THREAD=1;
+#endif
 
 // Init element-prime tools
 typedef ElementPrime<int32_t> eltType;
@@ -50,7 +56,7 @@ int cyclic6F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(6,11);
+    Monomial::initMonomial(6);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic6;
@@ -64,7 +70,7 @@ int cyclic6F4(bool magma)
     polCyclic6.emplace_back("x0*x1*x2*x3*x4*x5-1");
 
     // Create cyclic6 ideal;
-    Ideal<eltType> cyclic6(polCyclic6, 6, 100000, 11, 2, 10);
+    Ideal<eltType> cyclic6(polCyclic6, 6, 100000);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic6.f4();
@@ -91,7 +97,7 @@ int cyclic7F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(7,13);
+    Monomial::initMonomial(7);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic7;
@@ -106,7 +112,7 @@ int cyclic7F4(bool magma)
     polCyclic7.emplace_back("x0*x1*x2*x3*x4*x5*x6-1");
 
     // Create cyclic7 ideal;
-    Ideal<eltType> cyclic7(polCyclic7, 7 , 1000000, 13, 2, 12);
+    Ideal<eltType> cyclic7(polCyclic7, 7 , 1000000);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic7.f4();
@@ -134,7 +140,7 @@ int cyclic8F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(8,15);
+    Monomial::initMonomial(8);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic8;
@@ -150,7 +156,7 @@ int cyclic8F4(bool magma)
     polCyclic8.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7-1");
 
     // Create cyclic8 ideal;
-    Ideal<eltType> cyclic8(polCyclic8, 8, 1000000, 15, 2, 14);
+    Ideal<eltType> cyclic8(polCyclic8, 8, 1000000);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic8.f4();
@@ -178,7 +184,7 @@ int cyclic9F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(9,17);
+    Monomial::initMonomial(9);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polCyclic9;
@@ -195,7 +201,7 @@ int cyclic9F4(bool magma)
     polCyclic9.emplace_back("x0*x1*x2*x3*x4*x5*x6*x7*x8-1");
 
     // Create cyclic9 ideal;
-    Ideal<eltType> cyclic9(polCyclic9, 9, 20000000, 17, 2, 16);
+    Ideal<eltType> cyclic9(polCyclic9, 9, 20000000);
     
     // Compute a reduced groebner basis;
     nbGen=cyclic9.f4();
@@ -222,7 +228,7 @@ int katsura9F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(9,11);
+    Monomial::initMonomial(9);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura9;
@@ -239,7 +245,7 @@ int katsura9F4(bool magma)
     polKatsura9.emplace_back("2*x3*x4+2*x2*x5+2*x1*x6+2*x0*x7+2*x1*x8-x7");
 
     // Create katsura9 ideal;
-    Ideal<eltType> katsura9(polKatsura9, 9 ,1000000, 11, 2, 10);
+    Ideal<eltType> katsura9(polKatsura9, 9 ,1000000);
     
     // Compute a reduced groebner basis;
     nbGen=katsura9.f4();
@@ -266,7 +272,7 @@ int katsura10F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(10,12);
+    Monomial::initMonomial(10);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura10;
@@ -284,7 +290,7 @@ int katsura10F4(bool magma)
     polKatsura10.emplace_back("x4^2+2*x3*x5+2*x2*x6+2*x1*x7+2*x0*x8+2*x1*x9-x8");
 
     // Create katsura10 ideal;
-    Ideal<eltType> katsura10(polKatsura10, 10, 10000000, 12, 2, 11);
+    Ideal<eltType> katsura10(polKatsura10, 10, 10000000);
     
     // Compute a reduced groebner basis;
     nbGen=katsura10.f4();
@@ -310,7 +316,7 @@ int katsura11F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(11,13);
+    Monomial::initMonomial(11);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura11;
@@ -329,7 +335,7 @@ int katsura11F4(bool magma)
     polKatsura11.emplace_back("2*x4*x5+2*x3*x6+2*x2*x7+2*x1*x8+2*x0*x9+2*x1*x10-x9");
 
     // Create katsura11 ideal;
-    Ideal<eltType> katsura11(polKatsura11, 11, 10000000, 13, 2, 12);
+    Ideal<eltType> katsura11(polKatsura11, 11, 10000000);
     
     // Compute a reduced groebner basis;
     nbGen=katsura11.f4();
@@ -355,7 +361,7 @@ int katsura12F4(bool magma)
     int nbGen;
     
     // Init monomial tools
-    Monomial::initMonomial(12,14);
+    Monomial::initMonomial(12);
     
     // Create polynomial array
     vector<Polynomial<eltType>> polKatsura12;
@@ -375,7 +381,7 @@ int katsura12F4(bool magma)
     polKatsura12.emplace_back("x5^2+2*x4*x6+2*x3*x7+2*x2*x8+2*x1*x9+2*x0*x10+2*x1*x11-x10");
 
     // Create katsura12 ideal;
-    Ideal<eltType> katsura12(polKatsura12, 12, 20000000, 14, 2, 13);
+    Ideal<eltType> katsura12(polKatsura12, 12, 20000000);
     
     // Compute a reduced groebner basis;
     nbGen=katsura12.f4();
@@ -385,6 +391,92 @@ int katsura12F4(bool magma)
     {
         katsura12.printReducedGroebnerBasis("katsura12", modulo);
     }
+    
+    return nbGen;
+}
+
+int randomIdealF4(bool magma)
+{
+    cout << "#########################################################" << endl;
+    cout << "#                          RANDOM 10                    #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
+    // Init element-prime tools
+    eltType::setModulo(modulo);
+    
+    // Number of generator
+    int nbGen;
+    
+    // Init monomial tools
+    Monomial::initMonomial(6);
+    
+    // Create polynomial array
+    vector<Polynomial<eltType>> polRandomIdeal;
+    
+    // Fill the polynomial array
+    polRandomIdeal.emplace_back("-25655*x1^2*x2^2*x4 - 27093*x0*x2*x3*x5^2 + 15696*x5^5 - 31611*x0*x1^3 + 10089*x0^3*x2 - 2759*x1^2*x3^2 + 3186*x1*x3^2*x4 - 7916*x1*x2^2*x5 + 16867*x1*x4^2*x5 - 26502*x2^2*x4");
+    polRandomIdeal.emplace_back("24757*x2^4*x3 + 13532*x0*x1*x2*x3^2 - 32273*x2^2*x3^3 + 24976*x2*x3^4 + 6577*x0*x2^3*x5 - 14251*x1*x3^2*x4*x5 + 8633*x0*x3*x4^2 + 18508*x0*x4^3 + 12700*x1*x2*x5^2 + 21103*x1*x5");
+    polRandomIdeal.emplace_back("-14089*x0^2*x2^3 + 6374*x0*x1^2*x3^2 - 11572*x2^3*x3^2 + 17253*x0^3*x1*x4 - 26476*x2*x3*x4^3 - 5794*x2*x4^3*x5 - 9292*x0^3*x1 + 9740*x0^3*x2 - 9633*x0^2*x5^2 + 15791*x4");
+    polRandomIdeal.emplace_back("520*x0^2*x1*x3*x5 - 29475*x3^4*x5 + 19553*x1*x4^3*x5 - 23508*x0*x3^2*x5^2 - 5914*x0^2*x4*x5^2 - 1142*x0*x2*x4*x5 + 18000*x0*x2*x3 + 9342*x2*x3^2 + 8761*x0^2*x5 + 19293*x2*x5");
+    polRandomIdeal.emplace_back("-29406*x0^4*x1 - 6933*x1*x2^4 - 16593*x1^2*x2*x3^2 - 12720*x1*x3^4 - 8580*x4*x5^4 - 17076*x1^2*x3*x4 + 24339*x0*x2*x3*x4 + 7722*x1*x3*x4^2 - 14196*x1*x2*x3 - 15797*x1^2*x5");
+    polRandomIdeal.emplace_back("31060*x0^3*x1*x2 - 6848*x2*x3^3*x5 - 17952*x1*x3*x4^2*x5 + 24428*x0*x2*x3*x5^2 + 20435*x0^4 - 20926*x1^2*x2*x3 + 18778*x2^2*x3^2 + 24106*x2*x4^3 - 11252*x5^4 - 20128*x2*x3");
+    polRandomIdeal.emplace_back("2175*x0^3*x4^2 + 24248*x0^2*x3*x4*x5 - 25078*x0*x2*x3*x4*x5 + 17127*x0*x3^2*x4*x5 + 16204*x3^2*x4*x5^2 + 3683*x0*x1*x2*x3 + 14115*x1*x4^2*x5 - 32337*x0^2*x1 - 17348*x1^2*x5 + 3481*x1*x4");
+    polRandomIdeal.emplace_back("-10922*x2^3*x3^2 + 11055*x2^2*x3^3 - 24940*x2^2*x3*x5^2 - 2405*x2*x5^4 - 26339*x1*x2*x3^2 - 4489*x0*x3^2*x5 + 2022*x1*x3*x4*x5 + 6254*x3*x4^2*x5 + 19234*x1^2*x3 + 28792*x2*x4*x5");
+    polRandomIdeal.emplace_back("-30691*x0^2*x2*x3^2 + 6407*x0*x2*x4^3 + 30127*x1*x4^4 + 20623*x2*x3*x4^2*x5 + 14919*x0*x3^2*x5^2 + 11410*x1^2*x4^2 + 11040*x0*x2*x4^2 - 23568*x4*x5^3 + 12549*x1^2*x3 - 19452*x2^2*x3");
+    polRandomIdeal.emplace_back("-21749*x0^3*x1^2 + 31426*x2^3*x4^2 + 24770*x3^2*x4^3 - 8527*x0^3*x1*x5 - 24637*x0^2*x1*x3*x5 - 12368*x0*x1*x2*x3*x5 + 12346*x1*x2^2*x3*x5 - 27520*x0*x5^4 - 8249*x1^2*x3*x4 - 4866*x0*x2*x3*x4");
+    
+    // Create katsura12 ideal;
+    Ideal<eltType> randomIdeal(polRandomIdeal, 6);
+    
+    // Compute a reduced groebner basis;
+    nbGen=randomIdeal.f4();
+    
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        randomIdeal.printReducedGroebnerBasis("randomIdeal", modulo);
+    }
+    
+    return nbGen;
+}
+
+int randomIdealExampleF4(bool magma)
+{
+    cout << "#########################################################" << endl;
+    cout << "#                          RANDOM 4                    #" << endl;
+    cout << "#########################################################" << endl << endl;
+    
+    // Init element-prime tools
+    eltType::setModulo(11);
+    
+    // Number of generator
+    int nbGen;
+    
+    // Init monomial tools
+    Monomial::initMonomial(4);
+    
+    // Create polynomial array
+    vector<Polynomial<eltType>> polRandomIdeal;
+    
+    // Fill the polynomial array
+    polRandomIdeal.emplace_back("x1+2*x2+3*x3");
+    polRandomIdeal.emplace_back("4*x0+5*x1+6*x2+7*x3");
+    polRandomIdeal.emplace_back("8*x0*x1+9*x1*x2+10*x2*x3");
+
+
+    // Create katsura12 ideal;
+    Ideal<eltType> randomIdeal(polRandomIdeal, 4);
+    
+    // Compute a reduced groebner basis;
+    nbGen=randomIdeal.f4();
+    
+    // Print the reduced groebner basis into a file
+    if(magma)
+    {
+        randomIdeal.printReducedGroebnerBasis("randomIdeal4", modulo);
+    }
+    
+    randomIdeal.printReducedGroebnerBasis(true);
     
     return nbGen;
 }
@@ -414,6 +506,20 @@ int main (int argc, char **argv)
     {
         file << "Benchmark for ideal with integer type coefficient." << endl << endl << endl;
     }
+    
+    start=chrono::steady_clock::now();
+    nbGen=randomIdealF4(magma);
+    if (file)
+    {
+        file << "Random 10 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
+    
+    //start=chrono::steady_clock::now();
+    //nbGen=randomIdealExampleF4(magma);
+    //if (file)
+    //{
+        //file << "Random example : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    //}
     
     //start=chrono::steady_clock::now();
     //nbGen=cyclic6F4(magma);
@@ -464,12 +570,12 @@ int main (int argc, char **argv)
         //file << "Katsura 11 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
     //}
     
-    //start=chrono::steady_clock::now();
-    //nbGen=katsura12F4(magma);
-    //if (file)
-    //{
-        //file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
-    //}
+    start=chrono::steady_clock::now();
+    nbGen=katsura12F4(magma);
+    if (file)
+    {
+        file << "Katsura 12 : " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms                   (" << nbGen << " generators)" << endl << endl;
+    }
     
     return 0;
 }

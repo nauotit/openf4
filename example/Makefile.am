@@ -1,14 +1,94 @@
-AM_CPPFLAGS= -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-#AM_CPPFLAGS= -Wall -funroll-loops -ftree-vectorize -std=c++11 -Wno-strict-overflow -fopenmp -march=native
-AM_LDFLAGS= -fopenmp
+# FLAGS
 
-#noinst_PROGRAMS = test_monomial test_dynamic_array test_monomial_array test_term test_single_list test_polynomial test_tagged_polynomial
+AM_CPPFLAGS= $(OPTIMISATION_FLAGS) $(DEBUG_FLAGS) $(VECTORISATION_FLAGS) -I$(top_srcdir)
+
+AM_LDFLAGS = 
+
+if F4_HAVE_OMP
+AM_LDFLAGS+= $(OMPFLAGS)
+AM_CPPFLAGS+= $(OMPFLAGS)
+endif
+
+if F4_HAVE_GIVARO
+AM_LDFLAGS+=$(GIVARO_LIBS) $(GMP_LIBS)
+AM_CPPFLAGS+=$(GIVARO_CFLAGS) $(GMP_CFLAGS)
+endif
+
+if F4_HAVE_FFLAS_FFPACK
+AM_LDFLAGS+=$(CBLAS_LIBS) $(FFLAS_FFPACK_LIBS)
+AM_CPPFLAGS+=$(BLAS_CFLAGS) $(FFLAS_FFPACK_CFLAGS)
+endif
+
+
+# Executable
+
+noinst_PROGRAMS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
+if F4_HAVE_GIVARO
+noinst_PROGRAMS += check_cyclic6_256bits
+endif
+noinst_PROGRAMS += tutorial_method2 tutorial_method3 tutorial_gf2_method2 tutorial_gf2_method3 tutorial_gf2_extension_method2 tutorial_gf2_extension_method3
+if F4_HAVE_GIVARO
+noinst_PROGRAMS += tutorial_big_modulo_method2 tutorial_big_modulo_method3
+endif
+
+
+# Souces
+
+check_cyclic6_16bits_SOURCES = check-cyclic6-16bits.cpp
+check_cyclic6_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+check_cyclic6_32bits_SOURCES = check-cyclic6-32bits.cpp
+check_cyclic6_32bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+check_cyclic6_64bits_SOURCES = check-cyclic6-64bits.cpp
+check_cyclic6_64bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+check_cyclic6_gf2_SOURCES = check-cyclic6-gf2.cpp
+check_cyclic6_gf2_LDADD = $(top_builddir)/f4/src/libf4.la
+
+check_cyclic6_gf2_extension_16bits_SOURCES = check-cyclic6-gf2-extension-16bits.cpp
+check_cyclic6_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+check_cyclic6_gf2_extension_32bits_SOURCES = check-cyclic6-gf2-extension-32bits.cpp
+check_cyclic6_gf2_extension_32bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+check_cyclic6_gf2_extension_64bits_SOURCES = check-cyclic6-gf2-extension-64bits.cpp
+check_cyclic6_gf2_extension_64bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+
+if F4_HAVE_GIVARO
+check_cyclic6_256bits_SOURCES = check-cyclic6-256bits.cpp
+check_cyclic6_256bits_LDADD = $(top_builddir)/f4/src/libf4.la
+endif
+
+tutorial_method2_SOURCES = tutorial-method2.cpp
+tutorial_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+
+tutorial_method3_SOURCES = tutorial-method3.cpp
+
+if F4_HAVE_GIVARO
+tutorial_big_modulo_method2_SOURCES = tutorial-big-modulo-method2.cpp
+tutorial_big_modulo_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+
+tutorial_big_modulo_method3_SOURCES = tutorial-big-modulo-method3.cpp
+endif
+
+tutorial_gf2_method2_SOURCES = tutorial-gf2-method2.cpp
+tutorial_gf2_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+
+tutorial_gf2_method3_SOURCES = tutorial-gf2-method3.cpp
+
+tutorial_gf2_extension_method2_SOURCES = tutorial-gf2-extension-method2.cpp
+tutorial_gf2_extension_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+
+tutorial_gf2_extension_method3_SOURCES = tutorial-gf2-extension-method3.cpp
+
+#noinst_PROGRAMS += test_monomial test_dynamic_array test_monomial_array test_term test_single_list test_polynomial test_tagged_polynomial
 #noinst_PROGRAMS += test_critical_pair test_list_pointer_critical_pair test_avl_critical_pair test_avl_monomial test_avl_polynomial
-#noinst_PROGRAMS += test_element_prime test_matrix test_ideal
-noinst_PROGRAMS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits
-noinst_PROGRAMS += tutorial_method2 tutorial_method3 test_zech
-bin_PROGRAMS = test_fflas_ffpack test_pluq test_matrix test_element_givaro test_element_gf2_extension
-#test_libf4 test_openmp
+#noinst_PROGRAMS += test_element_prime test_matrix test_ideal test_element_gf2_extension test_libf4
+
+#if F4_HAVE_GIVARO
+#noinst_PROGRAMS += test_element_givaro 
+#endif
 
 #test_monomial_SOURCES = test-monomial.cpp
 #test_dynamic_array_SOURCES = test-dynamic-array.cpp
@@ -25,41 +105,16 @@ bin_PROGRAMS = test_fflas_ffpack test_pluq test_matrix test_element_givaro test_
 #test_avl_polynomial_SOURCES = test-avl-polynomial.cpp
 
 #test_element_prime_SOURCES = test-element-prime.cpp
-test_element_gf2_extension_SOURCES = test-element-gf2-extension.cpp
-test_element_givaro_SOURCES = test-element-givaro.cpp
-test_element_givaro_LDFLAGS = -lgivaro -lcblas -latlas -lgmp -lgmpxx -fopenmp
-test_matrix_SOURCES = test-matrix.cpp
-#test_matrix_LDFLAGS = -lgivaro -lcblas -latlas -lgmp -lgmpxx -fopenmp
-test_matrix_LDFLAGS = -lgivaro -lopenblas -lgmp -lgmpxx -fopenmp
+#test_element_givaro_SOURCES = test-element-givaro.cpp
+#test_matrix_SOURCES = test-matrix.cpp
 #test_ideal_SOURCES = test-ideal.cpp
-
-test_zech_SOURCES = test-zech.cpp
-test_zech_LDFLAGS = -lm -lpari -lgmp -lgmpxx -Wl,-rpath "/usr/local/lib"
-
-check_cyclic6_16bits_SOURCES = check-cyclic6-16bits.cpp
-check_cyclic6_16bits_LDADD = $(top_builddir)/src/libf4.la 
-check_cyclic6_16bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-check_cyclic6_32bits_SOURCES = check-cyclic6-32bits.cpp
-check_cyclic6_32bits_LDADD = $(top_builddir)/src/libf4.la
-check_cyclic6_32bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-check_cyclic6_64bits_SOURCES = check-cyclic6-64bits.cpp
-check_cyclic6_64bits_LDADD = $(top_builddir)/src/libf4.la
-check_cyclic6_64bits_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-
-tutorial_method2_SOURCES = tutorial-method2.cpp
-tutorial_method2_LDADD = $(top_builddir)/src/libf4.la
-tutorial_method2_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-
-tutorial_method3_SOURCES = tutorial-method3.cpp
-tutorial_method3_LDADD = $(top_builddir)/src/libf4.la
-tutorial_method3_CPPFLAGS = -I$(top_srcdir)/include -Wall -funroll-loops -ftree-vectorize -std=c++11 -DNDEBUG -Wno-strict-overflow -fopenmp -march=native
-
 #test_libf4_SOURCES = test-libf4.cpp
-#test_openmp_SOURCES = test-openmp.cpp
-test_fflas_ffpack_SOURCES = test-fflas-ffpack.cpp
-test_fflas_ffpack_LDFLAGS = -lgivaro -lcblas -latlas -lgmp -lgmpxx
 
-test_pluq_SOURCES = test-pluq.cpp
-test_pluq_LDFLAGS = -lgivaro -lcblas -latlas -lgmp -lgmpxx
 
-TESTS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits
+# For check target
+
+TESTS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
+
+if F4_HAVE_GIVARO
+TESTS += check_cyclic6_256bits
+endif

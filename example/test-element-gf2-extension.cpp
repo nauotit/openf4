@@ -1,18 +1,20 @@
 /* 
- * Copyright (C) 2010 Antoine Joux and Vanessa Vitse 
-
- * This program is free software: you can redistribute it and/or modify
+ * Copyright (C) 2015 Antoine Joux, Vanessa Vitse and Titouan Coladon
+ * 
+ * This file is part of F4.
+ * 
+ * F4 is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * 
+ * F4 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with F4.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -25,7 +27,8 @@
 
 #include <iostream>
 #include <vector>
-#include "../include/element-gf2-extension.h"
+#include <chrono>
+#include "../f4/include/element-gf2-extension.h"
 
 using namespace F4;
 using namespace std;
@@ -40,7 +43,7 @@ int main (int argc, char **argv)
     cout << "#                TEST ELEMENT GF2 EXTENSION             #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    typedef uint32_t baseType;
+    typedef uint64_t baseType;
     
     // Test static void setModulo(baseType modulo);
     /* Modulo = t^8+t^4+t^3+t+1 */
@@ -66,7 +69,8 @@ int main (int argc, char **argv)
     // Test static void setVariableName(std::string var);
     cout << "________Test setVariableName(std::string var)________" << endl;
     ElementGF2Extension<baseType>::setVariableName(string("a"));
-    ElementGF2Extension<baseType>::setModulo(string("a^8+a^4+a^3+a+1"));
+    ElementGF2Extension<baseType>::setModulo(string("a^63 + a^61 + a^57 + a^56 + a^54 + a^51 + a^47 + a^46 + a^45 + a^44 + a^43 + a^42 + a^39 + a^38 + a^35 + a^34 + a^32 + a^31 + a^28 + a^25 + a^24 + a^23 + a^21 + a^19 + a^18 + a^17 + a^15 + a^13 + a^10 + a^8 + a^7 + a^5 + a^2 + a + 1"));
+    //ElementGF2Extension<baseType>::setModulo(string("a^31+a^3+1"));
     e1=ElementGF2Extension<baseType>::getModulo();
     cout << "Modulo =" << e1 << endl << endl;
             
@@ -237,6 +241,151 @@ int main (int argc, char **argv)
     cout << "________Test operator - (ElementGF2Extension<baseType> const & element)________" << endl;
     cout << "-e3: " << (-e3) << endl << endl;
     
+    // Benchmark multiplication
+    chrono::steady_clock::time_point start=chrono::steady_clock::now();
+    typedef chrono::duration<int,milli> millisecs_t;
+    
+    /*  mult */
+    
+    ElementGF2Extension<baseType> e4;
+    e4=e3;
+    int c=0;
+    e2=e4;
+    e3=e4;
+    for(int i=0; i<10000000; i++)
+    {
+        e3.multBase2(e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to multiply 1000000 gf(2^n) base 2 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.multBase4(e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to multiply 1000000 gf(2^n) base 4 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.multBase16(e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to multiply 1000000 gf(2^n) base 16 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.multBase256(e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to multiply 1000000 gf(2^n) base 256 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    
+    /*  addMult */
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.addMultBase2(e4,e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to addMultiply 1000000 gf(2^n) base 2 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.addMultBase4(e4,e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to addMultiply 1000000 gf(2^n) base 4 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.addMultBase16(e4,e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to addMultiply 1000000 gf(2^n) base 16 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
+    
+    c=0;
+    e2=e4;
+    e3=e4;
+    start=chrono::steady_clock::now();
+    for(int i=0; i<10000000; i++)
+    {
+        e3.addMultBase256(e4,e2);
+        c++;
+        if(c==10000)
+        {
+            e2=e3;
+            c=0;
+        }
+    }
+    cout << "e3 = " << e3 << endl;
+    cout << "time to addMultiply 1000000 gf(2^n) base 256 elements: " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start).count() << " ms" << endl << endl;
     
     return 0;
 }

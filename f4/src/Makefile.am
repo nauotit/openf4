@@ -1,0 +1,37 @@
+# FLAGS
+
+AM_CPPFLAGS= $(OPTIMISATION_FLAGS) $(DEBUG_FLAGS) $(VECTORISATION_FLAGS) -I$(top_srcdir)
+
+AM_LDFLAGS = 
+
+if F4_HAVE_OMP
+AM_LDFLAGS+= $(OMPFLAGS)
+AM_CPPFLAGS+= $(OMPFLAGS)
+endif
+
+if F4_HAVE_GIVARO
+AM_LDFLAGS+=$(GIVARO_LIBS) $(GMP_LIBS)
+AM_CPPFLAGS+=$(GIVARO_CFLAGS) $(GMP_CFLAGS)
+endif
+
+if F4_HAVE_FFLAS_FFPACK
+AM_LDFLAGS+=$(CBLAS_LIBS) $(FFLAS_FFPACK_LIBS)
+AM_CPPFLAGS+=$(BLAS_CFLAGS) $(FFLAS_FFPACK_CFLAGS)
+endif
+
+
+# Library 
+
+lib_LTLIBRARIES = libf4.la
+libf4_la_SOURCES = libf4.cpp $(top_srcdir)/libf4.h
+
+# Header to distribute
+
+pkgincludesubdir=$(pkgincludedir)/src
+
+pkgincludesub_HEADERS = avl-critical-pair.inl element-gf2-extension.inl libf4.cpp single-list.inl specialisation-simd-gf2-extension.inl
+pkgincludesub_HEADERS += avl-monomial.inl element-gf2.inl list-pointer-critical-pair.inl matrix.inl specialisation-echelonize-fflas-ffpack.inl specialisation-simd-prime.inl
+pkgincludesub_HEADERS += avl-polynomial.inl element-givaro.inl monomial-array.inl specialisation-echelonize-gf2-extension.inl tagged-polynomial.inl
+pkgincludesub_HEADERS += critical-pair.inl element-prime.inl monomial.inl specialisation-echelonize-gf2.inl term.inl
+pkgincludesub_HEADERS += dynamic-array.inl ideal.inl polynomial.inl specialisation-echelonize-prime.inl
+
