@@ -223,7 +223,7 @@ namespace F4
     ElementGF2Extension<baseType> &
     ElementGF2Extension<baseType>::addMult(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        addMultBase4(element, mult);
+        addMultBase16(element, mult);
         return * this;
     }
     
@@ -232,11 +232,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::addMultBase2(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*8]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             amul[1]=a;
             for(size_t i=2; i<sizeof(baseType)*8; i++)
             {
@@ -247,13 +248,12 @@ namespace F4
                 }
                 amul[i]=a;
             }
-            
-            baseType tmp=element.getElement();
-            for(size_t i=1; i<sizeof(baseType)*8; i++)
-            {
-                _element^=amul[i * (tmp & 0x1)];
-                tmp >>= 1;
-            }
+        }
+        baseType tmp=element.getElement();
+        for(size_t i=1; i<sizeof(baseType)*8; i++)
+        {
+            _element^=amul[i * (tmp & 0x1)];
+            tmp >>= 1;
         }
         return * this;
     }
@@ -268,11 +268,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::addMultBase4(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*16]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a=aStatic;
             for(size_t i=0; i<sizeof(baseType)*4; i++)
             {
                 amul[4*i]=0;
@@ -292,13 +293,12 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=element.getElement();
-            for(size_t i=0; i<sizeof(baseType)*4; i++)
-            {
-                _element^=amul[4*i + (tmp & 0x3)];
-                tmp >>= 2;
-            }
+        }
+        baseType tmp=element.getElement();
+        for(size_t i=0; i<sizeof(baseType)*4; i++)
+        {
+            _element^=amul[4*i + (tmp & 0x3)];
+            tmp >>= 2;
         }
         return * this;
     }
@@ -313,11 +313,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::addMultBase16(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*32]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             for(size_t i=0; i<sizeof(baseType)*2; i++)
             {
                 amul[16*i]=0;
@@ -355,13 +356,12 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=element.getElement();
-            for(size_t i=0; i<sizeof(baseType)*2; i++)
-            {
-                _element^=amul[16*i + (tmp & 0xf)];
-                tmp >>= 4;
-            }
+        }
+        baseType tmp=element.getElement();
+        for(size_t i=0; i<sizeof(baseType)*2; i++)
+        {
+            _element^=amul[16*i + (tmp & 0xf)];
+            tmp >>= 4;
         }
         return * this;
     }
@@ -377,11 +377,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::addMultBase256(ElementGF2Extension<baseType> const & element, ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*256]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             for(size_t i=0; i<sizeof(baseType); i++)
             {
                 amul[256*i]=0;
@@ -455,13 +456,12 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=element.getElement();
-            for(size_t i=0; i<sizeof(baseType); i++)
-            {
-                _element^=amul[256*i + (tmp & 0xff)];
-                tmp >>= 8;
-            }
+        }
+        baseType tmp=element.getElement();
+        for(size_t i=0; i<sizeof(baseType); i++)
+        {
+            _element^=amul[256*i + (tmp & 0xff)];
+            tmp >>= 8;
         }
         return * this;
     }
@@ -618,7 +618,7 @@ namespace F4
                     if(tmp==VARIABLE_NAME)
                     {
                         /* Implicit coeff = 1 */
-                        _element^=(1<<1);
+                        _element^=((baseType)1<<1);
                     }
                     else
                     {
@@ -626,7 +626,7 @@ namespace F4
                         coeff%=2;
                         if(coeff==1)
                         {
-                            _element^=(1<<1);
+                            _element^=((baseType)1<<1);
                         }
                     }
                 }
@@ -640,7 +640,7 @@ namespace F4
                     if(tmp==VARIABLE_NAME)
                     {
                         /* Implicit coeff = 1 */
-                        _element^=(1<<deg);
+                        _element^=((baseType)1<<deg);
                     }
                     else
                     {
@@ -650,7 +650,7 @@ namespace F4
                         coeff%=2;
                         if(coeff==1)
                         {
-                            _element^=(1<<deg);
+                            _element^=((baseType)1<<deg);
                         }
                     }
                 }
@@ -668,11 +668,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::multBase2(ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*8]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             amul[1]=a;
             for(size_t i=2; i<sizeof(baseType)*8; i++)
             {
@@ -683,15 +684,14 @@ namespace F4
                 }
                 amul[i]=a;
             }
-            
-            baseType tmp=0;
-            for(size_t i=1; i<sizeof(baseType)*8; i++)
-            {
-                tmp^=amul[i * (_element & 0x1)];
-                _element >>= 1;
-            }
-            _element=tmp;
         }
+        baseType tmp=0;
+        for(size_t i=1; i<sizeof(baseType)*8; i++)
+        {
+            tmp^=amul[i * (_element & 0x1)];
+            _element >>= 1;
+        }
+        _element=tmp;
         return * this;
     }
     
@@ -705,11 +705,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::multBase4(ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*16]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             for(size_t i=0; i<sizeof(baseType)*4; i++)
             {
                 amul[4*i]=0;
@@ -729,15 +730,14 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=0;
-            for(size_t i=0; i<sizeof(baseType)*4; i++)
-            {
-                tmp^=amul[4*i + (_element & 0x3)];
-                _element >>= 2;
-            }
-            _element=tmp;
         }
+        baseType tmp=0;
+        for(size_t i=0; i<sizeof(baseType)*4; i++)
+        {
+            tmp^=amul[4*i + (_element & 0x3)];
+            _element >>= 2;
+        }
+        _element=tmp;
         return * this;
     }
     
@@ -751,11 +751,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::multBase16(ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*32]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             for(size_t i=0; i<sizeof(baseType)*2; i++)
             {
                 amul[16*i]=0;
@@ -793,15 +794,15 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=0;
-            for(size_t i=0; i<sizeof(baseType)*2; i++)
-            {
-                tmp^=amul[16*i + (_element & 0xf)];
-                _element >>= 4;
-            }
-            _element=tmp;
         }
+            
+        baseType tmp=0;
+        for(size_t i=0; i<sizeof(baseType)*2; i++)
+        {
+            tmp^=amul[16*i + (_element & 0xf)];
+            _element >>= 4;
+        }
+        _element=tmp;
         return * this;
     }
     
@@ -816,11 +817,12 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::multBase256(ElementGF2Extension<baseType> const & mult)
     {
-        static baseType a=0;
+        static baseType aStatic=0;
         static baseType amul[sizeof(baseType)*256]={0};
-        if(mult.getElement()!=a)
+        if(mult.getElement()!=aStatic)
         {
-            a=mult.getElement();
+            aStatic=mult.getElement();
+            baseType a = aStatic;
             for(size_t i=0; i<sizeof(baseType); i++)
             {
                 amul[256*i]=0;
@@ -894,15 +896,15 @@ namespace F4
                     a^=MODULO;
                 }
             }
-            
-            baseType tmp=0;
-            for(size_t i=0; i<sizeof(baseType); i++)
-            {
-                tmp^=amul[256*i + (_element & 0xff)];
-                _element >>= 8;
-            }
-            _element=tmp;
         }
+            
+        baseType tmp=0;
+        for(size_t i=0; i<sizeof(baseType); i++)
+        {
+            tmp^=amul[256*i + (_element & 0xff)];
+            _element >>= 8;
+        }
+        _element=tmp;
         return * this;
     }
             
@@ -910,7 +912,7 @@ namespace F4
     ElementGF2Extension<baseType> & 
     ElementGF2Extension<baseType>::operator*=(ElementGF2Extension<baseType> const & mult)
     {
-        multBase4(mult);
+        multBase16(mult);
         return * this;
     }
     

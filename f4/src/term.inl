@@ -201,10 +201,10 @@ namespace F4
     void
     Term<ElementPrime<int64_t>>::readCoefficient(std::string const s)
     {
-        long res;
+        int64_t res;
         try
         { 
-            res=stol(s);
+            res=stoll(s);
         }
         catch(exception const & e)
         {
@@ -426,10 +426,10 @@ namespace F4
     void
     Term<ElementPrime<double>>::readCoefficient(std::string const s)
     {
-        long res;
+        int64_t res;
         try
         { 
-            res=stol(s);
+            res=stoll(s);
         }
         catch(exception const & e)
         {
@@ -450,10 +450,10 @@ namespace F4
     void
     Term<ElementGivaro<Givaro::Modular<Givaro::Log16>>>::readCoefficient(std::string const s)
     {
-        long res;
+        int64_t res;
         try
         { 
-            res=stol(s);
+            res=stoll(s);
         }
         catch(exception const & e)
         {

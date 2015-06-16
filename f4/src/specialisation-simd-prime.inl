@@ -19,7 +19,7 @@
 
   /**
   * \file specialisation-simd-prime.inl
-  * \brief Specialisation of addMultRow method with vectorisation for ElementPrime type.
+  * \brief Specialisation of addMultRowPrime method with vectorisation for ElementPrime type.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
@@ -30,7 +30,7 @@ using namespace std;
 
 namespace F4
 {
-    #if defined(__SSE2__) && defined(__x86_64__)
+    #if defined(__SSE2__) && defined(OS_64_BIT)
     template <typename T>
     string __m128i_toString(const __m128i var) 
     {
@@ -56,7 +56,7 @@ namespace F4
     #ifndef __SSE4_1__
     template <>
     inline void
-    Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
+    Matrix<ElementPrime<int16_t>>::addMultRowPrime(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
     {
         int i;
         static int16_t hibound = 0;
@@ -128,7 +128,7 @@ namespace F4
     
     template <>
     inline void
-    Matrix<ElementPrime<int32_t>>::addMultRow(ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> mult, int start, int end)
+    Matrix<ElementPrime<int32_t>>::addMultRowPrime(ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> mult, int start, int end)
     {
         int i;
         static int32_t hibound = 0;
@@ -266,7 +266,7 @@ namespace F4
     
     template <>
     inline void
-    Matrix<ElementPrime<double>>::addMultRow(ElementPrime<double> * row1, ElementPrime<double> * row2, ElementPrime<double> mult, int start, int end)
+    Matrix<ElementPrime<double>>::addMultRowPrime(ElementPrime<double> * row1, ElementPrime<double> * row2, ElementPrime<double> mult, int start, int end)
     {
         int i;
         static double hibound = 0;
@@ -341,10 +341,10 @@ namespace F4
     #endif // __SSE2__
     #endif // __SSE4_1__
     
-    #if defined(__SSE4_1__) && defined(__x86_64__)
+    #if defined(__SSE4_1__) && defined(OS_64_BIT)
     template <>
     inline void
-    Matrix<ElementPrime<int16_t>>::addMultRow(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
+    Matrix<ElementPrime<int16_t>>::addMultRowPrime(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
     {
         int i;
         static int16_t hibound = 0;
@@ -411,7 +411,7 @@ namespace F4
 
     template <>
     inline void
-    Matrix<ElementPrime<int32_t>>::addMultRow(ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> mult, int start, int end)
+    Matrix<ElementPrime<int32_t>>::addMultRowPrime(ElementPrime<int32_t> * row1, ElementPrime<int32_t> * row2, ElementPrime<int32_t> mult, int start, int end)
     {
         int i;
         static int32_t hibound = 0;
@@ -477,10 +477,10 @@ namespace F4
     }
     #endif // __SSE4_1__
     
-    #if defined(__SSE4_2__) && defined(__x86_64__)
+    #if defined(__SSE4_2__) && defined(OS_64_BIT)
     template <>
     inline void
-    Matrix<ElementPrime<int64_t>>::addMultRow(ElementPrime<int64_t> * row1, ElementPrime<int64_t> * row2, ElementPrime<int64_t> mult, int start, int end)
+    Matrix<ElementPrime<int64_t>>::addMultRowPrime(ElementPrime<int64_t> * row1, ElementPrime<int64_t> * row2, ElementPrime<int64_t> mult, int start, int end)
     {
         int i;
         static int64_t hibound = 0;

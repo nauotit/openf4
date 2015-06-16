@@ -227,7 +227,7 @@ namespace F4
                     while (ssin.good() && i < _width)
                     {
                         ssin >> tmp;
-                        getRow(row)[i]=stol(tmp);
+                        getRow(row)[i]=stoll(tmp);
                         ++i;
                     }
                     row++;

@@ -105,6 +105,7 @@ tutorial_gf2_extension_method3_SOURCES = tutorial-gf2-extension-method3.cpp
 #test_avl_polynomial_SOURCES = test-avl-polynomial.cpp
 
 #test_element_prime_SOURCES = test-element-prime.cpp
+#test_element_gf2_extension_SOURCES = test-element-gf2-extension.cpp
 #test_element_givaro_SOURCES = test-element-givaro.cpp
 #test_matrix_SOURCES = test-matrix.cpp
 #test_ideal_SOURCES = test-ideal.cpp

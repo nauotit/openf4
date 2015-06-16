@@ -181,11 +181,11 @@ namespace F4
                 /* Constant */
                 if(neg)
                 {
-                    coeff=-stol(tmp);
+                    coeff=-stoll(tmp);
                 }
                 else
                 {
-                    coeff=stol(tmp);
+                    coeff=stoll(tmp);
                 }
                 if(firstTerm)
                 {
@@ -224,11 +224,11 @@ namespace F4
                     {
                         if(neg)
                         {
-                            coeff=-stol(tmp);
+                            coeff=-stoll(tmp);
                         }
                         else
                         {
-                            coeff=stol(tmp);
+                            coeff=stoll(tmp);
                         }
                         if(firstTerm)
                         {
@@ -271,11 +271,11 @@ namespace F4
                         tmp=tmp.substr(0, pos3-1);
                         if(neg)
                         {
-                            coeff=-stol(tmp);
+                            coeff=-stoll(tmp);
                         }
                         else
                         {
-                            coeff=stol(tmp);
+                            coeff=stoll(tmp);
                         }
                         if(firstTerm)
                         {

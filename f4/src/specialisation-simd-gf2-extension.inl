@@ -30,7 +30,7 @@ using namespace std;
 
 namespace F4
 {
-    #if defined(__SSE2__) && defined(__x86_64__)
+    #if defined(__SSE2__) && defined(OS_64_BIT)
     
     #define BITBLOCKS 16
     #define NBBITBLOCKS_SHORT 4

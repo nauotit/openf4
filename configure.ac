@@ -29,6 +29,9 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_MKDIR_P
 
+# Check 64 or 32 bits architecture
+F4_CHECK_OS_64
+
 # Check for vectorisation
 F4_ENABLE_OPTIMISATION
 

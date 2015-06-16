@@ -151,7 +151,6 @@ namespace F4
     Matrix<Element>::addMultRowGF2Extension(Element * row1, Element * row2, Element element, int start, int end)
     {
         assert((start >= 0) && (end <= _width));
-        element.modulo();
         for(int i=start; i<end; ++i)
         {
             row1[i].addMult(row2[i], element);
@@ -308,7 +307,7 @@ namespace F4
         }
     }
     
-    #ifdef __SSE4_2__
+    #if defined(__SSE4_2__) && defined(OS_64_BIT)
     /* We can only set 2 uint64_t in one __m128i vector */
     template <>
     void
