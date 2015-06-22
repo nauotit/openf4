@@ -61,10 +61,6 @@ int main (int argc, char **argv)
     
     // Fill reference vectors
     vector<string> groebnerBasisCyclic6Long;
-    //for(size_t i = 0; i < basisLong.size(); i++)
-    //{
-        //cout << "groebnerBasisCyclic6Long.push_back(\"" << basisLong[i] << "\");" << endl;
-    //}
 
     groebnerBasisCyclic6Long.push_back("(1*x0^1) + (1*x1^1) + (1*x2^1) + (1*x3^1) + (1*x4^1) + (1*x5^1)");
     groebnerBasisCyclic6Long.push_back("(1*x1^2) + (1*x1^1*x3^1) + (-1*x2^1*x3^1) + (1*x1^1*x4^1) + (-1*x3^1*x4^1) + (2*x1^1*x5^1) + (1*x2^1*x5^1) + (1*x3^1*x5^1) + (1*x5^2)");

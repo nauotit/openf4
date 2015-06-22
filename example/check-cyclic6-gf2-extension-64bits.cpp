@@ -62,11 +62,6 @@ int main (int argc, char **argv)
     // Fill reference vectors
     vector<string> groebnerBasisCyclic6Long;
     
-    //for(size_t i = 0; i < basisLong.size(); i++)
-    //{
-        //cout << "groebnerBasisCyclic6Long.push_back(\"" << basisLong[i] << "\");" << endl;
-    //}
-    
     groebnerBasisCyclic6Long.push_back("((+1)*x0^1) + ((+1)*x1^1) + ((+1)*x2^1) + ((+1)*x3^1) + ((+1)*x4^1) + ((+1)*x5^1)");
     groebnerBasisCyclic6Long.push_back("((+1)*x1^2) + ((+1)*x1^1*x3^1) + ((+1)*x2^1*x3^1) + ((+1)*x1^1*x4^1) + ((+1)*x3^1*x4^1) + ((+1)*x2^1*x5^1) + ((+1)*x3^1*x5^1) + ((+1)*x5^2)");
     groebnerBasisCyclic6Long.push_back("((+1)*x2^1*x3^3*x5^4) + ((+1)*x2^1*x3^2*x5^5) + ((+1)*x3^3*x5^5) + ((+1)*x3^2*x5^6) + ((t^60+t^54+t^53+t^52+t^50+t^44+t^43+t^40+t^39+t^38+t^37+t^32+t^31+t^30+t^25+t^23+t^22+t^18+t^15+t^14+t^13+t^11+t^10+t^9+t^8+t^6+t^5+t^3+t^2+t+1)*x2^1*x3^1) + ((t^60+t^54+t^53+t^52+t^50+t^44+t^43+t^40+t^39+t^38+t^37+t^32+t^31+t^30+t^25+t^23+t^22+t^18+t^15+t^14+t^13+t^11+t^10+t^9+t^8+t^6+t^5+t^3+t^2+t+1)*x2^1*x5^1) + ((t^60+t^54+t^53+t^52+t^50+t^44+t^43+t^40+t^39+t^38+t^37+t^32+t^31+t^30+t^25+t^23+t^22+t^18+t^15+t^14+t^13+t^11+t^10+t^9+t^8+t^6+t^5+t^3+t^2+t+1)*x3^1*x5^1) + ((t^60+t^54+t^53+t^52+t^50+t^44+t^43+t^40+t^39+t^38+t^37+t^32+t^31+t^30+t^25+t^23+t^22+t^18+t^15+t^14+t^13+t^11+t^10+t^9+t^8+t^6+t^5+t^3+t^2+t+1)*x5^2)");

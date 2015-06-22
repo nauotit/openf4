@@ -1099,9 +1099,11 @@ namespace F4
             }
             if(!postprocessing(mat, tabMon, sigma, tau, height, width, heightReal, nbPiv, stat))
             {
-                cout << endl << endl << "GROEBNER BASIS : (1)" << endl;
-                cout << "---> " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << " ms " << endl << endl << endl;
-                
+                if(VERBOSE > 0)
+                {
+                    cout << endl << endl << "GROEBNER BASIS : (1)" << endl;
+                    cout << "---> " << chrono::duration_cast<millisecs_t>(chrono::steady_clock::now()-start1).count() << " ms " << endl << endl << endl;
+                }
                 if(_matMons.size() != (size_t)width)
                 {
                     cout << "*** Problem in width computation: size of _matMons = " << _matMons.size() << ", width = " << width << " ***" << endl;
