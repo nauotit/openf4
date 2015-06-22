@@ -307,7 +307,7 @@ namespace F4
         }
     }
     
-    #if defined(__SSE4_2__) && defined(OS_64_BIT)
+    #if defined(HAVE_SSE4_2) && defined(OS_64_BIT)
     /* We can only set 2 uint64_t in one __m128i vector */
     template <>
     void
@@ -343,7 +343,7 @@ namespace F4
             _matrix[stl1][ll+dec]=0;
         }
     }
-    #endif // __SSE4_2__
+    #endif // HAVE_SSE4_2
     
     template <typename Element>
     int

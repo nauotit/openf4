@@ -18,7 +18,7 @@ dnl along with F4.  If not, see <http://www.gnu.org/licenses/>.
 
 dnl F4_ENABLE_VECTORISATION
 
-dnl Tests SSE2 SSE4.1 and SSE4.2 for and define __SSE2__ __SSE4_1__ __SSE4_2__
+dnl Tests SSE2 SSE4.1 and SSE4.2 for and define HAVE_SSE2 HAVE_SSE4_1 HAVE_SSE4_2
 
 
 AC_DEFUN([F4_ENABLE_VECTORISATION],
@@ -92,24 +92,24 @@ AC_DEFUN([F4_ENABLE_VECTORISATION],
                 
                 AS_IF([ test "x$sse4_2_found" = "xyes" ],
                       [
-                          AC_DEFINE(__SSE4_2__,1,[Define if SSE4.2 is available])
-                          AC_DEFINE(__SSE4_1__,1,[Define if SSE4.1 is available])
-                          AC_DEFINE(__SSE2__,1,[Define if SSE2 is available])
+                          AC_DEFINE(HAVE_SSE4_2,1,[Define if SSE4.2 is available])
+                          AC_DEFINE(HAVE_SSE4_1,1,[Define if SSE4.1 is available])
+                          AC_DEFINE(HAVE_SSE2,1,[Define if SSE2 is available])
                           VECTORISATION_FLAGS="-msse4.2"
                           AC_MSG_RESULT(yes (SSE4.2))
                       ],
                       [
                         AS_IF([ test "x$sse4_1_found" = "xyes" ],
                               [
-                                  AC_DEFINE(__SSE4_1__,1,[Define if SSE4.1 is available])
-                                  AC_DEFINE(__SSE2__,1,[Define if SSE2 is available])
+                                  AC_DEFINE(HAVE_SSE4_1,1,[Define if SSE4.1 is available])
+                                  AC_DEFINE(HAVE_SSE2,1,[Define if SSE2 is available])
                                   VECTORISATION_FLAGS="-msse4.1"
                                   AC_MSG_RESULT(yes (SSE4.1))
                               ],
                               [
                                 AS_IF([ test "x$sse2_found" = "xyes" ],
                                       [
-                                          AC_DEFINE(__SSE2__,1,[Define if SSE2 is available])
+                                          AC_DEFINE(HAVE_SSE2,1,[Define if SSE2 is available])
                                           VECTORISATION_FLAGS="-msse2"
                                           AC_MSG_RESULT(yes (SSE2))
                                       ],

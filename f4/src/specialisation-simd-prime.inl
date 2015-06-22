@@ -30,7 +30,7 @@ using namespace std;
 
 namespace F4
 {
-    #if defined(__SSE2__) && defined(OS_64_BIT)
+    #if defined(HAVE_SSE2) && defined(OS_64_BIT)
     template <typename T>
     string __m128i_toString(const __m128i var) 
     {
@@ -53,7 +53,7 @@ namespace F4
         return sstr.str();
     }
     
-    #ifndef __SSE4_1__
+    #ifndef HAVE_SSE4_1
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRowPrime(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -338,10 +338,10 @@ namespace F4
         }
     }
     
-    #endif // __SSE2__
-    #endif // __SSE4_1__
+    #endif // HAVE_SSE2
+    #endif // HAVE_SSE4_1
     
-    #if defined(__SSE4_1__) && defined(OS_64_BIT)
+    #if defined(HAVE_SSE4_1) && defined(OS_64_BIT)
     template <>
     inline void
     Matrix<ElementPrime<int16_t>>::addMultRowPrime(ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> mult, int start, int end)
@@ -475,9 +475,9 @@ namespace F4
             ssedst[i] = _mm_add_epi32 (sse0, sse1);
         }
     }
-    #endif // __SSE4_1__
+    #endif // HAVE_SSE4_1
     
-    #if defined(__SSE4_2__) && defined(OS_64_BIT)
+    #if defined(HAVE_SSE4_2) && defined(OS_64_BIT)
     template <>
     inline void
     Matrix<ElementPrime<int64_t>>::addMultRowPrime(ElementPrime<int64_t> * row1, ElementPrime<int64_t> * row2, ElementPrime<int64_t> mult, int start, int end)
@@ -551,7 +551,7 @@ namespace F4
             ssedst[i] = _mm_add_epi64 (sse0, ssedst[i]);
         }
     }
-    #endif //__SSE4_2__
+    #endif //HAVE_SSE4_2
     
 }
 

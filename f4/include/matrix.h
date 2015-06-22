@@ -55,17 +55,17 @@
 #include "element-givaro.h"
 #endif // HAVE_GIVARO
 
-#ifdef __SSE2__
+#ifdef HAVE_SSE2
 #include <emmintrin.h>
-#endif // __SSE2__
+#endif // HAVE_SSE2
 
-#ifdef __SSE4_1__
+#ifdef HAVE_SSE4_1
 #include <smmintrin.h>
-#endif // __SSE4_1__
+#endif // HAVE_SSE4_1
 
-#ifdef __SSE4_2__
+#ifdef HAVE_SSE4_2
 #include <nmmintrin.h>
-#endif // __SSE4_2__
+#endif // HAVE_SSE4_2
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.

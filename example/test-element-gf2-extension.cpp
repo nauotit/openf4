@@ -43,7 +43,7 @@ int main (int argc, char **argv)
     cout << "#                TEST ELEMENT GF2 EXTENSION             #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    typedef uint64_t baseType;
+    typedef uint16_t baseType;
     
     // Test static void setModulo(baseType modulo);
     /* Modulo = t^8+t^4+t^3+t+1 */
@@ -69,9 +69,9 @@ int main (int argc, char **argv)
     // Test static void setVariableName(std::string var);
     cout << "________Test setVariableName(std::string var)________" << endl;
     ElementGF2Extension<baseType>::setVariableName(string("a"));
-    ElementGF2Extension<baseType>::setModulo(string("a^63 + a^61 + a^57 + a^56 + a^54 + a^51 + a^47 + a^46 + a^45 + a^44 + a^43 + a^42 + a^39 + a^38 + a^35 + a^34 + a^32 + a^31 + a^28 + a^25 + a^24 + a^23 + a^21 + a^19 + a^18 + a^17 + a^15 + a^13 + a^10 + a^8 + a^7 + a^5 + a^2 + a + 1"));
+    //ElementGF2Extension<baseType>::setModulo(string("a^63 + a^61 + a^57 + a^56 + a^54 + a^51 + a^47 + a^46 + a^45 + a^44 + a^43 + a^42 + a^39 + a^38 + a^35 + a^34 + a^32 + a^31 + a^28 + a^25 + a^24 + a^23 + a^21 + a^19 + a^18 + a^17 + a^15 + a^13 + a^10 + a^8 + a^7 + a^5 + a^2 + a + 1"));
     //ElementGF2Extension<baseType>::setModulo(string("a^31+a^3+1"));
-    //ElementGF2Extension<baseType>::setModulo(string("a^15 + a^13 + a^8 + a^5 + a^2 + a + 1"));
+    ElementGF2Extension<baseType>::setModulo(string("a^15 + a^13 + a^8 + a^5 + a^2 + a + 1"));
     e1=ElementGF2Extension<baseType>::getModulo();
     cout << "Modulo =" << e1 << endl << endl;
             
@@ -257,7 +257,7 @@ int main (int argc, char **argv)
     {
         e3.multBase2(e2);
         c++;
-        if(c==10000)
+        if(c==100)
         {
             e2=e3;
             c=0;
@@ -274,7 +274,7 @@ int main (int argc, char **argv)
     {
         e3.multBase4(e2);
         c++;
-        if(c==10000)
+        if(c==100)
         {
             e2=e3;
             c=0;
@@ -291,7 +291,7 @@ int main (int argc, char **argv)
     {
         e3.multBase16(e2);
         c++;
-        if(c==10000)
+        if(c==100)
         {
             e2=e3;
             c=0;
@@ -308,7 +308,7 @@ int main (int argc, char **argv)
     {
         e3.multBase256(e2);
         c++;
-        if(c==10000)
+        if(c==100)
         {
             e2=e3;
             c=0;

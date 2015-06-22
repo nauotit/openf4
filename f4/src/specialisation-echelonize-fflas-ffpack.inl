@@ -101,8 +101,8 @@ namespace F4
     
     /* addMultRow specialisation for ElementPrime */
     
-    #ifndef __SSE4_1__
-    #ifndef __SSE2__
+    #ifndef HAVE_SSE4_1
+    #ifndef HAVE_SSE2
     template <>
     void
     Matrix<ElementPrime<int16_t>>::addMultRow (ElementPrime<int16_t> * row1, ElementPrime<int16_t> * row2, ElementPrime<int16_t> element, int start, int end)

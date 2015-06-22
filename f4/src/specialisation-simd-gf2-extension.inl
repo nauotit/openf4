@@ -30,7 +30,7 @@ using namespace std;
 
 namespace F4
 {
-    #if defined(__SSE2__) && defined(OS_64_BIT)
+    #if defined(HAVE_SSE2) && defined(OS_64_BIT)
     
     #define BITBLOCKS 16
     #define NBBITBLOCKS_SHORT 4
@@ -60,8 +60,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2, pow[4]*2, pow[5]*2, pow[6]*2, pow[7]*2] */
             pow=_mm_slli_epi16(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            /* Set to 0xf if pow & mask > 0 */
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3], modulo & ssetmp[4], modulo & ssetmp[5], modulo & ssetmp[6], modulo & ssetmp[7]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -71,7 +72,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -79,7 +81,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -87,7 +90,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -128,8 +132,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2, pow[4]*2, pow[5]*2, pow[6]*2, pow[7]*2] */
             pow=_mm_slli_epi16(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            /* Set to 0xf if pow & mask > 0 */
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3], modulo & ssetmp[4], modulo & ssetmp[5], modulo & ssetmp[6], modulo & ssetmp[7]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -139,7 +144,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -147,7 +153,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -155,7 +162,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -197,8 +205,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2, pow[4]*2, pow[5]*2, pow[6]*2, pow[7]*2] */
             pow=_mm_slli_epi16(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            /* Set to 0xf if pow & mask > 0 */
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3], modulo & ssetmp[4], modulo & ssetmp[5], modulo & ssetmp[6], modulo & ssetmp[7]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -208,7 +217,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -216,7 +226,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -224,7 +235,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -267,8 +279,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2, pow[4]*2, pow[5]*2, pow[6]*2, pow[7]*2] */
             pow=_mm_slli_epi16(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            /* Set to 0xf if pow & mask > 0 */
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3], modulo & ssetmp[4], modulo & ssetmp[5], modulo & ssetmp[6], modulo & ssetmp[7]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -278,7 +291,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -286,7 +300,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -294,7 +309,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi16(pow,1);
-            ssetmp=_mm_srai_epi16(pow,maskBit);
+            ssetmp=_mm_srli_epi16(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi16(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -342,8 +358,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2] */
             pow=_mm_slli_epi32(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            /* Set to 0xff if pow & mask > 0 */
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -353,7 +370,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -361,7 +379,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -369,7 +388,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -385,7 +405,7 @@ namespace F4
                 b>>=BITDECAL;
             }
             
-            #ifdef __SSE4_1__
+            #ifdef HAVE_SSE4_1
             dest1[i]=_mm_extract_epi32 (ssetmp, 0);
             dest2[i]=_mm_extract_epi32 (ssetmp, 1);
             #else
@@ -415,8 +435,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2] */
             pow=_mm_slli_epi32(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            /* Set to 0xff if pow & mask > 0 */
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -426,7 +447,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -434,7 +456,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -442,7 +465,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -458,7 +482,7 @@ namespace F4
                 b>>=BITDECAL;
             }
             
-            #ifdef __SSE4_1__
+            #ifdef HAVE_SSE4_1
             dest1[i]=_mm_extract_epi32 (ssetmp, 0);
             dest2[i]=_mm_extract_epi32 (ssetmp, 1);
             dest3[i]=_mm_extract_epi32 (ssetmp, 2);
@@ -490,8 +514,9 @@ namespace F4
             amuls[BITBLOCKS*j+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2] */
             pow=_mm_slli_epi32(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            /* Set to 0xff if pow & mask > 0 */
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -501,7 +526,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+2]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -509,7 +535,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+4]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -517,7 +544,8 @@ namespace F4
                 amuls[BITBLOCKS*j+i+8]=_mm_xor_si128(amuls[BITBLOCKS*j+i],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -533,7 +561,7 @@ namespace F4
                 b>>=BITDECAL;
             }
             
-            #ifdef __SSE4_1__
+            #ifdef HAVE_SSE4_1
             dest1[i]=_mm_extract_epi32 (ssetmp, 0);
             dest2[i]=_mm_extract_epi32 (ssetmp, 1);
             dest3[i]=_mm_extract_epi32 (ssetmp, 2);
@@ -569,8 +597,9 @@ namespace F4
             amuls[2*(BITBLOCKS*j+1)]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2] */
             pow=_mm_slli_epi32(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            /* Set to 0xff if pow & mask > 0 */
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -580,7 +609,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+2)]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -588,7 +618,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+4)]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -596,7 +627,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+8)]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -611,8 +643,9 @@ namespace F4
             amuls[2*(BITBLOCKS*j+1)+1]=pow;
             /* pow = [pow[0]*2, pow[1]*2, pow[2]*2, pow[3]*2] */
             pow=_mm_slli_epi32(pow,1);
-            /* Arithmetic shift that sign bit into all the bits */
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            /* Set to 0xff if pow & mask > 0 */
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             /* ssetmp = [modulo & ssetmp[0], modulo & ssetmp[1], modulo & ssetmp[2], modulo & ssetmp[3]] */
             ssetmp=_mm_and_si128(ssetmp,extmod);
             /* Apply modulo if required */
@@ -622,7 +655,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+2)+1]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)+1],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<4;i++)
@@ -630,7 +664,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+4)+1]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)+1],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
             for(i=0;i<8;i++)
@@ -638,7 +673,8 @@ namespace F4
                 amuls[2*(BITBLOCKS*j+i+8)+1]=_mm_xor_si128(amuls[2*(BITBLOCKS*j+i)+1],pow);
             }
             pow=_mm_slli_epi32(pow,1);
-            ssetmp=_mm_srai_epi32(pow,maskBit);
+            ssetmp=_mm_srli_epi32(pow,maskBit); 
+            ssetmp=_mm_cmpgt_epi32(ssetmp,_mm_setzero_si128 ());
             ssetmp=_mm_and_si128(ssetmp,extmod);
             pow=_mm_xor_si128(ssetmp,pow);
         }
@@ -656,7 +692,7 @@ namespace F4
                 b>>=BITDECAL;
             } 
             
-            #ifdef __SSE4_1__
+            #ifdef HAVE_SSE4_1
             dest1[i]=_mm_extract_epi32 (ssetmp1, 0);
             dest2[i]=_mm_extract_epi32 (ssetmp1, 1);
             dest3[i]=_mm_extract_epi32 (ssetmp1, 2);
@@ -680,7 +716,7 @@ namespace F4
     
     
     /* 64 bits integer -> up to GF(2^63) */
-    #ifdef __SSE4_2__
+    #ifdef HAVE_SSE4_2
     
     template <>
     void
@@ -755,8 +791,8 @@ namespace F4
             dest2[i]=(uint64_t)_mm_extract_epi64 (ssetmp, 1);
         }
     }
-    #endif // __SSE4_2__
-    #endif // __SSE2__
+    #endif // HAVE_SSE4_2
+    #endif // HAVE_SSE2
 }
 
 #endif // F4_SPECIALISATION_SIMD_GF2_EXTENSION_INL
