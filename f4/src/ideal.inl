@@ -230,10 +230,6 @@ namespace F4
     int
     Ideal<Element>::simplify (Monomial const & u, int numList) 
     {
-        //cout << "--------------- simplify input---------------------" << endl;
-        //cout << numList << ": " << _taggedPolynomialArray[numList]  << endl;
-        //cout << numList << " x " << u  << ": " << (_taggedPolynomialArray[numList] * Monomial(u)) << endl << endl;
-        
         int numList_prev = numList;
         int i, j, k;
         uint8_t const * varlistU = u.getVarlist();
@@ -279,9 +275,6 @@ namespace F4
             /* Product does not exist => we create it. */
             _taggedPolynomialArray[numList].setTaggedPolynomial(_taggedPolynomialArray[numList_prev], varlistTmp);
         }
-        
-        //cout << "--------------- simplify output---------------------" << endl;
-        //cout << numList << ": " << _taggedPolynomialArray[numList] << endl << endl;
         return numList;
     }
     

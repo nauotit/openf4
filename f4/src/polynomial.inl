@@ -53,8 +53,15 @@ namespace F4
         {
             Term<Element> term;
             pos2= min(s.find('+', pos1), s.find('-', pos1));
-            tmp=s.substr(pos1, (pos2-pos1));
-            
+            if(pos2 != string::npos)
+            {
+                tmp=s.substr(pos1, (pos2-pos1));
+            }
+            else
+            {
+                /* Last term */
+                tmp=s.substr(pos1);
+            }
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
                 /* Add sign */
@@ -92,12 +99,19 @@ namespace F4
             Term<ElementGF2Extension<uint16_t>> term;
             pos2= min(s.find('(', pos1), min(s.find('+', pos1), s.find('-', pos1)));
             /* In case there is a coefficient of the type (t^8+t^4+t^3+t+1) */
-            if(s[pos2]=='(')
+            if(pos2 != string::npos)
             {
-                pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                if(s[pos2]=='(')
+                {
+                    pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                }
+                tmp=s.substr(pos1, (pos2-pos1));
             }
-            tmp=s.substr(pos1, (pos2-pos1));
-            
+            else
+            {
+                /* Last term */
+                tmp=s.substr(pos1);
+            }
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
                 /* Add sign */
@@ -135,12 +149,19 @@ namespace F4
             Term<ElementGF2Extension<uint32_t>> term;
             pos2= min(s.find('(', pos1), min(s.find('+', pos1), s.find('-', pos1)));
             /* In case there is a coefficient of the type (t^8+t^4+t^3+t+1) */
-            if(s[pos2]=='(')
+            if(pos2 != string::npos)
             {
-                pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                if(s[pos2]=='(')
+                {
+                    pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                }
+                tmp=s.substr(pos1, (pos2-pos1));
             }
-            tmp=s.substr(pos1, (pos2-pos1));
-            
+            else
+            {
+                /* Last term */
+                tmp=s.substr(pos1);
+            }
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
                 /* Add sign */
@@ -178,12 +199,19 @@ namespace F4
             Term<ElementGF2Extension<uint64_t>> term;
             pos2= min(s.find('(', pos1), min(s.find('+', pos1), s.find('-', pos1)));
             /* In case there is a coefficient of the type (t^8+t^4+t^3+t+1) */
-            if(s[pos2]=='(')
+            if(pos2 != string::npos)
             {
-                pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                if(s[pos2]=='(')
+                {
+                    pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                }
+                tmp=s.substr(pos1, (pos2-pos1));
             }
-            tmp=s.substr(pos1, (pos2-pos1));
-            
+            else
+            {
+                /* Last term */
+                tmp=s.substr(pos1);
+            }
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
                 /* Add sign */
@@ -222,12 +250,19 @@ namespace F4
             Term<ElementGivaro<Givaro::GFqDom<long>>> term;
             pos2= min(s.find('(', pos1), min(s.find('+', pos1), s.find('-', pos1)));
             /* In case there is a coefficient of the type (t^8+t^4+t^3+t+1) */
-            if(s[pos2]=='(')
+            if(pos2 != string::npos)
             {
-                pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                if(s[pos2]=='(')
+                {
+                    pos2= min(s.find('+', s.find(')', pos2)), s.find('-', s.find(')', pos2)));
+                }
+                tmp=s.substr(pos1, (pos2-pos1));
             }
-            tmp=s.substr(pos1, (pos2-pos1));
-            
+            else
+            {
+                /* Last term */
+                tmp=s.substr(pos1);
+            }
             if(pos1!=0 && (s[pos1-1]=='+' || s[pos1-1]=='-'))
             {
                 /* Add sign */

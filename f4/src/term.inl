@@ -257,23 +257,25 @@ namespace F4
         {
             tmp=s;
         }
-        
-        /* Term without coefficient */
-        if(pos1==0)
-        {
-            tmp=string("1");
-        }
         else
         {
-            /* Term with coefficient and monomial */
-            if(s[pos1-1]=='*')
+            /* Term without coefficient */
+            if(pos1==0)
             {
-                /* remove '*' */
-                tmp=s.substr(0, pos1-1);
+                tmp=string("1");
             }
             else
             {
-                tmp=s.substr(0, pos1);
+                /* Term with coefficient and monomial */
+                if(s[pos1-1]=='*')
+                {
+                    /* remove '*' */
+                    tmp=s.substr(0, pos1-1);
+                }
+                else
+                {
+                    tmp=s.substr(0, pos1);
+                }
             }
         }
         
@@ -319,23 +321,25 @@ namespace F4
         {
             tmp=s;
         }
-        
-        /* Term without coefficient */
-        if(pos1==0)
-        {
-            tmp=string("1");
-        }
         else
         {
-            /* Term with coefficient and monomial */
-            if(s[pos1-1]=='*')
+            /* Term without coefficient */
+            if(pos1==0)
             {
-                /* remove '*' */
-                tmp=s.substr(0, pos1-1);
+                tmp=string("1");
             }
             else
             {
-                tmp=s.substr(0, pos1);
+                /* Term with coefficient and monomial */
+                if(s[pos1-1]=='*')
+                {
+                    /* remove '*' */
+                    tmp=s.substr(0, pos1-1);
+                }
+                else
+                {
+                    tmp=s.substr(0, pos1);
+                }
             }
         }
         
@@ -381,23 +385,25 @@ namespace F4
         {
             tmp=s;
         }
-        
-        /* Term without coefficient */
-        if(pos1==0)
-        {
-            tmp=string("1");
-        }
         else
         {
-            /* Term with coefficient and monomial */
-            if(s[pos1-1]=='*')
+            /* Term without coefficient */
+            if(pos1==0)
             {
-                /* remove '*' */
-                tmp=s.substr(0, pos1-1);
+                tmp=string("1");
             }
             else
             {
-                tmp=s.substr(0, pos1);
+                /* Term with coefficient and monomial */
+                if(s[pos1-1]=='*')
+                {
+                    /* remove '*' */
+                    tmp=s.substr(0, pos1-1);
+                }
+                else
+                {
+                    tmp=s.substr(0, pos1);
+                }
             }
         }
         
@@ -490,23 +496,25 @@ namespace F4
         {
             tmp=s;
         }
-        
-        /* Term without coefficient */
-        if(pos1==0)
-        {
-            tmp=string("1");
-        }
         else
         {
-            /* Term with coefficient and monomial */
-            if(s[pos1-1]=='*')
+            /* Term without coefficient */
+            if(pos1==0)
             {
-                /* remove '*' */
-                tmp=s.substr(0, pos1-1);
+                tmp=string("1");
             }
             else
             {
-                tmp=s.substr(0, pos1);
+                /* Term with coefficient and monomial */
+                if(s[pos1-1]=='*')
+                {
+                    /* remove '*' */
+                    tmp=s.substr(0, pos1-1);
+                }
+                else
+                {
+                    tmp=s.substr(0, pos1);
+                }
             }
         }
         
@@ -556,24 +564,25 @@ namespace F4
         {
             tmp=s;
         }
-        
-        /* Term without coefficient */
-        if(pos1==0)
-        {
-            tmp=string("1");
-        }
-        
         else
         {
-            /* Term with coefficient and monomial */
-            if(s[pos1-1]=='*')
+            /* Term without coefficient */
+            if(pos1==0)
             {
-                /* remove '*' */
-                tmp=s.substr(0, pos1-1);
+                tmp=string("1");
             }
             else
             {
-                tmp=s.substr(0, pos1);
+                /* Term with coefficient and monomial */
+                if(s[pos1-1]=='*')
+                {
+                    /* remove '*' */
+                    tmp=s.substr(0, pos1-1);
+                }
+                else
+                {
+                    tmp=s.substr(0, pos1);
+                }
             }
         }
         
