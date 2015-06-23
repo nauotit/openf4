@@ -443,13 +443,6 @@ namespace F4
     }
     
     
-    /* Destructor */
-    
-    Monomial::~Monomial()
-    {
-    }
-    
-    
     /* Get / Set */
             
     short 

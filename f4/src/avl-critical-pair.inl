@@ -34,6 +34,7 @@ namespace F4
     
     extern int VERBOSE;
     
+    
     /* Constructor */
     
     template<typename Element>

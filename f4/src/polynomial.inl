@@ -295,12 +295,7 @@ namespace F4
     }
     
     
-    /* Destructor */
-    
-    template <typename Element>
-    Polynomial<Element>::~Polynomial()
-    {
-    }
+    /* Memory management */
     
     template <typename Element>
     void
@@ -315,6 +310,7 @@ namespace F4
     {
         _polynomial.deleteAfter(it);
     }
+    
     
     /* Miscellaneous */
     

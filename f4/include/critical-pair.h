@@ -100,6 +100,7 @@ namespace F4
              */ 
             ~CriticalPair();
             
+            
             /* Get / Set */
             
             /**

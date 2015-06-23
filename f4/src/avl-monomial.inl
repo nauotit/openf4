@@ -34,6 +34,7 @@ namespace F4
     
     extern int VERBOSE;
     
+    
     /* Constructor */
     
     NodeAvlMonomial::NodeAvlMonomial():_numMonomial(-1), _lt(false), _bf(0), _parent(0), _left(0), _right(0)

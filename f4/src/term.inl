@@ -83,14 +83,6 @@ namespace F4
     }
     
     
-    /* Destructor */
-    
-    template <typename Element>
-    Term<Element>::~Term()
-    {
-    }
-    
-    
     /* Get / Set */
     
     template <typename Element>

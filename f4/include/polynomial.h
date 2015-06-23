@@ -74,12 +74,7 @@ namespace F4
             Polynomial(Polynomial && polynomial);
             
             
-            /* Destructor */
-            
-            /**
-             * \brief Destructor.
-             */
-            ~Polynomial();
+            /* Memory management */
             
             /**
              * \brief Delete all the terms.

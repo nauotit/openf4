@@ -48,14 +48,6 @@ namespace F4
     }
     
     
-    /* Destructor */
-    
-    template <typename Element>
-    Ideal<Element>::~Ideal()
-    {
-    }
-    
-    
     /* Miscellaneous */
     
     template <typename Element>

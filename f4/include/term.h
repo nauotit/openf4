@@ -94,14 +94,6 @@ namespace F4
             Term(Term const & toCopy);
             
             
-            /* Destructor */
-            
-            /**
-             * \brief Destructor.
-             */
-            ~Term();
-            
-            
             /* Get / Set */
             
             /**

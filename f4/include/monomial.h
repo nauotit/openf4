@@ -182,13 +182,6 @@ namespace F4
              * \brief Copy constructor.
              */
             Monomial(Monomial const & toCopy);
-             
-             /* Destructor */
-            
-            /**
-             * \brief Destructor.
-             */
-            ~Monomial();
             
             
             /* Get / Set */

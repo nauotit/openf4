@@ -34,6 +34,7 @@ namespace F4
     
     extern int VERBOSE;
     
+    
     /* Constructor */
     
     NodeAvlPolynomial::NodeAvlPolynomial():_numPolynomial(-1), _numMonomial(-1), _nbTerms(0), _bf(0), _parent(0), _left(0), _right(0)

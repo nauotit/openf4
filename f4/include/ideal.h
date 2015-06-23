@@ -81,14 +81,6 @@ namespace F4
             Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity=100000, int degree=0);
             
             
-            /* Destructor */ 
-            
-            /**
-             * \brief Destructor.
-             */
-            ~Ideal();
-            
-            
             /* Miscellaneous */
             
             /**
