@@ -18,7 +18,7 @@
  */
 
   /**
-  * \file f4.h
+  * \file openf4.h
   * \brief Declaration of class F4 methods.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */

@@ -18,7 +18,7 @@
  */
 
 /**
- *  \file libf4.cpp
+ *  \file libopenf4.cpp
  *  \brief Compute a grevlex groebner groebner basis of the input.
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -31,7 +31,7 @@
 #include <sstream>
 #include <algorithm>
 /** \endcond */
-#include <libf4.h>
+#include <libopenf4.h>
 #include "../include/ideal.h"
 
 using namespace F4;

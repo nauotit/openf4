@@ -36,71 +36,71 @@ endif
 # Souces
 
 check_cyclic6_16bits_SOURCES = check-cyclic6-16bits.cpp
-check_cyclic6_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_16bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_cyclic6_32bits_SOURCES = check-cyclic6-32bits.cpp
-check_cyclic6_32bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_32bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_cyclic6_64bits_SOURCES = check-cyclic6-64bits.cpp
-check_cyclic6_64bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_64bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_cyclic6_gf2_SOURCES = check-cyclic6-gf2.cpp
-check_cyclic6_gf2_LDADD = $(top_builddir)/f4/src/libf4.la
+check_cyclic6_gf2_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 check_cyclic6_gf2_extension_16bits_SOURCES = check-cyclic6-gf2-extension-16bits.cpp
-check_cyclic6_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_cyclic6_gf2_extension_32bits_SOURCES = check-cyclic6-gf2-extension-32bits.cpp
-check_cyclic6_gf2_extension_32bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_gf2_extension_32bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_cyclic6_gf2_extension_64bits_SOURCES = check-cyclic6-gf2-extension-64bits.cpp
-check_cyclic6_gf2_extension_64bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_cyclic6_gf2_extension_64bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_random_16bits_SOURCES=check-random-16bits.cpp
-check_random_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_random_16bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_random_32bits_SOURCES=check-random-32bits.cpp
-check_random_32bits_LDADD = $(top_builddir)/f4/src/libf4.la
+check_random_32bits_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 check_random_64bits_SOURCES=check-random-64bits.cpp
-check_random_64bits_LDADD = $(top_builddir)/f4/src/libf4.la
+check_random_64bits_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 check_random_gf2_extension_16bits_SOURCES=check-random-gf2-extension-16bits.cpp
-check_random_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_random_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 check_random_gf2_extension_32bits_SOURCES=check-random-gf2-extension-32bits.cpp
-check_random_gf2_extension_32bits_LDADD = $(top_builddir)/f4/src/libf4.la
+check_random_gf2_extension_32bits_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 check_random_gf2_extension_64bits_SOURCES=check-random-gf2-extension-64bits.cpp
-check_random_gf2_extension_64bits_LDADD = $(top_builddir)/f4/src/libf4.la
+check_random_gf2_extension_64bits_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 check_aes_gf2_extension_16bits_SOURCES=check-aes-gf2-extension-16bits.cpp
-check_aes_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libf4.la 
+check_aes_gf2_extension_16bits_LDADD = $(top_builddir)/f4/src/libopenf4.la 
 
 if F4_HAVE_GIVARO
 check_cyclic6_256bits_SOURCES = check-cyclic6-256bits.cpp
-check_cyclic6_256bits_LDADD = $(top_builddir)/f4/src/libf4.la
+check_cyclic6_256bits_LDADD = $(top_builddir)/f4/src/libopenf4.la
 endif
 
 tutorial_method2_SOURCES = tutorial-method2.cpp
-tutorial_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+tutorial_method2_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 tutorial_method3_SOURCES = tutorial-method3.cpp
 
 if F4_HAVE_GIVARO
 tutorial_big_modulo_method2_SOURCES = tutorial-big-modulo-method2.cpp
-tutorial_big_modulo_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+tutorial_big_modulo_method2_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 tutorial_big_modulo_method3_SOURCES = tutorial-big-modulo-method3.cpp
 endif
 
 tutorial_gf2_method2_SOURCES = tutorial-gf2-method2.cpp
-tutorial_gf2_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+tutorial_gf2_method2_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 tutorial_gf2_method3_SOURCES = tutorial-gf2-method3.cpp
 
 tutorial_gf2_extension_method2_SOURCES = tutorial-gf2-extension-method2.cpp
-tutorial_gf2_extension_method2_LDADD = $(top_builddir)/f4/src/libf4.la
+tutorial_gf2_extension_method2_LDADD = $(top_builddir)/f4/src/libopenf4.la
 
 tutorial_gf2_extension_method3_SOURCES = tutorial-gf2-extension-method3.cpp
 

@@ -18,7 +18,7 @@
  */
 
   /**
-  * \file libf4.h
+  * \file libopenf4.h
   * \brief Declaration of library methods.
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
