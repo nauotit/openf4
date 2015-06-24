@@ -1,2 +1,19 @@
 <map id="/home/titouan/Bureau/Stage/project&#45;f4&#45;cpp/openf4.h" name="/home/titouan/Bureau/Stage/project&#45;f4&#45;cpp/openf4.h">
+<area shape="rect" id="node2" href="$ideal_8h.html" title="Declaration of class Ideal. " alt="" coords="365,109,512,136"/>
+<area shape="rect" id="node3" href="$matrix_8h.html" title="Declaration of class Matrix. " alt="" coords="160,573,229,600"/>
+<area shape="rect" id="node7" href="$avl-monomial_8h.html" title="Declaration of class AvlMonomial. " alt="" coords="662,192,772,219"/>
+<area shape="rect" id="node9" href="$avl-polynomial_8h.html" title="Declaration of class AvlPolynomial. " alt="" coords="522,192,637,219"/>
+<area shape="rect" id="node10" href="$avl-critical-pair_8h.html" title="Declaration of class AvlCriticalPair. " alt="" coords="380,192,496,219"/>
+<area shape="rect" id="node18" href="$list-pointer-critical-pair_8h.html" title="Declaration of class ListPointerCriticalPair. " alt="" coords="233,185,356,226"/>
+<area shape="rect" id="node4" href="$element-prime_8h.html" title="Declaration of class ElementPrime. " alt="" coords="5,648,120,675"/>
+<area shape="rect" id="node5" href="$element-gf2_8h.html" title="Declaration of class ElementGF2. " alt="" coords="144,648,245,675"/>
+<area shape="rect" id="node6" href="$element-gf2-extension_8h.html" title="Declaration of class ElementGF2Extension. " alt="" coords="270,648,431,675"/>
+<area shape="rect" id="node8" href="$dynamic-array_8h.html" title="Declaration of class DynamicArray. " alt="" coords="452,275,567,301"/>
+<area shape="rect" id="node11" href="$critical-pair_8h.html" title="Declaration of class CriticalPair. " alt="" coords="277,275,373,301"/>
+<area shape="rect" id="node12" href="$tagged-polynomial_8h.html" title="Declaration of class TaggedPolynomial. " alt="" coords="256,349,395,376"/>
+<area shape="rect" id="node13" href="$polynomial_8h.html" title="Declaration of class Polynomial. " alt="" coords="278,424,372,451"/>
+<area shape="rect" id="node14" href="$single-list_8h.html" title="Declaration of class SingleList. " alt="" coords="281,499,369,525"/>
+<area shape="rect" id="node15" href="$term_8h.html" title="Declaration of class Term. " alt="" coords="296,573,353,600"/>
+<area shape="rect" id="node16" href="$monomial-array_8h.html" title="Declaration of class MonomialArray. " alt="" coords="456,648,579,675"/>
+<area shape="rect" id="node17" href="$monomial_8h.html" title="Declaration of class Monomial. " alt="" coords="473,723,561,749"/>
 </map>

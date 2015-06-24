@@ -40,6 +40,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
@@ -65,7 +67,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -125,9 +127,9 @@ If degree &lt; 64 use ElementGF2Extension&lt;uint64_t&gt; </li>
 <li>
 Configure the class monomial with the number of variables and an initial degree for the monomial precomputation. </li>
 <li>
-Create an ideal with a vector of polynomials and others informations: F4::Ideal::Ideal(std::vector&lt;Polynomial&lt;Element&gt;&gt; &amp; polynomialArray, int nbVariable, int capacity, int degree); </li>
+Create an ideal with a vector of polynomials and others informations: <a class="el" href="class_f4_1_1_ideal.html#aa81b827155d9be33fb161e00ad66eb44" title="Constructor. ">F4::Ideal::Ideal(std::vector&lt;Polynomial&lt;Element&gt;&gt; &amp; polynomialArray, int nbVariable, int capacity, int degree)</a>; </li>
 <li>
-Call the method f4: F4::Ideal::f4(); </li>
+Call the method f4: <a class="el" href="class_f4_1_1_ideal.html#a07e28d17f6002fc4213bce984823b915" title="Compute a groebner basis of this using the F4 algorithm. ">F4::Ideal::f4()</a>; </li>
 <li>
 Compile with: <ul>
 <li>
@@ -158,7 +160,7 @@ Look at the example <a class="el" href="tutorial-gf2-extension-method3_8cpp.html
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 15:16:55 for OPENF4 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 17:28:55 for OPENF4 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['clear',['clear',['../class_f4_1_1_polynomial.html#a8422dc7d5f22170a423d738381ba3687',1,'F4::Polynomial::clear()'],['../class_f4_1_1_single_list.html#a274cf826d28865c1f81f841b933906e1',1,'F4::SingleList::clear()']]],
+  ['clear',['clear',['../class_f4_1_1_single_list.html#a274cf826d28865c1f81f841b933906e1',1,'F4::SingleList::clear()'],['../class_f4_1_1_polynomial.html#a8422dc7d5f22170a423d738381ba3687',1,'F4::Polynomial::clear()']]],
   ['comparecriticalpair',['compareCriticalPair',['../class_f4_1_1_critical_pair.html#aac761658e04bf011eed51ecc60ecbb5b',1,'F4::CriticalPair']]],
   ['comparemonomial',['compareMonomial',['../class_f4_1_1_monomial.html#afc1a585027ba46684576768fb6766460',1,'F4::Monomial']]],
   ['comparenummonomial',['compareNumMonomial',['../class_f4_1_1_monomial.html#afc008ff9802a65900a2bb04481592eab',1,'F4::Monomial']]],

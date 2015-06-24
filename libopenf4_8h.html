@@ -40,6 +40,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
@@ -71,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -105,9 +107,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a963527d366bad8b672216114330a03aa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libopenf4_8h.html#a963527d366bad8b672216114330a03aa">groebnerBasisGF2ExtensionF4</a> (std::string modulo, int nbVariable, std::vector&lt; std::string &gt; variableName, std::string polyVarName, std::vector&lt; std::string &gt; polynomialList, int nbThread, int verbose)</td></tr>
 <tr class="memdesc:a963527d366bad8b672216114330a03aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a reduced groebner basis of the ideal defined by the list of polynomials polynomialList.  <a href="#a963527d366bad8b672216114330a03aa">More...</a><br/></td></tr>
 <tr class="separator:a963527d366bad8b672216114330a03aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae544fa613efe1f34f854bc14ef613f5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libopenf4_8h.html#ae544fa613efe1f34f854bc14ef613f5a">groebnerBasisGivaroIntegerF4</a> (std::string modulo, int nbVariable, std::vector&lt; std::string &gt; variableName, std::vector&lt; std::string &gt; polynomialList, int nbThread, int verbose)</td></tr>
-<tr class="memdesc:ae544fa613efe1f34f854bc14ef613f5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a reduced groebner basis of the ideal defined by the list of polynomials polynomialList. Use only if modulo &gt; 4294967291, otherwise use groebnerBasisF4.  <a href="#ae544fa613efe1f34f854bc14ef613f5a">More...</a><br/></td></tr>
-<tr class="separator:ae544fa613efe1f34f854bc14ef613f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Declaration of library methods. </p>
@@ -310,75 +309,10 @@ Functions</h2></td></tr>
 </dl>
 </div>
 </div>
-<a class="anchor" id="ae544fa613efe1f34f854bc14ef613f5a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::string&gt; groebnerBasisGivaroIntegerF4 </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>modulo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nbVariable</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
-          <td class="paramname"><em>variableName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
-          <td class="paramname"><em>polynomialList</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nbThread</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>verbose</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Compute a reduced groebner basis of the ideal defined by the list of polynomials polynomialList. Use only if modulo &gt; 4294967291, otherwise use groebnerBasisF4. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">modulo</td><td>Characteristic of the base field under string representation. </td></tr>
-    <tr><td class="paramname">nbVariable</td><td>Number of variable of the polynomial ring. </td></tr>
-    <tr><td class="paramname">variableName</td><td>Array of variable names used to describe the monomials. </td></tr>
-    <tr><td class="paramname">polynomialList</td><td>List of polynomials under text format. </td></tr>
-    <tr><td class="paramname">nbThread</td><td>Number of threads to use. </td></tr>
-    <tr><td class="paramname">verbose</td><td>Verbosity level. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Reduced groebner basis under text format. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="tutorial-big-modulo-method2_8cpp-example.html#a0">tutorial-big-modulo-method2.cpp</a>.</dd>
-</dl>
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 15:16:55 for OPENF4 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 17:28:55 for OPENF4 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
