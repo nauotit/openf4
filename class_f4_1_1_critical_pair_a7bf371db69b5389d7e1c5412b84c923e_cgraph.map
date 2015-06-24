@@ -1,0 +1,14 @@
+<map id="F4::CriticalPair::CriticalPair" name="F4::CriticalPair::CriticalPair">
+<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#a1b750328e81c1a227fb67ac4d833e4c1" title="Allocate the varlist of this. " alt="" coords="253,5,408,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_monomial.html#a5c6bbe072f7682f2aaf7a64d79fa3a93" title="Get the static variable NB_VARIABLE. " alt="" coords="235,56,426,83"/>
+<area shape="rect" id="node4" href="$class_f4_1_1_monomial_array.html#a93ed4ee8f15be6479648834a042d87fd" title="Overload the operator []. " alt="" coords="261,107,401,149"/>
+<area shape="rect" id="node11" href="$class_f4_1_1_critical_pair.html#ac424809e8d9f28e99a129ccb5c9c21c1" title="Get a tagged polynomial from the array of tagged polynomial. " alt="" coords="241,173,420,214"/>
+<area shape="rect" id="node12" href="$class_f4_1_1_monomial.html#a6b0343a497e04e5f95f5a5ac1d7f8d9b" title="Get the varlist of this. " alt="" coords="249,239,413,265"/>
+<area shape="rect" id="node13" href="$class_f4_1_1_monomial.html#ab7a99475217b81fc84df00ecf4162a73" title="Initialize this with varlist. " alt="" coords="239,289,422,316"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_monomial.html#a16bf80c49b5ba3aef347fe93838f3876" title="Modify the dynamic 2D array NB_MONOMIAL. " alt="" coords="475,75,650,117"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_monomial_array.html#a73d0a26f85ae4db46c10116acdd878cc" title="Modify the dynamic array _monomialArray. " alt="" coords="493,141,633,182"/>
+<area shape="rect" id="node7" href="$class_f4_1_1_monomial.html#afc09da354134a94950b820ae57d583ec" title="Get NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]. " alt="" coords="699,97,899,124"/>
+<area shape="rect" id="node8" href="$class_f4_1_1_monomial.html#a0907989057d36848c3e7115e02ac14b3" title="Set the varlist of this. " alt="" coords="717,148,881,175"/>
+<area shape="rect" id="node9" href="$class_f4_1_1_monomial.html#ab188361bed75424cb64bfcb24616953b" title="Initialize this with the num&#45;th monomial. " alt="" coords="701,199,896,225"/>
+<area shape="rect" id="node10" href="$class_f4_1_1_monomial.html#aeafd82d43461e7ef93eee4c49a95343e" title="Modify the dynamic 2D array NB_MONOMIAL, and call setMonomialArray(). " alt="" coords="947,199,1147,225"/>
+</map>

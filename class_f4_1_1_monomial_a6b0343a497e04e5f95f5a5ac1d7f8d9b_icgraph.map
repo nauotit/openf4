@@ -1,0 +1,9 @@
+<map id="F4::Monomial::getVarlist" name="F4::Monomial::getVarlist">
+<area shape="rect" id="node2" href="$class_f4_1_1_critical_pair.html#a7bf371db69b5389d7e1c5412b84c923e" title="Constructor. " alt="" coords="228,5,409,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_critical_pair.html#ad89b37d0ef2a074d5de696efedd6e8cc" title="Modify an already created critical pair. " alt="" coords="219,56,418,83"/>
+<area shape="rect" id="node4" href="$class_f4_1_1_ideal.html#ac09f4a78d486ba1dec3d0f0c5df9bb01" title="Update the set of critical pair and the current basis. " alt="" coords="477,81,597,108"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_ideal.html#aeb08d1976bdd02ad0aa00acaec5a2014" title="Simplify the product u*(_taggedPolynomialArray[numList].poly) by another polynomial with the same lea..." alt="" coords="255,157,382,184"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_monomial_array.html#a9f8718816e6cd18d44a3d6fd339cf377" title="Modify the static 2D array TABULATED_PRODUCT. " alt="" coords="247,209,390,250"/>
+<area shape="rect" id="node8" href="$class_f4_1_1_monomial_array.html#af8020179118a5f34552e18c7e710628c" title="Get _monomialArray[numMon]._varlist[i]. " alt="" coords="249,274,389,315"/>
+<area shape="rect" id="node7" href="$class_f4_1_1_monomial_array.html#a43af563be9541b502995b666e1d6b491" title="Constructor. " alt="" coords="467,209,607,250"/>
+</map>

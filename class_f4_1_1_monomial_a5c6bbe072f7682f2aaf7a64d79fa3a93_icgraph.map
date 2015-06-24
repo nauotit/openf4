@@ -1,0 +1,11 @@
+<map id="F4::Monomial::getNbVariable" name="F4::Monomial::getNbVariable">
+<area shape="rect" id="node2" href="$class_f4_1_1_critical_pair.html#a7bf371db69b5389d7e1c5412b84c923e" title="Constructor. " alt="" coords="255,5,436,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_critical_pair.html#ad89b37d0ef2a074d5de696efedd6e8cc" title="Modify an already created critical pair. " alt="" coords="246,56,445,83"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_tagged_polynomial.html#af4d428a2f7a089d4b825ae405077c385" title="Constructor. " alt="" coords="269,107,421,149"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_tagged_polynomial.html#a5b2fd512853101763a807634098d0316" title="Get _simplyrules[i]. " alt="" coords="269,173,421,214"/>
+<area shape="rect" id="node7" href="$class_f4_1_1_tagged_polynomial.html#a59e7a47ad8270ce2a59b02f5c9c10fd3" title="Set _simplyrules[i]. " alt="" coords="269,238,421,279"/>
+<area shape="rect" id="node8" href="$class_f4_1_1_tagged_polynomial.html#a12a7f05f1315357c9edd556cbbd7aa0e" title="Print the polynomial and the _simplyrules of this. " alt="" coords="264,303,427,345"/>
+<area shape="rect" id="node9" href="$class_f4_1_1_tagged_polynomial.html#a19f72971d0cd81ebdb0ea6d3dfdbccea" title="Reset the simplyrules of this. " alt="" coords="269,369,421,410"/>
+<area shape="rect" id="node10" href="$class_f4_1_1_tagged_polynomial.html#a008c37f9dcd56f2d64a963eac3fd3410" title="Overload the operator =. " alt="" coords="269,434,421,475"/>
+<area shape="rect" id="node4" href="$class_f4_1_1_ideal.html#ac09f4a78d486ba1dec3d0f0c5df9bb01" title="Update the set of critical pair and the current basis. " alt="" coords="493,56,613,83"/>
+</map>

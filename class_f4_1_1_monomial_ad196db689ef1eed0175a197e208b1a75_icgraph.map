@@ -1,0 +1,6 @@
+<map id="F4::Monomial::compareNumMonomial" name="F4::Monomial::compareNumMonomial">
+<area shape="rect" id="node2" href="$class_f4_1_1_tagged_polynomial.html#afc494aed71746a552a9c5041690035cd" title="Compare this with taggedPolynomial. " alt="" coords="240,49,427,90"/>
+<area shape="rect" id="node3" href="$namespace_f4.html#a571a122b32649ac9deaae80d438a4c6b" title="Overload the operator ==. " alt="" coords="475,5,583,32"/>
+<area shape="rect" id="node4" href="$namespace_f4.html#adcce0b58b1da3ca938fcb2766ebd0e88" title="Overload the operator &gt;. " alt="" coords="479,56,579,83"/>
+<area shape="rect" id="node5" href="$namespace_f4.html#a8cbaba34327020f379af1d5fe1404ba7" title="Overload the operator &gt;=. " alt="" coords="475,107,583,133"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="F4::Ideal::appendMatrixF4" name="F4::Ideal::appendMatrixF4">
+<area shape="rect" id="node2" href="$class_f4_1_1_critical_pair.html#af22eb508c621007fd15140049997d5d0" title="Get the number of the monomial u1. " alt="" coords="257,5,409,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_critical_pair.html#a4860b62c1e642df0e1a589e4f3fd8588" title="Get the index of the first tagged polynomial. " alt="" coords="258,56,409,83"/>
+<area shape="rect" id="node4" href="$struct_f4_1_1_node_list.html#ae5f8cafba0e6344db1c6068a5fe55b80" title="Get the number of the monomial of the term. " alt="" coords="230,107,437,133"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_critical_pair.html#a7bc5e02a022dea882a4d505777dbb8ee" title="Get the number of the monomial u2. " alt="" coords="257,157,409,184"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_critical_pair.html#a2fd304ed1660f0a7b8a1b058949f6ebb" title="Get the index of the second tagged polynomial. " alt="" coords="258,208,409,235"/>
+</map>

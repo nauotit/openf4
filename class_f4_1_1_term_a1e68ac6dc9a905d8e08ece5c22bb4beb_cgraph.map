@@ -1,0 +1,7 @@
+<map id="F4::Term::setTerm" name="F4::Term::setTerm">
+<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#a1b750328e81c1a227fb67ac4d833e4c1" title="Allocate the varlist of this. " alt="" coords="204,5,359,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_monomial.html#ab7a99475217b81fc84df00ecf4162a73" title="Initialize this with varlist. " alt="" coords="190,56,373,83"/>
+<area shape="rect" id="node4" href="$class_f4_1_1_monomial.html#a7b5a915e39686b6c497f12551151e148" title="Compute the number of this. " alt="" coords="184,107,379,133"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_monomial.html#ab22d8dd302502248f9e9e0707f300af4" title="Delete the varlist of this. " alt="" coords="211,157,352,184"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_monomial.html#aeafd82d43461e7ef93eee4c49a95343e" title="Modify the dynamic 2D array NB_MONOMIAL, and call setMonomialArray(). " alt="" coords="427,107,627,133"/>
+</map>

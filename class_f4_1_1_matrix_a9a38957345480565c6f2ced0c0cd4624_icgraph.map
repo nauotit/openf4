@@ -1,0 +1,4 @@
+<map id="F4::Matrix::getRow" name="F4::Matrix::getRow">
+<area shape="rect" id="node2" href="$class_f4_1_1_ideal.html#afd4b0d18aea6638ed059ba031c569cef" title="Rebuild _matPols from mat, update the basis and the set of critical pairs. " alt="" coords="190,5,359,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_ideal.html#a07e28d17f6002fc4213bce984823b915" title="Compute a groebner basis of this using the F4 algorithm. " alt="" coords="229,56,321,83"/>
+</map>

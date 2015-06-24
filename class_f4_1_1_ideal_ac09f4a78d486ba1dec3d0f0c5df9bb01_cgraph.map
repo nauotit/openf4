@@ -1,0 +1,9 @@
+<map id="F4::Ideal::update" name="F4::Ideal::update">
+<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#a6b0343a497e04e5f95f5a5ac1d7f8d9b" title="Get the varlist of this. " alt="" coords="435,5,599,32"/>
+<area shape="rect" id="node3" href="$class_f4_1_1_critical_pair.html#ad89b37d0ef2a074d5de696efedd6e8cc" title="Modify an already created critical pair. " alt="" coords="174,56,373,83"/>
+<area shape="rect" id="node6" href="$class_f4_1_1_critical_pair.html#a42afdefaeb50b9522a3f097ad772d4ac" title="Get _lcm. " alt="" coords="193,107,353,133"/>
+<area shape="rect" id="node7" href="$class_f4_1_1_monomial.html#a3a7e3bd9f0f8d0f28dfa1272ffc585c3" title="Test if this is divisible by mon. " alt="" coords="189,157,358,184"/>
+<area shape="rect" id="node8" href="$class_f4_1_1_monomial.html#ab22d8dd302502248f9e9e0707f300af4" title="Delete the varlist of this. " alt="" coords="203,208,344,235"/>
+<area shape="rect" id="node4" href="$class_f4_1_1_monomial.html#a5c6bbe072f7682f2aaf7a64d79fa3a93" title="Get the static variable NB_VARIABLE. " alt="" coords="422,56,613,83"/>
+<area shape="rect" id="node5" href="$class_f4_1_1_monomial.html#a045d71edd68c1cf6a427584f00606664" title="Get the degree of this. " alt="" coords="433,107,602,133"/>
+</map>
