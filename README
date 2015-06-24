@@ -1,0 +1,12 @@
+This package provides an implementation of the F4 algorithm over finite fields.
+The prime fields of characteristic < 2^32 and the binary field extensions of degree < 64 are handled natively.
+For prime fields of characteristic > 2^32 you need Givaro.
+Other finite fields are not handled.
+
+A basic installation could be done with:
+./configure
+make 
+make install
+
+
+
