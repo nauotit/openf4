@@ -28,7 +28,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../f4/include/monomial.h"
+#include "../openf4/include/monomial.h"
 
 using namespace F4;
 using namespace std;

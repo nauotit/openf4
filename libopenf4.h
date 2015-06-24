@@ -23,11 +23,11 @@
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_LIBF4_H
-#define F4_LIBF4_H
+#ifndef F4_LIBOPENF4_H
+#define F4_LIBOPENF4_H
 
 /** \cond */
-#include "f4/include/global.h"
+#include "openf4/include/global.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -84,4 +84,4 @@ std::vector<std::string> groebnerBasisGF2ExtensionF4(std::string modulo, int nbV
 std::vector<std::string> groebnerBasisGivaroIntegerF4(std::string modulo, int nbVariable, std::vector<std::string> variableName, std::vector<std::string> polynomialList, int nbThread, int verbose);
 #endif // HAVE_GIVARO
 
-#endif // F4_LIBF4_H
+#endif // F4_LIBOPENF4_H

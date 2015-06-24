@@ -23,9 +23,9 @@
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_H
-#define F4_H
+#ifndef OPENF4_H
+#define OPENF4_H
 
-#include "f4/include/ideal.h"
+#include "openf4/include/ideal.h"
 
 #endif

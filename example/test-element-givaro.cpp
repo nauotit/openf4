@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../f4/include/element-givaro.h"
+#include "../openf4/include/element-givaro.h"
 
 using namespace F4;
 using namespace std;

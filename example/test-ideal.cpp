@@ -26,7 +26,7 @@
  */
 
 #include <iostream>
-#include "../f4/include/ideal.h"
+#include "../openf4/include/ideal.h"
 
 using namespace F4;
 using namespace std;

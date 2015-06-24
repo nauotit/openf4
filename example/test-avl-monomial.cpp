@@ -28,7 +28,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "../f4/include/avl-monomial.h"
+#include "../openf4/include/avl-monomial.h"
 
 using namespace F4;
 using namespace std;

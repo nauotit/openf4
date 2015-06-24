@@ -81,9 +81,9 @@ AC_TYPE_UINT8_T
 
 AC_CONFIG_FILES([
  Makefile
- f4/Makefile
- f4/include/Makefile
- f4/src/Makefile
+ openf4/Makefile
+ openf4/include/Makefile
+ openf4/src/Makefile
  benchmark/Makefile
  example/Makefile
 ])

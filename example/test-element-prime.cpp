@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../f4/include/element-prime.h"
+#include "../openf4/include/element-prime.h"
 
 using namespace F4;
 using namespace std;

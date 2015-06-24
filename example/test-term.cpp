@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../f4/include/term.h"
+#include "../openf4/include/term.h"
 
 using namespace F4;
 using namespace std;

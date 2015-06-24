@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../f4/include/critical-pair.h"
+#include "../openf4/include/critical-pair.h"
 
 using namespace F4;
 using namespace std;

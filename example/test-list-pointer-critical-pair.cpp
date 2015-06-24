@@ -28,7 +28,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "../f4/include/list-pointer-critical-pair.h"
+#include "../openf4/include/list-pointer-critical-pair.h"
 
 using namespace F4;
 using namespace std;

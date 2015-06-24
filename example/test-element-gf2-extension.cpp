@@ -28,7 +28,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include "../f4/include/element-gf2-extension.h"
+#include "../openf4/include/element-gf2-extension.h"
 
 using namespace F4;
 using namespace std;

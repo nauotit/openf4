@@ -30,7 +30,7 @@
 #include <cstdlib>
 #include <set>
 #include <tuple>
-#include "../f4/include/avl-polynomial.h"
+#include "../openf4/include/avl-polynomial.h"
 
 using namespace F4;
 using namespace std;

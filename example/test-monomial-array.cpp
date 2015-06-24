@@ -28,7 +28,7 @@
 #include <iostream>
 #include <ctime>
 #include <chrono>
-#include "../f4/include/monomial-array.h"
+#include "../openf4/include/monomial-array.h"
 
 using namespace F4;
 using namespace std;

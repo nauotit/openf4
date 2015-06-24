@@ -27,9 +27,9 @@
 
 #include <iostream>
 #include <vector>
-#include "../f4/include/matrix.h"
-#include "../f4/include/element-prime.h"
-#include "../f4/include/element-givaro.h"
+#include "../openf4/include/matrix.h"
+#include "../openf4/include/element-prime.h"
+#include "../openf4/include/element-givaro.h"
 
 using namespace F4;
 using namespace std;

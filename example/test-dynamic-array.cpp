@@ -26,7 +26,7 @@
  */
 
 #include <iostream>
-#include "../f4/include/dynamic-array.h"
+#include "../openf4/include/dynamic-array.h"
 
 using namespace F4;
 using namespace std;

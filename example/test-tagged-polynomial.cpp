@@ -26,7 +26,7 @@
  */
 
 #include <iostream>
-#include "../f4/include/tagged-polynomial.h"
+#include "../openf4/include/tagged-polynomial.h"
 
 
 using namespace F4;

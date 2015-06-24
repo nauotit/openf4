@@ -26,8 +26,8 @@
  */
 
 #include <iostream>
-#include "../f4/include/polynomial.h"
-#include "../f4/include/element-prime.h"
+#include "../openf4/include/polynomial.h"
+#include "../openf4/include/element-prime.h"
 
 using namespace F4;
 using namespace std;
