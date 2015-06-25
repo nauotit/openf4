@@ -1,0 +1,16 @@
+/*! 
+
+\page dev_convention Naming conventions
+
+We follow the same naming conventions as LINBOX:
+
+<UL>
+    <LI> Directory and file names should be in lower case, with words separated by a hyphen ('-'), e.g. my-file.h.
+    <LI> Classes whose names have several words have all the words juxtaposed without underscores, and each word has its first letter capitalized (e.g. MyClass, MyOtherClass).
+    <LI> Methods are similar, except that the first letter of the first word is lower case (e.g. myMethod). 
+    <LI> Global constants should be all upper case with underscores between the words (e.g. MY\_CONSTANT).
+    <LI> In addition, variables that are members of classes should begin with an underscore to differentiate them from methods and parameters (e.g. int \_myMember; int myMember () const;).
+</UL>
+
+*/
+

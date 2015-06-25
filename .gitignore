@@ -1,2 +1,5 @@
 html/
+latex/
 *.am~
+*.in
+*~

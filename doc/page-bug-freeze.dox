@@ -1,0 +1,14 @@
+/*! 
+
+\page bug_freeze The computer freeze
+
+Gröebner basis computation needs a lot of memory: on a computer with 4 Go of RAM the computation of Katsura 12 use all the memory.
+
+If you are using the "template library method", select carefully your Element type.
+
+The more the base type (int16_t, int32_t, int64_t, uint16_t, uint32_t, uint64_t) is small, the less you need memory. 
+
+You can use top or htop programs to observe your memory consumption.
+
+*/
+

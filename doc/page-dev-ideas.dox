@@ -1,0 +1,14 @@
+/*! 
+
+\page dev_ideas Improvement ideas
+
+<UL>
+    <LI> Add support for non prime field of characteristic != 2 (possibly through Givaro or NTL).
+    <LI> Add support for GF(2^n) with n>63 (possibly through gmp).
+    <LI> Add AVX instructions support.
+    <LI> Add CLMUL support for multiplication in characteristic 2.
+    <LI> Add GPU support (possibly with CUDA).
+</UL>
+
+*/
+

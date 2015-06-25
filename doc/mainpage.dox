@@ -1,0 +1,138 @@
+/*! 
+\mainpage
+
+
+\section introduction Introduction
+
+The openf4 library is a free (GPLv3) C++ implementation of the F4 algorithm. 
+
+It is efficient on prime fields of characteristic lower than  2^32 and on GF(2) extensions of degree less than 64.
+
+Computations over prime fields of characteristic higher than 2^32 are available through a Givaro wrapper for arithmetic.
+
+Computations over non prime fields (exept GF(2^n) with n<64) are not handled. 
+
+
+\section requirement Requirement
+
+You need a compiler that support C++11. If it is not your default compiler replace ../configure by CXX=compiler ../configure.
+
+Example: CXX=g++-4.9.2 ../configure.
+
+If you want a parallelized version, you need to compile with g++ (clang does not support openmp).
+
+For prime fields of characteristic higher than 2^32 you need Givaro and GMP (required by Givaro). GMP must be compile with C++ support (--enable-cxx option in configure). 
+
+For some very specific systems the library can use FFLAS-FFPACK to improve slightly the time complexity (but increase in the same time the memory requirement).
+
+
+\section installation Installation
+
+\subsection git Develloper version
+
+Clone git repository: git clone https://github.com/nauotit/openf4.git
+
+
+\subsection base_installation Basic installation (without Givaro and FFLAS-FFPACK)
+
+<OL>
+    <LI>Download the openf4 archive: <a href="http://nauotit.github.io/openf4/openf4-1.0.0.tar.gz">openf4-1.0.0.tar.gz</a>
+    <LI>Extract it: tar -zxvf openf4-version-number.tar.gz 
+    <LI>Move into the archive directory: cd openf4-version-number
+    <LI>Run the classical commands: 
+    <OL>
+        <LI>./configure
+        <LI>make
+        <LI>make check
+        <LI>make install (need the root rights to install in /usr/local)
+    </OL>
+</OL>
+
+\subsection option Configure options
+
+Default values are in uppercase.
+
+<OL>
+    <LI>--enable-optimisation=YES/no (Use -O3 -funroll-loops -ftree-vectorize)
+    <LI>--enable-vectorisation=YES/no (Use -march=native, SSE2 or SSE4 can be used)
+    <LI>--enable-debug=yes/NO (add -g and remove -DNDEBUG)
+    <LI>--enable-openmp=YES/no (Use -fopenmp for parallelisation)
+    <LI>--help gives other informations (especially for external package paths)
+</OL>
+
+\subsection givaro_installation Installation (with Givaro)
+
+<OL>
+    <LI> If Givaro is installed in the classical /usr or /usr/local: replace ./configure by ./configure --with-givaro
+    <LI> Else give the path to Givaro and GMP directories: replace ./configure by ./configure --with-gmp=/path/to/gmp --with-givaro=/path/to/givaro
+</OL>
+
+\subsection fflas_ffpack_installation Installation (with Givaro and FFLAS-FFPACK)
+
+This support allows sometimes a small improvement but increase the memory requirement.
+FFLAS-FFPACK requires BLAS (we advise Openblas), Givaro and GMP.
+The Blas library must be compiled without threading (for Openblas compile with make USE_THREAD=0) in order to use FFLAS-FFPACK in multithread mode.
+Finally FFLAS-FFPACK may be configured with the following options:
+./configure --enable-optimization --enable-openmp --with-gmp="/path/to/gmp" --with-givaro="/path/to/givaro" --with-blas-libs="-L/path/to/openblas/lib -lopenblas -Wl,-rpath=/path/to/openblas/lib"  
+
+<OL>
+    <LI> If GMP, Givaro, Openblas, FFLAS-FFPACK are installed in the classical /usr or /usr/local: replace ./configure by ./configure --with-givaro --with-fflas-ffpack
+    <LI> Else give the different paths: replace ./configure by ./configure --with-gmp=/path/to/gmp --with-givaro=/path/to/givaro --with-blas-libs="-L/path/to/openblas/lib -lopenblas -Wl,-rpath=/path/to/openblas/lib" --with-fflas-ffpack="path/to/fflas-ffpack"
+</OL>
+
+
+\section tutorials Tutorials
+
+In these tutorials, we assume that the openf4 library has been installed in /usr or /usr/local.
+The input polynomials must not have several terms with the same monomial.
+
+\ref small_prime_field
+
+\ref big_prime_field
+
+\ref gf2_field
+
+\ref gf2_extension_field
+
+If the library has been installed in a directory called "LIB" (using for example ./configure --prefix=/home/miscellaneous/LIB) add:
+<OL>
+    <LI> -I/home/miscellaneous/LIB/include
+    <LI> -L/home/miscellaneous/LIB/lib -lopenf4 -Wl,-rpath=/home/miscellaneous/LIB/lib
+</OL>
+
+For instance tutorial-method2.cpp can be compiled with:
+g++ tutorial-method2.cpp -I/home/miscellaneous/LIB/include -o test -std=c++11 -L/home/miscellaneous/LIB/lib -lopenf4 -Wl,-rpath=/home/miscellaneous/LIB/lib
+
+
+\section bug Bugs
+
+Here is a list of encountered problems with their solutions:
+
+\ref bug_libstdcpp
+
+\ref bug_transform
+
+\ref bug_freeze
+
+If you find an other runtime bug:
+<OL>
+    <LI> Configure the project with: ./configure --enable-debug=yes
+    <LI> Run again you program
+    <LI> Get the bug repport address with ./configure --help
+    <LI> Send a program allowing to reproduce the error and the error itself.
+</OL>
+
+
+\section dev Developper corner
+
+Contribution is welcome, we give here some ideas of improvement but feel free to implement your own. 
+
+\ref dev_ideas
+
+In order to keep consistency we follow these naming conventions: 
+
+\ref dev_convention 
+
+*/
+
+

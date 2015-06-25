@@ -1,0 +1,23 @@
+/*! 
+
+\page bug_libstdcpp Bug with libgomp and libstdc++ (make check failed)
+
+If make check fails, run example/check_cyclic6_16bits to have more details on the error.
+
+If you have the problem:
+
+<UL>
+    <LI> miscellaneous/x86_64-linux-gnu/libgomp.so.1: version `GOMP_4.0' not found
+    <LI> miscellaneous/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.19' not found
+    <LI> miscellaneous/x86_64-linux-gnu/libstdc++.so.6: version `CXXABI_1.3.8' not found
+    <LI> miscellaneous/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.20' not found
+</UL>
+
+you need to find where these libraries are installed (for example in /opt/gcc-4.9.2/lib64) and modify the LD_LIBRARY_PATH:
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/directory_with_libraries
+
+for example: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/gcc-4.9.2/lib64
+
+*/
+

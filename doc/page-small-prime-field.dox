@@ -1,0 +1,54 @@
+/*! 
+
+\page small_prime_field Tutorial for prime finite fields with modulo < 2^32
+
+There are three main ways to use the openf4 library (from the simplest to the most involved):
+<OL>
+<LI>In Sage (not yet available): 
+    <OL>
+        <LI>R.<x0,x1,x2,x3,x4,x5> = Zmod(65521)[]
+        <LI>I = sage.rings.ideal.Cyclic(R,6)
+        <LI>I.groebner_basis('openf4')
+    </OL>
+<LI>As a C++ library:
+    <OL>
+        <LI>Include the library header: libopenf4.h.
+        <LI>Link with the library during the compilation: -lopenf4
+        <LI>Use the function groebnerBasisF4(int64_t modulo, int nbVariable, std::vector<std::string> variableName, std::vector<std::string> polynomialList, int nbThread, int verbose); 
+        <LI>Look at the example tutorial-method2.cpp into the section example.
+    </OL>
+<LI>As a template library:
+    <OL>
+        <LI>Include the header openf4.h.
+        <LI>Create and configure the element type with your modulo:
+        <UL>
+            <LI> If modulo < 2^8 use ElementPrime<int16_t>
+            <LI> If modulo < 2^16 use ElementPrime<int32_t>
+            <LI> If modulo < 2^32 use ElementPrime<int64_t>
+        </UL>
+        <LI>Configure the class monomial with the number of variables and an initial degree for the monomial precomputation.
+        <LI>Create an ideal with a vector of polynomials and others informations: F4::Ideal::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree);
+        <LI>Call the method f4: F4::Ideal::f4();
+        <LI>Compile with:
+        <UL>
+            <LI> -std=c++11 to enable c++11 support
+            <LI> -DNDEBUG to disable assertion 
+            <LI> -fopenmp to use parallelisation 
+            <LI> -march=native to use vectorisation (if your system support SSE instructions).
+            <LI> -03 -funroll-loops -ftree-vectorize (for fast)
+            <LI> -Wall -Wno-strict-overflow to enable useful warning.
+         </UL> 
+        <LI>Link with:
+        <UL>
+            <LI> -lgmp for big number.
+            <LI> -lgmpxx for big number.
+            <LI> -lgivaro for prime field based on GMP.
+            <LI> -fopenmp to use parallelisation
+            <LI> -lopenblas (to use fflas-ffpack with OpenBlas) or -lcblas -latlas (to use fflas-ffpack with Atlas).
+         </UL>
+        <LI>Look at the example tutorial-method3.cpp into the section example.
+    </OL>
+</OL>
+
+*/
+
