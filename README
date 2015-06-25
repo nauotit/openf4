@@ -4,9 +4,12 @@ For prime fields of characteristic > 2^32 you need Givaro.
 Other finite fields are not handled.
 
 A basic installation could be done with:
+autoreconf --install
 ./configure
 make 
 make install
+
+A complete documentation is available on http://nauotit.github.io/openf4/
 
 
 
