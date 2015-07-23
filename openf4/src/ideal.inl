@@ -348,7 +348,6 @@ namespace F4
             startAddCp = clock ();
         }
         
-        CriticalPair<Element> * cp1=0;
         CriticalPair<Element> * it = _cpArray.getBegin();
 
         /* Computation of critical pairs */ 
@@ -365,66 +364,62 @@ namespace F4
             it=_cpArray.getNext(it);
         }
 
-        
-        NodeListPointerCriticalPair<Element> const * itpcp1;
-        NodeListPointerCriticalPair<Element> const * itpcp2 = 0;
-        
-        itpcp1=_cpSet1.getRoot();
-        while(itpcp1 != 0)
+               
+        size_t itpcp1 = _cpSet1.size();
+        while(itpcp1)
         {
-            cp1=(itpcp1->_cp);
-            itpcp1=_cpSet1.getNext(itpcp1);
-            
+	  --itpcp1;
+	  Monomial const &lcm = _cpSet1[itpcp1]->getLcm();
             /* Test if cp1 verifies criteria 2 */
             divisorFound = false;
             
             /* Scan _cpSet0 */
-            itpcp2=_cpSet0.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
-                    divisorFound = true;
+            size_t itpcp2=_cpSet0.size();
+            while (itpcp2) {
+	      --itpcp2;
+                if (lcm.isDivisible(_cpSet0[itpcp2]->getLcm())) {
+		  divisorFound = true;
+		  break;
                 }
-                itpcp2=_cpSet0.getNext(itpcp2);
             }
-            
-            /* Scan _cpSet1 */
-            itpcp2=itpcp1;
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
-                    divisorFound = true;
+
+	    if (!divisorFound) {
+	      /* Scan _cpSet1 */
+	      itpcp2=itpcp1;
+	      while (itpcp2) {
+		--itpcp2;
+		if (lcm.isDivisible(_cpSet1[itpcp2]->getLcm())) {
+		  divisorFound = true;
+		  break;
                 }
-                itpcp2=_cpSet1.getNext(itpcp2);
+	      }
             }
-            
-            /* Scan _cpSet2 */
-            itpcp2=_cpSet2.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
+
+	    if (!divisorFound) {
+	      /* Scan _cpSet2 */
+	      itpcp2=_cpSet2.size();
+	      while (itpcp2) {
+                --itpcp2;
+                if (lcm.isDivisible(_cpSet2[itpcp2]->getLcm())) {
                     divisorFound = true;
+		    break;
                 }
-                itpcp2=_cpSet2.getNext(itpcp2);
-            }
-            if (!divisorFound)
-            {
+	      }
+	    }
+	    
+            if (!divisorFound) {
                 /* Add cp1 to _cpSet2 */
-                _cpSet2.insert(cp1);
+                _cpSet2.insert(_cpSet1[itpcp1]);
             }
         }
         _cpSet1.reset();
         
         /* CP <- CP U _cpSet2 */
-        itpcp1=_cpSet2.getRoot();
-        while(itpcp1!=0)
-        { 
-            _criticalPairSet.insert(*itpcp1->_cp);
-            itpcp1=_cpSet2.getNext(itpcp1);
-            stat._nbCp++;
+        itpcp1=_cpSet2.size();
+        while(itpcp1) { 
+	  --itpcp1;
+	  _criticalPairSet.insert(*(_cpSet2[itpcp1]));
+	  stat._nbCp++;
         }
         _cpSet2.reset();
         
