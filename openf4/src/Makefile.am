@@ -29,9 +29,9 @@ libopenf4_la_SOURCES = libopenf4.cpp $(top_srcdir)/libopenf4.h
 
 pkgincludesubdir=$(pkgincludedir)/src
 
-pkgincludesub_HEADERS = avl-critical-pair.inl element-gf2-extension.inl libopenf4.cpp single-list.inl specialisation-simd-gf2-extension.inl
-pkgincludesub_HEADERS += avl-monomial.inl element-gf2.inl list-pointer-critical-pair.inl matrix.inl specialisation-echelonize-fflas-ffpack.inl specialisation-simd-prime.inl
-pkgincludesub_HEADERS += avl-polynomial.inl element-givaro.inl monomial-array.inl specialisation-echelonize-gf2-extension.inl tagged-polynomial.inl
+pkgincludesub_HEADERS = element-gf2-extension.inl libopenf4.cpp single-list.inl specialisation-simd-gf2-extension.inl
+pkgincludesub_HEADERS += element-gf2.inl matrix.inl specialisation-echelonize-fflas-ffpack.inl specialisation-simd-prime.inl
+pkgincludesub_HEADERS += element-givaro.inl monomial-array.inl specialisation-echelonize-gf2-extension.inl tagged-polynomial.inl
 pkgincludesub_HEADERS += critical-pair.inl element-prime.inl monomial.inl specialisation-echelonize-gf2.inl term.inl
-pkgincludesub_HEADERS += dynamic-array.inl ideal.inl polynomial.inl specialisation-echelonize-prime.inl
+pkgincludesub_HEADERS += ideal.inl polynomial.inl specialisation-echelonize-prime.inl
 
