@@ -232,7 +232,7 @@ namespace F4
             ListPointerCriticalPair<Element> _cpSet0; /*!< List of pointers on critical pairs for update */
             ListPointerCriticalPair<Element> _cpSet1; /*!< List of pointers on critical pairs for update */
             ListPointerCriticalPair<Element> _cpSet2; /*!< List of pointers on critical pairs for update */
-            DynamicArray<CriticalPair<Element>> _cpArray; /*!< Dynamic array of critical pairs used in _cpSet0, _cpSet1 and _cpSet2. */
+	    vector<CriticalPair<Element>> _cpArray; /*!< Dynamic array of critical pairs used in _cpSet0, _cpSet1 and _cpSet2. */
             AvlMonomial _matMons; /*!< Monomials used in _matPols, AVL of pair (numMon, lt) decreasing order */
             AvlPolynomial _matPols; /*!< F4 Matrix = AVL of triple (tagged polynomial index, numLM, nbTerms), decreasing order */ 
     };

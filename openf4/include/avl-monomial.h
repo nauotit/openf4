@@ -85,8 +85,7 @@ namespace F4
              * \brief Constructor
              */
             AvlMonomial();
-            
-            
+
             /* Miscellaneous */
             
             /**

@@ -53,7 +53,6 @@ namespace F4
              * \brief Constructor
              */
             NodeAvlPolynomial();
-            
             /* Attributes */
         
             int _numPolynomial; /*!< Index of a tagged polynomial. */

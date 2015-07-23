@@ -33,7 +33,7 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree), _cpArray(1000, 20,1)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree)
     {
         /* Share the monomial array. */
         Term<Element>::setMonomialArray(&_monomialArray);
@@ -347,24 +347,19 @@ namespace F4
             stat._timePurgeCp += (clock () - startPurgeCp);
             startAddCp = clock ();
         }
-        
-        CriticalPair<Element> * it = _cpArray.getBegin();
 
-        /* Computation of critical pairs */ 
-        for (j = _basis.size(); j > 0; j--)
-        {
-            if (!it->setCriticalPair(index, _total[_basis[j-1]]))
-            {
-                _cpSet0.insert(it);
-            }
-            else
-            {
-                _cpSet1.insert(it);
-            }
-            it=_cpArray.getNext(it);
-        }
-
-               
+	
+	{
+	  if (_cpArray.size() < _basis.size())
+	    _cpArray.resize(_cpArray.size() + 1024);
+	  auto it = _cpArray.data();
+	  for(j = _basis.size(); j > 0; j--, ++it)
+	    if (it->setCriticalPair(index, _total[_basis[j-1]]))
+	      _cpSet1.insert(it);
+	    else
+	      _cpSet0.insert(it);
+	}
+	
         size_t itpcp1 = _cpSet1.size();
         while(itpcp1)
         {
@@ -425,10 +420,6 @@ namespace F4
         
         /* Free _cpSet0 */
         _cpSet0.reset();
-        
-        /* Reset the dynamic array of critical pair */
-        _cpArray.reset();
-        
         
         if (VERBOSE > 1)
         {
@@ -1001,7 +992,6 @@ namespace F4
             /* Critical pair of minimal degree */
             itcp1=_criticalPairSet.findSmallest();
             cp1=itcp1->_cp;
-            itcp1=_criticalPairSet.erase(itcp1);
             
             stat._nbCp--;
             d = cp1.getDegree();
@@ -1018,13 +1008,14 @@ namespace F4
             stat._nbCpDeg++;
 
             /* Get the other critical pairs of degree d */
+            itcp1=_criticalPairSet.erase(itcp1);
             while ( (itcp1 != 0) && (itcp1->_cp.getDegree()==d))
             {
                 cp1=itcp1->_cp;
-                itcp1=_criticalPairSet.erase(itcp1);
-                stat._nbCp--;
                 appendMatrixF4 (cp1, height, nbPiv);
                 stat._nbCpDeg++;
+                itcp1=_criticalPairSet.erase(itcp1);
+                stat._nbCp--;
             }
             if(VERBOSE > 1)
             {
