@@ -164,7 +164,7 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printMonomialAvl() const
+    Ideal<Element>::printMonomialAvl()
     {
         cout << endl << "------------------- Monomial AVL -------------------------" << endl;
         NodeAvlMonomial const * itMonBeg = _matMons.findBiggest();
@@ -178,11 +178,11 @@ namespace F4
             
     template <typename Element>
     void
-    Ideal<Element>::printTaggedPolynomialAvl() const
+    Ideal<Element>::printTaggedPolynomialAvl()
     {
         cout << endl << "------------------- Tagged polynomial index AVL -------------------------" << endl;
         
-        NodeAvlPolynomial const * itPolBeg = _matPols.findBiggest(); 
+        NodeAvlPolynomial * itPolBeg = _matPols.findBiggest(); 
         while(itPolBeg != 0)
         {
             cout << "_numPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
@@ -752,7 +752,7 @@ namespace F4
                 {
                     quotient.setMonomialDivide(m1,m2);
                     /* Reducer found */
-                    itmon->_lt=true;
+                    itmon->setLt();
                     nbPiv++;
                     /* Test if the computation of this multiple is not already done */ 
                     indexPol=simplify(quotient, _total[_basis[i]]);
