@@ -18,9 +18,9 @@
  */
 
 /**
- *  \file tutorial-gf2-method2.cpp
- *  \example tutorial-gf2-method2.cpp
- *  \brief Tutorial with f4 library use for GF(2).
+ *  \file check-trivial1-gf2.cpp
+ *  \example check-trivial1-gf2.cpp
+ *  \brief Library check tests.
  *  \ingroup examples
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
  */
@@ -35,33 +35,44 @@ using namespace std;
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#               TUTORIAL WITH LIBRARY USE               #" << endl;
+    cout << "#                   CHECK TRIVIAL1 GF2                  #" << endl;
     cout << "#########################################################" << endl << endl;
     
-    // Create polynomial array.
+    // Create polynomial array
     vector<string> polynomialArray;
     
-    // Create variable name array.
+    // Create variable name array
     vector<string> variableName;
-    for(int i = 0; i < 6; i++)
+    variableName.push_back("x");
+    
+    // Fill the polynomial array
+    polynomialArray.emplace_back("0");
+    
+    // Compute a reduce groebner basis
+    vector<string> basis= groebnerBasisGF2F4(1, variableName, polynomialArray, 1, 0);
+    
+    // Fill reference vectors
+    vector<string> groebnerBasis;
+    groebnerBasis.push_back("(0*1)");
+
+    /* 8 bits */
+    bool test = true;
+    size_t i = 0;
+    while(i < basis.size() && test == true )
     {
-        variableName.push_back('x'+to_string(i));
+        test = test && (groebnerBasis[i].compare(basis[i])==0);
+        i++;
     }
-    
-    // Fill the polynomial array.
-    polynomialArray.emplace_back("x0+x1+x2+x3+x4+x5");
-    polynomialArray.emplace_back("x0*x1+x1*x2+x2*x3+x3*x4+x0*x5+x4*x5");
-    polynomialArray.emplace_back("x0*x1*x2+x1*x2*x3+x2*x3*x4+x0*x1*x5+x0*x4*x5+x3*x4*x5");
-    polynomialArray.emplace_back("x0*x1*x2*x3+x1*x2*x3*x4+x0*x1*x2*x5+x0*x1*x4*x5+x0*x3*x4*x5+x2*x3*x4*x5");
-    polynomialArray.emplace_back("x0*x1*x2*x3*x4+x0*x1*x2*x3*x5+x0*x1*x2*x4*x5+x0*x1*x3*x4*x5+x0*x2*x3*x4*x5+x1*x2*x3*x4*x5");
-    polynomialArray.emplace_back("x0*x1*x2*x3*x4*x5-1");
-    
-    // Compute a reduce groebner basis.
-    vector<string> basis = groebnerBasisGF2F4(6, variableName, polynomialArray, 1, 0);
-    
-    // Print the reduce groebner basis.
-    for(size_t i = 0; i < basis.size(); i++)
+    if(test==true)
     {
-        cout << basis[i] << endl;
+        cout << "Test trivial1 gf2 pass" << endl;
+        return 0;
+    }
+    else
+    {
+        cout << "Test trivial1 gf2 failed" << endl;
+        return -1;
     }
 }
+
+

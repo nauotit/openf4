@@ -18,8 +18,8 @@
  */
 
 /**
- *  \file check-random-64bits.cpp
- *  \example check-random-64bits.cpp
+ *  \file check-trivial4-64bits.cpp
+ *  \example check-trivial4-64bits.cpp
  *  \brief Library check tests.
  *  \ingroup examples
  *  \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
@@ -35,7 +35,7 @@ using namespace std;
 int main (int argc, char **argv)
 {
     cout << "#########################################################" << endl;
-    cout << "#                 CHECK RANDOM 64 BITS                  #" << endl;
+    cout << "#              CHECK TRIVIAL 2 64 BITS                  #" << endl;
     cout << "#########################################################" << endl << endl;
     
     // Create polynomial array
@@ -43,35 +43,24 @@ int main (int argc, char **argv)
     
     // Create variable name array
     vector<string> variableName;
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 3; i++)
     {
         variableName.push_back('x'+to_string(i));
     }
     
     // Fill the polynomial array
-    polynomialArray.emplace_back("-67903332*x0*x2^2 + 75795853*x0*x3^2 - 77876537*x0^2 - 68654934*x1 - 110666967");
-    polynomialArray.emplace_back("-86462958*x0^2*x1 - 156974227*x0^2*x2 + 94227320*x0^2 - 121068676*x1*x3 + 383807976*x2*x4");
-    polynomialArray.emplace_back("-350205823*x1^2*x4 - 209659308*x1*x3*x4 - 161169513*x0*x2 + 257797958*x1*x4 - 208472984*x4");
-    polynomialArray.emplace_back("-230331186*x0*x1*x2 + 301656182*x2^3 + 151924179*x1^2*x3 + 36652593*x0*x4^2 - 5590016*x3*x4^2");
-    polynomialArray.emplace_back("296066009*x2^2*x3 - 170271076*x0*x1*x4 + 199165238*x0*x4^2 + 313864578*x0^2 + 397526485*x4^2");
-    polynomialArray.emplace_back("203697918*x0*x1*x3 - 167650883*x2^2*x4 + 37458212*x2*x3 - 9502594*x3^2 + 194478864*x4^2");
+    polynomialArray.emplace_back("-381588408*x0^2 + 476686997*x2^2 - 462809584*x0 + 257786256*x2 - 114361905");
+    polynomialArray.emplace_back("-165319008*x0^2 + 74443335*x0*x2 - 139862633*x2^2 - 274498434*x0 + 48302322");
+    polynomialArray.emplace_back("0");
+    polynomialArray.emplace_back("-462665673*x0^2 + 458273559*x2^2 - 602419172*x0 + 103972832*x2 - 383910315");
+    polynomialArray.emplace_back("0");
     
     // Compute a reduce groebner basis
-    vector<string> basis= groebnerBasisF4(805922797LL, 5, variableName, polynomialArray, 1, 0);
+    vector<string> basis= groebnerBasisF4(1217734367, 3, variableName, polynomialArray, 1, 0);
     
     // Fill reference vectors
     vector<string> groebnerBasis;
-    groebnerBasis.push_back("(1*x2^3) + (-102475207*x3^1) + (-355538109*x4^1)");
-    groebnerBasis.push_back("(1*x0^2)");
-    groebnerBasis.push_back("(1*x0^1*x2^1) + (-267894235*x4^1)");
-    groebnerBasis.push_back("(1*x0^1*x3^1)");
-    groebnerBasis.push_back("(1*x2^1*x3^1)");
-    groebnerBasis.push_back("(1*x3^2)");
-    groebnerBasis.push_back("(1*x0^1*x4^1)");
-    groebnerBasis.push_back("(1*x2^1*x4^1) + (-249211079*x3^1)");
-    groebnerBasis.push_back("(1*x3^1*x4^1)");
-    groebnerBasis.push_back("(1*x4^2)");
-    groebnerBasis.push_back("(1*x1^1) + (169143356*x3^1) + (-377176632*1)");
+    groebnerBasis.push_back("(1*1)");
 
     /* 64 bits */
     bool test = true;
@@ -83,12 +72,12 @@ int main (int argc, char **argv)
     }
     if(test==true)
     {
-        cout << "Test random 64 bits pass" << endl;
+        cout << "Test trivial4 64 bits pass" << endl;
         return 0;
     }
     else
     {
-        cout << "Test random 64 bits failed" << endl;
+        cout << "Test trivial4 64 bits failed" << endl;
         return -1;
     }
 }

@@ -23,7 +23,7 @@ endif
 # Executable
 
 noinst_PROGRAMS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
-noinst_PROGRAMS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits
+noinst_PROGRAMS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial1_gf2
 if F4_HAVE_GIVARO
 noinst_PROGRAMS += check_cyclic6_256bits
 endif
@@ -76,6 +76,21 @@ check_random_gf2_extension_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.l
 
 check_aes_gf2_extension_16bits_SOURCES=check-aes-gf2-extension-16bits.cpp
 check_aes_gf2_extension_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
+
+check_trivial1_64bits_SOURCES=check-trivial1-64bits.cpp
+check_trivial1_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
+
+check_trivial2_64bits_SOURCES=check-trivial2-64bits.cpp
+check_trivial2_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
+
+check_trivial3_64bits_SOURCES=check-trivial3-64bits.cpp
+check_trivial3_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
+
+check_trivial4_64bits_SOURCES=check-trivial4-64bits.cpp
+check_trivial4_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial1_gf2_SOURCES=check-trivial1-gf2.cpp
+check_trivial1_gf2_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
 
 if F4_HAVE_GIVARO
 check_cyclic6_256bits_SOURCES = check-cyclic6-256bits.cpp
@@ -137,7 +152,7 @@ tutorial_gf2_extension_method3_SOURCES = tutorial-gf2-extension-method3.cpp
 # For check target
 
 TESTS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
-TESTS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits
+TESTS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial1_gf2
 
 if F4_HAVE_GIVARO
 TESTS += check_cyclic6_256bits

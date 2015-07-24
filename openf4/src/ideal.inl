@@ -1,20 +1,20 @@
 /* 
  * Copyright (C) 2015 Antoine Joux, Vanessa Vitse and Titouan Coladon
  * 
- * This file is part of F4.
+ * This file is part of openf4.
  * 
- * F4 is free software: you can redistribute it and/or modify
+ * openf4 is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * F4 is distributed in the hope that it will be useful,
+ * openf4 is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with F4.  If not, see <http://www.gnu.org/licenses/>.
+ * along with openf4.  If not, see <http://www.gnu.org/licenses/>.
  */
 
   /**
@@ -23,8 +23,8 @@
   * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON
   */
 
-#ifndef F4_IDEAL_INL
-#define F4_IDEAL_INL
+#ifndef OPENF4_IDEAL_INL
+#define OPENF4_IDEAL_INL
 
 using namespace std;
 
@@ -41,7 +41,6 @@ namespace F4
         CriticalPair<Element>::setMonomialArray(&_monomialArray);
         /* Share the tagged polynomial array. */
         CriticalPair<Element>::setTaggedPolynomialArray(&_taggedPolynomialArray);
-        
         _taggedPolynomialArray.reserve(50000);
         _total.reserve(10000);
         _basis.reserve(1000);
@@ -822,6 +821,16 @@ namespace F4
             num_lt = tabMon[sigma[i]];
             if (tabMon[sigma[i]] == 0)
             {
+                Polynomial<Element> polyOne;
+                Element one;
+                one.setOne();
+                polyOne.emplaceAfter(polyOne.getPolynomialBegin(), one, 0);
+                _taggedPolynomialArray.emplace_back(polyOne);
+                _total.push_back(_numPol);
+                update(_numPol, false, stat);
+                _numPol++;
+                _numTot++;
+                stat._cmptNewGen++;
                 return false;
             }
             if (VERBOSE > 3)
@@ -922,17 +931,36 @@ namespace F4
         millisecs_t timePostprocessing = millisecs_t::zero();
         chrono::steady_clock::time_point timePostprocessingStart;
         
+        /* Special case where I=<0> */
+        if (_polynomialArray.size()==1 && _polynomialArray[0].getNbTerm()==1 && _polynomialArray[0].getLC()._element==0)
+        {
+            Element zero;
+            zero.setZero();
+            Polynomial<Element> polyZero;
+            polyZero.emplaceAfter(polyZero.getPolynomialBegin(), zero, 0);
+            _basis.push_back(0);
+            _total.push_back(0);
+            _taggedPolynomialArray.push_back(polyZero);
+            _numPol++;
+            _numTot++;
+            _numGen++;
+            return 1;
+        }
+        
         /*step 0 */
         for (size_t i = 0; i < _polynomialArray.size(); i++)
         {
-            _polynomialArray[i].normalize();
-            _taggedPolynomialArray.emplace_back(_polynomialArray[i]);
-            _total.push_back(_numPol);
+            if (_polynomialArray[i].getNbTerm()!=1 || _polynomialArray[i].getLC()._element!=0)
+            {
+                _polynomialArray[i].normalize();
+                _taggedPolynomialArray.emplace_back(_polynomialArray[i]);
+                _total.push_back(_numPol);
 
-            /* Initialisation : compute all the critical pairs and purge of the basis */
-            update(i, true, stat);
-            _numPol++;
-            _numTot++;
+                /* Initialisation : compute all the critical pairs and purge of the basis */
+                update(_numPol, true, stat);
+                _numPol++;
+                _numTot++;
+            }
         }
         step++;
         
@@ -1267,4 +1295,4 @@ namespace F4
 
 }
 
-#endif // F4_IDEAL_INL
+#endif // OPENF4_IDEAL_INL
