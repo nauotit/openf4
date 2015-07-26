@@ -1,7 +1,0 @@
-<map id="F4::NodeList::getNumMonomial" name="F4::NodeList::getNumMonomial">
-<area shape="rect" id="node2" href="$class_f4_1_1_ideal.html#aaf7a9df5272ae54b42bff4ab431748da" title="Update _matPols and _matMons with the critical pair p. " alt="" coords="262,5,437,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_ideal.html#adb4067fdb230734b881be32dd7aa4639" title="Transform _matPols and _matMons into an almost tringular matrix. " alt="" coords="281,56,417,83"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_ideal.html#a54844f00de151ddcf9a8aeba20b31d57" title="Add polynomials to _matPols in order to reduced queue of current polynomials. " alt="" coords="268,107,431,133"/>
-<area shape="rect" id="node5" href="$class_f4_1_1_ideal.html#a07e28d17f6002fc4213bce984823b915" title="Compute a groebner basis of this using the F4 algorithm. " alt="" coords="303,157,395,184"/>
-<area shape="rect" id="node6" href="$class_f4_1_1_tagged_polynomial.html#a99b4b28b817d34b87f90545a97a3ee24" title="Set this = taggedPolynomial * monomial. Do not modify the simplyrules. " alt="" coords="272,209,427,250"/>
-</map>

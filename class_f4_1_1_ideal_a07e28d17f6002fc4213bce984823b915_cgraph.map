@@ -1,7 +1,0 @@
-<map id="F4::Ideal::f4" name="F4::Ideal::f4">
-<area shape="rect" id="node2" href="$class_f4_1_1_critical_pair.html#a44ca105688b8caeb770cfce2b1eee4f6" title="Get the degree of this. " alt="" coords="162,5,339,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_matrix.html#a2655934d9e9084958b3d37855545a754" title="Set the informations required by echelonize. " alt="" coords="186,56,315,83"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_matrix.html#ae6b53012ab0f54824b51a35c3069d15a" title="Echelonize the matrix mat using the shape of the F4 matrix. " alt="" coords="175,107,326,133"/>
-<area shape="rect" id="node5" href="$struct_f4_1_1_node_list.html#ae5f8cafba0e6344db1c6068a5fe55b80" title="Get the number of the monomial of the term. " alt="" coords="147,157,354,184"/>
-<area shape="rect" id="node6" href="$class_f4_1_1_matrix.html#a9a38957345480565c6f2ced0c0cd4624" title="Get the row&#45;th row of this. " alt="" coords="183,208,318,235"/>
-</map>

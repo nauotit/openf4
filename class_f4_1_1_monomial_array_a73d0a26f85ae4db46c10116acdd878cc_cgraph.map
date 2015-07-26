@@ -1,6 +1,0 @@
-<map id="F4::MonomialArray::setMonomialArray" name="F4::MonomialArray::setMonomialArray">
-<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#afc09da354134a94950b820ae57d583ec" title="Get NB_MONOMIAL[MAX_DEGREE][NB_VARIABLE+1]. " alt="" coords="195,5,395,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_monomial.html#a0907989057d36848c3e7115e02ac14b3" title="Set the varlist of this. " alt="" coords="213,56,377,83"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_monomial.html#ab188361bed75424cb64bfcb24616953b" title="Initialize this with the num&#45;th monomial. " alt="" coords="197,107,392,133"/>
-<area shape="rect" id="node5" href="$class_f4_1_1_monomial.html#aeafd82d43461e7ef93eee4c49a95343e" title="Modify the dynamic 2D array NB_MONOMIAL, and call setMonomialArray(). " alt="" coords="443,107,643,133"/>
-</map>

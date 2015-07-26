@@ -1,6 +1,0 @@
-<map id="F4::Monomial::monomialToInt" name="F4::Monomial::monomialToInt">
-<area shape="rect" id="node2" href="$class_f4_1_1_polynomial.html#a0744cbe3a1471dcb480f0618753c0e92" title="Overload the operator *= to multiply this with a monomial. Prefer multNumMon(int numMon) if the monom..." alt="" coords="249,5,426,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_term.html#a7a794ee5d573eb0aee36b5780e34ae94" title="Constructor. " alt="" coords="281,56,394,83"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_term.html#a1e68ac6dc9a905d8e08ece5c22bb4beb" title="Initialize this with s. " alt="" coords="272,107,403,133"/>
-<area shape="rect" id="node5" href="$class_f4_1_1_term.html#af6dc98d222d7f0740b8e5b2fdf5cc0a3" title="Overload the operator *= to multiply this with a monomial. " alt="" coords="266,157,409,184"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="F4::Ideal::buildPolynomial" name="F4::Ideal::buildPolynomial">
-<area shape="rect" id="node2" href="$class_f4_1_1_polynomial.html#ac95a6ee6405dcde62042c496f296a921" title="Get an iterator before the beginning of the polynomial. " alt="" coords="227,5,426,46"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_polynomial.html#abbb9a50db6175e11ac9518ac0476b307" title="Add a term after pos. Beware to keep a correct order. " alt="" coords="235,71,418,97"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_polynomial.html#afaa1c1c1e245ad4cd20539e790dbdba4" title="Erase all the term from it to the end of the polynomial. " alt="" coords="237,121,417,148"/>
-<area shape="rect" id="node5" href="$class_f4_1_1_polynomial.html#a4e0653bf8a44bd355dadcf8c1fc2b0a1" title="Test if the polynomial is empty or not. " alt="" coords="244,172,409,199"/>
-</map>

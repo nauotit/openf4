@@ -1,7 +1,0 @@
-<map id="F4::Ideal::transform" name="F4::Ideal::transform">
-<area shape="rect" id="node2" href="$class_f4_1_1_matrix.html#a645d17a8710f484b338e7c2d01259be4" title="Get the height of the matrix (number of rows). " alt="" coords="221,5,366,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_matrix.html#a412f3c84c944f2ebba80701de04940f7" title="Get the width of the matrix (number of columns). " alt="" coords="223,56,364,83"/>
-<area shape="rect" id="node4" href="$struct_f4_1_1_node_list.html#ae5f8cafba0e6344db1c6068a5fe55b80" title="Get the number of the monomial of the term. " alt="" coords="190,107,397,133"/>
-<area shape="rect" id="node5" href="$class_f4_1_1_matrix.html#af8a13fcafab3f2f6997246ac59dd33c7" title="Modify matrix element. " alt="" coords="216,157,371,184"/>
-<area shape="rect" id="node6" href="$struct_f4_1_1_node_list.html#adb1d79841df60dc68f80d58d8948bb77" title="Get the coefficient of the term. " alt="" coords="200,208,387,235"/>
-</map>

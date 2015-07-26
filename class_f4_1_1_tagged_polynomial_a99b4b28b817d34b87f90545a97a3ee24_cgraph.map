@@ -1,6 +1,0 @@
-<map id="F4::TaggedPolynomial::setTaggedPolynomial" name="F4::TaggedPolynomial::setTaggedPolynomial">
-<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#a90e7191cb905b315dcd562a9e2e73c05" title="Compute the number of a monomial from its varlist. " alt="" coords="225,5,399,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_tagged_polynomial.html#a09cb092ae8d0d4ff5795a498cb7ac5c3" title="Get a constant iterator on the beginning of the polynomial. " alt="" coords="222,57,402,98"/>
-<area shape="rect" id="node4" href="$struct_f4_1_1_node_list.html#adb1d79841df60dc68f80d58d8948bb77" title="Get the coefficient of the term. " alt="" coords="219,123,405,149"/>
-<area shape="rect" id="node5" href="$struct_f4_1_1_node_list.html#ae5f8cafba0e6344db1c6068a5fe55b80" title="Get the number of the monomial of the term. " alt="" coords="209,173,415,200"/>
-</map>

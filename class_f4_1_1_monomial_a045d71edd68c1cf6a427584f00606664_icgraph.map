@@ -1,5 +1,0 @@
-<map id="F4::Monomial::getDegree" name="F4::Monomial::getDegree">
-<area shape="rect" id="node2" href="$class_f4_1_1_critical_pair.html#ad89b37d0ef2a074d5de696efedd6e8cc" title="Modify an already created critical pair. " alt="" coords="225,5,423,32"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_monomial_array.html#a2087513bc2219570275e98b5c4281664" title="Multiply two monomials, using _tabulatedProduct if possible. Prefer numMon1&lt;numMon2. " alt="" coords="254,57,394,98"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_ideal.html#ac09f4a78d486ba1dec3d0f0c5df9bb01" title="Update the set of critical pair and the current basis. " alt="" coords="472,5,592,32"/>
-</map>

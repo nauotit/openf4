@@ -1,7 +1,0 @@
-<map id="F4::Ideal::preprocessing" name="F4::Ideal::preprocessing">
-<area shape="rect" id="node2" href="$class_f4_1_1_monomial.html#a1b750328e81c1a227fb67ac4d833e4c1" title="Allocate the varlist of this. " alt="" coords="243,5,397,32"/>
-<area shape="rect" id="node3" href="$class_f4_1_1_monomial.html#a3a7e3bd9f0f8d0f28dfa1272ffc585c3" title="Test if this is divisible by mon. " alt="" coords="235,56,405,83"/>
-<area shape="rect" id="node4" href="$class_f4_1_1_monomial.html#a292fa0fdbd81c8e621fd92387a61abca" title="Initialize this with mon1 / mon2. " alt="" coords="229,107,411,149"/>
-<area shape="rect" id="node5" href="$struct_f4_1_1_node_list.html#ae5f8cafba0e6344db1c6068a5fe55b80" title="Get the number of the monomial of the term. " alt="" coords="217,173,423,200"/>
-<area shape="rect" id="node6" href="$class_f4_1_1_monomial.html#ab22d8dd302502248f9e9e0707f300af4" title="Delete the varlist of this. " alt="" coords="249,224,391,251"/>
-</map>
