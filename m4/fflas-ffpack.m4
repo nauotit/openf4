@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_CHECK_FFLAS_FFPACK
+dnl OPENF4_CHECK_FFLAS_FFPACK
 
 dnl Test for FFLAS_FFPACK 
 
-AC_DEFUN([F4_CHECK_FFLAS_FFPACK],
+AC_DEFUN([OPENF4_CHECK_FFLAS_FFPACK],
 [
 
 AC_ARG_WITH([fflas-ffpack],
@@ -46,7 +46,7 @@ AS_IF([test "x$with_fflas_ffpack" != xno],
       [version_min=20100
         
         dnl Check for Blas
-        F4_CHECK_BLAS_LIBS
+        OPENF4_CHECK_BLAS_LIBS
 
         dnl Check for existence
         BACKUP_CXXFLAGS=${CXXFLAGS}
@@ -126,8 +126,8 @@ AS_IF([test "x$with_fflas_ffpack" != xno],
         LIBS=${BACKUP_LIBS}
       ])
       
-      AM_CONDITIONAL(F4_HAVE_BLAS, test "x$HAVE_BLAS" = "xyes")
-      AM_CONDITIONAL(F4_HAVE_LAPACK, test "x$HAVE_LAPACK" = "xyes")
-      AM_CONDITIONAL([F4_HAVE_FFLAS_FFPACK], [test x$HAVE_FFLAS_FFPACK = xyes])
+      AM_CONDITIONAL(OPENF4_HAVE_BLAS, test "x$HAVE_BLAS" = "xyes")
+      AM_CONDITIONAL(OPENF4_HAVE_LAPACK, test "x$HAVE_LAPACK" = "xyes")
+      AM_CONDITIONAL([OPENF4_HAVE_FFLAS_FFPACK], [test x$HAVE_FFLAS_FFPACK = xyes])
 
 ])

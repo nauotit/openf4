@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_CHECK_GIVARO
+dnl OPENF4_CHECK_GIVARO
 
 dnl Test for Givaro and define GIVARO_CFLAGS and GIVARO_LIBS
 
-AC_DEFUN([F4_CHECK_GIVARO],
+AC_DEFUN([OPENF4_CHECK_GIVARO],
 [
 
 AC_ARG_WITH([givaro],
@@ -44,7 +44,7 @@ AC_ARG_WITH([givaro],
 AS_IF([test "x$with_givaro" != xno],
       [version_min=30901
       
-       F4_CHECK_GMP(,,[echo '*******************************************************************************'
+       OPENF4_CHECK_GMP(,,[echo '*******************************************************************************'
                        echo ' ERROR: GMP not found!'
                        echo
                        echo ' GMP library compiled with --enable-cxx is required for this library to compile.'
@@ -123,6 +123,6 @@ AS_IF([test "x$with_givaro" != xno],
         LIBS=${BACKUP_LIBS}
       ])
       
-      AM_CONDITIONAL(F4_HAVE_GIVARO, test "x$HAVE_GIVARO" = "xyes")
+      AM_CONDITIONAL(OPENF4_HAVE_GIVARO, test "x$HAVE_GIVARO" = "xyes")
 
 ])

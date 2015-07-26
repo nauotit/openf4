@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_ENABLE_DEBUG
+dnl OPENF4_ENABLE_DEBUG
 
 dnl turn on OpenMP if available
 
-AC_DEFUN([F4_ENABLE_DEBUG],
+AC_DEFUN([OPENF4_ENABLE_DEBUG],
          [AC_ARG_ENABLE([debug],
                         [AC_HELP_STRING([--enable-debug],
                         [Enable assertion and flag -g])],

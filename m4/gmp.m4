@@ -17,11 +17,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_CHECK_GMP
+dnl OPENF4_CHECK_GMP
 
 dnl Test for the GNU Multiprecision library and define GMP_CFLAGS and GMP_LIBS
 
-AC_DEFUN([F4_CHECK_GMP],
+AC_DEFUN([OPENF4_CHECK_GMP],
 [
 AC_ARG_WITH([gmp],
             [AC_HELP_STRING([--with-gmp=<path>|yes], 

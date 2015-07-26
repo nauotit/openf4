@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_ENABLE_BENCHMARK
+dnl OPENF4_ENABLE_BENCHMARK
 
 dnl Build benchmark
 
-AC_DEFUN([F4_ENABLE_BENCHMARK],
+AC_DEFUN([OPENF4_ENABLE_BENCHMARK],
 [
     AC_ARG_ENABLE([benchmark],
                   [AC_HELP_STRING([--enable-benchmark],
@@ -28,5 +28,5 @@ AC_DEFUN([F4_ENABLE_BENCHMARK],
                   [with_benchmark=$enable_benchmark],
                   [with_benchmark=no])
 
-    AM_CONDITIONAL([F4_HAVE_BENCHMARK], [test x$with_benchmark != xno])
+    AM_CONDITIONAL([OPENF4_HAVE_BENCHMARK], [test x$with_benchmark != xno])
 ])

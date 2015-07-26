@@ -16,12 +16,12 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_ENABLE_VECTORISATION
+dnl OPENF4_ENABLE_VECTORISATION
 
 dnl Tests SSE2 SSE4.1 and SSE4.2 for and define HAVE_SSE2 HAVE_SSE4_1 HAVE_SSE4_2
 
 
-AC_DEFUN([F4_ENABLE_VECTORISATION],
+AC_DEFUN([OPENF4_ENABLE_VECTORISATION],
          [AC_ARG_ENABLE([vectorisation],
                         [AC_HELP_STRING([--enable-vectorisation],
                         [Use SSE vectorisation (-msse2 -msse4.1 -msse4.2),

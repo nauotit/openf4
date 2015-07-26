@@ -47,6 +47,18 @@ namespace F4
     }
     
     
+    /* Destructor */
+    
+    template <typename Element>
+    Ideal<Element>::~Ideal()
+    {
+        Term<Element>::setMonomialArray(0);
+        TaggedPolynomial<Element>::setMonomialArray(0);
+        CriticalPair<Element>::setMonomialArray(0);
+        CriticalPair<Element>::setTaggedPolynomialArray(0);
+    }
+    
+    
     /* Miscellaneous */
     
     template <typename Element>

@@ -1,5 +1,5 @@
 SUBDIRS = openf4 example
-if F4_HAVE_BENCHMARK
+if OPENF4_HAVE_BENCHMARK
 SUBDIRS += benchmark
 endif
 

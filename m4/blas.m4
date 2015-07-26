@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_CHECK_BLAS_LIBS
+dnl OPENF4_CHECK_BLAS_LIBS
 
 dnl Tests BLAS for and define CBLAS_LIBS
 
-AC_DEFUN([F4_CHECK_BLAS_LIBS],
+AC_DEFUN([OPENF4_CHECK_BLAS_LIBS],
          [AC_ARG_WITH([blas-libs],
                       [AC_HELP_STRING([--with-blas-libs=<libs>],
                                       [LIBS for BLAS/LAPACK i.e. ('-L/path/to/openblas -lopenblas -Wl,-rpath=/path/to/openblas/lib') or ('-L/path/to/ATLAS -latlas -lcblas -Wl,-rpath=/path/to/ATLAS/lib') ])],

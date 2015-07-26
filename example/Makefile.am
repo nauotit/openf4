@@ -4,17 +4,17 @@ AM_CPPFLAGS= $(OPTIMISATION_FLAGS) $(DEBUG_FLAGS) $(VECTORISATION_FLAGS) -I$(top
 
 AM_LDFLAGS = 
 
-if F4_HAVE_OMP
+if OPENF4_HAVE_OMP
 AM_LDFLAGS+= $(OMPFLAGS)
 AM_CPPFLAGS+= $(OMPFLAGS)
 endif
 
-if F4_HAVE_GIVARO
+if OPENF4_HAVE_GIVARO
 AM_LDFLAGS+=$(GIVARO_LIBS) $(GMP_LIBS)
 AM_CPPFLAGS+=$(GIVARO_CFLAGS) $(GMP_CFLAGS)
 endif
 
-if F4_HAVE_FFLAS_FFPACK
+if OPENF4_HAVE_FFLAS_FFPACK
 AM_LDFLAGS+=$(CBLAS_LIBS) $(FFLAS_FFPACK_LIBS)
 AM_CPPFLAGS+=$(BLAS_CFLAGS) $(FFLAS_FFPACK_CFLAGS)
 endif
@@ -23,12 +23,13 @@ endif
 # Executable
 
 noinst_PROGRAMS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
-noinst_PROGRAMS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial1_gf2
-if F4_HAVE_GIVARO
+noinst_PROGRAMS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits 
+noinst_PROGRAMS += check_trivial1_16bits check_trivial2_16bits check_trivial1_32bits check_trivial2_32bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial5_64bits check_trivial1_gf2 check_trivial2_gf2 check_trivial1_gf2_extension_16bits check_trivial2_gf2_extension_16bits check_trivial1_gf2_extension_32bits check_trivial2_gf2_extension_32bits check_trivial1_gf2_extension_64bits check_trivial2_gf2_extension_64bits
+if OPENF4_HAVE_GIVARO
 noinst_PROGRAMS += check_cyclic6_256bits
 endif
 noinst_PROGRAMS += tutorial_method2 tutorial_method3 tutorial_gf2_method2 tutorial_gf2_method3 tutorial_gf2_extension_method2 tutorial_gf2_extension_method3
-if F4_HAVE_GIVARO
+if OPENF4_HAVE_GIVARO
 noinst_PROGRAMS += tutorial_big_modulo_method2 tutorial_big_modulo_method3
 endif
 
@@ -77,6 +78,18 @@ check_random_gf2_extension_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.l
 check_aes_gf2_extension_16bits_SOURCES=check-aes-gf2-extension-16bits.cpp
 check_aes_gf2_extension_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
 
+check_trivial1_16bits_SOURCES=check-trivial1-16bits.cpp
+check_trivial1_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial2_16bits_SOURCES=check-trivial2-16bits.cpp
+check_trivial2_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial1_32bits_SOURCES=check-trivial1-32bits.cpp
+check_trivial1_32bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial2_32bits_SOURCES=check-trivial2-32bits.cpp
+check_trivial2_32bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
 check_trivial1_64bits_SOURCES=check-trivial1-64bits.cpp
 check_trivial1_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
 
@@ -89,10 +102,34 @@ check_trivial3_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
 check_trivial4_64bits_SOURCES=check-trivial4-64bits.cpp
 check_trivial4_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
 
+check_trivial5_64bits_SOURCES=check-trivial5-64bits.cpp
+check_trivial5_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
 check_trivial1_gf2_SOURCES=check-trivial1-gf2.cpp
 check_trivial1_gf2_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
 
-if F4_HAVE_GIVARO
+check_trivial2_gf2_SOURCES=check-trivial2-gf2.cpp
+check_trivial2_gf2_LDADD = $(top_builddir)/openf4/src/libopenf4.la 
+
+check_trivial1_gf2_extension_16bits_SOURCES=check-trivial1-gf2-extension-16bits.cpp
+check_trivial1_gf2_extension_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial2_gf2_extension_16bits_SOURCES=check-trivial2-gf2-extension-16bits.cpp
+check_trivial2_gf2_extension_16bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial1_gf2_extension_32bits_SOURCES=check-trivial1-gf2-extension-32bits.cpp
+check_trivial1_gf2_extension_32bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial2_gf2_extension_32bits_SOURCES=check-trivial2-gf2-extension-32bits.cpp
+check_trivial2_gf2_extension_32bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial1_gf2_extension_64bits_SOURCES=check-trivial1-gf2-extension-64bits.cpp
+check_trivial1_gf2_extension_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+check_trivial2_gf2_extension_64bits_SOURCES=check-trivial2-gf2-extension-64bits.cpp
+check_trivial2_gf2_extension_64bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
+
+if OPENF4_HAVE_GIVARO
 check_cyclic6_256bits_SOURCES = check-cyclic6-256bits.cpp
 check_cyclic6_256bits_LDADD = $(top_builddir)/openf4/src/libopenf4.la
 endif
@@ -102,7 +139,7 @@ tutorial_method2_LDADD = $(top_builddir)/openf4/src/libopenf4.la
 
 tutorial_method3_SOURCES = tutorial-method3.cpp
 
-if F4_HAVE_GIVARO
+if OPENF4_HAVE_GIVARO
 tutorial_big_modulo_method2_SOURCES = tutorial-big-modulo-method2.cpp
 tutorial_big_modulo_method2_LDADD = $(top_builddir)/openf4/src/libopenf4.la
 
@@ -152,8 +189,9 @@ tutorial_gf2_extension_method3_SOURCES = tutorial-gf2-extension-method3.cpp
 # For check target
 
 TESTS = check_cyclic6_16bits check_cyclic6_32bits check_cyclic6_64bits check_cyclic6_gf2_extension_16bits check_cyclic6_gf2_extension_32bits check_cyclic6_gf2_extension_64bits check_cyclic6_gf2
-TESTS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial1_gf2
+TESTS += check_random_16bits check_random_32bits check_random_64bits check_random_gf2_extension_16bits check_random_gf2_extension_32bits check_random_gf2_extension_64bits check_aes_gf2_extension_16bits 
+TESTS += check_trivial1_16bits check_trivial2_16bits check_trivial1_32bits check_trivial2_32bits check_trivial1_64bits check_trivial2_64bits check_trivial3_64bits check_trivial4_64bits check_trivial5_64bits check_trivial1_gf2 check_trivial2_gf2 check_trivial1_gf2_extension_16bits check_trivial2_gf2_extension_16bits check_trivial1_gf2_extension_32bits check_trivial2_gf2_extension_32bits check_trivial1_gf2_extension_64bits check_trivial2_gf2_extension_64bits
 
-if F4_HAVE_GIVARO
+if OPENF4_HAVE_GIVARO
 TESTS += check_cyclic6_256bits
 endif

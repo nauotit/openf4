@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_CHECK_OS_64
+dnl OPENF4_CHECK_OS_64
 
 dnl Check if the architecture is 32 or 64 bits.
 
-AC_DEFUN([F4_CHECK_OS_64],
+AC_DEFUN([OPENF4_CHECK_OS_64],
          [AC_MSG_CHECKING(for OS type)
           AC_CHECK_SIZEOF([long])
           AS_IF([test "$ac_cv_sizeof_long" -eq 8],

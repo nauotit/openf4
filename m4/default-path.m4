@@ -16,11 +16,11 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
 
-dnl F4_DEFAULT_PATH
+dnl OPENF4_DEFAULT_PATH
 
 dnl Specify default path variables for Givaro and FFLAS_FFPACK  
 
-AC_DEFUN([F4_DEFAULT_PATH],
+AC_DEFUN([OPENF4_DEFAULT_PATH],
 [
 
 AC_ARG_WITH([default],

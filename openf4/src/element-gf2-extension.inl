@@ -507,39 +507,46 @@ namespace F4
     void
     ElementGF2Extension<baseType>::printElementGF2Extension (std::ostream & stream) const
     {
-        stream << "(";
-        int i=sizeof(baseType)*8-1;
-        /* Print higher term */
-        while(i>1)
+        if(_element==0)
         {
-            if(_element & ((baseType)1<<i))
+            stream << "(0)";
+        }
+        else
+        {
+            stream << "(";
+            int i=sizeof(baseType)*8-1;
+            /* Print higher term */
+            while(i>1)
             {
-                stream << VARIABLE_NAME << "^" << i;
+                if(_element & ((baseType)1<<i))
+                {
+                    stream << VARIABLE_NAME << "^" << i;
+                    i--;
+                    break;
+                }
                 i--;
-                break;
             }
-            i--;
-        }
-        /* Print other terms with pow > 1 */
-        while(i>1)
-        {
-            if(_element & ((baseType)1<<i))
+            /* Print other terms with pow > 1 */
+            while(i>1)
             {
-                stream << "+" << VARIABLE_NAME << "^" << i;
+                if(_element & ((baseType)1<<i))
+                {
+                    stream << "+" << VARIABLE_NAME << "^" << i;
+                }
+                i--;
             }
-            i--;
+            /* Print other terms with pow = 1 */
+            if(_element & (1<<1))
+            {
+                stream << "+" << VARIABLE_NAME;
+            }
+            /* Print other terms with pow = 1 */
+            if(_element & 0x1)
+            {
+                stream << "+" << "1";
+            }
+            stream << ")";
         }
-        /* Print other terms with pow = 1 */
-        if(_element & (1<<1))
-        {
-            stream << "+" << VARIABLE_NAME;
-        }
-        /* Print other terms with pow = 1 */
-        if(_element & 0x1)
-        {
-            stream << "+" << "1";
-        }
-        stream << ")";
     }
             
     template <typename baseType>

@@ -16,11 +16,11 @@ dnl GNU General Public License for more details.
 dnl You should have received a copy of the GNU General Public License
 dnl along with openf4.  If not, see <http://www.gnu.org/licenses/>.
 
-dnl F4_CHECK_OMP
+dnl OPENF4_CHECK_OMP
 
 dnl turn on OpenMP if available
 
-AC_DEFUN([F4_CHECK_OMP],
+AC_DEFUN([OPENF4_CHECK_OMP],
          [AC_ARG_ENABLE([openmp],
                         [AC_HELP_STRING([--enable-openmp],
                         [Use OpenMP (parallel computation),
@@ -54,5 +54,5 @@ AC_DEFUN([F4_CHECK_OMP],
             ],
             [AC_MSG_RESULT(no)])
          ]
-         AM_CONDITIONAL(F4_HAVE_OMP, test "x$HAVE_OMP" = "xyes")
+         AM_CONDITIONAL(OPENF4_HAVE_OMP, test "x$HAVE_OMP" = "xyes")
 )

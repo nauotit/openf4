@@ -276,7 +276,7 @@ namespace F4
         {
             tmp=string("1");
         }
-        if(tmp.size()==1)
+        if(tmp=="+" || tmp =="-")
         {
             /* In case tmp is just a sign */
             tmp=string("1");
@@ -289,7 +289,7 @@ namespace F4
             /* remove sign */
             tmp=tmp.substr(1);
         }
-        _coefficient=tmp;
+        _coefficient=tmp; 
     }
     
     template<>
@@ -340,7 +340,7 @@ namespace F4
         {
             tmp=string("1");
         }
-        if(tmp.size()==1)
+        if(tmp=="+" || tmp =="-")
         {
             /* In case tmp is just a sign */
             tmp=string("1");
@@ -404,7 +404,7 @@ namespace F4
         {
             tmp=string("1");
         }
-        if(tmp.size()==1)
+        if(tmp=="+" || tmp =="-")
         {
             /* In case tmp is just a sign */
             tmp=string("1");
