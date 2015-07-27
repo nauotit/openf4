@@ -33,7 +33,7 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree), _cpArray(1000, 20,1)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree)
     {
         /* Share the monomial array. */
         Term<Element>::setMonomialArray(&_monomialArray);
@@ -164,7 +164,7 @@ namespace F4
     
     template <typename Element>
     void
-    Ideal<Element>::printMonomialAvl() const
+    Ideal<Element>::printMonomialAvl()
     {
         cout << endl << "------------------- Monomial AVL -------------------------" << endl;
         NodeAvlMonomial const * itMonBeg = _matMons.findBiggest();
@@ -178,11 +178,11 @@ namespace F4
             
     template <typename Element>
     void
-    Ideal<Element>::printTaggedPolynomialAvl() const
+    Ideal<Element>::printTaggedPolynomialAvl()
     {
         cout << endl << "------------------- Tagged polynomial index AVL -------------------------" << endl;
         
-        NodeAvlPolynomial const * itPolBeg = _matPols.findBiggest(); 
+        NodeAvlPolynomial * itPolBeg = _matPols.findBiggest(); 
         while(itPolBeg != 0)
         {
             cout << "_numPol = " << itPolBeg->_numPolynomial << ", NumLM = " << itPolBeg->_numMonomial << ", Number of terms = " << itPolBeg->_nbTerms << endl;
@@ -347,93 +347,79 @@ namespace F4
             stat._timePurgeCp += (clock () - startPurgeCp);
             startAddCp = clock ();
         }
-        
-        CriticalPair<Element> * cp1=0;
-        CriticalPair<Element> * it = _cpArray.getBegin();
 
-        /* Computation of critical pairs */ 
-        for (j = _basis.size(); j > 0; j--)
+	
+	{
+	  if (_cpArray.size() < _basis.size())
+	    _cpArray.resize(_cpArray.size() + 1024);
+	  auto it = _cpArray.data();
+	  for(j = _basis.size(); j > 0; j--, ++it)
+	    if (it->setCriticalPair(index, _total[_basis[j-1]]))
+	      _cpSet1.insert(it);
+	    else
+	      _cpSet0.insert(it);
+	}
+	
+        size_t itpcp1 = _cpSet1.size();
+        while(itpcp1)
         {
-            if (!it->setCriticalPair(index, _total[_basis[j-1]]))
-            {
-                _cpSet0.insert(it);
-            }
-            else
-            {
-                _cpSet1.insert(it);
-            }
-            it=_cpArray.getNext(it);
-        }
-
-        
-        NodeListPointerCriticalPair<Element> const * itpcp1;
-        NodeListPointerCriticalPair<Element> const * itpcp2 = 0;
-        
-        itpcp1=_cpSet1.getRoot();
-        while(itpcp1 != 0)
-        {
-            cp1=(itpcp1->_cp);
-            itpcp1=_cpSet1.getNext(itpcp1);
-            
+	  --itpcp1;
+	  Monomial const &lcm = _cpSet1[itpcp1]->getLcm();
             /* Test if cp1 verifies criteria 2 */
             divisorFound = false;
             
             /* Scan _cpSet0 */
-            itpcp2=_cpSet0.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
-                    divisorFound = true;
+            size_t itpcp2=_cpSet0.size();
+            while (itpcp2) {
+	      --itpcp2;
+                if (lcm.isDivisible(_cpSet0[itpcp2]->getLcm())) {
+		  divisorFound = true;
+		  break;
                 }
-                itpcp2=_cpSet0.getNext(itpcp2);
             }
-            
-            /* Scan _cpSet1 */
-            itpcp2=itpcp1;
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
-                    divisorFound = true;
+
+	    if (!divisorFound) {
+	      /* Scan _cpSet1 */
+	      itpcp2=itpcp1;
+	      while (itpcp2) {
+		--itpcp2;
+		if (lcm.isDivisible(_cpSet1[itpcp2]->getLcm())) {
+		  divisorFound = true;
+		  break;
                 }
-                itpcp2=_cpSet1.getNext(itpcp2);
+	      }
             }
-            
-            /* Scan _cpSet2 */
-            itpcp2=_cpSet2.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
-            {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
-                {
+
+	    if (!divisorFound) {
+	      /* Scan _cpSet2 */
+	      itpcp2=_cpSet2.size();
+	      while (itpcp2) {
+                --itpcp2;
+                if (lcm.isDivisible(_cpSet2[itpcp2]->getLcm())) {
                     divisorFound = true;
+		    break;
                 }
-                itpcp2=_cpSet2.getNext(itpcp2);
-            }
-            if (!divisorFound)
-            {
+	      }
+	    }
+	    
+            if (!divisorFound) {
                 /* Add cp1 to _cpSet2 */
-                _cpSet2.insert(cp1);
+                _cpSet2.insert(_cpSet1[itpcp1]);
             }
         }
         _cpSet1.reset();
         
         /* CP <- CP U _cpSet2 */
-        itpcp1=_cpSet2.getRoot();
-        while(itpcp1!=0)
-        { 
-            _criticalPairSet.insert(*itpcp1->_cp);
-            itpcp1=_cpSet2.getNext(itpcp1);
-            stat._nbCp++;
+        itpcp1=_cpSet2.size();
+        while(itpcp1) { 
+	  --itpcp1;
+	  _criticalPairSet.insert(*(_cpSet2[itpcp1]));
+	  stat._nbCp++;
         }
         _cpSet2.reset();
         
         /* Free _cpSet0 */
         _cpSet0.reset();
-        
-        /* Reset the dynamic array of critical pair */
-        _cpArray.reset();
-        
         
         if (VERBOSE > 1)
         {
@@ -766,7 +752,7 @@ namespace F4
                 {
                     quotient.setMonomialDivide(m1,m2);
                     /* Reducer found */
-                    itmon->_lt=true;
+                    itmon->setLt();
                     nbPiv++;
                     /* Test if the computation of this multiple is not already done */ 
                     indexPol=simplify(quotient, _total[_basis[i]]);
@@ -1006,7 +992,6 @@ namespace F4
             /* Critical pair of minimal degree */
             itcp1=_criticalPairSet.findSmallest();
             cp1=itcp1->_cp;
-            itcp1=_criticalPairSet.erase(itcp1);
             
             stat._nbCp--;
             d = cp1.getDegree();
@@ -1023,13 +1008,14 @@ namespace F4
             stat._nbCpDeg++;
 
             /* Get the other critical pairs of degree d */
+            itcp1=_criticalPairSet.erase(itcp1);
             while ( (itcp1 != 0) && (itcp1->_cp.getDegree()==d))
             {
                 cp1=itcp1->_cp;
-                itcp1=_criticalPairSet.erase(itcp1);
-                stat._nbCp--;
                 appendMatrixF4 (cp1, height, nbPiv);
                 stat._nbCpDeg++;
+                itcp1=_criticalPairSet.erase(itcp1);
+                stat._nbCp--;
             }
             if(VERBOSE > 1)
             {

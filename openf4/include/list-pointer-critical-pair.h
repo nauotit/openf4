@@ -33,35 +33,14 @@
 #include <iomanip>
 /** \endcond */
 #include "critical-pair.h"
-#include "dynamic-array.h"
+
+#include <vector>
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */
 namespace F4
 {
-    /**
-     * \struct NodeListPointerCriticalPair.
-     * \brief Represent a node of the list.
-     */
-    template<typename Element>
-    struct NodeListPointerCriticalPair
-    {        
-        public:
-            
-            /* Constructor */
-            
-            /**
-             * \brief Constructor
-             */
-            NodeListPointerCriticalPair();
-            
-            /* Attributes */
-        
-            CriticalPair<Element> * _cp; /*!< Pointer on a critical pair */
-            NodeListPointerCriticalPair * _next; /*!< Pointer on the next node. */
-    };
-    
     
     /**
      * \class ListPointerCriticalPair
@@ -71,69 +50,43 @@ namespace F4
     class ListPointerCriticalPair
     {        
         public:
-            
+
             /* Constructor */
             
             /**
              * \brief Constructor
              */
-            ListPointerCriticalPair();
-            
+      ListPointerCriticalPair() {}
             
             /* Miscellaneous */
-            
-            /**
-             * \brief Print the List.
-             * \param stream: Stream.
-             */
-            void printListCriticalPair(std::ostream & stream) const;
-            
+                        
             /**
              * \brief Reset the List for a new usage, memory is not clear.
              */
-            void reset();
+      void reset() {
+	_array.clear();
+      }
             
             /**
              * \brief Get the first element of the list.
              */
-            NodeListPointerCriticalPair<Element> const * getRoot() const;
-            
+      size_t size() const { return _array.size(); }
             /* Insertion */
             
             /**
              * \brief Insert the critical pair pointer cp in the list.
              * \param cp: Pointer on a critical pair.
              */
-            void insert(CriticalPair<Element> * cp);
-            
-            
-            /* Access */
-            
-            /**
-             * \brief Get the next NodeListPointerCriticalPair after node.
-             * \param node: Pointer on a node.
-             * \return Pointer on the next NodeListPointerCriticalPair after node.
-             */
-            NodeListPointerCriticalPair<Element> const * getNext(NodeListPointerCriticalPair<Element> const * node) const;
+      void insert(CriticalPair<Element> * cp) {
+	_array.push_back(cp);
+      }
+
+      CriticalPair<Element> *operator[](size_t i) { return _array[i]; }
         
         private:
-            DynamicArray<NodeListPointerCriticalPair<Element>> _array; /*!< Dynamic array of NodeListPointerCriticalPair. */
-            NodeListPointerCriticalPair<Element> * _it; /*!< Iterator. */
-            NodeListPointerCriticalPair<Element> * _root; /*!< Root of the List. */
-            
-            
+      vector< CriticalPair<Element> * > _array;
     };
     
-    /**
-     * \brief Overload the operator <<.
-     * \return ostream: Stream.
-     */
-    template <typename Element>
-    std::ostream & operator<<(std::ostream & stream, ListPointerCriticalPair<Element> const & avlCriticalPair);
 }
-
-/** \cond */
-#include "../src/list-pointer-critical-pair.inl"
-/** \endcond */
 
 #endif // OPENF4_LIST_POINTER_CRITICAL_PAIR_H

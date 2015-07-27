@@ -32,7 +32,7 @@
 #include <cassert>
 #include <iomanip>
 /** \endcond */
-#include "dynamic-array.h"
+#include <set>
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
@@ -46,31 +46,38 @@ namespace F4
     struct NodeAvlPolynomial
     {        
         public:
-            
             /* Constructor */
             
             /**
              * \brief Constructor
              */
-            NodeAvlPolynomial();
-            
+      NodeAvlPolynomial() {}
             /* Attributes */
-        
-            int _numPolynomial; /*!< Index of a tagged polynomial. */
-            int _numMonomial; /*!< Number of the leading monomial of the tagged polynomial. */
-            int _nbTerms; /*!< Number of terms of the tagged polynomial. */
-            signed char _bf; /*!< Balance factor. */
-            NodeAvlPolynomial* _parent; /*!< Pointer on the parent node. */
-            NodeAvlPolynomial* _left; /*!< Pointer on the left child node. */
-            NodeAvlPolynomial* _right; /*!< Pointer on the right child node. */
+      NodeAvlPolynomial(int p, int m, int t)
+	: _numPolynomial(p), _numMonomial(m), _nbTerms(t) {}
+      
+      int _numPolynomial; /*!< Index of a tagged polynomial. */
+      int _numMonomial; /*!< Number of the leading monomial of the tagged polynomial. */
+      int _nbTerms; /*!< Number of terms of the tagged polynomial. */
+
+      bool operator>(const NodeAvlPolynomial &other) const {
+	if (_numMonomial > other._numMonomial)
+	  return true;
+	if (_numMonomial < other._numMonomial)
+	  return false;
+	if (_nbTerms > other._nbTerms)
+	  return true;
+	if (_nbTerms < other._nbTerms)
+	  return false;
+	if (_numPolynomial > other._numPolynomial)
+	  return true;
+	if (_numPolynomial < other._numPolynomial)
+	  return false;
+	// equal
+	return false;
+      }
     };
-    
-    /**
-     * \brief Print the AVL of root p.
-     * \param p: Pointer on a node of the AVL.
-     */
-    void printNode(NodeAvlPolynomial * p, int indent=0);
-    
+        
     
     /**
      * \class AvlPolynomial
@@ -85,27 +92,21 @@ namespace F4
             /**
              * \brief Constructor
              */
-            AvlPolynomial();
+      AvlPolynomial() {}
             
             
             /* Miscellaneous */
-            
-            /**
-             * \brief Print the AVL.
-             * \param stream: Stream.
-             */
-            void printAvlPolynomial(std::ostream & stream) const;
-            
+                        
             /**
              * \brief Reset the AVL for a new usage, memory is not clear.
              */
-            void reset();
+      void reset() { _set.clear(); }
             
             /**
              * \brief Get the number of element in the AVL.
              * \return Number of element in the AVL.
              */
-            size_t size() const;
+      size_t size() const { return _set.size(); }
             
             /* Insertion */
             
@@ -117,7 +118,12 @@ namespace F4
              * \return 0 if a new polynomial is created.
              * \return 1 if the polynomial already exist.
              */
-            int insert(int numPol, int numMon, int nbTerms);
+      int insert(int numPol, int numMon, int nbTerms) {
+	auto t = _set.emplace(numPol, numMon, nbTerms);
+	if (t.second)
+	  return 0;
+	return 1;
+      }
             
             
             /* Search */
@@ -126,50 +132,32 @@ namespace F4
              * \brief Find the biggest node of the AVL.
              * \return Pointer on the biggest node.
              */
-            NodeAvlPolynomial * findBiggest ();
-            
-            /**
-             * \brief Find the biggest node of the AVL.
-             * \return Pointer on the biggest node.
-             */
-            NodeAvlPolynomial const * findBiggest () const;
-            
-            /**
-             * \brief Find the next biggest node after node.
-             * \param node: Pointer on a node.
-             * \return Pointer on the next biggest node after node.
-             */
-            NodeAvlPolynomial * findNextBiggest(NodeAvlPolynomial * node);
+      NodeAvlPolynomial * findBiggest () {
+	_i = _set.begin();
+	if (_i == _set.end())
+	  return 0;
+	else
+	  return const_cast<NodeAvlPolynomial *>(&*_i);
+      }
             
             /**
              * \brief Find the next biggest node after node.
              * \param node: Pointer on a node.
              * \return Pointer on the next biggest node after node.
              */
-            NodeAvlPolynomial const * findNextBiggest(NodeAvlPolynomial const * node) const;
+      NodeAvlPolynomial * findNextBiggest(const NodeAvlPolynomial * node) {
+	++_i;
+	if (_i == _set.end())
+	  return 0;
+	else
+	  return const_cast<NodeAvlPolynomial *>(&*_i);
+      }
         
         private:
-            DynamicArray<NodeAvlPolynomial> _array; /*!< Dynamic array of NodeAvlPolynomial. */
-            NodeAvlPolynomial * _it; /*!< Iterator. */
-            NodeAvlPolynomial * _root; /*!< Root of the AVL. */
-            size_t _size; /*!< Number of node in the AVL. */
-            
-            
+      set<NodeAvlPolynomial, greater<NodeAvlPolynomial>> _set;
+      typename set<NodeAvlPolynomial, greater<NodeAvlPolynomial>>::iterator _i; /*!< Iterator. */
     };
     
-    
-    /* External operators */
-    
-    /**
-     * \brief Overload the operator <<.
-     * \return ostream: Stream.
-     */
-    template <typename dataType>
-    std::ostream & operator<<(std::ostream & stream, AvlPolynomial const & AvlPolynomial);
 }
-
-/** \cond */
-#include "../src/avl-polynomial.inl"
-/** \endcond */
 
 #endif // OPENF4_AVL_POLYNOMIAL_H

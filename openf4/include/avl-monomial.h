@@ -17,11 +17,11 @@
  * along with openf4.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-  /**
-  * \file avl-monomial.h
-  * \brief Declaration of class AvlMonomial.
-  * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON 
-  */
+/**
+ * \file avl-monomial.h
+ * \brief Declaration of class AvlMonomial.
+ * \author Vanessa VITSE, Antoine JOUX, Titouan COLADON 
+ */
 
 #ifndef OPENF4_AVL_MONOMIAL_H
 #define OPENF4_AVL_MONOMIAL_H
@@ -32,143 +32,125 @@
 #include <cassert>
 #include <iomanip>
 /** \endcond */
-#include "dynamic-array.h"
 
 /** \namespace F4 
  * Group all the required tools used by the F4 algorithm.
  */
+
+#include <set>
+#include <unordered_set>
+
 namespace F4
 {
+  /**
+   * \struct NodeAvlMonomial.
+   * \brief Represent a node of the AVL of monomials.
+   */
+  class AvlMonomial;
+  
+  struct NodeAvlMonomial
+  {
+  public:
+    int _numMonomial;
+    bool _lt;
+    AvlMonomial *_parent;
+    NodeAvlMonomial(AvlMonomial *a): _parent(a) {}
+    void setLt();
+  };
+  
+  /**
+   * \class AvlMonomial
+   * \brief Represent an avl of pair (number of a monomial, is leading monomial).
+   */
+  class AvlMonomial
+  {        
+  public:
+            
+    /* Constructor */
+            
     /**
-     * \struct NodeAvlMonomial.
-     * \brief Represent a node of the AVL of monomials.
+     * \brief Constructor
      */
-    struct NodeAvlMonomial
-    {        
-        public:
+  AvlMonomial() : _node(this) {}
             
-            /* Constructor */
-            
-            /**
-             * \brief Constructor
-             */
-            NodeAvlMonomial();
-            
-            /* Attributes */
-        
-            int _numMonomial; /*!< Number of a monomial. */
-            bool _lt; /*!< True if the monomial is a leading term. */
-            signed char _bf; /*!< Balance factor. */
-            NodeAvlMonomial* _parent; /*!< Pointer on the parent node. */
-            NodeAvlMonomial* _left; /*!< Pointer on the left child node. */
-            NodeAvlMonomial* _right; /*!< Pointer on the right child node. */
-    };
-    
     /**
-     * \brief Print the AVL of root p.
-     * \param p: Pointer on a node of the AVL.
+     * \brief Reset the AVL for a new usage, memory is not clear.
      */
-    void printNode(NodeAvlMonomial * p, int indent=0);
-    
-    
+    void reset() {
+      _umon.clear();
+      _mon.clear();
+      _lt.clear();
+    }
+            
     /**
-     * \class AvlMonomial
-     * \brief Represent an avl of pair (number of a monomial, is leading monomial).
+     * \brief Get the number of element in the AVL.
+     * \return Number of element in the AVL.
      */
-    class AvlMonomial
-    {        
-        public:
+    size_t size() const {
+      return _umon.size();
+    }
             
-            /* Constructor */
+    /* Insertion */
             
-            /**
-             * \brief Constructor
-             */
-            AvlMonomial();
-            
-            
-            /* Miscellaneous */
-            
-            /**
-             * \brief Print the AVL.
-             * \param stream: Stream.
-             */
-            void printAvlMonomial(std::ostream & stream) const;
-            
-            /**
-             * \brief Reset the AVL for a new usage, memory is not clear.
-             */
-            void reset();
-            
-            /**
-             * \brief Get the number of element in the AVL.
-             * \return Number of element in the AVL.
-             */
-            size_t size() const;
-            
-            /* Insertion */
-            
-            /**
-             * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
-             * \param numMon: Number of a monomial.
-             * \param lt: true if numMon is a leading monomial, false otherwise.
-             * \return 0 if a new NodeAvlMonomial is created.
-             * \return 1 if the monomial already exist.
-             * \return 2 if the monomial already exist but was not a leading term. In this case its lt flag is set to 1.
-             */
-            int insert(int numMon, bool lt);
-            
-            
-            /* Search */
-            
-            /**
-             * \brief Find the biggest NodeAvlMonomial of the AVL.
-             * \return Pointer on the biggest node.
-             */
-            NodeAvlMonomial * findBiggest ();
-            
-            /**
-             * \brief Find the biggest NodeAvlMonomial of the AVL.
-             * \return Pointer on the biggest node.
-             */
-            NodeAvlMonomial const * findBiggest () const;
-            
-            /**
-             * \brief Find the next biggest NodeAvlMonomial after node.
-             * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlMonomial after node.
-             */
-            NodeAvlMonomial * findNextBiggest(NodeAvlMonomial * node);
-            
-            /**
-             * \brief Find the next biggest NodeAvlMonomial after node.
-             * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlMonomial after node.
-             */
-            NodeAvlMonomial const * findNextBiggest(NodeAvlMonomial const * node) const;
-        
-        private:
-            DynamicArray<NodeAvlMonomial> _array; /*!< Dynamic array of NodeAvlMonomial. */
-            NodeAvlMonomial * _it; /*!< Iterator. */
-            NodeAvlMonomial * _root; /*!< Root of the AVL. */
-            size_t _size; /*!< Number of node in the AVL. */
-            
-            
-    };
-    
-    
-    /* External operators */
-    
     /**
-     * \brief Overload the operator <<.
-     * \return ostream: Stream.
+     * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
+     * \param numMon: Number of a monomial.
+     * \param lt: true if numMon is a leading monomial, false otherwise.
+     * \return 0 if a new NodeAvlMonomial is created.
+     * \return 1 if the monomial already exist.
+     * \return 2 if the monomial already exist but was not a leading term. In this case its lt flag is set to 1.
      */
-    template <typename dataType>
-    std::ostream & operator<<(std::ostream & stream, AvlMonomial const & avlMonomial);
-}
+    int insert(int numMon, bool lt) {
+      if (_umon.insert(numMon).second == false) {
+	if (lt && _lt.insert(numMon).second)
+	  return 2;
+ 	return 1;
+      }
+      _mon.insert(numMon);
+      if (lt)
+	_lt.insert(numMon);
+      return 0;
+    }
+            
+    /**
+     * \brief Find the biggest NodeAvlMonomial of the AVL.
+     * \return Pointer on the biggest node.
+     */
+    NodeAvlMonomial * findBiggest () {
+      if (_umon.empty())
+	return 0;
+      _it = _mon.begin();
+      size_t f = *_it;
+      _node._numMonomial = f;
+      _node._lt = _lt.count(f);
+      return &_node;
+    }
+      
+    NodeAvlMonomial * findNextBiggest(const NodeAvlMonomial * node) {
+      ++_it;
+      if (_it == _mon.end())
+	return 0;
+      size_t i = *_it;
+      _node._numMonomial = i;
+      _node._lt = _lt.count(i);
+      return &_node;
+    }
 
-/** \cond */
-#include "../src/avl-monomial.inl"
-/** \endcond */
+
+    void setLt(int n) {
+      _lt.insert(n);
+    }
+    
+  private:
+    set<int, greater<int>> _mon;
+    unordered_set<int> _umon;
+    unordered_set<int> _lt;
+    set<int, greater<int>>::iterator _it;
+    NodeAvlMonomial _node;
+  };
+
+  void NodeAvlMonomial::setLt() { _parent->setLt(_numMonomial); }
+  
+}
 
 #endif // OPENF4_AVL_MONOMIAL_H
