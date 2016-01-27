@@ -33,7 +33,7 @@ namespace F4
     /* Constructor */
     
     template <typename Element>
-    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree), _cpArray(1000, 20,1)
+    Ideal<Element>::Ideal(std::vector<Polynomial<Element>> & polynomialArray, int nbVariable, int capacity, int degree): _polynomialArray(polynomialArray), _nbVariable(Monomial::getNbVariable()), _numPol(0), _numTot(0), _numGen(0), _monomialArray(nbVariable, capacity, degree)
     {
         /* Share the monomial array. */
         Term<Element>::setMonomialArray(&_monomialArray);
@@ -348,92 +348,95 @@ namespace F4
             startAddCp = clock ();
         }
         
-        CriticalPair<Element> * cp1=0;
-        CriticalPair<Element> * it = _cpArray.getBegin();
+        if (_cpArray.size() < _basis.size())
+        {
+            _cpArray.resize(_basis.size() + 1024);
+        }
+        CriticalPair<Element> * it = _cpArray.data();
 
         /* Computation of critical pairs */ 
-        for (j = _basis.size(); j > 0; j--)
+        for (j = _basis.size(); j > 0; j--, ++it)
         {
-            if (!it->setCriticalPair(index, _total[_basis[j-1]]))
+            if (it->setCriticalPair(index, _total[_basis[j-1]]))
             {
-                _cpSet0.insert(it);
+                _cpSet1.push_back(it);
             }
             else
             {
-                _cpSet1.insert(it);
+                _cpSet0.push_back(it);
             }
-            it=_cpArray.getNext(it);
         }
 
-        
-        NodeListPointerCriticalPair<Element> const * itpcp1;
-        NodeListPointerCriticalPair<Element> const * itpcp2 = 0;
-        
-        itpcp1=_cpSet1.getRoot();
-        while(itpcp1 != 0)
+        size_t itpcp1=_cpSet1.size();
+        while(itpcp1)
         {
-            cp1=(itpcp1->_cp);
-            itpcp1=_cpSet1.getNext(itpcp1);
+            --itpcp1;
+            Monomial const & lcm=_cpSet1[itpcp1]->getLcm();
             
             /* Test if cp1 verifies criteria 2 */
             divisorFound = false;
             
             /* Scan _cpSet0 */
-            itpcp2=_cpSet0.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
+            size_t itpcp2=_cpSet0.size();
+            while (itpcp2)
             {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
+                --itpcp2;
+                if (lcm.isDivisible(_cpSet0[itpcp2]->getLcm()))
                 {
                     divisorFound = true;
+                    break;
                 }
-                itpcp2=_cpSet0.getNext(itpcp2);
             }
             
             /* Scan _cpSet1 */
-            itpcp2=itpcp1;
-            while (itpcp2 != 0 && !divisorFound)
+            if(!divisorFound)
             {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
+                itpcp2=itpcp1;
+                while (itpcp2)
                 {
-                    divisorFound = true;
+                    --itpcp2;
+                    if (lcm.isDivisible(_cpSet1[itpcp2]->getLcm()))
+                    {
+                        divisorFound = true;
+                        break;
+                    }
                 }
-                itpcp2=_cpSet1.getNext(itpcp2);
             }
             
             /* Scan _cpSet2 */
-            itpcp2=_cpSet2.getRoot();
-            while (itpcp2 != 0 && !divisorFound)
+            if(!divisorFound)
             {
-                if ((cp1->getLcm()).isDivisible(itpcp2->_cp->getLcm()))
+                itpcp2=_cpSet2.size();
+                while (itpcp2)
                 {
-                    divisorFound = true;
+                    --itpcp2;
+                    if (lcm.isDivisible(_cpSet2[itpcp2]->getLcm()))
+                    {
+                        divisorFound = true;
+                        break;
+                    }
                 }
-                itpcp2=_cpSet2.getNext(itpcp2);
             }
             if (!divisorFound)
             {
                 /* Add cp1 to _cpSet2 */
-                _cpSet2.insert(cp1);
+                _cpSet2.push_back(_cpSet1[itpcp1]);
             }
         }
-        _cpSet1.reset();
+        _cpSet1.clear();
         
         /* CP <- CP U _cpSet2 */
-        itpcp1=_cpSet2.getRoot();
-        while(itpcp1!=0)
+        itpcp1=_cpSet2.size();
+        while(itpcp1)
         { 
-            _criticalPairSet.insert(*itpcp1->_cp);
-            itpcp1=_cpSet2.getNext(itpcp1);
+            --itpcp1;
+            _criticalPairSet.insert(*(_cpSet2[itpcp1]));
             stat._nbCp++;
         }
-        _cpSet2.reset();
+        _cpSet2.clear();
         
         /* Free _cpSet0 */
-        _cpSet0.reset();
-        
-        /* Reset the dynamic array of critical pair */
-        _cpArray.reset();
-        
+        _cpSet0.clear();        
         
         if (VERBOSE > 1)
         {
