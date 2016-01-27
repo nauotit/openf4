@@ -113,7 +113,7 @@ namespace F4
             /**
              * \brief Print _matMons.
              */
-            void printMonomialAvl() const;
+            void printMonomialAvl();
             
             /**
              * \brief Print _matPols.

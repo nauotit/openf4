@@ -41,7 +41,7 @@ namespace F4
     {
     } 
     
-    AvlMonomial::AvlMonomial(): _array(1000, 1000, 1), _it(_array.getBegin()), _root(0), _size(0)
+    AvlMonomial::AvlMonomial(): _array(1000, 1000, 1), _it(_array.getBegin()), _root(0)
     {
     }
     
@@ -86,13 +86,20 @@ namespace F4
         _it=_array.getBegin();
         _root=0;
         _array.reset();
-        _size=0;
+        _lt.clear();
+        _umon.clear();
     }
     
     size_t 
     AvlMonomial::size() const
     {
-        return _size;
+        return _umon.size();
+    }
+    
+    void 
+    AvlMonomial::setLT(int numMon)
+    {
+        _lt.insert(numMon);
     }
     
     
@@ -103,283 +110,286 @@ namespace F4
     {
         NodeAvlMonomial *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmp_parent, *node;
         int adjust, cmp;
-
-        if (_root == 0)
+        
+        if (_umon.insert(numMon).second == false)
         {
-            node = _it;
-            _it=_array.getNext(_it);
-            node->_numMonomial = numMon;
-            node->_lt = lt;
-
-            _root = node;
-            
-            _root->_left = 0;
-            _root->_right = 0;
-            _root->_parent = 0;
-            _root->_bf = 0;
-            
-            _size++;
-            return 0;
-        }
-
-        tmpnode = _root;
-        while (tmpnode != 0)
-        {
-            tmpnode2 = tmpnode;
-            if ((tmpnode->_numMonomial) < numMon)
+            /* Monomial found */
+            if (lt && _lt.insert(numMon).second)
             {
-                cmp = 1;
-                tmpnode = tmpnode->_right;
-            }
-            else if ((tmpnode->_numMonomial) > numMon)
-            {
-                cmp = -1;
-                tmpnode = tmpnode->_left;
+                return 2;
             }
             else
             {
-                /* Monomial found */
-                if (lt == true && tmpnode->_lt == false)
-                {
-                    tmpnode->_lt = true;
-                    return 2;
-                }
-                else
-                {
-                    return 1;
-                }
+                return 1;
             }
-        }
-
-        /* Monomial is not here, we create it */
-        node = _it;
-        _it=_array.getNext(_it);
-        node->_numMonomial = numMon;
-        node->_lt = lt;
-
-        /* Insertion */
-        tmpnode = tmpnode2;
-        if (cmp < 0)
-        {
-            tmpnode->_left = node;
-            node->_parent = tmpnode;
-            node->_bf = 0;
-            node->_left = node->_right = 0;
-            adjust = -1;
         }
         else
         {
-            tmpnode->_right = node;
-            node->_parent = tmpnode;
-            node->_bf = 0;
-            node->_left = node->_right = 0;
-            adjust = 1;
-        }
-
-        while (adjust != 0)
-        {
-            if (tmpnode->_bf == adjust)
+            /* Insert a new monomial */
+            if(lt)
             {
-                if (adjust == 1)
+                _lt.insert(numMon);
+            }
+            if (_root == 0)
+            {
+                node = _it;
+                _it=_array.getNext(_it);
+                node->_numMonomial = numMon;
+
+                _root = node;
+                
+                _root->_left = 0;
+                _root->_right = 0;
+                _root->_parent = 0;
+                _root->_bf = 0;
+                
+                return 0;
+            }
+
+            tmpnode = _root;
+            while (tmpnode != 0)
+            {
+                tmpnode2 = tmpnode;
+                if ((tmpnode->_numMonomial) < numMon)
                 {
-                    tmpnode2 = tmpnode->_right;
-                    if (tmpnode2->_bf != -adjust)
-                    {
-                        tmpnode3 = tmpnode->_right = tmpnode2->_left;
-                        tmpnode2->_left = tmpnode;
-                        tmp_parent = tmpnode2->_parent = tmpnode->_parent;
-                        if (tmp_parent != 0)
-                        {
-                            if (tmp_parent->_left == tmpnode)
-                            {
-                                tmp_parent->_left = tmpnode2;
-                            }
-                            else
-                            {
-                                tmp_parent->_right = tmpnode2;
-                            }
-                        }
-                        else
-                        {
-                            _root = tmpnode2;
-                        }
-                        tmpnode->_parent = tmpnode2;
-                        if (tmpnode3 != 0)
-                        {
-                            tmpnode3->_parent = tmpnode;
-                        }
-                        tmpnode->_bf = adjust - tmpnode2->_bf;
-                        tmpnode2->_bf -= adjust;
-                    }
-                    else
-                    {
-                        tmpnode3 = tmpnode2->_left;
-                        tmpnode4 = tmpnode->_right = tmpnode3->_left;
-                        tmpnode5 = tmpnode2->_left = tmpnode3->_right;
-                        tmpnode3->_left = tmpnode;
-                        tmpnode3->_right = tmpnode2;
-                        tmp_parent = tmpnode3->_parent = tmpnode->_parent;
-                        if (tmp_parent != 0)
-                        {
-                            if (tmp_parent->_left == tmpnode)
-                            {
-                                tmp_parent->_left = tmpnode3;
-                            }
-                            else
-                            {
-                                tmp_parent->_right = tmpnode3;
-                            }
-                        }
-                        else
-                        {
-                            _root = tmpnode3;
-                        }
-                        tmpnode->_parent = tmpnode3;
-                        tmpnode2->_parent = tmpnode3;
-                        if (tmpnode4 != 0)
-                        {
-                            tmpnode4->_parent = tmpnode;
-                        }
-                        if (tmpnode5 != 0)
-                        {
-                            tmpnode5->_parent = tmpnode2;
-                        }
-                        if (tmpnode3->_bf <= 0)
-                        {
-                            tmpnode->_bf = 0;
-                        }
-                        else
-                        {
-                            tmpnode->_bf = -1;
-                        }
-                        if (tmpnode3->_bf >= 0)
-                        {
-                            tmpnode2->_bf = 0;
-                        }
-                        else
-                        {
-                            tmpnode2->_bf = 1;
-                        }
-                        tmpnode3->_bf = 0;
-                    }
+                    cmp = 1;
+                    tmpnode = tmpnode->_right;
                 }
                 else
                 {
-                    node = tmpnode->_right;
-                    tmpnode2 = tmpnode->_left;
-                    if (tmpnode2->_bf != -adjust)
-                    {
-                        tmpnode3 = tmpnode->_left = tmpnode2->_right;
-                        tmpnode2->_right = tmpnode;
-                        tmp_parent = tmpnode2->_parent = tmpnode->_parent;
-                        if (tmp_parent != 0)
-                        {
-                            if (tmp_parent->_left == tmpnode)
-                            {
-                                tmp_parent->_left = tmpnode2;
-                            }
-                            else
-                            {
-                                tmp_parent->_right = tmpnode2;
-                            }
-                        }
-                        else
-                        {
-                            _root = tmpnode2;
-                        }
-                        tmpnode->_parent = tmpnode2;
-                        if (tmpnode3 != 0)
-                        {
-                            tmpnode3->_parent = tmpnode;
-                        }
-                        tmpnode->_bf = adjust - tmpnode2->_bf;
-                        tmpnode2->_bf -= adjust;
-                    }
-                    else
-                    {
-                        tmpnode3 = tmpnode2->_right;
-                        tmpnode4 = tmpnode->_left = tmpnode3->_right;
-                        tmpnode5 = tmpnode2->_right = tmpnode3->_left;
-                        tmpnode3->_left = tmpnode2;
-                        tmpnode3->_right = tmpnode;
-                        tmp_parent = tmpnode3->_parent = tmpnode->_parent;
-                        if (tmp_parent != 0)
-                        {
-                            if (tmp_parent->_left == tmpnode)
-                            {
-                                tmp_parent->_left = tmpnode3;
-                            }
-                            else
-                            {
-                                tmp_parent->_right = tmpnode3;
-                            }
-                        }
-                        else
-                        {
-                            _root = tmpnode3;
-                        }
-                        tmpnode->_parent = tmpnode3;
-                        tmpnode2->_parent = tmpnode3;
-                        if (tmpnode4 != 0)
-                        {
-                            tmpnode4->_parent = tmpnode;
-                        }
-                        if (tmpnode5 != 0)
-                        {
-                            tmpnode5->_parent = tmpnode2;
-                        }
-                        if (tmpnode3->_bf >= 0)
-                        {
-                            tmpnode->_bf = 0;
-                        }
-                        else
-                        {
-                            tmpnode->_bf = 1;
-                        }
-                        if (tmpnode3->_bf <= 0)
-                        {
-                            tmpnode2->_bf = 0;
-                        }
-                        else
-                        {
-                            tmpnode2->_bf = -1;
-                        }
-                        tmpnode3->_bf = 0;
-                    }
+                    cmp = -1;
+                    tmpnode = tmpnode->_left;
                 }
-                adjust = 0;
+            }
+
+            /* Monomial is not here, we create it */
+            node = _it;
+            _it=_array.getNext(_it);
+            node->_numMonomial = numMon;
+
+            /* Insertion */
+            tmpnode = tmpnode2;
+            if (cmp < 0)
+            {
+                tmpnode->_left = node;
+                node->_parent = tmpnode;
+                node->_bf = 0;
+                node->_left = node->_right = 0;
+                adjust = -1;
             }
             else
             {
-                tmpnode->_bf += adjust;
-                if (tmpnode->_bf != 0)
+                tmpnode->_right = node;
+                node->_parent = tmpnode;
+                node->_bf = 0;
+                node->_left = node->_right = 0;
+                adjust = 1;
+            }
+
+            while (adjust != 0)
+            {
+                if (tmpnode->_bf == adjust)
                 {
-                    tmpnode2 = tmpnode->_parent;
-                    if (tmpnode2 == 0)
+                    if (adjust == 1)
                     {
-                        adjust = 0;
-                    }
-                    else
-                    {
-                        if (tmpnode == tmpnode2->_left)
+                        tmpnode2 = tmpnode->_right;
+                        if (tmpnode2->_bf != -adjust)
                         {
-                            adjust = -1;
+                            tmpnode3 = tmpnode->_right = tmpnode2->_left;
+                            tmpnode2->_left = tmpnode;
+                            tmp_parent = tmpnode2->_parent = tmpnode->_parent;
+                            if (tmp_parent != 0)
+                            {
+                                if (tmp_parent->_left == tmpnode)
+                                {
+                                    tmp_parent->_left = tmpnode2;
+                                }
+                                else
+                                {
+                                    tmp_parent->_right = tmpnode2;
+                                }
+                            }
+                            else
+                            {
+                                _root = tmpnode2;
+                            }
+                            tmpnode->_parent = tmpnode2;
+                            if (tmpnode3 != 0)
+                            {
+                                tmpnode3->_parent = tmpnode;
+                            }
+                            tmpnode->_bf = adjust - tmpnode2->_bf;
+                            tmpnode2->_bf -= adjust;
                         }
                         else
                         {
-                            adjust = 1;
+                            tmpnode3 = tmpnode2->_left;
+                            tmpnode4 = tmpnode->_right = tmpnode3->_left;
+                            tmpnode5 = tmpnode2->_left = tmpnode3->_right;
+                            tmpnode3->_left = tmpnode;
+                            tmpnode3->_right = tmpnode2;
+                            tmp_parent = tmpnode3->_parent = tmpnode->_parent;
+                            if (tmp_parent != 0)
+                            {
+                                if (tmp_parent->_left == tmpnode)
+                                {
+                                    tmp_parent->_left = tmpnode3;
+                                }
+                                else
+                                {
+                                    tmp_parent->_right = tmpnode3;
+                                }
+                            }
+                            else
+                            {
+                                _root = tmpnode3;
+                            }
+                            tmpnode->_parent = tmpnode3;
+                            tmpnode2->_parent = tmpnode3;
+                            if (tmpnode4 != 0)
+                            {
+                                tmpnode4->_parent = tmpnode;
+                            }
+                            if (tmpnode5 != 0)
+                            {
+                                tmpnode5->_parent = tmpnode2;
+                            }
+                            if (tmpnode3->_bf <= 0)
+                            {
+                                tmpnode->_bf = 0;
+                            }
+                            else
+                            {
+                                tmpnode->_bf = -1;
+                            }
+                            if (tmpnode3->_bf >= 0)
+                            {
+                                tmpnode2->_bf = 0;
+                            }
+                            else
+                            {
+                                tmpnode2->_bf = 1;
+                            }
+                            tmpnode3->_bf = 0;
                         }
-                        tmpnode = tmpnode2;
                     }
+                    else
+                    {
+                        node = tmpnode->_right;
+                        tmpnode2 = tmpnode->_left;
+                        if (tmpnode2->_bf != -adjust)
+                        {
+                            tmpnode3 = tmpnode->_left = tmpnode2->_right;
+                            tmpnode2->_right = tmpnode;
+                            tmp_parent = tmpnode2->_parent = tmpnode->_parent;
+                            if (tmp_parent != 0)
+                            {
+                                if (tmp_parent->_left == tmpnode)
+                                {
+                                    tmp_parent->_left = tmpnode2;
+                                }
+                                else
+                                {
+                                    tmp_parent->_right = tmpnode2;
+                                }
+                            }
+                            else
+                            {
+                                _root = tmpnode2;
+                            }
+                            tmpnode->_parent = tmpnode2;
+                            if (tmpnode3 != 0)
+                            {
+                                tmpnode3->_parent = tmpnode;
+                            }
+                            tmpnode->_bf = adjust - tmpnode2->_bf;
+                            tmpnode2->_bf -= adjust;
+                        }
+                        else
+                        {
+                            tmpnode3 = tmpnode2->_right;
+                            tmpnode4 = tmpnode->_left = tmpnode3->_right;
+                            tmpnode5 = tmpnode2->_right = tmpnode3->_left;
+                            tmpnode3->_left = tmpnode2;
+                            tmpnode3->_right = tmpnode;
+                            tmp_parent = tmpnode3->_parent = tmpnode->_parent;
+                            if (tmp_parent != 0)
+                            {
+                                if (tmp_parent->_left == tmpnode)
+                                {
+                                    tmp_parent->_left = tmpnode3;
+                                }
+                                else
+                                {
+                                    tmp_parent->_right = tmpnode3;
+                                }
+                            }
+                            else
+                            {
+                                _root = tmpnode3;
+                            }
+                            tmpnode->_parent = tmpnode3;
+                            tmpnode2->_parent = tmpnode3;
+                            if (tmpnode4 != 0)
+                            {
+                                tmpnode4->_parent = tmpnode;
+                            }
+                            if (tmpnode5 != 0)
+                            {
+                                tmpnode5->_parent = tmpnode2;
+                            }
+                            if (tmpnode3->_bf >= 0)
+                            {
+                                tmpnode->_bf = 0;
+                            }
+                            else
+                            {
+                                tmpnode->_bf = 1;
+                            }
+                            if (tmpnode3->_bf <= 0)
+                            {
+                                tmpnode2->_bf = 0;
+                            }
+                            else
+                            {
+                                tmpnode2->_bf = -1;
+                            }
+                            tmpnode3->_bf = 0;
+                        }
+                    }
+                    adjust = 0;
                 }
                 else
                 {
-                    adjust = 0;
+                    tmpnode->_bf += adjust;
+                    if (tmpnode->_bf != 0)
+                    {
+                        tmpnode2 = tmpnode->_parent;
+                        if (tmpnode2 == 0)
+                        {
+                            adjust = 0;
+                        }
+                        else
+                        {
+                            if (tmpnode == tmpnode2->_left)
+                            {
+                                adjust = -1;
+                            }
+                            else
+                            {
+                                adjust = 1;
+                            }
+                            tmpnode = tmpnode2;
+                        }
+                    }
+                    else
+                    {
+                        adjust = 0;
+                    }
                 }
             }
+            return 0;
         }
-        _size++;
-        return 0;
     }
     
     
@@ -398,25 +408,9 @@ namespace F4
         {
             tmp = tmp->_right;
         }
+        tmp->_lt=_lt.count(tmp->_numMonomial);
         return tmp;
     }
-    
-    NodeAvlMonomial const *
-    AvlMonomial::findBiggest () const
-    {
-        if (_root == 0)       
-        {
-            /* Empty tree */
-            return 0;
-        }
-        NodeAvlMonomial * tmp = _root;
-        while (tmp->_right != 0)
-        {
-            tmp = tmp->_right;
-        }
-        return tmp;
-    }
-    
 
     NodeAvlMonomial *
     AvlMonomial::findNextBiggest(NodeAvlMonomial * node)
@@ -432,6 +426,7 @@ namespace F4
             {
                 node = node->_right;
             }
+            node->_lt=_lt.count(node->_numMonomial);
             return node;
         }
         else
@@ -441,37 +436,7 @@ namespace F4
             {
                 if (node->_parent->_right == node)
                 {
-                    return node->_parent;
-                }
-                node = node->_parent;
-            }
-        }
-        return 0;
-    }
-    
-    NodeAvlMonomial const *
-    AvlMonomial::findNextBiggest(NodeAvlMonomial const * node) const
-    {
-        if (node == 0)
-        {
-            return 0;
-        }
-        if (node->_left != 0)
-        {
-            node = node->_left;
-            while (node->_right != 0)
-            {
-                node = node->_right;
-            }
-            return node;
-        }
-        else
-        {
-            /* No left child */
-            while (node->_parent != 0)
-            {
-                if (node->_parent->_right == node)
-                {
+                    node->_parent->_lt=_lt.count(node->_parent->_numMonomial);
                     return node->_parent;
                 }
                 node = node->_parent;

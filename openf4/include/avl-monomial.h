@@ -31,6 +31,7 @@
 #include <iostream>
 #include <cassert>
 #include <iomanip>
+#include <unordered_set>
 /** \endcond */
 #include "dynamic-array.h"
 
@@ -106,6 +107,13 @@ namespace F4
              */
             size_t size() const;
             
+            /**
+             * \brief Add numMon to the unordered set _lt.
+             * \param numMon: Number of a monomial.
+             */
+            void setLT(int numMon);
+            
+            
             /* Insertion */
             
             /**
@@ -128,32 +136,18 @@ namespace F4
             NodeAvlMonomial * findBiggest ();
             
             /**
-             * \brief Find the biggest NodeAvlMonomial of the AVL.
-             * \return Pointer on the biggest node.
-             */
-            NodeAvlMonomial const * findBiggest () const;
-            
-            /**
              * \brief Find the next biggest NodeAvlMonomial after node.
              * \param node: Pointer on a node.
              * \return Pointer on the next biggest NodeAvlMonomial after node.
              */
             NodeAvlMonomial * findNextBiggest(NodeAvlMonomial * node);
-            
-            /**
-             * \brief Find the next biggest NodeAvlMonomial after node.
-             * \param node: Pointer on a node.
-             * \return Pointer on the next biggest NodeAvlMonomial after node.
-             */
-            NodeAvlMonomial const * findNextBiggest(NodeAvlMonomial const * node) const;
         
         private:
             DynamicArray<NodeAvlMonomial> _array; /*!< Dynamic array of NodeAvlMonomial. */
+            unordered_set<int> _umon; /*!< Unorder set of monomial number to test membership */
+            unordered_set<int> _lt; /*!< Unorder set of lt to test membership */
             NodeAvlMonomial * _it; /*!< Iterator. */
             NodeAvlMonomial * _root; /*!< Root of the AVL. */
-            size_t _size; /*!< Number of node in the AVL. */
-            
-            
     };
     
     
