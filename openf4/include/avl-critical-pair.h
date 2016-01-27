@@ -203,7 +203,6 @@ namespace F4
             NodeAvlCriticalPair<Element> * _root; /*!< Root of the AVL. */
             size_t _size; /*!< Number of node in the AVL. */
             
-            
     };
     
     /**

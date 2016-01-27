@@ -153,8 +153,6 @@ namespace F4
             NodeAvlPolynomial * _it; /*!< Iterator. */
             NodeAvlPolynomial * _root; /*!< Root of the AVL. */
             size_t _size; /*!< Number of node in the AVL. */
-            
-            
     };
     
     

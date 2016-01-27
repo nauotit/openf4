@@ -148,6 +148,7 @@ namespace F4
             unordered_set<int> _lt; /*!< Unorder set of lt to test membership */
             NodeAvlMonomial * _it; /*!< Iterator. */
             NodeAvlMonomial * _root; /*!< Root of the AVL. */
+            NodeAvlMonomial _node; /*!< Node (speed up openf4)*/
     };
     
     
