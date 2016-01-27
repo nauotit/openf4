@@ -443,7 +443,8 @@ namespace F4
         
         int adjust, adjust_parent;
         CriticalPair<Element> ptmp;
-        NodeAvlCriticalPair<Element> *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmpParent, *res;
+        NodeAvlCriticalPair<Element> *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmpParent;
+        NodeAvlCriticalPair<Element> * res=0;
 
         /* Erase node (find the closest succesor) */
         tmpnode = node->_right;
@@ -463,7 +464,16 @@ namespace F4
         {
             tmpnode = node;
             /* Keep trace of the next smallest node after the deleted node */
-            res=node->_parent;
+            /* No right child */
+            while (node->_parent != 0)
+            {
+                if (node->_parent->_left == node)
+                {
+                    res=node->_parent;
+                    break;
+                }
+                node = node->_parent;
+            }
         }
 
         node = tmpnode;
