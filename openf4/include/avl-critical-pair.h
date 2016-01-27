@@ -138,7 +138,7 @@ namespace F4
              * \brief Delete the node pointed by node from the AVL.
              * \pre node belongs to the avl, if node = 0, the AVL is clear.
              * \param node: Pointer on a node.
-             * \return Pointer the deleted node.
+             * \return Pointer on the next node after the deleted one (if elements are erased from the smallest to the biggest). 
              */
             NodeAvlCriticalPair<Element> * erase(NodeAvlCriticalPair<Element> * node);
             
