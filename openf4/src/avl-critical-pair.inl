@@ -445,7 +445,7 @@ namespace F4
         CriticalPair<Element> ptmp;
         NodeAvlCriticalPair<Element> *tmpnode, *tmpnode2, *tmpnode3, *tmpnode4, *tmpnode5, *tmpParent, *res;
 
-        /* Effacement de node (remonte du successeur immediat et effacement) */
+        /* Erase node (find the closest succesor) */
         tmpnode = node->_right;
         if (tmpnode != 0)
         {

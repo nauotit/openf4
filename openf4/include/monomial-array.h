@@ -101,10 +101,10 @@ namespace F4
              void freeTabulatedProduct();
              
              /**
-             * \brief Get _monomialArray[numMon]._varlist[i].
+             * \brief Get _monomialArray[numMon]._varlist[index].
              * \param numMon: Number of the monomial.
              * \param index: Index of a variable in varlist.
-             * \return _monomialArray[numMon]._varlist[i].
+             * \return _monomialArray[numMon]._varlist[index].
              */
              uint8_t getNumVarlist(int numMon, int index);
              

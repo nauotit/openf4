@@ -131,7 +131,7 @@ namespace F4
             
             /**
              * \brief Simplify the product u*(_taggedPolynomialArray[numList].poly) by another polynomial with the same leading term but with less terms in its tail.
-             * \param u: Number of a monomial.
+             * \param u: Monomial.
              * \param numList: Index of a tagged polynomial in _taggedPolynomialArray.
              * \return Index of the simplified polynomial in the array Mon_Tab.
              */
@@ -194,7 +194,7 @@ namespace F4
             
             /**
              * \brief Rebuild _matPols from mat, update the basis and the set of critical pairs.
-             * \param mat: Matrix to fill.
+             * \param matrix: Matrix.
              * \param tabMon: Array of monomials involved in _matPols.
              * \param sigma: sigma[i]=index in tabMon of the column i monomial.
              * \param tau: tau[i]=column of the monomial tabMon[i].

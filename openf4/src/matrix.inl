@@ -655,8 +655,8 @@ namespace F4
             printf ("Echelonization time: ");
         }
 
-    #define TRANCHE 64
-    
+        #define TRANCHE 64
+        
         /* Echelonize the left part of the matrix */
         start = chrono::steady_clock::now();
         for (l = _nbPiv - 1; l >= 0; l -= TRANCHE)

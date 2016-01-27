@@ -127,7 +127,6 @@ namespace F4
         
         if(numMaxColumn>_numMaxColumn)
         {
-        
             /* Time */
             chrono::steady_clock::time_point start;
             typedef chrono::duration<int,milli> millisecs_t;

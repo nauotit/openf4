@@ -126,7 +126,6 @@ namespace F4
             /**
              * \brief Insert the critical pair cp in the AVL.
              * \param cp: Critical pair
-             * \param lt: true if numMon is a leading monomial, false otherwise.
              * \return 0 if a new NodeAvlCriticalPair is created.
              * \return 1 if cp already exist in the AVL.
              */

@@ -109,7 +109,7 @@ namespace F4
             /* Insertion */
             
             /**
-             * \brief If numMon if already in the AVL, update its lt flag, otherwise insert a new node.
+             * \brief If numMon is already in the AVL, update its lt flag, otherwise insert a new node.
              * \param numMon: Number of a monomial.
              * \param lt: true if numMon is a leading monomial, false otherwise.
              * \return 0 if a new NodeAvlMonomial is created.

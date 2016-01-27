@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([openf4], [1.0.0], [titouan.coladon@gmail.com])
+AC_INIT([openf4], [1.0.1], [titouan.coladon@gmail.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
