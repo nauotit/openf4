@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['singlelist',['SingleList',['../class_f4_1_1_single_list.html',1,'F4']]],
-  ['stat',['Stat',['../struct_f4_1_1_stat.html',1,'F4']]]
+  ['taggedpolynomial',['TaggedPolynomial',['../class_f4_1_1_tagged_polynomial.html',1,'F4']]],
+  ['term',['Term',['../class_f4_1_1_term.html',1,'F4']]]
 ];

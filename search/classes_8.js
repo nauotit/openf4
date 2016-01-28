@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['polynomial',['Polynomial',['../class_f4_1_1_polynomial.html',1,'F4']]]
+  ['singlelist',['SingleList',['../class_f4_1_1_single_list.html',1,'F4']]],
+  ['stat',['Stat',['../struct_f4_1_1_stat.html',1,'F4']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['naming_20conventions',['Naming conventions',['../dev_convention.html',1,'']]]
+  ['improvement_20ideas',['Improvement ideas',['../dev_ideas.html',1,'']]]
 ];

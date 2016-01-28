@@ -6,7 +6,7 @@ var searchData=
   ['ideal_2eh',['ideal.h',['../ideal_8h.html',1,'']]],
   ['increasenbmonomial',['increaseNbMonomial',['../class_f4_1_1_monomial.html#a3c118b2612f6d6085c197a99345a1a0c',1,'F4::Monomial']]],
   ['initmonomial',['initMonomial',['../class_f4_1_1_monomial.html#a3689ece1f14618e1a493127feaded231',1,'F4::Monomial']]],
-  ['insert',['insert',['../class_f4_1_1_list_pointer_critical_pair.html#ae4e6094ded34e0b1a6db18294325504d',1,'F4::ListPointerCriticalPair::insert()'],['../class_f4_1_1_avl_polynomial.html#a979f7500f061edb5b81c720594f6a2eb',1,'F4::AvlPolynomial::insert()'],['../class_f4_1_1_avl_monomial.html#a47cfbd41b15f59237b1baf5edf13b506',1,'F4::AvlMonomial::insert()'],['../class_f4_1_1_avl_critical_pair.html#a81d8762f4f95c64d0f6712007b03b093',1,'F4::AvlCriticalPair::insert()']]],
+  ['insert',['insert',['../class_f4_1_1_avl_polynomial.html#a979f7500f061edb5b81c720594f6a2eb',1,'F4::AvlPolynomial::insert()'],['../class_f4_1_1_avl_monomial.html#a47cfbd41b15f59237b1baf5edf13b506',1,'F4::AvlMonomial::insert()'],['../class_f4_1_1_avl_critical_pair.html#a81d8762f4f95c64d0f6712007b03b093',1,'F4::AvlCriticalPair::insert()']]],
   ['insertafter',['insertAfter',['../class_f4_1_1_single_list.html#a77199b8bb06cf7736b879e28f5f5ca9d',1,'F4::SingleList']]],
   ['insertbegin',['insertBegin',['../class_f4_1_1_single_list.html#aee1aff612987f405d7753d1d9e7c667c',1,'F4::SingleList']]],
   ['inttomonomial',['intToMonomial',['../class_f4_1_1_monomial.html#ab188361bed75424cb64bfcb24616953b',1,'F4::Monomial']]],
