@@ -36,7 +36,7 @@ Clone git repository: git clone https://github.com/nauotit/openf4.git
 \subsection base_installation Basic installation (without Givaro and FFLAS-FFPACK)
 
 <OL>
-    <LI>Download the openf4 archive: <a href="http://nauotit.github.io/openf4/openf4-1.0.0.tar.gz">openf4-1.0.0.tar.gz</a>
+    <LI>Download the openf4 archive: \ref download
     <LI>Extract it: tar -zxvf openf4-version-number.tar.gz 
     <LI>Move into the archive directory: cd openf4-version-number
     <LI>Run the classical commands: 
