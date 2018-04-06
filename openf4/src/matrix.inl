@@ -1257,8 +1257,8 @@ namespace F4
     Matrix<Element> &
     Matrix<Element>::operator=(Matrix<Element> const & matrix)
     {
-        _height(matrix._height);
-        _width(matrix._width);
+        _height=matrix._height;
+        _width=matrix._width;
         int j;
         _matrix=new Element*[_height];
         int allocWidth = 16 * ((_width + 16 - 1) / 16);
